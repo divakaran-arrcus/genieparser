@@ -77,9 +77,9 @@ class ShowSrv6ConfigSchema(MetaParser):
     """
 
     schema = {
-        "srv6_config": {
-            "network_instances": {
-                Any(): {  # network-instance name
+        "srv6": {
+            Any(): {  # instance name
+                Optional("config"): {
                     Optional("encapsulation"): {
                         Optional("source_address"): str,
                     },
@@ -114,7 +114,7 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                 cmd += f" locator {locator}"
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        ret_dict: Dict[str, TypeAny] = {"srv6_config": {"network_instances": {}}}
+        ret_dict: Dict[str, TypeAny] = {"srv6": {}}
 
         try:
             parsed_json = _load_json_robust(output)
@@ -178,7 +178,8 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                ret_dict["srv6_config"]["network_instances"][inst_name] = ni_entry
+                srv6_inst = ret_dict.setdefault("srv6", {}).setdefault(inst_name, {})
+                srv6_inst["config"] = ni_entry
 
         log.info(json.dumps(ret_dict, indent=2))
         return ret_dict
@@ -193,7 +194,7 @@ class ShowSrv6LocatorSchema(MetaParser):
     """
 
     schema = {
-        "srv6_locator": {
+        "srv6": {
             "network_instances": {
                 Any(): {  # network-instance name
                     Optional("locators"): {
@@ -229,7 +230,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
 
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        ret_dict: Dict[str, TypeAny] = {"srv6_locator": {"network_instances": {}}}
+        ret_dict: Dict[str, TypeAny] = {"srv6": {"network_instances": {}}}
 
         try:
             parsed_json = _load_json_robust(output)
@@ -291,7 +292,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                ret_dict["srv6_locator"]["network_instances"][inst_name] = ni_entry
+                ret_dict["srv6"]["network_instances"][inst_name] = ni_entry
 
         log.info(json.dumps(ret_dict, indent=2))
         return ret_dict

@@ -1,5 +1,3 @@
-import json
-
 from genie.libs.parser.arcos.srv6 import ShowSrv6Config, ShowSrv6Locator
 
 
@@ -74,15 +72,15 @@ def test_show_srv6_config_minimal():
     parser = ShowSrv6Config(device="dummy")
     result = parser.cli(output=CONFIG_SAMPLE)
 
-    assert "srv6_config" in result
-    nis = result["srv6_config"].get("network_instances", {})
-    assert "default" in nis
+    # New structure: srv6[instance]["config"]
+    assert "srv6" in result
+    assert "default" in result["srv6"]
 
-    ni = nis["default"]
-    encap = ni.get("encapsulation", {})
+    cfg = result["srv6"]["default"].get("config", {})
+    encap = cfg.get("encapsulation", {})
     assert encap.get("source_address") == "2400:2020:0:1191::91"
 
-    locators = ni.get("locators", {})
+    locators = cfg.get("locators", {})
     assert "base_slice0" in locators
     loc = locators["base_slice0"]
     assert loc["name"] == "base_slice0"
@@ -98,8 +96,8 @@ def test_show_srv6_locator_minimal():
     parser = ShowSrv6Locator(device="dummy")
     result = parser.cli(output=LOCATOR_SAMPLE)
 
-    assert "srv6_locator" in result
-    nis = result["srv6_locator"].get("network_instances", {})
+    assert "srv6" in result
+    nis = result["srv6"].get("network_instances", {})
     assert "default" in nis
 
     ni = nis["default"]
