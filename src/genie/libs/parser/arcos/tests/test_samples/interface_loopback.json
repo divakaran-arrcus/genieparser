@@ -1,0 +1,126 @@
+{
+  "data": {
+    "openconfig-interfaces:interfaces": {
+      "interface": [
+        {
+          "name": "loopback0",
+          "state": {
+            "type": "iana-if-type:softwareLoopback",
+            "mtu": 9000,
+            "name": "loopback0",
+            "description": "",
+            "enabled": true,
+            "ifindex": 20005,
+            "admin-status": "UP",
+            "oper-status": "UP",
+            "last-change": "2025-11-26T06:26:16.869171-00:00",
+            "counters": {
+              "in-octets": "0",
+              "in-unicast-pkts": "0",
+              "in-broadcast-pkts": "0",
+              "in-multicast-pkts": "0",
+              "in-discards": "0",
+              "in-errors": "0",
+              "in-unknown-protos": 0,
+              "out-octets": "0",
+              "out-unicast-pkts": "0",
+              "out-broadcast-pkts": "0",
+              "out-multicast-pkts": "0",
+              "out-discards": "0",
+              "out-errors": "0",
+              "arcos-openconfig-interfaces-augments:in-pkts": "0",
+              "arcos-openconfig-interfaces-augments:out-pkts": "0"
+            },
+            "arcos-openconfig-interfaces-augments:load-interval": 30,
+            "arcos-openconfig-interfaces-augments:fec": "fec-none",
+            "arcos-openconfig-interfaces-augments:fec-corrected-errors": "0",
+            "arcos-openconfig-interfaces-augments:fec-uncorrected-errors": "0",
+            "arcos-openconfig-interfaces-augments:pre-fec-ber": "0.00e+00",
+            "arcos-openconfig-interfaces-augments:speed-group": 0,
+            "arcos-openconfig-interfaces-augments:time-elapsed-since-last-change": "0d 17:54:09"
+          },
+          "subinterfaces": {
+            "subinterface": [
+              {
+                "index": 0,
+                "state": {
+                  "index": 0,
+                  "name": "loopback0",
+                  "description": "",
+                  "enabled": true,
+                  "ifindex": 20005,
+                  "admin-status": "UP",
+                  "oper-status": "UP",
+                  "last-change": "2025-11-26T06:26:16.869171-00:00",
+                  "counters": {
+                    "in-octets": "0",
+                    "in-unicast-pkts": "0",
+                    "in-broadcast-pkts": "0",
+                    "in-multicast-pkts": "0",
+                    "in-discards": "0",
+                    "in-errors": "0",
+                    "in-unknown-protos": 0,
+                    "out-octets": "0",
+                    "out-unicast-pkts": "0",
+                    "out-broadcast-pkts": "0",
+                    "out-multicast-pkts": "0",
+                    "out-discards": "0",
+                    "out-errors": "0",
+                    "arcos-openconfig-interfaces-augments:in-pkts": "0",
+                    "arcos-openconfig-interfaces-augments:out-pkts": "0"
+                  },
+                  "arcos-openconfig-interfaces-augments:network-instance": "default",
+                  "arcos-openconfig-interfaces-augments:urpf-mode": "none",
+                  "arcos-openconfig-interfaces-augments:priority-vlan": false
+                },
+                "openconfig-if-ip:ipv6": {
+                  "addresses": {
+                    "address": [
+                      {
+                        "ip": "1::1",
+                        "state": {
+                          "ip": "1::1",
+                          "prefix-length": 128,
+                          "origin": "STATIC",
+                          "status": "PREFERRED",
+                          "arcos-openconfig-if-ip-augments:label-index": 4294967295
+                        },
+                        "arcos-openconfig-if-ip-augments:router-advertisement": {
+                          "state": {
+                            "auto-config-flag": false
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "state": {
+                    "arcos-openconfig-if-ip-augments:neighbor-timeout": 14400,
+                    "arcos-openconfig-if-ip-augments:neighbor-cache-limit": 0,
+                    "arcos-openconfig-if-ip-augments:neighbor-cache-count": 0
+                  },
+                  "arcos-openconfig-if-ip-augments:router-advertisement": {
+                    "state": {
+                      "interval": 600,
+                      "lifetime": 1800,
+                      "suppress": false,
+                      "virtual-router-only": false,
+                      "managed-config-flag": false,
+                      "other-config-flag": false
+                    }
+                  }
+                },
+                "openconfig-if-ip:ipv4": {
+                  "state": {
+                    "arcos-openconfig-if-ip-augments:neighbor-timeout": 14400,
+                    "arcos-openconfig-if-ip-augments:neighbor-cache-limit": 0,
+                    "arcos-openconfig-if-ip-augments:neighbor-cache-count": 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

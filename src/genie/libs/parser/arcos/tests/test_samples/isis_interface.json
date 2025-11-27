@@ -1,0 +1,98 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "oc-pol-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "interfaces": {
+                    "interface": [
+                      {
+                        "interface-id": "swp1",
+                        "state": {
+                          "enabled": true,
+                          "interface-id": "swp1",
+                          "passive": false,
+                          "hello-padding": "STRICT",
+                          "circuit-type": "arcos-isis-types:LEVEL_2",
+                          "arcos-openconfig-isis-augments:network-type": "POINT_TO_POINT",
+                          "arcos-openconfig-isis-augments:protocol-up": true,
+                          "arcos-openconfig-isis-augments:snpa": "6e:80:ef:da:2f:14",
+                          "arcos-openconfig-isis-augments:mtu": 8974
+                        },
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "state": {
+                                "priority": 64,
+                                "enabled": true,
+                                "arcos-openconfig-isis-augments:metric": 10
+                              },
+                              "adjacencies": {
+                                "adjacency": [
+                                  {
+                                    "system-id": "rtr1",
+                                    "state": {
+                                      "system-id": "rtr1",
+                                      "neighbor-ipv4-address": "10.20.0.10",
+                                      "local-extended-circuit-id": 757,
+                                      "neighbor-extended-circuit-id": 758,
+                                      "neighbor-circuit-type": "LEVEL_2",
+                                      "adjacency-type": "LEVEL_2",
+                                      "adjacency-state": "UP",
+                                      "remaining-hold-time": 28,
+                                      "up-time": 15574,
+                                      "restart-support": false,
+                                      "restart-status": false,
+                                      "nlpid": ["IPV4"],
+                                      "arcos-openconfig-isis-augments:usable": true
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "interface-id": "loopback0",
+                        "state": {
+                          "enabled": true,
+                          "interface-id": "loopback0",
+                          "passive": false,
+                          "hello-padding": "STRICT",
+                          "circuit-type": "arcos-isis-types:LEVEL_2",
+                          "arcos-openconfig-isis-augments:network-type": "LOOPBACK",
+                          "arcos-openconfig-isis-augments:protocol-up": true
+                        },
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "state": {
+                                "priority": 64,
+                                "enabled": true,
+                                "arcos-openconfig-isis-augments:metric": 10
+                              },
+                              "adjacencies": {}
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

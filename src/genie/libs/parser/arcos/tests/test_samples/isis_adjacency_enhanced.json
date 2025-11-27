@@ -1,0 +1,105 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "oc-pol-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "interfaces": {
+                    "interface": [
+                      {
+                        "interface-id": "swp1",
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "adjacencies": {
+                                "adjacency": [
+                                  {
+                                    "system-id": "rtr1",
+                                    "state": {
+                                      "system-id": "rtr1",
+                                      "neighbor-ipv4-address": "10.20.0.10",
+                                      "neighbor-ipv6-address": "fe80::1",
+                                      "local-extended-circuit-id": 757,
+                                      "neighbor-extended-circuit-id": 758,
+                                      "neighbor-circuit-type": "LEVEL_2",
+                                      "adjacency-type": "LEVEL_2",
+                                      "adjacency-state": "UP",
+                                      "remaining-hold-time": 28,
+                                      "up-time": 429525,
+                                      "restart-support": true,
+                                      "restart-suppress": false,
+                                      "restart-status": false,
+                                      "nlpid": ["IPV4", "IPV6"],
+                                      "arcos-openconfig-isis-augments:usable": true,
+                                      "arcos-openconfig-isis-augments:restart-ack": false,
+                                      "arcos-openconfig-isis-augments:restart-request": false,
+                                      "arcos-openconfig-isis-augments:received-multi-topology-ids": ["arcos-openconfig-isis-augments:ISIS_MT_ID2_IPV6_UNICAST"],
+                                      "arcos-openconfig-isis-augments:active-multi-topology-ids": ["arcos-openconfig-isis-augments:ISIS_MT_ID2_IPV6_UNICAST"]
+                                    },
+                                    "arcos-openconfig-isis-augments:bfd": {
+                                      "topologies": {
+                                        "topology": [
+                                          {
+                                            "mt-id": 0,
+                                            "state": {
+                                              "mt-id": 0,
+                                              "ipv4-bfd-required": false,
+                                              "bfd-required": false,
+                                              "ipv4-bfd-up": false,
+                                              "ipv4-up": true,
+                                              "usable": true
+                                            }
+                                          },
+                                          {
+                                            "mt-id": 2,
+                                            "state": {
+                                              "mt-id": 2,
+                                              "ipv6-bfd-required": false,
+                                              "bfd-required": false,
+                                              "ipv6-bfd-up": false,
+                                              "ipv6-up": true,
+                                              "usable": true
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "state": {
+                                        "bfd-required": false
+                                      }
+                                    },
+                                    "arcos-openconfig-isis-augments:dynamic-delay-measurement": {
+                                      "state": {
+                                        "enabled": false,
+                                        "num-advertisements-sent": 0,
+                                        "last-sampled-avg-delay-value": 0,
+                                        "last-advertised-min-delay-value": 0,
+                                        "last-advertised-max-delay-value": 0,
+                                        "last-advertised-timestamp": "1969-12-31T16:00:00+00:00",
+                                        "last-advertisement-reason": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
