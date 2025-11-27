@@ -16,237 +16,17 @@ from genie.libs.parser.arcos.show_isis import (
 )
 
 
-# Default location of ArcOS golden samples from the local arrcus_pyats repo.
-# Can be overridden by setting ARCOS_PARSER_SAMPLES_DIR.
+# Default location of ArcOS golden samples: local relative test_samples directory.
+# Can be overridden by setting ARCOS_PARSER_SAMPLES_DIR to an alternate path.
 SAMPLES_DIR = Path(
-    os.environ.get(
-        "ARCOS_PARSER_SAMPLES_DIR",
-        "/Users/divakaran/arrcus_workspace/isis_pyats/arrcus-pyats/arrcus_pyats/tests/test_samples",
-    )
+    os.environ.get("ARCOS_PARSER_SAMPLES_DIR")
+    or (Path(__file__).parent / "test_samples")
 )
 
 pytestmark = pytest.mark.skipif(
     not SAMPLES_DIR.exists(),
     reason="ArcOS golden samples directory not available",
 )
-
-
-FAST_REROUTE_SAMPLE = """
-{
-  "data": {
-    "openconfig-network-instance:network-instances": {
-      "network-instance": [
-        {
-          "name": "default",
-          "protocols": {
-            "protocol": [
-              {
-                "identifier": "openconfig-policy-types:ISIS",
-                "name": "default",
-                "isis": {
-                  "global": {
-                    "afi-safi": {
-                      "af": [
-                        {
-                          "afi-name": "openconfig-isis-types:IPV6",
-                          "safi-name": "openconfig-isis-types:UNICAST",
-                          "arcos-openconfig-isis-augments:fast-reroutes": {
-                            "fast-reroute": [
-                              {
-                                "prefix": "2001:db8::/64",
-                                "levels": {
-                                  "level": [
-                                    {
-                                      "level-number": 2,
-                                      "state": {
-                                        "reroute-type": "TI_LFA",
-                                        "metric": 10,
-                                        "nexthop-address": "fe80::1",
-                                        "nexthop-interface": "swp1",
-                                        "flags": [
-                                          "arcos-openconfig-isis-augments:remote"
-                                        ],
-                                        "last-updated-time": "2025-11-21T08:10:49.811578+00:00",
-                                        "origin-system-id": "0000.0000.0001"
-                                      },
-                                      "pq-node": {
-                                        "state": {
-                                          "system-id": "0000.0000.0002"
-                                        }
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-  }
-}
-"""
-
-
-FLEX_ALGO_FAST_REROUTE_SAMPLE = """
-{
-  "data": {
-    "openconfig-network-instance:network-instances": {
-      "network-instance": [
-        {
-          "name": "default",
-          "protocols": {
-            "protocol": [
-              {
-                "identifier": "openconfig-policy-types:ISIS",
-                "name": "default",
-                "isis": {
-                  "global": {
-                    "afi-safi": {
-                      "af": [
-                        {
-                          "afi-name": "openconfig-isis-types:IPV6",
-                          "safi-name": "openconfig-isis-types:UNICAST",
-                          "arcos-openconfig-isis-augments:flexible-algorithms": {
-                            "flexible-algorithm": [
-                              {
-                                "id": 128,
-                                "fast-reroutes": {
-                                  "fast-reroute": [
-                                    {
-                                      "prefix": "2001:db8:fa::/64",
-                                      "levels": {
-                                        "level": [
-                                          {
-                                            "level-number": 2,
-                                            "state": {
-                                              "reroute-type": "TI_LFA",
-                                              "metric": 20,
-                                              "nexthop-address": "fe80::2",
-                                              "nexthop-interface": "swp2",
-                                              "flags": [
-                                                "arcos-openconfig-isis-augments:remote"
-                                              ],
-                                              "last-updated-time": "2025-11-21T08:10:49.811578+00:00",
-                                              "origin-system-id": "0000.0000.0003"
-                                            },
-                                            "pq-node": {
-                                              "state": {
-                                                "system-id": "0000.0000.0004"
-                                              }
-                                            }
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-  }
-}
-"""
-
-
-FLEX_ALGO_ROUTE_SAMPLE = """
-{
-  "data": {
-    "openconfig-network-instance:network-instances": {
-      "network-instance": [
-        {
-          "name": "default",
-          "protocols": {
-            "protocol": [
-              {
-                "identifier": "openconfig-policy-types:ISIS",
-                "name": "default",
-                "isis": {
-                  "global": {
-                    "afi-safi": {
-                      "af": [
-                        {
-                          "afi-name": "openconfig-isis-types:IPV6",
-                          "safi-name": "openconfig-isis-types:UNICAST",
-                          "arcos-openconfig-isis-augments:flexible-algorithms": {
-                            "flexible-algorithm": [
-                              {
-                                "id": 128,
-                                "routes": {
-                                  "route": [
-                                    {
-                                      "prefix": "2001:db8:fa::1/128",
-                                      "state": {
-                                        "best-level-number": 2
-                                      },
-                                      "levels": {
-                                        "level": [
-                                          {
-                                            "level-number": 2,
-                                            "state": {
-                                              "metric": 15,
-                                              "flags": [
-                                                "arcos-openconfig-isis-augments:best"
-                                              ],
-                                              "next-hop-id": "2147483650",
-                                              "prefix-origin-count": 1,
-                                              "route-tag": 0,
-                                              "last-updated-time": "2025-11-21T08:10:49.811578+00:00"
-                                            },
-                                            "next-hops": {
-                                              "next-hop": [
-                                                {
-                                                  "outgoing-interface": "swp2",
-                                                  "next-hop-address": "fe80::2",
-                                                  "state": {
-                                                    "tunnel-id": 1,
-                                                    "backup": false
-                                                  }
-                                                }
-                                              ]
-                                            }
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      ]
-    }
-  }
-}
-"""
 
 
 def test_show_isis_adjacency_sample():
@@ -533,8 +313,14 @@ def test_show_isis_redistribute_route_sample():
 def test_show_isis_fast_reroute_minimal():
     """Validate parsing of a minimal ISIS fast-reroute sample."""
 
+    sample_file = SAMPLES_DIR / "isis_fast_reroute.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
     parser = ShowIsisFastReroute(device="dummy")
-    result = parser.cli(prefix=None, output=FAST_REROUTE_SAMPLE)
+    result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
     assert "isis" in result and "default" in result["isis"]
@@ -547,20 +333,27 @@ def test_show_isis_fast_reroute_minimal():
     assert af["safi_name"] == "UNICAST"
 
     prefixes = af["prefixes"]
-    assert "2001:db8::/64" in prefixes
-    pfx = prefixes["2001:db8::/64"]
+    # The sample contains multiple prefixes; validate a representative one.
+    assert "2::2/128" in prefixes
+    pfx = prefixes["2::2/128"]
     lvl2 = pfx["levels"]["2"]
-    assert lvl2["metric"] == 10
-    assert lvl2["nexthop_interface"] == "swp1"
-    assert lvl2["nexthop_address"] == "fe80::1"
-    assert lvl2["origin_system_id"] == "0000.0000.0001"
+    assert lvl2["metric"] == 20
+    assert lvl2["nexthop_interface"] == "swp4"
+    assert lvl2["nexthop_address"] == "::"
+    assert lvl2["origin_system_id"] == "rtr2.00"
 
 
 def test_show_isis_flex_algo_fast_reroute_minimal():
     """Validate parsing of a minimal ISIS flex-algo fast-reroute sample."""
 
+    sample_file = SAMPLES_DIR / "isis_flexalgo_fast_reroute copy.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
     parser = ShowIsisFlexAlgoFastReroute(device="dummy")
-    result = parser.cli(prefix=None, output=FLEX_ALGO_FAST_REROUTE_SAMPLE)
+    result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
     assert "isis" in result and "default" in result["isis"]
@@ -570,24 +363,30 @@ def test_show_isis_flex_algo_fast_reroute_minimal():
 
     af = flex["IPV6-UNICAST"]
     algos = af["algorithms"]
-    assert "128" in algos
+    assert "132" in algos
 
-    algo = algos["128"]
-    assert algo["id"] == 128
+    algo = algos["132"]
+    assert algo["id"] == 132
     prefixes = algo["prefixes"]
-    assert "2001:db8:fa::/64" in prefixes
-    pfx = prefixes["2001:db8:fa::/64"]
+    assert "2400:2020:32:2291::/64" in prefixes
+    pfx = prefixes["2400:2020:32:2291::/64"]
     lvl2 = pfx["levels"]["2"]
     assert lvl2["metric"] == 20
-    assert lvl2["nexthop_interface"] == "swp2"
-    assert lvl2["nexthop_address"] == "fe80::2"
+    assert lvl2["nexthop_interface"] == "swp4"
+    assert lvl2["nexthop_address"] == "::"
 
 
 def test_show_isis_flex_algo_route_minimal():
     """Validate parsing of a minimal ISIS flex-algo route sample."""
 
+    sample_file = SAMPLES_DIR / "isis_flexalgo_route.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
     parser = ShowIsisFlexAlgoRoute(device="dummy")
-    result = parser.cli(prefix=None, output=FLEX_ALGO_ROUTE_SAMPLE)
+    result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
     assert "isis" in result and "default" in result["isis"]
@@ -597,14 +396,15 @@ def test_show_isis_flex_algo_route_minimal():
 
     af = flex["IPV6-UNICAST"]
     algos = af["algorithms"]
-    assert "128" in algos
+    # The sample contains algorithms 131 and 132; validate algorithm 132.
+    assert "132" in algos
 
-    algo = algos["128"]
-    assert algo["id"] == 128
+    algo = algos["132"]
+    assert algo["id"] == 132
     routes = algo["routes"]
-    assert "2001:db8:fa::1/128" in routes
-    r = routes["2001:db8:fa::1/128"]
+    assert "2400:2020:32:2291::/64" in routes
+    r = routes["2400:2020:32:2291::/64"]
     assert r["best_level_number"] == 2
     lvl2 = r["levels"]["2"]
-    assert lvl2["metric"] == 15
+    assert lvl2["metric"] == 20
     assert "best" in lvl2["flags"]

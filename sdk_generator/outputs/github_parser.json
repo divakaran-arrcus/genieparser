@@ -51309,6 +51309,36 @@
       }
     }
   },
+  "show isis global": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisGlobal",
+        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_global",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance * protocol ISIS * global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisGlobal",
+        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_global",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show running isis": {
     "folders": {
       "arcos": {
