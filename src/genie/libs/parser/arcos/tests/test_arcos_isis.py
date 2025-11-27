@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from genie.libs.parser.arcos.isis import (
+from genie.libs.parser.arcos.show_isis import (
     ShowIsisAdjacency,
     ShowIsisConfig,
     ShowIsisFlexAlgoFastReroute,
