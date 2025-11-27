@@ -1790,6 +1790,102 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
         return ret_dict
 
 
+class ShowIsisGlobalSchema(MetaParser):
+    """Schema for ArcOS ISIS global state JSON output."""
+
+    schema = {
+        "isis_global": {
+            Any(): {  # instance name (e.g., 'default')
+                Optional("net"): list,
+                Optional("level_capability"): str,
+                Optional("max_ecmp_paths"): int,
+                Optional("is_type"): str,
+                Optional("table_id"): int,
+                Optional("area_address"): list,
+                Optional("system_id"): str,
+            }
+        }
+    }
+
+
+class ShowIsisGlobal(ShowIsisGlobalSchema):
+    """Parser for ArcOS ISIS global state command (JSON format).
+
+    Supports::
+
+        show network-instance * protocol ISIS * global state | display json | nomore
+    """
+
+    cli_command = "show network-instance * protocol ISIS * global state"
+
+    def cli(self, output: TypeOptional[str] = None) -> TypeAny:
+        if output is None:
+            cmd = self.cli_command
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        # Initialize return dictionary
+        ret_dict: Dict[str, TypeAny] = {"isis_global": {}}
+
+        try:
+            # Parse JSON output robustly
+            parsed_json = _load_json_robust(output)
+
+            # Navigate to ISIS data
+            isis = get_isis_data(parsed_json)
+            if not isis:
+                return ret_dict
+
+            global_config = isis.get("global", {})
+            state = global_config.get("state", {})
+
+            if state:
+                global_entry: Dict[str, TypeAny] = {}
+
+                # Standard fields
+                if "net" in state:
+                    global_entry["net"] = state["net"]
+
+                level_cap = state.get("level-capability")
+                if level_cap is not None:
+                    # Clean up known prefixes
+                    level_cap = level_cap.replace("openconfig-isis-types:", "")
+                    level_cap = level_cap.replace("oc-isis-types:", "")
+                    global_entry["level_capability"] = level_cap
+
+                if "max-ecmp-paths" in state:
+                    global_entry["max_ecmp_paths"] = state["max-ecmp-paths"]
+
+                # ArcOS augments
+                is_type_key = f"{ARCOS_ISIS_AUGMENTS}:is-type"
+                if is_type_key in state:
+                    is_type = state[is_type_key]
+                    is_type = is_type.replace("arcos-isis-types:", "")
+                    is_type = is_type.replace(f"{ARCOS_ISIS_AUGMENTS}:", "")
+                    global_entry["is_type"] = is_type
+
+                table_id_key = f"{ARCOS_ISIS_AUGMENTS}:table-id"
+                if table_id_key in state:
+                    global_entry["table_id"] = state[table_id_key]
+
+                area_addr_key = f"{ARCOS_ISIS_AUGMENTS}:area-address"
+                if area_addr_key in state:
+                    global_entry["area_address"] = state[area_addr_key]
+
+                system_id_key = f"{ARCOS_ISIS_AUGMENTS}:system-id"
+                if system_id_key in state:
+                    global_entry["system_id"] = state[system_id_key]
+
+                # For now, always use DEFAULT_INSTANCE key
+                ret_dict["isis_global"][DEFAULT_INSTANCE] = global_entry
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS global data: %s", exc)
+
+        return ret_dict
+
+
 class ShowIsisFastRerouteSchema(MetaParser):
     """Schema for ArcOS ISIS fast-reroute information per AF and prefix.
 
