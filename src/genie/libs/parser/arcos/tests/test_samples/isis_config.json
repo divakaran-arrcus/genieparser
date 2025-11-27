@@ -1,0 +1,166 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:ISIS",
+                "name": "default",
+                "config": {
+                  "identifier": "openconfig-policy-types:ISIS",
+                  "name": "default"
+                },
+                "isis": {
+                  "global": {
+                    "config": {
+                      "net": ["49.0001.1111.1111.1111.00"],
+                      "level-capability": "LEVEL_2"
+                    },
+                    "afi-safi": {
+                      "af": [
+                        {
+                          "afi-name": "openconfig-isis-types:IPV6",
+                          "safi-name": "openconfig-isis-types:UNICAST",
+                          "config": {
+                            "afi-name": "openconfig-isis-types:IPV6",
+                            "safi-name": "openconfig-isis-types:UNICAST",
+                            "enabled": true
+                          },
+                          "arcos-openconfig-isis-augments:multi-topology": {
+                            "config": {
+                              "enabled": true
+                            }
+                          }
+                        },
+                        {
+                          "afi-name": "openconfig-isis-types:IPV4",
+                          "safi-name": "openconfig-isis-types:UNICAST",
+                          "config": {
+                            "afi-name": "openconfig-isis-types:IPV4",
+                            "safi-name": "openconfig-isis-types:UNICAST",
+                            "enabled": true
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "levels": {
+                    "level": [
+                      {
+                        "level-number": 2,
+                        "config": {
+                          "enabled": true,
+                          "level-number": 2
+                        }
+                      }
+                    ]
+                  },
+                  "interfaces": {
+                    "interface": [
+                      {
+                        "interface-id": "swp1",
+                        "config": {
+                          "enabled": true,
+                          "interface-id": "swp1",
+                          "arcos-openconfig-isis-augments:network-type": "POINT_TO_POINT"
+                        },
+                        "afi-safi": {
+                          "af": [
+                            {
+                              "afi-name": "openconfig-isis-types:IPV6",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "config": {
+                                "afi-name": "openconfig-isis-types:IPV6",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true
+                              }
+                            },
+                            {
+                              "afi-name": "openconfig-isis-types:IPV4",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "config": {
+                                "afi-name": "openconfig-isis-types:IPV4",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        },
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "config": {
+                                "level-number": 2,
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        },
+                        "interface-ref": {
+                          "config": {
+                            "interface": "swp1",
+                            "subinterface": 0
+                          }
+                        }
+                      },
+                      {
+                        "interface-id": "loopback0",
+                        "config": {
+                          "enabled": true,
+                          "interface-id": "loopback0"
+                        },
+                        "afi-safi": {
+                          "af": [
+                            {
+                              "afi-name": "openconfig-isis-types:IPV6",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "config": {
+                                "afi-name": "openconfig-isis-types:IPV6",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true
+                              }
+                            },
+                            {
+                              "afi-name": "openconfig-isis-types:IPV4",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "config": {
+                                "afi-name": "openconfig-isis-types:IPV4",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        },
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "config": {
+                                "level-number": 2,
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        },
+                        "interface-ref": {
+                          "config": {
+                            "interface": "loopback0",
+                            "subinterface": 0
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

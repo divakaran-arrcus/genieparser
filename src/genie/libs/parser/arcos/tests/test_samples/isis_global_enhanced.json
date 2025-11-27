@@ -1,0 +1,32 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "oc-pol-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "global": {
+                    "state": {
+                      "net": ["49.0000.0000.0000.0005.00", "49.2000.0000.0000.0005.00"],
+                      "level-capability": "LEVEL_1_2",
+                      "max-ecmp-paths": 16,
+                      "arcos-openconfig-isis-augments:is-type": "arcos-isis-types:LEVEL_1_2",
+                      "arcos-openconfig-isis-augments:table-id": 1,
+                      "arcos-openconfig-isis-augments:area-address": ["49.0000", "49.2000"],
+                      "arcos-openconfig-isis-augments:system-id": "0000.0000.0005"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

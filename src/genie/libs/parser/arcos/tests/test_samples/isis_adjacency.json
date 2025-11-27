@@ -1,0 +1,57 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "oc-pol-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "interfaces": {
+                    "interface": [
+                      {
+                        "interface-id": "swp1",
+                        "levels": {
+                          "level": [
+                            {
+                              "level-number": 2,
+                              "adjacencies": {
+                                "adjacency": [
+                                  {
+                                    "system-id": "rtr1",
+                                    "state": {
+                                      "system-id": "rtr1",
+                                      "neighbor-ipv4-address": "10.20.0.10",
+                                      "local-extended-circuit-id": 757,
+                                      "neighbor-extended-circuit-id": 758,
+                                      "neighbor-circuit-type": "LEVEL_2",
+                                      "adjacency-type": "LEVEL_2",
+                                      "adjacency-state": "UP",
+                                      "remaining-hold-time": 28,
+                                      "up-time": 429525,
+                                      "restart-support": false,
+                                      "restart-status": false,
+                                      "nlpid": ["IPV4"],
+                                      "arcos-openconfig-isis-augments:usable": true
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
