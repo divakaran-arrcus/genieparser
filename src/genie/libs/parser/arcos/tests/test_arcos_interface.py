@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from genie.libs.parser.arcos.interface import ShowInterface
+from genie.libs.parser.arcos.show_interface import ShowInterface
 
 
 # Default location of ArcOS golden samples from the local arrcus_pyats repo.

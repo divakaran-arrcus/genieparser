@@ -181,7 +181,6 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                 srv6_inst = ret_dict.setdefault("srv6", {}).setdefault(inst_name, {})
                 srv6_inst["config"] = ni_entry
 
-        log.info(json.dumps(ret_dict, indent=2))
         return ret_dict
 
 
@@ -294,5 +293,4 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
             if ni_entry:
                 ret_dict["srv6"]["network_instances"][inst_name] = ni_entry
 
-        log.info(json.dumps(ret_dict, indent=2))
         return ret_dict

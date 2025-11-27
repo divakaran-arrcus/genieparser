@@ -1,4 +1,4 @@
-from genie.libs.parser.arcos.srv6 import ShowSrv6Config, ShowSrv6Locator
+from genie.libs.parser.arcos.show_srv6 import ShowSrv6Config, ShowSrv6Locator
 
 
 # Minimal synthetic SRv6 samples to validate parser behaviour. These are
