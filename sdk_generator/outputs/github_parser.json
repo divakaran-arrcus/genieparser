@@ -32967,7 +32967,7 @@
       "arcos": {
         "class": "ShowInterface",
         "doc": "Parser for show interface on ArcOS (OpenConfig JSON)",
-        "module_name": "arcos.interface",
+        "module_name": "arcos.show_interface",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -33359,7 +33359,7 @@
       "arcos": {
         "class": "ShowInterface",
         "doc": "Parser for show interface {interface} on ArcOS (OpenConfig JSON)",
-        "module_name": "arcos.interface",
+        "module_name": "arcos.show_interface",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -49808,7 +49808,7 @@
       "arcos": {
         "class": "ShowIsisAdjacency",
         "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -49824,7 +49824,7 @@
       "arcos": {
         "class": "ShowIsisAdjacency",
         "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -50212,7 +50212,7 @@
       "arcos": {
       "class": "ShowIsisInterface",
       "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
-      "module_name": "arcos.isis",
+      "module_name": "arcos.show_isis",
       "package": "genie.libs.parser",
       "schema": "",
       "tokens": {
@@ -50272,7 +50272,7 @@
       "arcos": {
       "class": "ShowIsisInterface",
       "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
-      "module_name": "arcos.isis",
+      "module_name": "arcos.show_isis",
       "package": "genie.libs.parser",
       "schema": "",
       "tokens": {
@@ -51010,7 +51010,7 @@
       "arcos": {
         "class": "ShowIsisLsp",
         "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51026,7 +51026,7 @@
       "arcos": {
         "class": "ShowIsisLsp",
         "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51042,7 +51042,7 @@
       "arcos": {
         "class": "ShowIsisRoute",
         "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51058,7 +51058,7 @@
       "arcos": {
         "class": "ShowIsisRoute",
         "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51074,7 +51074,7 @@
       "arcos": {
         "class": "ShowIsisRedistributeRoute",
         "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51090,7 +51090,7 @@
       "arcos": {
         "class": "ShowIsisRedistributeRoute",
         "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51106,7 +51106,7 @@
       "arcos": {
         "class": "ShowIsisFastReroute",
         "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51122,7 +51122,7 @@
       "arcos": {
         "class": "ShowIsisFastReroute",
         "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51138,7 +51138,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoRoute",
         "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51154,7 +51154,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoRoute",
         "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51170,7 +51170,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoFastReroute",
         "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51186,7 +51186,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoFastReroute",
         "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51202,7 +51202,7 @@
       "arcos": {
         "class": "ShowIsisConfig",
         "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": { "os": "arcos" },
@@ -51216,7 +51216,7 @@
       "arcos": {
         "class": "ShowIsisConfig",
         "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": { "os": "arcos" },
@@ -51230,7 +51230,7 @@
       "arcos": {
         "class": "ShowIsisInterface",
         "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51246,7 +51246,7 @@
       "arcos": {
         "class": "ShowIsisAdjacency",
         "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51262,7 +51262,7 @@
       "arcos": {
         "class": "ShowIsisLsp",
         "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51278,7 +51278,7 @@
       "arcos": {
         "class": "ShowIsisRoute",
         "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51294,7 +51294,7 @@
       "arcos": {
         "class": "ShowIsisRedistributeRoute",
         "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51310,7 +51310,7 @@
       "arcos": {
         "class": "ShowIsisFastReroute",
         "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51326,7 +51326,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoRoute",
         "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -51342,7 +51342,7 @@
       "arcos": {
         "class": "ShowIsisFlexAlgoFastReroute",
         "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.isis",
+        "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -104819,7 +104819,7 @@
       "arcos": {
         "class": "ShowSrv6Config",
         "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
-        "module_name": "arcos.srv6",
+        "module_name": "arcos.show_srv6",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -104835,7 +104835,7 @@
       "arcos": {
         "class": "ShowSrv6Locator",
         "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.srv6",
+        "module_name": "arcos.show_srv6",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -104851,7 +104851,7 @@
       "arcos": {
         "class": "ShowSrv6Config",
         "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
-        "module_name": "arcos.srv6",
+        "module_name": "arcos.show_srv6",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -104867,7 +104867,7 @@
       "arcos": {
         "class": "ShowSrv6Locator",
         "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.srv6",
+        "module_name": "arcos.show_srv6",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -104883,7 +104883,7 @@
       "arcos": {
         "class": "ShowSrv6Locator",
         "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.srv6",
+        "module_name": "arcos.show_srv6",
         "package": "genie.libs.parser",
         "schema": "",
         "tokens": {
@@ -109308,7 +109308,19 @@
         },
         "uid": "show_version",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/viptela/show_version.py#L26"
-      }
+      },
+      "arcos": {
+        "class": "ShowVersion",
+        "doc": "Parser for ArcOS 'show version' (OpenConfig JSON)",
+        "module_name": "arcos.show_version",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'version': {\n        'version': str,\n        Optional('software'): str,\n        Optional('platform'): str,\n        Optional('form_factor'): str,\n        Optional('num_cpu_cores'): str,\n        Optional('cpu_info'): str,\n        Optional('total_memory'): str,\n        Optional('uptime'): str,\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_version_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }     
     },
     "module_name": "generic.show_platform",
     "package": "genie.libs.parser",
