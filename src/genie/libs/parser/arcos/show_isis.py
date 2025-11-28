@@ -18,7 +18,7 @@ from genie.libs.parser.arcos.constants import (
     DEFAULT_INSTANCE,
     OPENCONFIG_NETWORK_INSTANCES,
 )
-from genie.libs.parser.arcos.utils import load_json_robust
+from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 
 
 logger = logging.getLogger(__name__)
@@ -131,9 +131,12 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
         if output is None:
             cmd = f"{self.cli_command}"
             if adj_router:
+                validate_input(adj_router, "adj_router")
                 cmd += f" {adj_router}"
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        logger.debug("Parsing output: %s", output)
         # Initialize return dictionary
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
@@ -404,9 +407,12 @@ class ShowIsisLsp(ShowIsisLspSchema):
         if output is None:
             cmd = f"{self.cli_command}"
             if lsp_id:
+                validate_input(lsp_id, "lsp_id")
                 cmd += f" lsp {lsp_id}"
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        logger.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
@@ -797,9 +803,12 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
         if output is None:
             cmd = f"{self.cli_command}"
             if interface:
+                validate_input(interface, "interface")
                 cmd += f" {interface}"
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        logger.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
@@ -1293,10 +1302,12 @@ class ShowIsisConfig(ShowIsisConfigSchema):
         if output is None:
             cmd = f"{self.cli_command}"
             if instance:
+                validate_input(instance, "instance")
                 cmd += f" {instance}"
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        # Nest under isis["default"]["config"].
+        logger.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
@@ -1801,8 +1812,10 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
     def cli(self, output: TypeOptional[str] = None) -> TypeAny:
         if output is None:
             cmd = self.cli_command
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        logger.debug("Parsing output: %s", output)
         # Initialize return dictionary
         ret_dict: Dict[str, TypeAny] = {"isis_global": {}}
 
