@@ -28,11 +28,13 @@ def test_show_srv6_config_minimal():
     parser = ShowSrv6Config(device="dummy")
     result = parser.cli(output=output)
 
-    # New structure: srv6[instance]["config"]
-    assert "srv6" in result
-    assert "default" in result["srv6"]
+    # New structure: network_instances[instance]["srv6"]["config"]
+    assert "network_instances" in result
+    assert "default" in result["network_instances"]
+    ni = result["network_instances"]["default"]
+    assert "srv6" in ni
 
-    cfg = result["srv6"]["default"].get("config", {})
+    cfg = ni["srv6"].get("config", {})
     encap = cfg.get("encapsulation", {})
     assert encap.get("source_address") == "2400:2020:0:1191::91"
 
@@ -72,12 +74,12 @@ def test_show_srv6_locator_minimal():
     parser = ShowSrv6Locator(device="dummy")
     result = parser.cli(output=output)
 
-    assert "srv6" in result
-    nis = result["srv6"].get("network_instances", {})
-    assert "default" in nis
+    assert "network_instances" in result
+    assert "default" in result["network_instances"]
 
-    ni = nis["default"]
-    locators = ni.get("locators", {})
+    ni = result["network_instances"]["default"]
+    assert "srv6" in ni
+    locators = ni["srv6"].get("locators", {})
     # The locator state sample includes base_slice0, base_slice131, base_slice132
     assert "base_slice0" in locators
     assert "base_slice131" in locators
