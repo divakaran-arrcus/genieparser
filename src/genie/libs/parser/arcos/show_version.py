@@ -61,8 +61,10 @@ class ShowVersion(ShowVersionSchema):
     def cli(self, output: TypeOptional[TypeAny] = None) -> Dict[str, TypeAny]:
         if output is None:
             cmd = f"{self.cli_command} | display json | nomore"
+            logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        logger.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"version": {}}
 
         try:
