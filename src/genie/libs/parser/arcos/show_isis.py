@@ -18,33 +18,13 @@ from genie.libs.parser.arcos.constants import (
     DEFAULT_INSTANCE,
     OPENCONFIG_NETWORK_INSTANCES,
 )
+from genie.libs.parser.arcos.utils import load_json_robust
 
 
 logger = logging.getLogger(__name__)
 
 
-def _load_json_robust(output: TypeAny) -> Dict:
-    """Load JSON from CLI output or a pre-decoded dict.
 
-    Some devices or helper layers may return a Python dict instead of a raw
-    JSON string. CLI output may also contain prompts or banners around the
-    JSON. This helper normalizes those cases.
-    """
-
-    if isinstance(output, dict):
-        return output
-
-    if not isinstance(output, str):
-        output = str(output)
-
-    start = output.find("{")
-    end = output.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        json_str = output[start : end + 1]
-    else:
-        json_str = output
-
-    return json.loads(json_str)
 
 
 def get_isis_data(json_output: Dict, instance: str = DEFAULT_INSTANCE) -> Dict:
@@ -158,7 +138,7 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis_data = get_isis_data(parsed_json)
             interfaces_data = isis_data.get("interfaces", {}).get("interface", [])
@@ -430,7 +410,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis_data = get_isis_data(parsed_json)
             levels_data = isis_data.get("levels", {}).get("level", [])
@@ -823,7 +803,7 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis_data = get_isis_data(parsed_json)
             interfaces_data = isis_data.get("interfaces", {}).get("interface", [])
@@ -1320,7 +1300,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:
@@ -1506,7 +1486,7 @@ class ShowIsisRoute(ShowIsisRouteSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:
@@ -1692,7 +1672,7 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:
@@ -1828,7 +1808,7 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
 
         try:
             # Parse JSON output robustly
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             # Navigate to ISIS data
             isis = get_isis_data(parsed_json)
@@ -1953,7 +1933,7 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:
@@ -2119,7 +2099,7 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:
@@ -2297,7 +2277,7 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
         ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             isis = get_isis_data(parsed_json)
             if not isis:

@@ -346,7 +346,7 @@ def test_show_isis_fast_reroute_minimal():
 def test_show_isis_flex_algo_fast_reroute_minimal():
     """Validate parsing of a minimal ISIS flex-algo fast-reroute sample."""
 
-    sample_file = SAMPLES_DIR / "isis_flexalgo_fast_reroute copy.json"
+    sample_file = SAMPLES_DIR / "isis_flexalgo_fast_reroute.json"
     if not sample_file.exists():
         pytest.skip(f"Sample file not found: {sample_file}")
 
