@@ -22,9 +22,6 @@ from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 log = logging.getLogger(__name__)
 
 
-
-
-
 def _get_srv6_data(json_output: Dict, instance: str = DEFAULT_INSTANCE) -> Dict:
     """Navigate to the SRv6 data for a given network-instance.
 
@@ -57,21 +54,23 @@ class ShowSrv6ConfigSchema(MetaParser):
     """
 
     schema = {
-        "srv6": {
-            Any(): {  # instance name
-                Optional("config"): {
-                    Optional("encapsulation"): {
-                        Optional("source_address"): str,
-                    },
-                    Optional("locators"): {
-                        Any(): {  # locator name
-                            "name": str,
-                            Optional("locator_node_length"): int,
-                            Optional("prefix"): str,
-                            Optional("function_length"): int,
-                            Optional("algorithm"): int,
-                        }
-                    },
+        "network_instances": {
+            Any(): {  # network-instance name
+                "srv6": {
+                    Optional("config"): {
+                        Optional("encapsulation"): {
+                            Optional("source_address"): str,
+                        },
+                        Optional("locators"): {
+                            Any(): {  # locator name
+                                "name": str,
+                                Optional("locator_node_length"): int,
+                                Optional("prefix"): str,
+                                Optional("function_length"): int,
+                                Optional("algorithm"): int,
+                            }
+                        },
+                    }
                 }
             }
         }
@@ -97,7 +96,7 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"srv6": {}}
+        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -161,8 +160,9 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                srv6_inst = ret_dict.setdefault("srv6", {}).setdefault(inst_name, {})
-                srv6_inst["config"] = ni_entry
+                ni_dict = ret_dict["network_instances"].setdefault(inst_name, {})
+                srv6_dict = ni_dict.setdefault("srv6", {})
+                srv6_dict["config"] = ni_entry
 
         return ret_dict
 
@@ -176,9 +176,9 @@ class ShowSrv6LocatorSchema(MetaParser):
     """
 
     schema = {
-        "srv6": {
-            "network_instances": {
-                Any(): {  # network-instance name
+        "network_instances": {
+            Any(): {  # network-instance name
+                "srv6": {
                     Optional("locators"): {
                         Any(): {  # locator name
                             "name": str,
@@ -215,7 +215,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"srv6": {"network_instances": {}}}
+        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -257,9 +257,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                     loc_entry: Dict[str, TypeAny] = {"name": name}
 
                     if "locator-node-length" in state:
-                        loc_entry["locator_node_length"] = state[
-                            "locator-node-length"
-                        ]
+                        loc_entry["locator_node_length"] = state["locator-node-length"]
                     if "prefix" in state:
                         loc_entry["prefix"] = state["prefix"]
                     if "micro-segment-behavior-unode" in state:
@@ -277,6 +275,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                ret_dict["srv6"]["network_instances"][inst_name] = ni_entry
+                ni_dict = ret_dict["network_instances"].setdefault(inst_name, {})
+                ni_dict["srv6"] = ni_entry
 
         return ret_dict
