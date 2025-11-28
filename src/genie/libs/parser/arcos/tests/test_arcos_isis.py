@@ -83,6 +83,82 @@ def test_show_isis_config_sample():
     glb = cfg.get("global", {})
     assert glb.get("net") == ["49.0001.1111.1111.1111.00"]
     assert glb.get("level_capability") == "LEVEL_2"
+    # Advanced global knobs
+    assert glb.get("max_ecmp_paths") == 16
+    assert glb.get("graceful_restart_enabled") is True
+    assert glb.get("lsp_mtu_size") == 8000
+    assert glb.get("segment_routing_enabled") is False
+
+    # SRv6
+    srv6 = glb.get("srv6", {})
+    assert srv6.get("enabled") is True
+    assert srv6.get("locators") == [
+        "base_slice0",
+        "base_slice131",
+        "base_slice132",
+    ]
+
+    # Traffic engineering
+    te = glb.get("traffic_engineering", {})
+    assert te.get("ipv6_router_id") == "2400:2020:0:905::1"
+
+    # Micro-loop avoidance
+    mla = glb.get("micro_loop_avoidance", {})
+    assert mla.get("srv6_enabled") is True
+    assert mla.get("rib_update_delay") == 60000
+
+    # Flexible algorithms
+    flex_algos = glb.get("flexible_algorithms", {})
+    assert "131" in flex_algos and "132" in flex_algos
+    algo_131 = flex_algos["131"]
+    assert algo_131["id"] == 131
+    assert algo_131.get("advertise_definition_enabled") is True
+    assert algo_131.get("metric_type") == "arcos-openconfig-isis-augments:LINK_DELAY"
+
+    algo_132 = flex_algos["132"]
+    assert algo_132["id"] == 132
+    assert algo_132.get("advertise_definition_enabled") is True
+    assert algo_132.get("metric_type") == "arcos-openconfig-isis-augments:IGP_METRIC"
+
+    # Dynamic delay measurement
+    ddm = glb.get("dynamic_delay_measurement", {})
+    assert ddm.get("probe_interval") == 20
+    assert ddm.get("advertisement_interval") == 60
+
+    # LSP-bit settings
+    lsp = glb.get("lsp_bit", {})
+    ov = lsp.get("overload_bit", {})
+    assert ov.get("set_bit_on_boot") is True
+    assert ov.get("advertise_high_metric") is True
+
+    resets = ov.get("reset_triggers")
+    assert isinstance(resets, list) and len(resets) == 1
+    r0 = resets[0]
+    assert r0.get("reset_trigger") == "arcos-isis-types:WAIT_DELAY"
+    assert r0.get("delay") == 500
+
+    att = lsp.get("attached_bit", {})
+    assert att.get("ignore_bit") is True
+    assert att.get("suppress_bit") is True
+
+    # Global levels
+    levels = cfg.get("levels", {})
+    assert "2" in levels
+    lvl2 = levels["2"]
+    assert lvl2["level_number"] == 2
+    assert lvl2.get("enabled") is True
+
+    # Per-level authentication (level 2)
+    lvl2_auth = lvl2.get("authentication", {})
+    assert lvl2_auth.get("lsp_authentication") is False
+    assert (
+        lvl2_auth.get("auth_password")
+        == "$8$P116vHF0+EDlx1jNJecNY+oosPeqDFOS82XLteuqzMI="
+    )
+    assert (
+        lvl2_auth.get("crypto_algorithm")
+        == "arcos-openconfig-isis-augments:MD5"
+    )
 
     # AFI/SAFI
     afs = cfg.get("afi_safi", {})
@@ -98,6 +174,29 @@ def test_show_isis_config_sample():
     assert v4["safi_name"] == "UNICAST"
     assert v4["enabled"] is True
 
+    # IPv6 AF summary-prefixes and prefix-unreachable
+    summaries = v6.get("summary_prefixes", {})
+    assert "2400:2020:0:100::/56" in summaries
+    assert "2400:2020:0:900::/56" in summaries
+
+    sum1 = summaries["2400:2020:0:100::/56"]
+    assert sum1["prefix"] == "2400:2020:0:100::/56"
+    assert sum1.get("level") == "LEVEL_2"
+    assert sum1.get("algorithm") == 0
+    assert sum1.get("adv_unreachable") is True
+
+    sum2 = summaries["2400:2020:0:900::/56"]
+    assert sum2["prefix"] == "2400:2020:0:900::/56"
+    assert sum2.get("level") == "LEVEL_1"
+    assert sum2.get("algorithm") == 0
+    assert sum2.get("tag") == 100
+
+    pref_unreach = v6.get("prefix_unreachable", {})
+    assert pref_unreach.get("adv_lifetime") == 65535
+    assert pref_unreach.get("adv_metric") == 4294967294
+    assert pref_unreach.get("adv_maximum") == 65535
+    assert pref_unreach.get("rx_process") is True
+
     # Interfaces
     interfaces = cfg.get("interfaces", {})
     assert "swp1" in interfaces and "loopback0" in interfaces
@@ -107,12 +206,104 @@ def test_show_isis_config_sample():
     assert swp1["enabled"] is True
     assert swp1.get("network_type") == "POINT_TO_POINT"
 
+    # swp1 authentication
+    swp1_auth = swp1.get("authentication", {})
+    assert swp1_auth.get("hello_authentication") is True
+    assert swp1_auth.get("auth_password") == (
+        "$8$ob8IZ1eMMUhk0tZVHJ933X4+F7xnbfJdC4jAQch+oBs="
+    )
+    assert (
+        swp1_auth.get("crypto_algorithm")
+        == "arcos-openconfig-isis-augments:MD5"
+    )
+
+    # swp1 timers
+    swp1_timers = swp1.get("timers", {})
+    assert swp1_timers.get("hello_interval") == 15
+    assert swp1_timers.get("hello_multiplier") == 5
+
     swp1_afs = swp1.get("afi_safi", {})
     assert "IPV6-UNICAST" in swp1_afs and "IPV4-UNICAST" in swp1_afs
 
+    # swp1 per-AF fast-reroute
+    swp1_v6_af = swp1_afs["IPV6-UNICAST"]
+    fr = swp1_v6_af.get("fast_reroute", {})
+    assert fr.get("ti_lfa_srv6_enabled") is True
+
     swp1_lvls = swp1.get("levels", {})
+    # Level 1 metric only
+    assert "1" in swp1_lvls
+    lvl1 = swp1_lvls["1"]
+    assert lvl1["level_number"] == 1
+    assert lvl1.get("metric") == 100
+
+    # Level 2 enabled + metric + flexible-algorithm TE/delay metrics
     assert "2" in swp1_lvls
-    assert swp1_lvls["2"]["enabled"] is True
+    lvl2_intf = swp1_lvls["2"]
+    assert lvl2_intf["level_number"] == 2
+    assert lvl2_intf.get("enabled") is True
+    assert lvl2_intf.get("metric") == 200
+    flex_lvl2 = lvl2_intf.get("flexible_algorithm", {})
+    assert flex_lvl2.get("delay_metric") == 1000000
+    assert flex_lvl2.get("te_metric") == 1000000
+
+    # swp1 interface-ref
+    swp1_ref = swp1.get("interface_ref", {})
+    assert swp1_ref.get("interface") == "swp1"
+    assert swp1_ref.get("subinterface") == 0
+
+    # Other interfaces: swp3
+    swp3 = interfaces["swp3"]
+    assert swp3["interface_id"] == "swp3"
+    assert swp3["enabled"] is True
+    swp3_ref = swp3.get("interface_ref", {})
+    assert swp3_ref.get("interface") == "swp3"
+    assert swp3_ref.get("subinterface") == 0
+    swp3_afs = swp3.get("afi_safi", {})
+    swp3_v6_af = swp3_afs["IPV6-UNICAST"]
+    fr3 = swp3_v6_af.get("fast_reroute", {})
+    assert fr3.get("ti_lfa_srv6_enabled") is True
+
+    # swp4
+    swp4 = interfaces["swp4"]
+    assert swp4["interface_id"] == "swp4"
+    assert swp4["enabled"] is True
+    swp4_ref = swp4.get("interface_ref", {})
+    assert swp4_ref.get("interface") == "swp4"
+    assert swp4_ref.get("subinterface") == 0
+    swp4_afs = swp4.get("afi_safi", {})
+    swp4_v6_af = swp4_afs["IPV6-UNICAST"]
+    fr4 = swp4_v6_af.get("fast_reroute", {})
+    assert fr4.get("ti_lfa_srv6_enabled") is True
+
+    # loopback0
+    loop0 = interfaces["loopback0"]
+    assert loop0["interface_id"] == "loopback0"
+    assert loop0["enabled"] is True
+    assert loop0.get("tag") == [1]
+    loop0_ref = loop0.get("interface_ref", {})
+    assert loop0_ref.get("interface") == "loopback0"
+    assert loop0_ref.get("subinterface") == 0
+    loop0_afs = loop0.get("afi_safi", {})
+    assert "IPV6-UNICAST" in loop0_afs and "IPV4-UNICAST" in loop0_afs
+    loop0_lvls = loop0.get("levels", {})
+    assert "2" in loop0_lvls
+    assert loop0_lvls["2"]["level_number"] == 2
+    assert loop0_lvls["2"].get("enabled") is True
+
+    # loopback1
+    loop1 = interfaces["loopback1"]
+    assert loop1["interface_id"] == "loopback1"
+    assert loop1["enabled"] is True
+    loop1_ref = loop1.get("interface_ref", {})
+    assert loop1_ref.get("interface") == "loopback1"
+    assert loop1_ref.get("subinterface") == 0
+    loop1_afs = loop1.get("afi_safi", {})
+    assert "IPV6-UNICAST" in loop1_afs
+    loop1_lvls = loop1.get("levels", {})
+    assert "2" in loop1_lvls
+    assert loop1_lvls["2"]["level_number"] == 2
+    assert loop1_lvls["2"].get("enabled") is True
 
 
 def test_show_isis_lsp_sample():
