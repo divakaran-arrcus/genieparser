@@ -42,9 +42,12 @@ def test_show_isis_adjacency_sample():
     result = parser.cli(adj_router=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    neighbors = result["isis"]["default"].get("neighbors", {})
+    neighbors = isis.get("neighbors", {})
     assert "rtr1" in neighbors
 
     adj = neighbors["rtr1"]
@@ -69,9 +72,12 @@ def test_show_isis_config_sample():
     result = parser.cli(instance=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    cfg = result["isis"]["default"].get("config", {})
+    cfg = isis.get("config", {})
 
     # Global settings
     glb = cfg.get("global", {})
@@ -122,9 +128,12 @@ def test_show_isis_lsp_sample():
     result = parser.cli(lsp_id=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    database = result["isis"]["default"].get("database", {})
+    database = isis.get("database", {})
     assert "rtr1.00-00" in database
     assert "rtr2.00-00" in database
 
@@ -188,9 +197,12 @@ def test_show_isis_interface_sample():
     result = parser.cli(interface=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    interfaces = result["isis"]["default"].get("interfaces", {})
+    interfaces = isis.get("interfaces", {})
     assert "swp1" in interfaces and "loopback0" in interfaces
 
     swp1 = interfaces["swp1"]
@@ -224,9 +236,12 @@ def test_show_isis_route_sample():
     result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    routes_afs = result["isis"]["default"].get("routes", {})
+    routes_afs = isis.get("routes", {})
     assert "IPV4-UNICAST" in routes_afs and "IPV6-UNICAST" in routes_afs
 
     v4 = routes_afs["IPV4-UNICAST"]
@@ -280,9 +295,12 @@ def test_show_isis_redistribute_route_sample():
     result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    redist_afs = result["isis"]["default"].get("redistribute_routes", {})
+    redist_afs = isis.get("redistribute_routes", {})
     assert "IPV6-UNICAST" in redist_afs and "IPV4-UNICAST" in redist_afs
 
     v6 = redist_afs["IPV6-UNICAST"]
@@ -323,9 +341,12 @@ def test_show_isis_fast_reroute_minimal():
     result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    frr = result["isis"]["default"].get("fast_reroute", {})
+    frr = isis.get("fast_reroute", {})
     assert "IPV6-UNICAST" in frr
 
     af = frr["IPV6-UNICAST"]
@@ -356,9 +377,12 @@ def test_show_isis_flex_algo_fast_reroute_minimal():
     result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    flex = result["isis"]["default"].get("flex_algo_fast_reroute", {})
+    flex = isis.get("flex_algo_fast_reroute", {})
     assert "IPV6-UNICAST" in flex
 
     af = flex["IPV6-UNICAST"]
@@ -389,9 +413,12 @@ def test_show_isis_flex_algo_route_minimal():
     result = parser.cli(prefix=None, output=output)
 
     assert isinstance(result, dict)
-    assert "isis" in result and "default" in result["isis"]
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
 
-    flex = result["isis"]["default"].get("flex_algo_routes", {})
+    flex = isis.get("flex_algo_routes", {})
     assert "IPV6-UNICAST" in flex
 
     af = flex["IPV6-UNICAST"]
