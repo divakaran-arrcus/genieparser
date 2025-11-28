@@ -55,55 +55,59 @@ class ShowIsisAdjacencySchema(MetaParser):
     """Schema for ArcOS ISIS adjacency JSON output."""
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("neighbors"): {
-                    Any(): {  # neighbor system-id
-                        "interface": str,
-                        "state": str,
-                        Optional("holdtime"): int,
-                        Optional("level"): str,
-                        Optional("neighbor-ipv4-address"): str,
-                        Optional("neighbor-ipv6-address"): str,
-                        Optional("adjacency-type"): str,
-                        Optional("up-time"): int,
-                        Optional("neighbor-circuit-type"): str,
-                        Optional("local-extended-circuit-id"): int,
-                        Optional("neighbor-extended-circuit-id"): int,
-                        Optional("restart-support"): bool,
-                        Optional("restart-suppress"): bool,
-                        Optional("restart-status"): bool,
-                        Optional("nlpid"): list,
-                        Optional("usable"): bool,
-                        Optional("restart-ack"): bool,
-                        Optional("restart-request"): bool,
-                        Optional("received-multi-topology-ids"): list,
-                        Optional("active-multi-topology-ids"): list,
-                        Optional("bfd"): {
-                            Optional("bfd-required"): bool,
-                            Optional("topologies"): {
-                                Any(): {  # mt-id
-                                    "mt-id": int,
-                                    Optional("ipv4-bfd-required"): bool,
-                                    Optional("ipv6-bfd-required"): bool,
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("neighbors"): {
+                            Any(): {  # neighbor system-id
+                                "interface": str,
+                                "state": str,
+                                Optional("holdtime"): int,
+                                Optional("level"): str,
+                                Optional("neighbor-ipv4-address"): str,
+                                Optional("neighbor-ipv6-address"): str,
+                                Optional("adjacency-type"): str,
+                                Optional("up-time"): int,
+                                Optional("neighbor-circuit-type"): str,
+                                Optional("local-extended-circuit-id"): int,
+                                Optional("neighbor-extended-circuit-id"): int,
+                                Optional("restart-support"): bool,
+                                Optional("restart-suppress"): bool,
+                                Optional("restart-status"): bool,
+                                Optional("nlpid"): list,
+                                Optional("usable"): bool,
+                                Optional("restart-ack"): bool,
+                                Optional("restart-request"): bool,
+                                Optional("received-multi-topology-ids"): list,
+                                Optional("active-multi-topology-ids"): list,
+                                Optional("bfd"): {
                                     Optional("bfd-required"): bool,
-                                    Optional("ipv4-bfd-up"): bool,
-                                    Optional("ipv6-bfd-up"): bool,
-                                    Optional("ipv4-up"): bool,
-                                    Optional("ipv6-up"): bool,
-                                    Optional("usable"): bool,
-                                }
-                            },
-                        },
-                        Optional("dynamic-delay-measurement"): {
-                            Optional("enabled"): bool,
-                            Optional("num-advertisements-sent"): int,
-                            Optional("last-sampled-avg-delay-value"): int,
-                            Optional("last-advertised-min-delay-value"): int,
-                            Optional("last-advertised-max-delay-value"): int,
-                            Optional("last-advertised-timestamp"): str,
-                            Optional("last-advertisement-reason"): str,
-                        },
+                                    Optional("topologies"): {
+                                        Any(): {  # mt-id
+                                            "mt-id": int,
+                                            Optional("ipv4-bfd-required"): bool,
+                                            Optional("ipv6-bfd-required"): bool,
+                                            Optional("bfd-required"): bool,
+                                            Optional("ipv4-bfd-up"): bool,
+                                            Optional("ipv6-bfd-up"): bool,
+                                            Optional("ipv4-up"): bool,
+                                            Optional("ipv6-up"): bool,
+                                            Optional("usable"): bool,
+                                        }
+                                    },
+                                },
+                                Optional("dynamic-delay-measurement"): {
+                                    Optional("enabled"): bool,
+                                    Optional("num-advertisements-sent"): int,
+                                    Optional("last-sampled-avg-delay-value"): int,
+                                    Optional("last-advertised-min-delay-value"): int,
+                                    Optional("last-advertised-max-delay-value"): int,
+                                    Optional("last-advertised-timestamp"): str,
+                                    Optional("last-advertisement-reason"): str,
+                                },
+                            }
+                        }
                     }
                 }
             }
@@ -138,7 +142,9 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
 
         logger.debug("Parsing output: %s", output)
         # Initialize return dictionary
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -150,6 +156,7 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
                 return ret_dict
 
             neighbors_dict: Dict[str, TypeAny] = {}
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
 
             # Extract neighbors from each interface's adjacencies
             for intf in interfaces_data:
@@ -334,7 +341,7 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
                         neighbors_dict[sys_id] = neighbor_entry
 
             if neighbors_dict:
-                ret_dict["isis"]["default"]["neighbors"] = neighbors_dict
+                ni_isis["neighbors"] = neighbors_dict
 
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
@@ -348,40 +355,44 @@ class ShowIsisLspSchema(MetaParser):
     """Schema for ArcOS ISIS LSP database JSON output."""
 
     schema = {
-        "isis": {
+        "network-instance": {
             Any(): {
-                Optional("database"): {
-                    Any(): {  # LSP ID
-                        "lsp-id": str,
-                        Optional("sequence"): int,
-                        Optional("checksum"): int,
-                        Optional("remaining-lifetime"): int,
-                        Optional("received-timestamp"): str,
-                        Optional("maximum-area-addresses"): int,
-                        Optional("pdu-length"): int,
-                        Optional("system-id"): str,
-                        Optional("overload-bit"): bool,
-                        Optional("attached-bit"): bool,
-                        Optional("is-type"): str,
-                        Optional("received-remaining-lifetime"): int,
-                        Optional("last-update-ifindex"): int,
-                        Optional("last-update-time"): str,
-                        Optional("srm-count"): int,
-                        Optional("ssn-count"): int,
-                        Optional("tlvs"): {
-                            Optional("area-addresses"): list,
-                            Optional("hostname"): str,
-                            Optional("nlpid"): list,
-                            Optional("ipv4-interface-addresses"): list,
-                            Optional("ipv6-interface-addresses"): list,
-                            Optional("ipv4-te-router-id"): str,
-                            Optional("ipv6-te-router-id"): str,
-                            Optional("srv6-locators"): list,
-                            Optional("router-capabilities"): dict,
-                        },
-                        Optional("extended_ipv4_reachability"): dict,
-                        Optional("mt_ipv6_reachability"): dict,
-                        Optional("attributes"): dict,
+                "isis": {
+                    Any(): {
+                        Optional("database"): {
+                            Any(): {  # LSP ID
+                                "lsp-id": str,
+                                Optional("sequence"): int,
+                                Optional("checksum"): int,
+                                Optional("remaining-lifetime"): int,
+                                Optional("received-timestamp"): str,
+                                Optional("maximum-area-addresses"): int,
+                                Optional("pdu-length"): int,
+                                Optional("system-id"): str,
+                                Optional("overload-bit"): bool,
+                                Optional("attached-bit"): bool,
+                                Optional("is-type"): str,
+                                Optional("received-remaining-lifetime"): int,
+                                Optional("last-update-ifindex"): int,
+                                Optional("last-update-time"): str,
+                                Optional("srm-count"): int,
+                                Optional("ssn-count"): int,
+                                Optional("tlvs"): {
+                                    Optional("area-addresses"): list,
+                                    Optional("hostname"): str,
+                                    Optional("nlpid"): list,
+                                    Optional("ipv4-interface-addresses"): list,
+                                    Optional("ipv6-interface-addresses"): list,
+                                    Optional("ipv4-te-router-id"): str,
+                                    Optional("ipv6-te-router-id"): str,
+                                    Optional("srv6-locators"): list,
+                                    Optional("router-capabilities"): dict,
+                                },
+                                Optional("extended_ipv4_reachability"): dict,
+                                Optional("mt_ipv6_reachability"): dict,
+                                Optional("attributes"): dict,
+                            }
+                        }
                     }
                 }
             }
@@ -413,7 +424,9 @@ class ShowIsisLsp(ShowIsisLspSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         logger.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -422,6 +435,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
             levels_data = isis_data.get("levels", {}).get("level", [])
 
             database_dict: Dict[str, TypeAny] = {}
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
 
             for level in levels_data:
                 lsdb_data = level.get("link-state-database", {}).get("lsp", [])
@@ -741,7 +755,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                     database_dict[lsp_id_val] = db_entry
 
             if database_dict:
-                ret_dict["isis"]["default"]["database"] = database_dict
+                ni_isis["database"] = database_dict
 
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
@@ -755,29 +769,33 @@ class ShowIsisInterfaceSchema(MetaParser):
     """Schema for ArcOS ISIS per-interface operational state and counters."""
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("interfaces"): {
-                    Any(): {  # interface name
-                        "enabled": bool,
-                        "interface-id": str,
-                        Optional("circuit-type"): str,
-                        Optional("network-type"): str,
-                        Optional("protocol-up"): bool,
-                        Optional("passive"): bool,
-                        Optional("hello-padding"): str,
-                        Optional("snpa"): str,
-                        Optional("mtu"): int,
-                        Optional("ifindex"): int,
-                        Optional("update-index"): int,
-                        Optional("speed"): int,
-                        Optional("circuit-counters"): dict,
-                        Optional("authentication"): dict,
-                        Optional("timers"): dict,
-                        Optional("bfd"): dict,
-                        Optional("fast-reroute"): dict,
-                        Optional("levels"): dict,
-                        Optional("adjacencies"): dict,
+        "network-instance": {
+            Any(): {
+                "isis": {
+                    Any(): {
+                        Optional("interfaces"): {
+                            Any(): {  # interface name
+                                "enabled": bool,
+                                "interface-id": str,
+                                Optional("circuit-type"): str,
+                                Optional("network-type"): str,
+                                Optional("protocol-up"): bool,
+                                Optional("passive"): bool,
+                                Optional("hello-padding"): str,
+                                Optional("snpa"): str,
+                                Optional("mtu"): int,
+                                Optional("ifindex"): int,
+                                Optional("update-index"): int,
+                                Optional("speed"): int,
+                                Optional("circuit-counters"): dict,
+                                Optional("authentication"): dict,
+                                Optional("timers"): dict,
+                                Optional("bfd"): dict,
+                                Optional("fast-reroute"): dict,
+                                Optional("levels"): dict,
+                                Optional("adjacencies"): dict,
+                            }
+                        }
                     }
                 }
             }
@@ -809,7 +827,9 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         logger.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -821,6 +841,7 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
                 return ret_dict
 
             interfaces_dict: Dict[str, TypeAny] = {}
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
 
             for intf in interfaces_data:
                 intf_id = intf.get("interface-id")
@@ -1224,7 +1245,7 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
                 interfaces_dict[intf_id] = intf_entry
 
             if interfaces_dict:
-                ret_dict["isis"]["default"]["interfaces"] = interfaces_dict
+                ni_isis["interfaces"] = interfaces_dict
 
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
@@ -1242,9 +1263,11 @@ class ShowIsisConfigSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("config"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("config"): {
                     Optional("global"): {
                         Optional("net"): list,
                         Optional("level_capability"): str,
@@ -1277,10 +1300,13 @@ class ShowIsisConfigSchema(MetaParser):
                                 }
                             },
                         }
-                    },
+
+                    }
                 }
             }
         }
+    }
+    }
     }
 
 
@@ -1308,7 +1334,9 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         logger.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -1317,11 +1345,8 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if not isis:
                 return ret_dict
 
-            cfg_root = (
-                ret_dict.setdefault("isis", {})
-                .setdefault("default", {})
-                .setdefault("config", {})
-            )
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            cfg_root = ni_isis.setdefault("config", {})
 
             # Global configuration
             global_config = isis.get("global", {})
@@ -1452,9 +1477,11 @@ class ShowIsisRouteSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("routes"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("routes"): {
                     Any(): {  # AFI-SAFI key like "IPV4-UNICAST" or "IPV6-UNICAST"
                         "afi_name": str,
                         "safi_name": str,
@@ -1469,6 +1496,8 @@ class ShowIsisRouteSchema(MetaParser):
                 }
             }
         }
+    }
+    }
     }
 
 
@@ -1494,7 +1523,9 @@ class ShowIsisRoute(ShowIsisRouteSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         # Align with other ISIS parsers: nest under isis["default"]["routes"].
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -1507,8 +1538,8 @@ class ShowIsisRoute(ShowIsisRouteSchema):
             afi_safi = global_config.get("afi-safi", {})
             af_list = afi_safi.get("af", [])
 
-            routes_root = ret_dict.setdefault("isis", {}).setdefault("default", {})
-            routes_dict: Dict[str, TypeAny] = routes_root.setdefault("routes", {})
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            routes_dict: Dict[str, TypeAny] = ni_isis.setdefault("routes", {})
 
             for af in af_list:
                 afi_name = af.get("afi-name", "")
@@ -1637,9 +1668,11 @@ class ShowIsisRedistributeRouteSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("redistribute_routes"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("redistribute_routes"): {
                     Any(): {  # AF key (e.g., "IPV4-UNICAST")
                         "afi_name": str,
                         "safi_name": str,
@@ -1653,6 +1686,8 @@ class ShowIsisRedistributeRouteSchema(MetaParser):
                 }
             }
         }
+    }
+    }
     }
 
 
@@ -1680,7 +1715,9 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         # Align with other ISIS parsers: nest under isis["default"]["redistribute_routes"].
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -1693,8 +1730,8 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
             afi_safi = global_config.get("afi-safi", {})
             af_list = afi_safi.get("af", [])
 
-            redist_root = ret_dict.setdefault("isis", {}).setdefault("default", {})
-            redist_dict: Dict[str, TypeAny] = redist_root.setdefault(
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            redist_dict: Dict[str, TypeAny] = ni_isis.setdefault(
                 "redistribute_routes", {}
             )
 
@@ -1785,8 +1822,11 @@ class ShowIsisGlobalSchema(MetaParser):
     """Schema for ArcOS ISIS global state JSON output."""
 
     schema = {
-        "isis_global": {
-            Any(): {  # instance name (e.g., 'default')
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("global"): {
                 Optional("net"): list,
                 Optional("level_capability"): str,
                 Optional("max_ecmp_paths"): int,
@@ -1795,8 +1835,12 @@ class ShowIsisGlobalSchema(MetaParser):
                 Optional("area_address"): list,
                 Optional("system_id"): str,
             }
+                        }
+                    }
+                }
+            }
         }
-    }
+
 
 
 class ShowIsisGlobal(ShowIsisGlobalSchema):
@@ -1817,7 +1861,9 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
 
         logger.debug("Parsing output: %s", output)
         # Initialize return dictionary
-        ret_dict: Dict[str, TypeAny] = {"isis_global": {}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             # Parse JSON output robustly
@@ -1869,7 +1915,9 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
                     global_entry["system_id"] = state[system_id_key]
 
                 # For now, always use DEFAULT_INSTANCE key
-                ret_dict["isis_global"][DEFAULT_INSTANCE] = global_entry
+                ret_dict["network-instance"]["default"]["isis"]["default"][
+                    "global"
+                ] = global_entry
 
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
@@ -1887,9 +1935,11 @@ class ShowIsisFastRerouteSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("fast_reroute"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("fast_reroute"): {
                     Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
                         "afi_name": str,
                         "safi_name": str,
@@ -1917,6 +1967,8 @@ class ShowIsisFastRerouteSchema(MetaParser):
             }
         }
     }
+    }
+    }
 
 
 class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
@@ -1943,7 +1995,9 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         # Nest under isis["default"]["fast_reroute"].
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -1956,8 +2010,8 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
             afi_safi = global_config.get("afi-safi", {})
             af_list = afi_safi.get("af", [])
 
-            fast_root = ret_dict.setdefault("isis", {}).setdefault("default", {})
-            fast_dict: Dict[str, TypeAny] = fast_root.setdefault("fast_reroute", {})
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            fast_dict: Dict[str, TypeAny] = ni_isis.setdefault("fast_reroute", {})
 
             for af in af_list:
                 afi_name = af.get("afi-name", "")
@@ -2047,9 +2101,11 @@ class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("flex_algo_fast_reroute"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("flex_algo_fast_reroute"): {
                     Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
                         "afi_name": str,
                         "safi_name": str,
@@ -2082,6 +2138,8 @@ class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
             }
         }
     }
+    }
+    }
 
 
 class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
@@ -2109,7 +2167,9 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         # Nest under isis["default"]["flex_algo_fast_reroute"].
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -2122,8 +2182,8 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
             afi_safi = global_config.get("afi-safi", {})
             af_list = afi_safi.get("af", [])
 
-            flex_frr_root = ret_dict.setdefault("isis", {}).setdefault("default", {})
-            flex_frr_dict: Dict[str, TypeAny] = flex_frr_root.setdefault(
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            flex_frr_dict: Dict[str, TypeAny] = ni_isis.setdefault(
                 "flex_algo_fast_reroute", {}
             )
 
@@ -2237,9 +2297,11 @@ class ShowIsisFlexAlgoRouteSchema(MetaParser):
     """
 
     schema = {
-        "isis": {
-            Any(): {  # instance name
-                Optional("flex_algo_routes"): {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("flex_algo_routes"): {
                     Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
                         "afi_name": str,
                         "safi_name": str,
@@ -2259,6 +2321,8 @@ class ShowIsisFlexAlgoRouteSchema(MetaParser):
                 }
             }
         }
+    }
+    }
     }
 
 
@@ -2287,7 +2351,9 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         # Nest under isis["default"]["flex_algo_routes"].
-        ret_dict: Dict[str, TypeAny] = {"isis": {"default": {}}}
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
 
         try:
             parsed_json = load_json_robust(output)
@@ -2300,10 +2366,8 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
             afi_safi = global_config.get("afi-safi", {})
             af_list = afi_safi.get("af", [])
 
-            flex_routes_root = ret_dict.setdefault("isis", {}).setdefault(
-                "default", {}
-            )
-            flex_routes_dict: Dict[str, TypeAny] = flex_routes_root.setdefault(
+            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            flex_routes_dict: Dict[str, TypeAny] = ni_isis.setdefault(
                 "flex_algo_routes", {}
             )
 
