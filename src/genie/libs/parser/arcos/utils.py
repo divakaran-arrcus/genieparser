@@ -4,7 +4,27 @@ Shared utility functions for ArcOS parsers.
 """
 
 import json
+import re
 from typing import Any as TypeAny, Dict
+
+
+def validate_input(input_str: str, param_name: str) -> None:
+    """Validate that input string contains only safe characters.
+
+    Allowed characters: alphanumeric, hyphen, underscore, dot, colon, slash.
+    Raises ValueError if input contains invalid characters.
+    """
+    if not input_str:
+        return
+
+    if not isinstance(input_str, str):
+        raise ValueError(f"Parameter '{param_name}' must be a string")
+
+    # Allow alphanumeric, -, _, ., :, /, *
+    if not re.match(r"^[a-zA-Z0-9\-_\.:/*]+$", input_str):
+        raise ValueError(
+            f"Invalid characters in parameter '{param_name}': {input_str}"
+        )
 
 
 def load_json_robust(output: TypeAny) -> Dict:

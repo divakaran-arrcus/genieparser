@@ -15,7 +15,7 @@ from genie.metaparser.util.schemaengine import Any, Optional
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import OPENCONFIG_INTERFACES
-from genie.libs.parser.arcos.utils import load_json_robust
+from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 
 
 logger = logging.getLogger(__name__)
@@ -93,8 +93,10 @@ class ShowInterface(ShowInterfaceSchema):
 
         if output is None:
             if interface:
+                validate_input(interface, "interface")
                 # Query specific interface
                 cmd = f"show interface {interface} | display json | nomore"
+                logger.debug("Executing command: %s", cmd)
                 output = self.device.execute(cmd)
                 return self._parse_output(output)
             else:
@@ -104,6 +106,7 @@ class ShowInterface(ShowInterfaceSchema):
                 for intf_type in self.interface_types:
                     cmd = f"show interface {intf_type}* | display json | nomore"
                     try:
+                        logger.debug("Executing command: %s", cmd)
                         output = self.device.execute(cmd)
                         parsed = self._parse_output(output)
                         all_interfaces.update(parsed)
@@ -123,6 +126,8 @@ class ShowInterface(ShowInterfaceSchema):
 
     def _parse_output(self, output):
         """Parse JSON output and return interface dictionary."""
+        logger.debug("Parsing output: %s", output)
+
         # Some devices or helper APIs may return a decoded JSON object
         # instead of a raw string. Accept both forms.
 

@@ -21,6 +21,54 @@ The parsers in this module are designed to handle JSON output from ArcOS OpenCon
 | `ShowSrv6Locator` | `show network-instance * srv6 locator` |
 | `ShowVersion` | `show version` |
 
+## Usage Examples
+
+### Basic Usage
+
+```python
+from genie.libs.parser.arcos.show_interface import ShowInterface
+
+# Parse all interfaces
+parser = ShowInterface(device=device)
+parsed_output = parser.cli()
+
+# Parse specific interface
+parsed_output = parser.cli(interface="swp1")
+```
+
+### ISIS Adjacency
+
+```python
+from genie.libs.parser.arcos.show_isis import ShowIsisAdjacency
+
+parser = ShowIsisAdjacency(device=device)
+# Get all adjacencies
+output = parser.cli()
+# Get specific neighbor
+output = parser.cli(adj_router="rtr2")
+```
+
+## Input Validation
+
+To ensure security and stability, all parsers validate input parameters before executing commands. Inputs are checked for:
+- Being non-empty strings
+- Containing only safe characters: alphanumeric, `-`, `_`, `.`, `:`, `/`, `*`
+
+Invalid inputs will raise a `ValueError`.
+
+## Troubleshooting
+
+All parsers emit logs at `DEBUG` level, which include:
+- The exact command being executed
+- The raw output received from the device
+
+To enable debug logging:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
+
 ## OpenConfig Namespaces
 
 These parsers rely on OpenConfig YANG models. Key namespaces used include:
