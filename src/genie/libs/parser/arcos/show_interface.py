@@ -15,9 +15,10 @@ from genie.metaparser.util.schemaengine import Any, Optional
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import OPENCONFIG_INTERFACES
+from genie.libs.parser.arcos.utils import load_json_robust
 
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class ShowInterfaceSchema(MetaParser):
@@ -107,7 +108,7 @@ class ShowInterface(ShowInterfaceSchema):
                         parsed = self._parse_output(output)
                         all_interfaces.update(parsed)
                     except Exception as exc:  # pragma: no cover - defensive
-                        log.warning(
+                        logger.warning(
                             "Failed to query %s* interfaces: %s", intf_type, exc
                         )
                         continue
@@ -125,28 +126,13 @@ class ShowInterface(ShowInterfaceSchema):
         # Some devices or helper APIs may return a decoded JSON object
         # instead of a raw string. Accept both forms.
 
-        if isinstance(output, dict):
-            data = output
-        else:
-            # Some devices may include prompts or additional text before/after
-            # the JSON payload. Extract the JSON portion bounded by the first
-            # opening brace and the last closing brace before decoding.
-
-            if not isinstance(output, str):
-                output = str(output)
-
-            start = output.find("{")
-            end = output.rfind("}")
-            if start != -1 and end != -1 and end > start:
-                json_str = output[start : end + 1]
-            else:
-                json_str = output
-
-            try:
-                data = json.loads(json_str)
-            except json.JSONDecodeError as exc:
-                log.warning("Failed to parse JSON output: %s", exc)
-                raise SchemaEmptyParserError("Invalid JSON in interface output") from exc
+        try:
+            data = load_json_robust(output)
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+            raise SchemaEmptyParserError(
+                f"Invalid JSON in interface output: {exc}"
+            ) from exc
 
         interfaces_data = data.get("data", {}).get(OPENCONFIG_INTERFACES, {})
         interface_list = interfaces_data.get("interface", [])
