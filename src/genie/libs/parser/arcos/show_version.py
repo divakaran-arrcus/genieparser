@@ -6,32 +6,12 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Optional
+from genie.libs.parser.arcos.utils import load_json_robust
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-def _load_json_robust(output: TypeAny) -> Dict:
-    """Load JSON from CLI output or a pre-decoded dict.
 
-    Some devices or helper layers may return a Python dict instead of a raw
-    JSON string. CLI output may also contain prompts or banners around the
-    JSON. This helper normalizes those cases.
-    """
-
-    if isinstance(output, dict):
-        return output
-
-    if not isinstance(output, str):
-        output = str(output)
-
-    start = output.find("{")
-    end = output.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        json_str = output[start : end + 1]
-    else:
-        json_str = output
-
-    return json.loads(json_str)
 
 
 class ShowVersionSchema(MetaParser):
@@ -86,7 +66,7 @@ class ShowVersion(ShowVersionSchema):
         ret_dict: Dict[str, TypeAny] = {"version": {}}
 
         try:
-            parsed_json = _load_json_robust(output)
+            parsed_json = load_json_robust(output)
 
             data = parsed_json.get("data", {})
             system = data.get("openconfig-system:system", {})
@@ -134,10 +114,10 @@ class ShowVersion(ShowVersionSchema):
                     ret_dict["version"]["version"] = "Unknown"
 
         except json.JSONDecodeError as exc:
-            log.warning("Failed to parse version JSON output: %s", exc)
+            logger.warning("Failed to parse version JSON output: %s", exc)
             ret_dict["version"]["software"] = "Arrcus ArcOS"
             ret_dict["version"]["version"] = "Parse Failed"
         except Exception as exc:  # pragma: no cover - defensive
-            log.warning("Error parsing version data: %s", exc)
+            logger.warning("Error parsing version data: %s", exc)
 
         return ret_dict
