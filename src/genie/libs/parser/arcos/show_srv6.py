@@ -16,7 +16,7 @@ from genie.libs.parser.arcos.constants import (
     DEFAULT_INSTANCE,
     OPENCONFIG_NETWORK_INSTANCES,
 )
-from genie.libs.parser.arcos.utils import load_json_robust
+from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 
 
 log = logging.getLogger(__name__)
@@ -91,9 +91,12 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
         if output is None:
             cmd = f"{self.cli_command}"
             if locator:
+                validate_input(locator, "locator")
                 cmd += f" locator {locator}"
+            log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"srv6": {}}
 
         try:
@@ -205,10 +208,13 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
         if output is None:
             cmd = self.cli_command
             if locator_name:
-                cmd += f" show network-instance * srv6 locator {locator_name}"
+                validate_input(locator_name, "locator_name")
+                cmd += f" {locator_name}"
 
+            log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"srv6": {"network_instances": {}}}
 
         try:
