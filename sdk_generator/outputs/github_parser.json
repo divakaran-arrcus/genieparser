@@ -51493,6 +51493,70 @@
       }
     }
   },
+  "show routing-policy defined-sets": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyDefinedSets",
+        "doc": "ArcOS routing-policy defined-sets (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_routing_policy_defined_sets_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show routing-policy policy-definition": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyPolicyDefinition",
+        "doc": "ArcOS routing-policy policy-definitions (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_routing_policy_policy_definition_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running routing-policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRunningConfigRoutingPolicy",
+        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running_config_routing_policy_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running-config routing-policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRunningConfigRoutingPolicy",
+        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running_config_routing_policy_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show issu clients": {
     "folders": {
       "iosxe": {

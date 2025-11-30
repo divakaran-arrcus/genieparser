@@ -1,0 +1,720 @@
+{
+  "data": {
+    "openconfig-routing-policy:routing-policy": {
+      "policy-definitions": {
+        "policy-definition": [
+          {
+            "name": "906",
+            "state": {
+              "name": "906"
+            },
+            "statements": {
+              "statement": [
+                {
+                  "name": "50",
+                  "state": {
+                    "name": "50",
+                    "arcos-openconfig-routing-policy-augments:auto-seq-num": "4"
+                  },
+                  "conditions": {
+                    "state": {
+                    },
+                    "match-interface": {
+                      "state": {
+                      }
+                    },
+                    "match-prefix-set": {
+                      "state": {
+                        "prefix-set": "906",
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "match-tag-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "igp-conditions": {
+                      "openconfig-isis-policy:isis-conditions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-conditions": {
+                      "state": {
+                      },
+                      "community-count": {
+                        "state": {
+                        }
+                      },
+                      "as-path-length": {
+                        "state": {
+                        }
+                      },
+                      "match-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-ext-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-as-path-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:match-large-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:match-next-hop-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-conditions": {
+                      "state": {
+                      }
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "reject-route": [null]
+                    },
+                    "igp-actions": {
+                      "state": {
+                      },
+                      "openconfig-isis-policy:isis-actions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-actions": {
+                      "state": {
+                      },
+                      "set-as-path-prepend": {
+                        "state": {
+                        }
+                      },
+                      "set-community": {
+                        "state": {
+                        }
+                      },
+                      "set-ext-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-ext-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-med": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-local-pref": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:srv6-oam-actions": {
+                      "state": {
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-actions": {
+                      "set-metric": {
+                        "state": {
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "100",
+                  "state": {
+                    "name": "100",
+                    "arcos-openconfig-routing-policy-augments:auto-seq-num": "8"
+                  },
+                  "conditions": {
+                    "state": {
+                    },
+                    "match-interface": {
+                      "state": {
+                      }
+                    },
+                    "match-prefix-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "match-tag-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "igp-conditions": {
+                      "openconfig-isis-policy:isis-conditions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-conditions": {
+                      "state": {
+                      },
+                      "community-count": {
+                        "state": {
+                        }
+                      },
+                      "as-path-length": {
+                        "state": {
+                        }
+                      },
+                      "match-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-ext-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-as-path-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:match-large-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:match-next-hop-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-conditions": {
+                      "state": {
+                      }
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "accept-route": [null]
+                    },
+                    "igp-actions": {
+                      "state": {
+                      },
+                      "openconfig-isis-policy:isis-actions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-actions": {
+                      "state": {
+                      },
+                      "set-as-path-prepend": {
+                        "state": {
+                        }
+                      },
+                      "set-community": {
+                        "state": {
+                        }
+                      },
+                      "set-ext-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-ext-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-med": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-local-pref": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:srv6-oam-actions": {
+                      "state": {
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-actions": {
+                      "set-metric": {
+                        "state": {
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "set_redis_level",
+            "state": {
+              "name": "set_redis_level"
+            },
+            "statements": {
+              "statement": [
+                {
+                  "name": "10",
+                  "state": {
+                    "name": "10",
+                    "arcos-openconfig-routing-policy-augments:auto-seq-num": "4"
+                  },
+                  "conditions": {
+                    "state": {
+                    },
+                    "match-interface": {
+                      "state": {
+                      }
+                    },
+                    "match-prefix-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "match-tag-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "igp-conditions": {
+                      "openconfig-isis-policy:isis-conditions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-conditions": {
+                      "state": {
+                      },
+                      "community-count": {
+                        "state": {
+                        }
+                      },
+                      "as-path-length": {
+                        "state": {
+                        }
+                      },
+                      "match-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-ext-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-as-path-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:match-large-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:match-next-hop-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-conditions": {
+                      "state": {
+                      }
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "accept-route": [null]
+                    },
+                    "igp-actions": {
+                      "state": {
+                      },
+                      "openconfig-isis-policy:isis-actions": {
+                        "state": {
+                          "set-level": 2
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-actions": {
+                      "state": {
+                      },
+                      "set-as-path-prepend": {
+                        "state": {
+                        }
+                      },
+                      "set-community": {
+                        "state": {
+                        }
+                      },
+                      "set-ext-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-ext-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-med": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-local-pref": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:srv6-oam-actions": {
+                      "state": {
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-actions": {
+                      "set-metric": {
+                        "state": {
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "v6_L2_to_L1",
+            "state": {
+              "name": "v6_L2_to_L1"
+            },
+            "statements": {
+              "statement": [
+                {
+                  "name": "10",
+                  "state": {
+                    "name": "10",
+                    "arcos-openconfig-routing-policy-augments:auto-seq-num": "4"
+                  },
+                  "conditions": {
+                    "state": {
+                    },
+                    "match-interface": {
+                      "state": {
+                      }
+                    },
+                    "match-prefix-set": {
+                      "state": {
+                        "prefix-set": "leaf_deny",
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "match-tag-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "igp-conditions": {
+                      "openconfig-isis-policy:isis-conditions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-conditions": {
+                      "state": {
+                      },
+                      "community-count": {
+                        "state": {
+                        }
+                      },
+                      "as-path-length": {
+                        "state": {
+                        }
+                      },
+                      "match-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-ext-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-as-path-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:match-large-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:match-next-hop-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-conditions": {
+                      "state": {
+                      }
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "reject-route": [null]
+                    },
+                    "igp-actions": {
+                      "state": {
+                      },
+                      "openconfig-isis-policy:isis-actions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-actions": {
+                      "state": {
+                      },
+                      "set-as-path-prepend": {
+                        "state": {
+                        }
+                      },
+                      "set-community": {
+                        "state": {
+                        }
+                      },
+                      "set-ext-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-ext-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-med": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-local-pref": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:srv6-oam-actions": {
+                      "state": {
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-actions": {
+                      "set-metric": {
+                        "state": {
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "20",
+                  "state": {
+                    "name": "20",
+                    "arcos-openconfig-routing-policy-augments:auto-seq-num": "8"
+                  },
+                  "conditions": {
+                    "state": {
+                    },
+                    "match-interface": {
+                      "state": {
+                      }
+                    },
+                    "match-prefix-set": {
+                      "state": {
+                        "prefix-set": "v6_L2_to_L1",
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "match-tag-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "igp-conditions": {
+                      "openconfig-isis-policy:isis-conditions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-conditions": {
+                      "state": {
+                      },
+                      "community-count": {
+                        "state": {
+                        }
+                      },
+                      "as-path-length": {
+                        "state": {
+                        }
+                      },
+                      "match-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-ext-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "match-as-path-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:match-large-community-set": {
+                        "state": {
+                          "match-set-options": "ANY"
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:match-next-hop-set": {
+                      "state": {
+                        "match-set-options": "ANY"
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-conditions": {
+                      "state": {
+                      }
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "accept-route": [null]
+                    },
+                    "igp-actions": {
+                      "state": {
+                        "set-tag": 69
+                      },
+                      "openconfig-isis-policy:isis-actions": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "openconfig-bgp-policy:bgp-actions": {
+                      "state": {
+                      },
+                      "set-as-path-prepend": {
+                        "state": {
+                        }
+                      },
+                      "set-community": {
+                        "state": {
+                        }
+                      },
+                      "set-ext-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-ext-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:set-large-community-additional": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-med": {
+                        "state": {
+                        }
+                      },
+                      "arcos-openconfig-bgp-policy-augments:adjust-local-pref": {
+                        "state": {
+                        }
+                      }
+                    },
+                    "arcos-openconfig-routing-policy-augments:srv6-oam-actions": {
+                      "state": {
+                      }
+                    },
+                    "arcos-ospf-policy:ospf-actions": {
+                      "set-metric": {
+                        "state": {
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
