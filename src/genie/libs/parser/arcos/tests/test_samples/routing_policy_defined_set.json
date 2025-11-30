@@ -1,0 +1,541 @@
+{
+  "data": {
+    "openconfig-routing-policy:routing-policy": {
+      "defined-sets": {
+        "prefix-sets": {
+          "prefix-set": [
+            {
+              "prefix-set-name": "906",
+              "state": {
+                "prefix-set-name": "906"
+              },
+              "prefixes": {
+                "prefix": [
+                  {
+                    "ip-prefix": "2400:2020:0:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:0:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:0:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:0:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:31:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:31:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:31:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:31:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:32:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:32:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:32:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:32:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:33:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:33:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:33:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:33:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:34:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:34:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:34:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:34:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:35:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:35:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:35:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:35:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:36:900::/56",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:36:900::/56",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:36:906::/64",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "2400:2020:36:906::/64",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:0:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:0:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:0:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:0:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:31:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:31:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:31:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:31:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:32:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:32:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:32:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:32:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:33:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:33:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:33:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:33:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:34:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:34:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:34:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:34:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:35:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:35:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:35:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:35:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:36:900::/40",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:36:900::/40",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:36:906::/48",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "fccc:36:906::/48",
+                      "masklength-range": "exact"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "prefix-set-name": "__IPV4_MARTIAN_PREFIX_SET__",
+              "state": {
+                "prefix-set-name": "__IPV4_MARTIAN_PREFIX_SET__"
+              },
+              "prefixes": {
+                "prefix": [
+                  {
+                    "ip-prefix": "0.0.0.0/8",
+                    "masklength-range": "8..32",
+                    "state": {
+                      "ip-prefix": "0.0.0.0/8",
+                      "masklength-range": "8..32"
+                    }
+                  },
+                  {
+                    "ip-prefix": "127.0.0.0/8",
+                    "masklength-range": "8..32",
+                    "state": {
+                      "ip-prefix": "127.0.0.0/8",
+                      "masklength-range": "8..32"
+                    }
+                  },
+                  {
+                    "ip-prefix": "192.0.0.0/24",
+                    "masklength-range": "24..32",
+                    "state": {
+                      "ip-prefix": "192.0.0.0/24",
+                      "masklength-range": "24..32"
+                    }
+                  },
+                  {
+                    "ip-prefix": "224.0.0.0/4",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "224.0.0.0/4",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "224.0.0.0/24",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "224.0.0.0/24",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "240.0.0.0/4",
+                    "masklength-range": "4..32",
+                    "state": {
+                      "ip-prefix": "240.0.0.0/4",
+                      "masklength-range": "4..32"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "prefix-set-name": "__IPV6_MARTIAN_PREFIX_SET__",
+              "state": {
+                "prefix-set-name": "__IPV6_MARTIAN_PREFIX_SET__"
+              },
+              "prefixes": {
+                "prefix": [
+                  {
+                    "ip-prefix": "::/128",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "::/128",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "::1/128",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "::1/128",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "ff00::/8",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "ff00::/8",
+                      "masklength-range": "exact"
+                    }
+                  },
+                  {
+                    "ip-prefix": "ff02::/16",
+                    "masklength-range": "exact",
+                    "state": {
+                      "ip-prefix": "ff02::/16",
+                      "masklength-range": "exact"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "prefix-set-name": "leaf_deny",
+              "state": {
+                "prefix-set-name": "leaf_deny"
+              },
+              "prefixes": {
+                "prefix": [
+                  {
+                    "ip-prefix": "2400:2020:0:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:0:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:31:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:31:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:32:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:32:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:33:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:33:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:34:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:34:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:35:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:35:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "2400:2020:36:100::/56",
+                    "masklength-range": "56..128",
+                    "state": {
+                      "ip-prefix": "2400:2020:36:100::/56",
+                      "masklength-range": "56..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:0:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:0:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:31:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:31:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:32:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:32:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:33:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:33:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:34:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:34:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:35:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:35:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc:36:100::/40",
+                    "masklength-range": "40..128",
+                    "state": {
+                      "ip-prefix": "fccc:36:100::/40",
+                      "masklength-range": "40..128"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "prefix-set-name": "v6_L2_to_L1",
+              "state": {
+                "prefix-set-name": "v6_L2_to_L1"
+              },
+              "prefixes": {
+                "prefix": [
+                  {
+                    "ip-prefix": "2400:2020::/32",
+                    "masklength-range": "32..128",
+                    "state": {
+                      "ip-prefix": "2400:2020::/32",
+                      "masklength-range": "32..128"
+                    }
+                  },
+                  {
+                    "ip-prefix": "fccc::/16",
+                    "masklength-range": "16..128",
+                    "state": {
+                      "ip-prefix": "fccc::/16",
+                      "masklength-range": "16..128"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "openconfig-bgp-policy:bgp-defined-sets": {
+          "community-sets": {
+          }
+        },
+        "arcos-openconfig-routing-policy-augments:string-sets": {
+          "string-set": [
+            {
+              "name": "abc",
+              "config": {
+                "name": "abc"
+              },
+              "strings": {
+                "string": [
+                  {
+                    "string-value": "xyz",
+                    "config": {
+                      "string-value": "xyz",
+                      "type": "EXACT"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "tag-sets": {
+          "tag-set": [
+            {
+              "tag-set-name": "pqr",
+              "config": {
+                "tag-set-name": "pqr",
+                "tag-value": [55]
+              }
+            }
+          ]
+        },
+        "arcos-openconfig-routing-policy-augments:next-hop-sets": {
+          "next-hop-set": [
+            {
+              "next-hop-set-name": "abc",
+              "state": {
+                "next-hop-set-name": "abc",
+                "address": ["10.20.0.0"]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
