@@ -454,7 +454,10 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         igp_raw = actions_raw.get("igp-actions") or {}
         igp_actions: TypeDict[str, TypeAny] = {}
 
-        igp_cfg = igp_raw.get("config") or {}
+        # ArcOS may place igp-actions under either "config" or "state";
+        # prefer "config" but fall back to "state" to support both
+        # running-config and operational JSON representations.
+        igp_cfg = igp_raw.get("config") or igp_raw.get("state") or {}
         set_tag = igp_cfg.get("set-tag")
         if set_tag is not None:
             try:
@@ -463,7 +466,8 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
                 pass
 
         isis_raw = igp_raw.get("openconfig-isis-policy:isis-actions") or {}
-        isis_cfg = isis_raw.get("config") or {}
+        # Likewise, ISIS actions can be under "config" or "state".
+        isis_cfg = isis_raw.get("config") or isis_raw.get("state") or {}
         set_level = isis_cfg.get("set-level")
         isis_actions: TypeDict[str, TypeAny] = {}
         if set_level is not None:
@@ -481,7 +485,12 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         ospf_actions: TypeDict[str, TypeAny] = {}
 
         set_metric_container = ospf_raw.get("set-metric") or {}
-        metric_cfg = set_metric_container.get("config") or {}
+        # OSPF set-metric may also use either "config" or "state" nodes.
+        metric_cfg = (
+            set_metric_container.get("config")
+            or set_metric_container.get("state")
+            or {}
+        )
         metric = metric_cfg.get("metric")
         if metric is not None:
             try:
