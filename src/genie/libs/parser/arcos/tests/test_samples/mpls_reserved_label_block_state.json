@@ -1,0 +1,41 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "mpls": {
+            "global": {
+              "reserved-label-blocks": {
+                "reserved-label-block": [
+                  {
+                    "local-id": "rb1",
+                    "state": {
+                      "local-id": "rb1",
+                      "lower-bound": 10000,
+                      "upper-bound": 19999,
+                      "arcos-mpls:usage": "arcos-mpls:ISIS_SRGB",
+                      "arcos-mpls:protocol-identifier": "openconfig-policy-types:ISIS",
+                      "arcos-mpls:protocol-name": "default"
+                    }
+                  },
+                  {
+                    "local-id": "rb2",
+                    "state": {
+                      "local-id": "rb2",
+                      "lower-bound": 20000,
+                      "upper-bound": 29999,
+                      "arcos-mpls:usage": "arcos-mpls:ISIS_SRLB",
+                      "arcos-mpls:protocol-identifier": "openconfig-policy-types:ISIS",
+                      "arcos-mpls:protocol-name": "default"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
