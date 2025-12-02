@@ -51324,17 +51324,18 @@
       }
     }
   },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global state": {
+  "show isis mpls": {
     "folders": {
       "arcos": {
-        "class": "ShowIsisGlobal",
-        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
+        "class": "ShowIsisMplsLabelDb",
+        "doc": "ArcOS ISIS MPLS label database (OpenConfig JSON)",
         "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
+        "schema": "",
         "tokens": {
           "os": "arcos"
         },
-        "uid": "show_isis_global",
+        "uid": "show_isis_mpls_label_db_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
@@ -51551,6 +51552,37 @@
           "os": "arcos"
         },
         "uid": "show_isis_lsp_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisMplsLabelDb",
+        "doc": "ArcOS ISIS MPLS label database (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_mpls_label_db_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisGlobal",
+        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_global",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
