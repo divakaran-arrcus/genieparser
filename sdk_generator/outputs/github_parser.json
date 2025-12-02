@@ -105219,7 +105219,7 @@
       }
     }
   },
-  "show running-config network-instance * srv6": {
+  "show running-config network-instance {instance} srv6": {
     "folders": {
       "arcos": {
         "class": "ShowSrv6Config",
@@ -105235,7 +105235,23 @@
       }
     }
   },
-  "show network-instance * srv6 locator": {
+  "show network-instance {instance} srv6 locator": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrv6Locator",
+        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
+        "module_name": "arcos.show_srv6",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_srv6_locator_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {instance} srv6 locator {locator_name}": {
     "folders": {
       "arcos": {
         "class": "ShowSrv6Locator",

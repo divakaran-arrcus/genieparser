@@ -80,15 +80,19 @@ class ShowSrv6ConfigSchema(MetaParser):
 class ShowSrv6Config(ShowSrv6ConfigSchema):
     """Parser for ArcOS SRv6 running configuration (JSON)."""
 
-    cli_command = "show running-config network-instance * srv6"
+    cli_command = [
+        "show running-config network-instance {instance} srv6",
+    ]
 
     def cli(
         self,
+        instance: str = "*",
         locator: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(instance, "instance")
+            cmd = f"show running-config network-instance {instance} srv6"
             if locator:
                 validate_input(locator, "locator")
                 cmd += f" locator {locator}"
@@ -198,15 +202,20 @@ class ShowSrv6LocatorSchema(MetaParser):
 class ShowSrv6Locator(ShowSrv6LocatorSchema):
     """Parser for ArcOS SRv6 locator operational state (JSON)."""
 
-    cli_command = "show network-instance * srv6 locator"
+    cli_command = [
+        "show network-instance {instance} srv6 locator",
+        "show network-instance {instance} srv6 locator {locator_name}",
+    ]
 
     def cli(
         self,
+        instance: str = "*",
         locator_name: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = self.cli_command
+            validate_input(instance, "instance")
+            cmd = f"show network-instance {instance} srv6 locator"
             if locator_name:
                 validate_input(locator_name, "locator_name")
                 cmd += f" {locator_name}"
