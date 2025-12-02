@@ -711,3 +711,111 @@ def test_show_isis_mpls_label_db_sample():
     assert key_20012.get("type") == "KEY_IPV4_ADJ"
     assert key_20012.get("nh_address") == "10.20.0.20"
     assert key_20012.get("ifindex") == "802"
+
+
+def test_show_isis_lsp_extended_is_neighbor():
+    """Validate parsing of Extended IS Reachability (neighbors/links) with SR-MPLS data."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
+    database = isis.get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # Verify Extended IS Neighbor parsing
+    ext_is = lsp.get("extended_is_neighbor", {})
+    assert len(ext_is) >= 2  # At least rtr2 and rtr3 neighbors
+
+    # Check neighbor rtr2.00 with instance 802
+    nbr_key = "rtr2.00:802"
+    assert nbr_key in ext_is
+    nbr = ext_is[nbr_key]
+
+    assert nbr["system_id"] == "rtr2.00"
+    assert nbr["instance_id"] == "802"
+    assert nbr["metric"] == 10
+    assert nbr.get("two_way") is True
+
+    # Link ID
+    assert "link_id" in nbr
+    assert nbr["link_id"]["local"] == 802
+    assert nbr["link_id"]["remote"] == 801
+
+    # IPv4 addresses
+    assert nbr.get("ipv4_interface_address") == ["10.20.0.10"]
+    assert nbr.get("ipv4_neighbor_address") == ["10.20.0.20"]
+
+    # IPv6 address
+    assert nbr.get("ipv6_interface_address") == ["10:20::10"]
+
+    # Adjacency SID (SR-MPLS)
+    adj_sids = nbr.get("adjacency_sids", [])
+    assert len(adj_sids) >= 1
+    adj_sid = adj_sids[0]
+    assert adj_sid["sid"] == 20012
+    assert "VALUE" in adj_sid.get("flags", [])
+    assert "LOCAL" in adj_sid.get("flags", [])
+    assert adj_sid.get("weight") == 0
+
+    # ASLA (Application-Specific Link Attributes)
+    asla = nbr.get("asla", {})
+    assert asla.get("application") == "flexible-algorithm"
+    assert "admin_groups" in asla
+    assert "red" in asla["admin_groups"]
+    assert asla.get("te_metric") == 10
+    assert asla.get("min_delay") == 5
+    assert asla.get("max_delay") == 5
+
+
+def test_show_isis_lsp_srv6_end_x_sid():
+    """Validate parsing of SRv6 End.X SID in Extended IS Reachability."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large_2.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    database = result["network-instance"]["default"]["isis"]["default"].get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # Verify Extended IS Neighbor parsing
+    ext_is = lsp.get("extended_is_neighbor", {})
+    assert len(ext_is) >= 1
+
+    # Check neighbor rtr2.00:802
+    nbr_key = "rtr2.00:802"
+    assert nbr_key in ext_is
+    nbr = ext_is[nbr_key]
+
+    # Adjacency SID should be present
+    adj_sids = nbr.get("adjacency_sids", [])
+    assert len(adj_sids) >= 1
+    assert adj_sids[0]["sid"] == 20012
