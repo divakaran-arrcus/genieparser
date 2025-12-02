@@ -69,7 +69,7 @@ def test_show_isis_config_sample():
     output = sample_file.read_text()
 
     parser = ShowIsisConfig(device="dummy")
-    result = parser.cli(instance=None, output=output)
+    result = parser.cli(output=output)
 
     assert isinstance(result, dict)
     assert "network-instance" in result
