@@ -23,7 +23,7 @@ class ShowVersionSchema(MetaParser):
 
     schema = {
         "version": {
-            "version": str,
+            "sw-version": str,
             Optional("software"): str,
             Optional("platform"): str,
             Optional("form_factor"): str,
@@ -31,14 +31,6 @@ class ShowVersionSchema(MetaParser):
             Optional("cpu_info"): str,
             Optional("total_memory"): str,
             Optional("uptime"): str,
-            # Older / alternate keys kept for forward-compatibility
-            Optional("product"): str,
-            Optional("build"): str,
-            Optional("build_date"): str,
-            Optional("hostname"): str,
-            Optional("serial"): str,
-            Optional("model"): str,
-            Optional("raw"): str,
         }
     }
 
@@ -86,7 +78,7 @@ class ShowVersion(ShowVersionSchema):
                     "cpu-info": "cpu_info",
                     "total-memory": "total_memory",
                     "software": "software",
-                    "sw-version": "version",
+                    "sw-version": "sw-version",
                     "uptime": "uptime",
                 }
 
@@ -94,12 +86,12 @@ class ShowVersion(ShowVersionSchema):
                     if json_key in state:
                         ret_dict["version"][dict_key] = state[json_key]
 
-                # If version was not set via "sw-version", try alternates
-                if "version" not in ret_dict["version"]:
+                # If sw-version was not set via "sw-version", try alternates
+                if "sw-version" not in ret_dict["version"]:
                     if "version" in state:
-                        ret_dict["version"]["version"] = state["version"]
+                        ret_dict["version"]["sw-version"] = state["version"]
                     elif "software-version" in state:
-                        ret_dict["version"]["version"] = state[
+                        ret_dict["version"]["sw-version"] = state[
                             "software-version"
                         ]
 
@@ -111,14 +103,13 @@ class ShowVersion(ShowVersionSchema):
                         ret_dict["version"][key] = value
                 else:
                     # Minimal fallback information
-                    ret_dict["version"]["raw"] = str(data)
                     ret_dict["version"]["software"] = "Arrcus ArcOS"
-                    ret_dict["version"]["version"] = "Unknown"
+                    ret_dict["version"]["sw-version"] = "Unknown"
 
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse version JSON output: %s", exc)
             ret_dict["version"]["software"] = "Arrcus ArcOS"
-            ret_dict["version"]["version"] = "Parse Failed"
+            ret_dict["version"]["sw-version"] = "Parse Failed"
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing version data: %s", exc)
 
