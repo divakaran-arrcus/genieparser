@@ -2995,3 +2995,339 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
             logger.warning("Error parsing ISIS flexible-algorithm routes data: %s", exc)
 
         return ret_dict
+
+
+# =============================================================================
+# ShowIsisMplsLabelDb - ISIS MPLS Label Database
+# =============================================================================
+
+
+class ShowIsisMplsLabelDbSchema(MetaParser):
+    """Schema for ArcOS ISIS MPLS label database.
+
+    CLI Command::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls
+    """
+
+    schema = {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        "mpls": {
+                            Optional("igp_ldp_sync_enabled"): bool,
+                            Optional("label_db"): {
+                                "state": {
+                                    Optional("protocol_identifier"): str,
+                                    Optional("protocol_name"): str,
+                                    Optional("configured_blocks"): int,
+                                    Optional("active_blocks"): int,
+                                    Optional("active_usages"): int,
+                                },
+                                Optional("statistics"): {
+                                    Optional("label_space"): int,
+                                    Optional("labels"): int,
+                                    Optional("allocs"): str,
+                                    Optional("frees"): str,
+                                    Optional("alloc_errors"): str,
+                                    Optional("free_errors"): str,
+                                },
+                                Optional("usages"): {
+                                    Any(): {  # usage type (ISIS_SRGB, ISIS_SRLB)
+                                        "usage": str,
+                                        Optional("blocks_count"): int,
+                                        Optional("opaque_flags"): str,
+                                        Optional("statistics"): {
+                                            Optional("label_space"): int,
+                                            Optional("labels"): int,
+                                            Optional("allocs"): str,
+                                            Optional("frees"): str,
+                                            Optional("alloc_errors"): str,
+                                            Optional("free_errors"): str,
+                                        },
+                                        Optional("blocks"): {
+                                            Any(): {  # lower-bound as key
+                                                "lower_bound": int,
+                                                "upper_bound": int,
+                                                Optional("block_name"): str,
+                                                Optional("opaque_flags"): str,
+                                                Optional("statistics"): {
+                                                    Optional("label_space"): int,
+                                                    Optional("labels"): int,
+                                                    Optional("allocs"): str,
+                                                    Optional("frees"): str,
+                                                    Optional("alloc_errors"): str,
+                                                    Optional("free_errors"): str,
+                                                },
+                                            }
+                                        },
+                                        Optional("labels"): {
+                                            Any(): {  # label value as key
+                                                "label": int,
+                                                Optional("block_name"): str,
+                                                Optional("label_key"): {
+                                                    Optional("type"): str,
+                                                    Optional("sub_type"): int,
+                                                    Optional("table_id"): int,
+                                                    Optional("ip_prefix"): str,
+                                                    Optional("nh_address"): str,
+                                                    Optional("ifindex"): str,
+                                                },
+                                            }
+                                        },
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
+    """Parser for ArcOS ISIS MPLS label database (JSON format).
+
+    Command pattern (before JSON pipe)::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls
+    """
+
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls",
+    ]
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls"
+            logger.debug("Executing command: %s", cmd)
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        ret_dict: Dict[str, TypeAny] = {"network-instance": {}}
+
+        try:
+            parsed_json = load_json_robust(output)
+
+            data = parsed_json.get("data", {})
+            network_instances = data.get(
+                "openconfig-network-instance:network-instances", {}
+            )
+            ni_list = network_instances.get("network-instance", [])
+
+            for ni in ni_list:
+                ni_name = ni.get("name")
+                if not ni_name:
+                    continue
+
+                protocols = ni.get("protocols", {})
+                protocol_list = protocols.get("protocol", [])
+
+                for protocol in protocol_list:
+                    identifier = protocol.get("identifier", "")
+                    if "ISIS" not in identifier:
+                        continue
+
+                    proto_name = protocol.get("name", "default")
+                    isis = protocol.get("isis", {})
+                    global_config = isis.get("global", {})
+                    mpls = global_config.get("mpls", {})
+
+                    if not mpls:
+                        continue
+
+                    # Initialize structure
+                    if ni_name not in ret_dict["network-instance"]:
+                        ret_dict["network-instance"][ni_name] = {"isis": {}}
+                    if proto_name not in ret_dict["network-instance"][ni_name]["isis"]:
+                        ret_dict["network-instance"][ni_name]["isis"][proto_name] = {
+                            "mpls": {}
+                        }
+
+                    mpls_entry = ret_dict["network-instance"][ni_name]["isis"][
+                        proto_name
+                    ]["mpls"]
+
+                    # IGP-LDP sync
+                    igp_ldp_sync = mpls.get("igp-ldp-sync", {})
+                    sync_state = igp_ldp_sync.get("state", {})
+                    if "enabled" in sync_state:
+                        mpls_entry["igp_ldp_sync_enabled"] = sync_state["enabled"]
+
+                    # Label database
+                    label_db = mpls.get("arcos-mpls:label-db", {})
+                    if not label_db:
+                        continue
+
+                    mpls_entry["label_db"] = {"state": {}}
+
+                    # Label DB state
+                    db_state = label_db.get("state", {})
+                    state_entry = mpls_entry["label_db"]["state"]
+
+                    proto_id = db_state.get("protocol-identifier", "")
+                    if proto_id:
+                        state_entry["protocol_identifier"] = proto_id.replace(
+                            "openconfig-policy-types:", ""
+                        )
+
+                    if "protocol-name" in db_state:
+                        state_entry["protocol_name"] = db_state["protocol-name"]
+                    if "configured-blocks" in db_state:
+                        state_entry["configured_blocks"] = db_state["configured-blocks"]
+                    if "active-blocks" in db_state:
+                        state_entry["active_blocks"] = db_state["active-blocks"]
+                    if "active-usages" in db_state:
+                        state_entry["active_usages"] = db_state["active-usages"]
+
+                    # Label DB statistics
+                    db_stats = label_db.get("statistics", {})
+                    if db_stats:
+                        mpls_entry["label_db"]["statistics"] = self._parse_statistics(
+                            db_stats
+                        )
+
+                    # Usages
+                    usages_container = label_db.get("usages", {})
+                    usage_list = usages_container.get("usage", [])
+
+                    if usage_list:
+                        mpls_entry["label_db"]["usages"] = {}
+                        for usage in usage_list:
+                            usage_key = usage.get("usage", "")
+                            usage_key_clean = usage_key.replace("arcos-mpls:", "")
+
+                            usage_entry: Dict[str, TypeAny] = {"usage": usage_key_clean}
+
+                            usage_state = usage.get("state", {})
+                            if "blocks" in usage_state:
+                                usage_entry["blocks_count"] = usage_state["blocks"]
+                            if "opaque-flags" in usage_state:
+                                usage_entry["opaque_flags"] = usage_state["opaque-flags"]
+
+                            # Usage statistics
+                            usage_stats = usage.get("statistics", {})
+                            if usage_stats:
+                                usage_entry["statistics"] = self._parse_statistics(
+                                    usage_stats
+                                )
+
+                            # Blocks
+                            blocks_container = usage.get("blocks", {})
+                            block_list = blocks_container.get("block", [])
+                            if block_list:
+                                usage_entry["blocks"] = {}
+                                for block in block_list:
+                                    lower = block.get("lower-bound")
+                                    if lower is None:
+                                        continue
+
+                                    block_state = block.get("state", {})
+                                    block_entry: Dict[str, TypeAny] = {
+                                        "lower_bound": lower,
+                                        "upper_bound": block_state.get("upper-bound", 0),
+                                    }
+
+                                    if "block-name" in block_state:
+                                        block_entry["block_name"] = block_state[
+                                            "block-name"
+                                        ]
+                                    if "opaque-flags" in block_state:
+                                        block_entry["opaque_flags"] = block_state[
+                                            "opaque-flags"
+                                        ]
+
+                                    block_stats = block.get("statistics", {})
+                                    if block_stats:
+                                        block_entry["statistics"] = (
+                                            self._parse_statistics(block_stats)
+                                        )
+
+                                    usage_entry["blocks"][str(lower)] = block_entry
+
+                            # Labels
+                            labels_container = usage.get("labels", {})
+                            label_list = labels_container.get("label", [])
+                            if label_list:
+                                usage_entry["labels"] = {}
+                                for label in label_list:
+                                    label_val = label.get("label")
+                                    if label_val is None:
+                                        continue
+
+                                    label_state = label.get("state", {})
+                                    label_entry: Dict[str, TypeAny] = {
+                                        "label": label_val,
+                                    }
+
+                                    if "block-name" in label_state:
+                                        label_entry["block_name"] = label_state[
+                                            "block-name"
+                                        ]
+
+                                    # Label key
+                                    label_key_obj = label.get("label-key", {})
+                                    key_state = label_key_obj.get("state", {})
+                                    if key_state:
+                                        key_entry: Dict[str, TypeAny] = {}
+
+                                        key_type = key_state.get("type", "")
+                                        if key_type:
+                                            key_entry["type"] = key_type.replace(
+                                                "arcos-mpls:", ""
+                                            )
+                                        if "sub-type" in key_state:
+                                            key_entry["sub_type"] = key_state["sub-type"]
+                                        if "table-id" in key_state:
+                                            key_entry["table_id"] = key_state["table-id"]
+                                        if "ip-prefix" in key_state:
+                                            key_entry["ip_prefix"] = key_state[
+                                                "ip-prefix"
+                                            ]
+                                        if "nh-address" in key_state:
+                                            key_entry["nh_address"] = key_state[
+                                                "nh-address"
+                                            ]
+                                        if "ifindex" in key_state:
+                                            key_entry["ifindex"] = key_state["ifindex"]
+
+                                        if key_entry:
+                                            label_entry["label_key"] = key_entry
+
+                                    usage_entry["labels"][str(label_val)] = label_entry
+
+                            mpls_entry["label_db"]["usages"][usage_key_clean] = (
+                                usage_entry
+                            )
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS MPLS label database: %s", exc)
+
+        return ret_dict
+
+    def _parse_statistics(self, stats: Dict) -> Dict[str, TypeAny]:
+        """Parse statistics section."""
+        result: Dict[str, TypeAny] = {}
+        if "label-space" in stats:
+            result["label_space"] = stats["label-space"]
+        if "labels" in stats:
+            result["labels"] = stats["labels"]
+        if "allocs" in stats:
+            result["allocs"] = stats["allocs"]
+        if "frees" in stats:
+            result["frees"] = stats["frees"]
+        if "alloc-errors" in stats:
+            result["alloc_errors"] = stats["alloc-errors"]
+        if "free-errors" in stats:
+            result["free_errors"] = stats["free-errors"]
+        return result

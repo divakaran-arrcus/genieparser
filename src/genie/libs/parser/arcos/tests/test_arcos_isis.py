@@ -11,6 +11,7 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisFastReroute,
     ShowIsisInterface,
     ShowIsisLsp,
+    ShowIsisMplsLabelDb,
     ShowIsisRedistributeRoute,
     ShowIsisRoute,
 )
@@ -626,3 +627,87 @@ def test_show_isis_flex_algo_route_minimal():
     lvl2 = r["levels"]["2"]
     assert lvl2["metric"] == 20
     assert "best" in lvl2["flags"]
+
+
+def test_show_isis_mpls_label_db_sample():
+    """Validate parsing of an ISIS MPLS label database sample."""
+
+    sample_file = SAMPLES_DIR / "isis_mpls_label_db.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisMplsLabelDb(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
+
+    mpls = isis.get("mpls", {})
+    assert mpls.get("igp_ldp_sync_enabled") is False
+
+    label_db = mpls.get("label_db", {})
+    state = label_db.get("state", {})
+    assert state.get("protocol_identifier") == "ISIS"
+    assert state.get("protocol_name") == "default"
+    assert state.get("configured_blocks") == 2
+    assert state.get("active_blocks") == 2
+    assert state.get("active_usages") == 2
+
+    # Statistics
+    stats = label_db.get("statistics", {})
+    assert stats.get("label_space") == 20000
+    assert stats.get("labels") == 6
+    assert stats.get("allocs") == "7"
+    assert stats.get("frees") == "5"
+
+    # Usages
+    usages = label_db.get("usages", {})
+    assert "ISIS_SRGB" in usages
+    assert "ISIS_SRLB" in usages
+
+    # SRGB usage
+    srgb = usages["ISIS_SRGB"]
+    assert srgb["usage"] == "ISIS_SRGB"
+    assert srgb.get("blocks_count") == 1
+    assert srgb.get("opaque_flags") == "0c"
+
+    srgb_stats = srgb.get("statistics", {})
+    assert srgb_stats.get("label_space") == 10000
+    assert srgb_stats.get("labels") == 3
+
+    # SRGB blocks
+    srgb_blocks = srgb.get("blocks", {})
+    assert "10000" in srgb_blocks
+    block_10000 = srgb_blocks["10000"]
+    assert block_10000["lower_bound"] == 10000
+    assert block_10000["upper_bound"] == 19999
+    assert block_10000.get("block_name") == "rb1"
+
+    # SRGB labels
+    srgb_labels = srgb.get("labels", {})
+    assert "10111" in srgb_labels
+    label_10111 = srgb_labels["10111"]
+    assert label_10111["label"] == 10111
+    assert label_10111.get("block_name") == "rb1"
+    key_10111 = label_10111.get("label_key", {})
+    assert key_10111.get("type") == "KEY_IPV4_PREFIX"
+    assert key_10111.get("ip_prefix") == "1.1.1.1/32"
+
+    # SRLB usage
+    srlb = usages["ISIS_SRLB"]
+    assert srlb["usage"] == "ISIS_SRLB"
+
+    # SRLB labels (adjacency labels)
+    srlb_labels = srlb.get("labels", {})
+    assert "20012" in srlb_labels
+    label_20012 = srlb_labels["20012"]
+    assert label_20012["label"] == 20012
+    key_20012 = label_20012.get("label_key", {})
+    assert key_20012.get("type") == "KEY_IPV4_ADJ"
+    assert key_20012.get("nh_address") == "10.20.0.20"
+    assert key_20012.get("ifindex") == "802"
