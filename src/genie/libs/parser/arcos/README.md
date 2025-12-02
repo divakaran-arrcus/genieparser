@@ -30,6 +30,14 @@ All ISIS parsers accept optional filtering parameters (default `*` for all). Par
 | `ShowIsisFastReroute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `prefix` |
 | `ShowIsisFlexAlgoFastReroute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `algo`, `prefix` |
 | `ShowIsisFlexAlgoRoute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `algo`, `prefix` |
+| `ShowIsisMplsLabelDb` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls` | `network_instance`, `protocol_instance` |
+
+### MPLS Parsers
+
+| Parser Class | CLI Command | Parameters |
+|--------------|-------------|------------|
+| `ShowMplsReservedLabelBlockConfig` | `show running-config network-instance {network_instance} mpls global reserved-label-block [<local_id>]` | `network_instance`, `local_id` |
+| `ShowMplsReservedLabelBlock` | `show network-instance {network_instance} mpls global reserved-label-block [<local_id>]` | `network_instance`, `local_id` |
 
 ### SRv6 Parsers
 
@@ -141,6 +149,46 @@ output = parser.cli(algo="128")
 output = parser.cli(network_instance="default", protocol_instance="default", afi="IPV6", algo="129")
 ```
 
+### MPLS Reserved Label Blocks
+
+```python
+from genie.libs.parser.arcos.show_mpls import (
+    ShowMplsReservedLabelBlockConfig,
+    ShowMplsReservedLabelBlock,
+)
+
+# Get running-config for all label blocks
+parser = ShowMplsReservedLabelBlockConfig(device=device)
+output = parser.cli()
+
+# Filter by network instance
+output = parser.cli(network_instance="default")
+
+# Get specific label block config
+output = parser.cli(network_instance="default", local_id="rb1")
+
+# Get operational state for label blocks
+parser = ShowMplsReservedLabelBlock(device=device)
+output = parser.cli()
+
+# Filter by network instance and block ID
+output = parser.cli(network_instance="default", local_id="rb2")
+```
+
+### ISIS MPLS Label Database
+
+```python
+from genie.libs.parser.arcos.show_isis import ShowIsisMplsLabelDb
+
+parser = ShowIsisMplsLabelDb(device=device)
+
+# Get all ISIS MPLS label database
+output = parser.cli()
+
+# Filter by network instance and protocol instance
+output = parser.cli(network_instance="default", protocol_instance="default")
+```
+
 ### Routing Policy
 
 ```python
@@ -220,12 +268,14 @@ arcos/
 ├── utils.py              # Utility functions (JSON parsing, input validation)
 ├── show_interface.py     # Interface parsers
 ├── show_isis.py          # ISIS protocol parsers
+├── show_mpls.py          # MPLS parsers
 ├── show_routing_policy.py # Routing policy parsers
 ├── show_srv6.py          # SRv6 parsers
 ├── show_version.py       # System version parser
 └── tests/                # Unit tests
     ├── test_arcos_interface.py
     ├── test_arcos_isis.py
+    ├── test_arcos_mpls.py
     ├── test_arcos_routing_policy.py
     ├── test_arcos_show_version.py
     ├── test_arcos_srv6.py
