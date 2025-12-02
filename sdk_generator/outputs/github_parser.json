@@ -51255,6 +51255,98 @@
       }
     }
   },
+  "show running-config network-instance {network_instance} mpls global reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlockConfig",
+        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": { "os": "arcos" },
+        "uid": "show_mpls_reserved_label_block_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running-config mpls reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlockConfig",
+        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": { "os": "arcos" },
+        "uid": "show_mpls_reserved_label_block_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show mpls reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show mpls reserved-label-block {local_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} mpls global reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} mpls global reserved-label-block {local_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show network-instance {network_instance} protocol ISIS {protocol_instance} interface": {
     "folders": {
       "arcos": {

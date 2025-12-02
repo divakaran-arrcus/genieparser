@@ -33,5 +33,5 @@ def test_show_version_sample():
 
     assert ver["platform"] == "Virtual"
     assert ver["software"] == "Arrcus ArcOS"
-    assert ver["version"] == "8.2.1A"
+    assert ver["sw-version"] == "8.2.1A"
     assert "uptime" in ver
