@@ -819,3 +819,245 @@ def test_show_isis_lsp_srv6_end_x_sid():
     adj_sids = nbr.get("adjacency_sids", [])
     assert len(adj_sids) >= 1
     assert adj_sids[0]["sid"] == 20012
+
+
+def test_show_isis_lsp_mt_is_neighbor():
+    """Validate parsing of MT IS Neighbors (MT_ISN TLV) with SRv6 End.X SID."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large_2.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    database = result["network-instance"]["default"]["isis"]["default"].get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # Verify MT IS Neighbor parsing
+    mt_is = lsp.get("mt_is_neighbor", {})
+    assert len(mt_is) >= 1
+
+    # Check neighbor rtr2.00 with mt-id 2, instance 802
+    nbr_key = "rtr2.00:mt2:802"
+    assert nbr_key in mt_is
+    nbr = mt_is[nbr_key]
+
+    assert nbr["system_id"] == "rtr2.00"
+    assert nbr["mt_id"] == 2
+    assert nbr["instance_id"] == "802"
+    assert nbr["metric"] == 10
+    assert nbr.get("two_way") is True
+
+    # Link ID
+    assert "link_id" in nbr
+    assert nbr["link_id"]["local"] == 802
+
+    # IPv4/IPv6 addresses
+    assert nbr.get("ipv4_interface_address") == ["10.20.0.10"]
+    assert nbr.get("ipv6_interface_address") == ["10:20::10"]
+
+    # ASLA (FlexAlgo attributes)
+    asla = nbr.get("asla", {})
+    assert asla.get("application") == "flexible-algorithm"
+    assert "admin_groups" in asla
+    assert asla.get("min_delay") == 109  # Different delay value in MT_ISN
+
+    # SRv6 End.X SID (should be present in MT_ISN)
+    end_x_sids = nbr.get("end_x_sids", [])
+    assert len(end_x_sids) >= 1
+    end_x = end_x_sids[0]
+    assert end_x["sid"] == "2400:2020:0:1191:8004::"
+    assert end_x.get("algorithm") == "SPF"
+    assert end_x.get("endpoint_func") == "END_X_PSP_USD"
+    assert end_x.get("weight") == 0
+
+    # SID structure
+    sid_struct = end_x.get("sid_structure", {})
+    assert sid_struct.get("lb") == 40
+    assert sid_struct.get("ln") == 24
+    assert sid_struct.get("fun") == 16
+    assert sid_struct.get("arg") == 0
+
+
+def test_show_isis_lsp_prefix_sid():
+    """Validate parsing of Prefix SID in Extended IPv4 Reachability."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large_2.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    database = result["network-instance"]["default"]["isis"]["default"].get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # Verify Extended IPv4 Reachability
+    ext4 = lsp.get("extended_ipv4_reachability", {})
+    assert "1.1.1.1/32" in ext4
+
+    pfx = ext4["1.1.1.1/32"]
+    assert pfx["ip_prefix"] == "1.1.1.1"
+    assert pfx["prefix_len"] == 32
+    assert pfx["metric"] == 10
+
+    # Prefix Tag
+    assert pfx.get("tag") == [1]
+
+    # Prefix SID (SR-MPLS)
+    prefix_sids = pfx.get("prefix_sids", [])
+    assert len(prefix_sids) >= 1
+
+    psid = prefix_sids[0]
+    assert psid.get("algorithm") == "SPF"
+    assert psid.get("sid") == 111
+    assert "NODE" in psid.get("flags", [])
+    assert "NO_PHP" in psid.get("flags", [])
+    assert "EXPLICIT_NULL" in psid.get("flags", [])
+
+
+def test_show_isis_lsp_router_capability():
+    """Validate parsing of Router Capability SubTLVs (SRGB, SRLB, FAD, Node MSD)."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large_2.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    database = result["network-instance"]["default"]["isis"]["default"].get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # Router Capabilities
+    tlvs = lsp.get("tlvs", {})
+    router_cap = tlvs.get("router-capabilities", {})
+    assert router_cap
+
+    # Basic info
+    assert router_cap.get("instance_number") == 1
+    assert router_cap.get("router_id") == "1.1.1.1"
+
+    # IPv6 TE Router ID
+    assert router_cap.get("ipv6_te_router_id") == "1::1"
+
+    # SR Algorithms
+    sr_algos = router_cap.get("sr_algorithms", [])
+    assert "SPF" in sr_algos
+    assert 131 in sr_algos
+    assert 132 in sr_algos
+
+    # SR Capability (SRGB)
+    sr_cap = router_cap.get("sr_capability", {})
+    assert "IPV4_MPLS" in sr_cap.get("flags", [])
+    assert "IPV6_MPLS" in sr_cap.get("flags", [])
+    assert sr_cap.get("range") == 10000
+    assert sr_cap.get("label") == 10000
+
+    # SRLB
+    srlb = router_cap.get("srlb", {})
+    assert srlb.get("range") == 10000
+    assert srlb.get("label") == 20000
+
+    # Node MSD
+    node_msd = router_cap.get("node_msd", {})
+    assert node_msd.get("srv6_max_segments_left") == 10
+    assert node_msd.get("srv6_max_end_pop") == 5
+    assert node_msd.get("srv6_max_h_encaps") == 3
+    assert node_msd.get("srv6_max_end_d") == 10
+
+    # Flex-Algo Definitions
+    fads = router_cap.get("flex_algo_definitions", {})
+    assert "131" in fads
+    assert fads["131"].get("priority") == 128
+    assert fads["131"].get("metric_type") == "LINK_DELAY"
+    assert "132" in fads
+    assert fads["132"].get("metric_type") == "IGP_METRIC"
+
+
+def test_show_isis_lsp_srv6_locator():
+    """Validate parsing of SRv6 Locators with End SID and SID structure."""
+
+    sample_file = SAMPLES_DIR / "isis_lsp_large_2.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    # Skip the first line (command prompt)
+    if output.startswith("root@"):
+        output = "\n".join(output.split("\n")[1:])
+
+    parser = ShowIsisLsp(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    database = result["network-instance"]["default"]["isis"]["default"].get("database", {})
+
+    # Check rtr1.00-00 LSP
+    assert "rtr1.00-00" in database
+    lsp = database["rtr1.00-00"]
+
+    # SRv6 Locators
+    tlvs = lsp.get("tlvs", {})
+    locators = tlvs.get("srv6-locators", [])
+    assert len(locators) >= 3  # SPF, algo 131, algo 132
+
+    # Find the SPF locator
+    spf_loc = next((loc for loc in locators if loc.get("algorithm") == "SPF"), None)
+    assert spf_loc is not None
+    assert spf_loc["locator"] == "2400:2020:0:1191::/64"
+    assert spf_loc["mt_id"] == 2
+    assert spf_loc["metric"] == 10
+
+    # Verify End SID parsing
+    end_sids = spf_loc.get("end_sids", [])
+    assert len(end_sids) >= 1
+
+    end_sid = end_sids[0]
+    assert end_sid["sid"] == "2400:2020:0:1191:1::"
+    assert end_sid.get("endpoint_func") == "END_PSP_USD"
+
+    # Verify SID structure
+    sid_struct = end_sid.get("sid_structure", {})
+    assert sid_struct.get("lb") == 40
+    assert sid_struct.get("ln") == 24
+    assert sid_struct.get("fun") == 16
+    assert sid_struct.get("arg") == 0
+
+    # Find FlexAlgo 131 locator
+    algo131_loc = next((loc for loc in locators if loc.get("algorithm") == 131), None)
+    assert algo131_loc is not None
+    assert algo131_loc["locator"] == "2400:2020:31:1191::/64"
+
+    # Find FlexAlgo 132 locator
+    algo132_loc = next((loc for loc in locators if loc.get("algorithm") == 132), None)
+    assert algo132_loc is not None
+    assert algo132_loc["locator"] == "2400:2020:32:1191::/64"

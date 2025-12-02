@@ -388,8 +388,10 @@ class ShowIsisLspSchema(MetaParser):
                                     Optional("router-capabilities"): dict,
                                 },
                                 Optional("extended_ipv4_reachability"): dict,
+                                Optional("ipv6_reachability"): dict,
                                 Optional("mt_ipv6_reachability"): dict,
                                 Optional("extended_is_neighbor"): dict,
+                                Optional("mt_is_neighbor"): dict,
                                 Optional("attributes"): dict,
                             }
                         }
@@ -610,27 +612,200 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     locators = []
                                     for loc in locators_data:
                                         loc_state = loc.get("state", {})
+                                        algo = loc_state.get("algorithm")
+                                        # Handle algorithm - can be string or numeric
+                                        if algo and ":" in str(algo):
+                                            algo = str(algo).split(":")[-1]
+
                                         loc_info: Dict[str, TypeAny] = {
                                             "locator": loc_state.get("locator"),
-                                            "mt-id": loc_state.get("mt-id"),
+                                            "mt_id": loc_state.get("mt-id"),
                                             "metric": loc_state.get("metric"),
-                                            "algorithm": loc_state.get("algorithm"),
+                                            "algorithm": algo,
                                         }
                                         if loc_state.get("flags"):
                                             loc_info["flags"] = loc_state["flags"]
+
+                                        # Parse locator subTLVs (End SID, prefix flags)
+                                        loc_subtlvs = loc.get("subtlvs", {}).get("subtlv", [])
+                                        for loc_sub in loc_subtlvs:
+                                            loc_sub_type = loc_sub.get("type", "")
+
+                                            # Prefix Flags
+                                            if "PREFIX_FLAGS" in loc_sub_type:
+                                                flags = (
+                                                    loc_sub.get("prefix-attribute-flags", {})
+                                                    .get("state", {})
+                                                    .get("flags")
+                                                )
+                                                if flags:
+                                                    loc_info["flags"] = flags
+
+                                            # SRv6 End SID
+                                            elif "END_SID" in loc_sub_type:
+                                                end_sids_data = loc_sub.get(
+                                                    "srv6-end-sids", {}
+                                                ).get("end-sid", [])
+                                                if end_sids_data:
+                                                    end_sids = []
+                                                    for end_sid in end_sids_data:
+                                                        es_state = end_sid.get("state", {})
+                                                        es_info: Dict[str, TypeAny] = {
+                                                            "sid": es_state.get("sid"),
+                                                        }
+
+                                                        func = es_state.get("endpoint-func")
+                                                        if func:
+                                                            if ":" in str(func):
+                                                                func = str(func).split(":")[-1]
+                                                            es_info["endpoint_func"] = func
+
+                                                        # Parse SID structure
+                                                        es_subtlvs = end_sid.get(
+                                                            "subsubtlvs", {}
+                                                        ).get("subsubtlv", [])
+                                                        for es_sub in es_subtlvs:
+                                                            if "SID_STRUCTURE" in es_sub.get("type", ""):
+                                                                struct = (
+                                                                    es_sub.get("srv6-sid-structure", {})
+                                                                    .get("state", {})
+                                                                )
+                                                                if struct:
+                                                                    es_info["sid_structure"] = {
+                                                                        "lb": struct.get("lb-length"),
+                                                                        "ln": struct.get("ln-length"),
+                                                                        "fun": struct.get("fun-length"),
+                                                                        "arg": struct.get("arg-length"),
+                                                                    }
+
+                                                        end_sids.append(es_info)
+
+                                                    if end_sids:
+                                                        loc_info["end_sids"] = end_sids
+
                                         locators.append(loc_info)
                                     if locators:
                                         tlv_info["srv6-locators"] = locators
 
                             # Router capabilities
                             elif "ROUTER_CAPABILITY" in tlv_type:
-                                cap_state = tlv.get("router-capabilities", {}).get(
+                                cap_list = tlv.get("router-capabilities", {}).get(
                                     "capability", []
                                 )
-                                if cap_state:
-                                    tlv_info["router-capabilities"] = cap_state[0].get(
-                                        "state", {}
-                                    )
+                                if cap_list:
+                                    cap = cap_list[0]
+                                    cap_state = cap.get("state", {})
+                                    cap_info: Dict[str, TypeAny] = {}
+
+                                    # Basic capability info
+                                    if "instance-number" in cap_state:
+                                        cap_info["instance_number"] = cap_state["instance-number"]
+                                    if "router-id" in cap_state:
+                                        cap_info["router_id"] = cap_state["router-id"]
+
+                                    # Parse Router Capability subTLVs
+                                    subtlvs = cap.get("subtlvs", {}).get("subtlvs", [])
+                                    for subtlv in subtlvs:
+                                        subtlv_type = subtlv.get("subtlv-type", "")
+
+                                        # SR Algorithm
+                                        if "SR_ALGORITHM" in subtlv_type:
+                                            algos = (
+                                                subtlv.get("segment-routing-algorithms", {})
+                                                .get("state", {})
+                                                .get("algorithm")
+                                            )
+                                            if algos:
+                                                cap_info["sr_algorithms"] = algos
+
+                                        # SR Capability (SRGB)
+                                        elif "SR_CAPABILITY" in subtlv_type and "SRV6" not in subtlv_type:
+                                            sr_state = (
+                                                subtlv.get("segment-routing-capability", {})
+                                                .get("state", {})
+                                            )
+                                            if sr_state:
+                                                sr_cap: Dict[str, TypeAny] = {}
+                                                if "flags" in sr_state:
+                                                    sr_cap["flags"] = sr_state["flags"]
+                                                if "range" in sr_state:
+                                                    sr_cap["range"] = sr_state["range"]
+                                                if "label" in sr_state:
+                                                    sr_cap["label"] = sr_state["label"]
+                                                if sr_cap:
+                                                    cap_info["sr_capability"] = sr_cap
+
+                                        # SRLB
+                                        elif "SRLB" in subtlv_type:
+                                            srlb_state = (
+                                                subtlv.get(f"{ARCOS_ISIS_AUGMENTS}:node-srlb", {})
+                                                .get("state", {})
+                                            )
+                                            if srlb_state:
+                                                srlb: Dict[str, TypeAny] = {}
+                                                if "range" in srlb_state:
+                                                    srlb["range"] = srlb_state["range"]
+                                                if "label" in srlb_state:
+                                                    srlb["label"] = srlb_state["label"]
+                                                if srlb:
+                                                    cap_info["srlb"] = srlb
+
+                                        # IPv6 TE Router ID
+                                        elif "IPV6_TE_ROUTER_ID" in subtlv_type:
+                                            ipv6_rid = (
+                                                subtlv.get(f"{ARCOS_ISIS_AUGMENTS}:ipv6-te-router-id", {})
+                                                .get("state", {})
+                                                .get("router-id")
+                                            )
+                                            if ipv6_rid:
+                                                cap_info["ipv6_te_router_id"] = ipv6_rid
+
+                                        # Node MSD
+                                        elif "NODE_MSD" in subtlv_type:
+                                            msds = (
+                                                subtlv.get(f"{ARCOS_ISIS_AUGMENTS}:node-msds", {})
+                                                .get("msd", [])
+                                            )
+                                            if msds:
+                                                msd_info: Dict[str, TypeAny] = {}
+                                                for msd in msds:
+                                                    msd_state = msd.get("state", {})
+                                                    msd_type = msd_state.get("type", "")
+                                                    msd_val = msd_state.get("value")
+                                                    if msd_val is not None:
+                                                        # Strip namespace prefix and convert to snake_case
+                                                        key = msd_type.split(":")[-1].lower()
+                                                        msd_info[key] = msd_val
+                                                if msd_info:
+                                                    cap_info["node_msd"] = msd_info
+
+                                        # Flex-Algo Definition (FAD)
+                                        elif "FLEX_ALGO_DEFINITION" in subtlv_type:
+                                            fads = (
+                                                subtlv.get(f"{ARCOS_ISIS_AUGMENTS}:flex-algo-definitions", {})
+                                                .get("flex-algo-definition", [])
+                                            )
+                                            if fads:
+                                                fad_info: Dict[str, TypeAny] = {}
+                                                for fad in fads:
+                                                    fad_id = fad.get("id")
+                                                    if fad_id is None:
+                                                        continue
+                                                    fad_state = fad.get("state", {})
+                                                    fad_entry: Dict[str, TypeAny] = {}
+                                                    if "priority" in fad_state:
+                                                        fad_entry["priority"] = fad_state["priority"]
+                                                    metric_type = fad_state.get("metric-type")
+                                                    if metric_type:
+                                                        # Strip namespace prefix
+                                                        fad_entry["metric_type"] = metric_type.split(":")[-1]
+                                                    if fad_entry:
+                                                        fad_info[str(fad_id)] = fad_entry
+                                                if fad_info:
+                                                    cap_info["flex_algo_definitions"] = fad_info
+
+                                    if cap_info:
+                                        tlv_info["router-capabilities"] = cap_info
 
                             # Extended IPv4 reachability
                             elif "EXTENDED_IPV4_REACHABILITY" in tlv_type:
@@ -677,12 +852,14 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         if up_down is not None:
                                             pfx_info["up_down"] = bool(up_down)
 
-                                        # Optional flags from subTLV
+                                        # Parse prefix subTLVs
                                         sub_tlvs = pfx.get("subTLVs", {}).get(
                                             "subTLVs", []
                                         )
                                         for sub in sub_tlvs:
                                             stype = sub.get("subtlv-type", "")
+
+                                            # Prefix Flags
                                             if "TLV135_PREFIX_FLAGS" in stype:
                                                 flags_state = sub.get("flags", {}).get(
                                                     "state", {}
@@ -690,7 +867,47 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                 flags = flags_state.get("flags")
                                                 if flags is not None:
                                                     pfx_info["flags"] = flags
-                                                break
+
+                                            # Prefix Tag
+                                            elif "TLV135_TAG" in stype:
+                                                tag_state = sub.get("tag", {}).get(
+                                                    "state", {}
+                                                )
+                                                tag32 = tag_state.get("tag32")
+                                                if tag32:
+                                                    pfx_info["tag"] = tag32
+
+                                            # Prefix SID (SR-MPLS)
+                                            elif "PREFIX_SID" in stype:
+                                                psids_data = sub.get(
+                                                    f"{ARCOS_ISIS_AUGMENTS}:prefix-sids", {}
+                                                ).get("prefix-sid", [])
+                                                if psids_data:
+                                                    prefix_sids = []
+                                                    for psid in psids_data:
+                                                        psid_state = psid.get("state", {})
+                                                        psid_info: Dict[str, TypeAny] = {}
+
+                                                        algo = psid_state.get("algorithm")
+                                                        if algo:
+                                                            # Strip namespace prefix
+                                                            if ":" in str(algo):
+                                                                algo = str(algo).split(":")[-1]
+                                                            psid_info["algorithm"] = algo
+
+                                                        sid_val = psid_state.get("sid")
+                                                        if sid_val is not None:
+                                                            psid_info["sid"] = sid_val
+
+                                                        sid_flags = psid_state.get("flags")
+                                                        if sid_flags:
+                                                            psid_info["flags"] = sid_flags
+
+                                                        if psid_info:
+                                                            prefix_sids.append(psid_info)
+
+                                                    if prefix_sids:
+                                                        pfx_info["prefix_sids"] = prefix_sids
 
                                         ext4[prefix_str] = pfx_info
 
@@ -745,7 +962,66 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         if up_down is not None:
                                             pfx_info["up_down"] = bool(up_down)
 
+                                        # Parse MT IPv6 prefix subTLVs (Prefix SID)
+                                        sub_tlvs = pfx.get("subTLVs", {}).get(
+                                            "subTLVs", []
+                                        )
+                                        self._parse_prefix_subtlvs(sub_tlvs, pfx_info)
+
                                         mt6[prefix_str] = pfx_info
+
+                            # IPv6 Reachability (non-MT, TLV 236)
+                            elif "IPV6_REACHABILITY" in tlv_type and "MT_" not in tlv_type:
+                                prefixes_data = (
+                                    tlv.get("ipv6-reachability", {})
+                                    .get("prefixes", {})
+                                    .get("prefix", [])
+                                )
+                                if prefixes_data:
+                                    ipv6_reach = db_entry.setdefault(
+                                        "ipv6_reachability", {}
+                                    )
+                                    for pfx in prefixes_data:
+                                        prefix_str = pfx.get("prefix")
+                                        state_pfx = pfx.get("state", {})
+
+                                        if not prefix_str:
+                                            prefix_str = state_pfx.get("prefix")
+                                        if not prefix_str:
+                                            continue
+
+                                        parts = prefix_str.split("/")
+                                        ip_prefix = parts[0]
+                                        prefix_len = (
+                                            parts[1] if len(parts) > 1 else None
+                                        )
+
+                                        metric = state_pfx.get("metric")
+                                        up_down = state_pfx.get("up-down")
+
+                                        pfx_info: Dict[str, TypeAny] = {
+                                            "ip_prefix": ip_prefix,
+                                        }
+
+                                        if prefix_len is not None:
+                                            try:
+                                                pfx_info["prefix_len"] = int(prefix_len)
+                                            except Exception:  # pragma: no cover
+                                                pfx_info["prefix_len"] = prefix_len
+
+                                        if metric is not None:
+                                            pfx_info["metric"] = metric
+
+                                        if up_down is not None:
+                                            pfx_info["up_down"] = bool(up_down)
+
+                                        # Parse IPv6 prefix subTLVs (Prefix SID)
+                                        sub_tlvs = pfx.get("subTLVs", {}).get(
+                                            "subTLVs", []
+                                        )
+                                        self._parse_prefix_subtlvs(sub_tlvs, pfx_info)
+
+                                        ipv6_reach[prefix_str] = pfx_info
 
                             # Extended IS Reachability (neighbors/links)
                             elif "EXTENDED_IS_REACHABILITY" in tlv_type:
@@ -792,6 +1068,62 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         self._parse_is_neighbor_subtlvs(sub_tlvs, nbr_info)
 
                                         ext_is[nbr_key] = nbr_info
+
+                            # MT IS Neighbors (MT_ISN TLV)
+                            elif "MT_ISN" in tlv_type:
+                                mt_neighbors_data = (
+                                    tlv.get("mt-isn", {})
+                                    .get("neighbors", {})
+                                    .get("neighbor", [])
+                                )
+                                if mt_neighbors_data:
+                                    mt_is = db_entry.setdefault("mt_is_neighbor", {})
+                                    for neighbor in mt_neighbors_data:
+                                        sys_id = neighbor.get("system-id")
+                                        mt_id = neighbor.get("mt-id")
+                                        if not sys_id:
+                                            continue
+
+                                        # MT_ISN has instances under each neighbor
+                                        instances = (
+                                            neighbor.get("instances", {}).get("instance", [])
+                                        )
+
+                                        for instance in instances:
+                                            inst_id = instance.get("id")
+                                            inst_state = instance.get("state", {})
+
+                                            # Use system-id + mt-id + instance-id as key
+                                            nbr_key = f"{sys_id}"
+                                            if mt_id is not None:
+                                                nbr_key = f"{sys_id}:mt{mt_id}"
+                                            if inst_id:
+                                                nbr_key = f"{nbr_key}:{inst_id}"
+
+                                            nbr_info: Dict[str, TypeAny] = {
+                                                "system_id": sys_id,
+                                                "metric": inst_state.get("metric"),
+                                            }
+
+                                            if mt_id is not None:
+                                                nbr_info["mt_id"] = mt_id
+
+                                            if inst_id:
+                                                nbr_info["instance_id"] = inst_id
+
+                                            two_way = inst_state.get(
+                                                f"{ARCOS_ISIS_AUGMENTS}:two-way-connectivity"
+                                            )
+                                            if two_way is not None:
+                                                nbr_info["two_way"] = two_way
+
+                                            # Parse instance subTLVs (same as Extended IS)
+                                            sub_tlvs = instance.get("subTLVs", {}).get(
+                                                "subTLVs", []
+                                            )
+                                            self._parse_is_neighbor_subtlvs(sub_tlvs, nbr_info)
+
+                                            mt_is[nbr_key] = nbr_info
 
                         if tlv_info:
                             db_entry["tlvs"] = tlv_info
@@ -989,6 +1321,62 @@ class ShowIsisLsp(ShowIsisLspSchema):
 
                     if end_x_sids:
                         nbr_info["end_x_sids"] = end_x_sids
+
+    def _parse_prefix_subtlvs(
+        self, sub_tlvs: list, pfx_info: Dict[str, TypeAny]
+    ) -> None:
+        """Parse prefix subTLVs for IPv4/IPv6 reachability.
+
+        Handles: Prefix Flags, Prefix Tag, Prefix SID (SR-MPLS).
+        """
+        for sub in sub_tlvs:
+            stype = sub.get("subtlv-type", "")
+
+            # Prefix Flags (TLV135/TLV236)
+            if "PREFIX_FLAGS" in stype:
+                flags_state = sub.get("flags", {}).get("state", {})
+                flags = flags_state.get("flags")
+                if flags is not None:
+                    pfx_info["flags"] = flags
+
+            # Prefix Tag
+            elif "TAG" in stype and "TAG64" not in stype:
+                tag_state = sub.get("tag", {}).get("state", {})
+                tag32 = tag_state.get("tag32")
+                if tag32:
+                    pfx_info["tag"] = tag32
+
+            # Prefix SID (SR-MPLS)
+            elif "PREFIX_SID" in stype:
+                psids_data = sub.get(
+                    f"{ARCOS_ISIS_AUGMENTS}:prefix-sids", {}
+                ).get("prefix-sid", [])
+                if psids_data:
+                    prefix_sids = []
+                    for psid in psids_data:
+                        psid_state = psid.get("state", {})
+                        psid_info: Dict[str, TypeAny] = {}
+
+                        algo = psid_state.get("algorithm")
+                        if algo:
+                            # Strip namespace prefix
+                            if ":" in str(algo):
+                                algo = str(algo).split(":")[-1]
+                            psid_info["algorithm"] = algo
+
+                        sid_val = psid_state.get("sid")
+                        if sid_val is not None:
+                            psid_info["sid"] = sid_val
+
+                        sid_flags = psid_state.get("flags")
+                        if sid_flags:
+                            psid_info["flags"] = sid_flags
+
+                        if psid_info:
+                            prefix_sids.append(psid_info)
+
+                    if prefix_sids:
+                        pfx_info["prefix_sids"] = prefix_sids
 
 
 class ShowIsisInterfaceSchema(MetaParser):
