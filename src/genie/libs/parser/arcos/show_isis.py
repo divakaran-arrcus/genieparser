@@ -11,7 +11,7 @@ import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
-from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.schemaengine import Any, Optional, Or
 
 from genie.libs.parser.arcos.constants import (
     ARCOS_ISIS_AUGMENTS,
@@ -117,20 +117,28 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * interface * level * adjacency [<adj_router>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency [<adj_router>]
     """
 
-    cli_command = (
-        "show network-instance * protocol ISIS * interface * level * adjacency"
-    )
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        interface: str = "*",
+        level: str = "*",
         adj_router: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(interface, "interface")
+            validate_input(level, "level")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency"
             if adj_router:
                 validate_input(adj_router, "adj_router")
                 cmd += f" {adj_router}"
@@ -396,21 +404,29 @@ class ShowIsisLsp(ShowIsisLspSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * level * link-state-database [lsp <lsp_id>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database [<lsp_id>]
     """
 
-    cli_command = "show network-instance * protocol ISIS * level * link-state-database"
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        level: str = "*",
         lsp_id: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(level, "level")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp"
             if lsp_id:
                 validate_input(lsp_id, "lsp_id")
-                cmd += f" lsp {lsp_id}"
+                cmd += f" {lsp_id}"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
@@ -789,18 +805,24 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * interface [<interface>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} interface [<interface>]
     """
 
-    cli_command = "show network-instance * protocol ISIS * interface"
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} interface",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
         interface: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface"
             if interface:
                 validate_input(interface, "interface")
                 cmd += f" {interface}"
@@ -1353,8 +1375,8 @@ class ShowIsisConfigSchema(MetaParser):
                                             Optional("enabled"): bool,
                                             Optional("metric"): int,
                                             Optional("flexible_algorithm"): {
-                                                Optional("delay_metric"): int,
-                                                Optional("te_metric"): int,
+                                                Optional("delay_metric"): Or(int, str),
+                                                Optional("te_metric"): Or(int, str),
                                             },
                                         }
                                     },
@@ -1377,21 +1399,23 @@ class ShowIsisConfig(ShowIsisConfigSchema):
 
     Command pattern (before JSON pipe)::
 
-        show running-config network-instance * protocol ISIS [<instance>]
+        show running-config network-instance {network_instance} protocol ISIS {protocol_instance}
     """
 
-    cli_command = "show running-config network-instance * protocol ISIS"
+    cli_command = [
+        "show running-config network-instance {network_instance} protocol ISIS {protocol_instance}",
+    ]
 
     def cli(
         self,
-        instance: TypeOptional[str] = None,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
-            if instance:
-                validate_input(instance, "instance")
-                cmd += f" {instance}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = f"show running-config network-instance {network_instance} protocol ISIS {protocol_instance}"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
@@ -1934,18 +1958,26 @@ class ShowIsisRoute(ShowIsisRouteSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * global af * UNICAST route [<prefix>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route [<prefix>]
     """
 
-    cli_command = "show network-instance * protocol ISIS * global af * UNICAST route"
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        afi: str = "*",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(afi, "afi")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route"
             if prefix:
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
@@ -2124,20 +2156,26 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * global af * UNICAST redistribute-route [<prefix>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route [<prefix>]
     """
 
-    cli_command = (
-        "show network-instance * protocol ISIS * global af * UNICAST redistribute-route"
-    )
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        afi: str = "*",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(afi, "afi")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route"
             if prefix:
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
@@ -2276,14 +2314,23 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
 
     Supports::
 
-        show network-instance * protocol ISIS * global state | display json | nomore
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global state | display json | nomore
     """
 
-    cli_command = "show network-instance * protocol ISIS * global state"
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global state",
+    ]
 
-    def cli(self, output: TypeOptional[str] = None) -> TypeAny:
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
         if output is None:
-            cmd = self.cli_command
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global state"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
@@ -2404,20 +2451,26 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * global af * UNICAST fast-reroute [<prefix>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute [<prefix>]
     """
 
-    cli_command = (
-        "show network-instance * protocol ISIS * global af * UNICAST fast-reroute"
-    )
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        afi: str = "*",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(afi, "afi")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute"
             if prefix:
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
@@ -2579,21 +2632,28 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * global af * UNICAST flexible-algorithm * fast-reroute [<prefix>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute [<prefix>]
     """
 
-    cli_command = (
-        "show network-instance * protocol ISIS * global af * UNICAST "
-        "flexible-algorithm * fast-reroute"
-    )
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        afi: str = "*",
+        algo: str = "*",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(afi, "afi")
+            validate_input(algo, "algo")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute"
             if prefix:
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
@@ -2757,21 +2817,28 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
 
     Command pattern (before JSON pipe)::
 
-        show network-instance * protocol ISIS * global af * UNICAST flexible-algorithm * route [<prefix>]
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route [<prefix>]
     """
 
-    cli_command = (
-        "show network-instance * protocol ISIS * global af * UNICAST "
-        "flexible-algorithm * route"
-    )
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route",
+    ]
 
     def cli(
         self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        afi: str = "*",
+        algo: str = "*",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
-            cmd = f"{self.cli_command}"
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            validate_input(afi, "afi")
+            validate_input(algo, "algo")
+            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route"
             if prefix:
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
