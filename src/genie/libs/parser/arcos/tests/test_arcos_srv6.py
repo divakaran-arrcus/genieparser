@@ -97,3 +97,55 @@ def test_show_srv6_locator_minimal():
     assert loc131["algorithm"] == 131
     loc132 = locators["base_slice132"]
     assert loc132["algorithm"] == 132
+
+
+def test_show_srv6_config_with_instance_parameter():
+    """Validate ShowSrv6Config accepts instance parameter."""
+
+    sample_file = SAMPLES_DIR / "srv6_config.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowSrv6Config(device="dummy")
+    # Test with explicit instance parameter (output provided, so no command executed)
+    result = parser.cli(instance="default", output=output)
+
+    assert "network_instances" in result
+    assert "default" in result["network_instances"]
+
+
+def test_show_srv6_locator_with_instance_parameter():
+    """Validate ShowSrv6Locator accepts instance parameter."""
+
+    sample_file = SAMPLES_DIR / "srv6_locator.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowSrv6Locator(device="dummy")
+    # Test with explicit instance parameter (output provided, so no command executed)
+    result = parser.cli(instance="default", output=output)
+
+    assert "network_instances" in result
+    assert "default" in result["network_instances"]
+
+
+def test_show_srv6_config_instance_validation():
+    """Validate instance parameter is validated for invalid characters."""
+
+    parser = ShowSrv6Config(device="dummy")
+
+    with pytest.raises(ValueError, match="Invalid characters"):
+        parser.cli(instance="default; rm -rf /")
+
+
+def test_show_srv6_locator_instance_validation():
+    """Validate instance parameter is validated for invalid characters."""
+
+    parser = ShowSrv6Locator(device="dummy")
+
+    with pytest.raises(ValueError, match="Invalid characters"):
+        parser.cli(instance="default; rm -rf /")
