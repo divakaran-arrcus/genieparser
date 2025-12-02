@@ -16,18 +16,20 @@ The parsers in this module are designed to handle JSON output from ArcOS OpenCon
 
 ### ISIS Parsers
 
-| Parser Class | CLI Command | Module |
-|--------------|-------------|--------|
-| `ShowIsisAdjacency` | `show network-instance * protocol ISIS * interface * level * adjacency [<adj_router>]` | `show_isis` |
-| `ShowIsisLsp` | `show network-instance * protocol ISIS * level * link-state-database [lsp <lsp_id>]` | `show_isis` |
-| `ShowIsisInterface` | `show network-instance * protocol ISIS * interface` | `show_isis` |
-| `ShowIsisConfig` | `show running-config network-instance * protocol ISIS` | `show_isis` |
-| `ShowIsisRoute` | `show network-instance * protocol ISIS * route` | `show_isis` |
-| `ShowIsisRedistributeRoute` | `show network-instance * protocol ISIS * redistribute-route` | `show_isis` |
-| `ShowIsisGlobal` | `show network-instance * protocol ISIS * global state` | `show_isis` |
-| `ShowIsisFastReroute` | `show network-instance * protocol ISIS * fast-reroute` | `show_isis` |
-| `ShowIsisFlexAlgoFastReroute` | `show network-instance * protocol ISIS * flexible-algorithm * fast-reroute` | `show_isis` |
-| `ShowIsisFlexAlgoRoute` | `show network-instance * protocol ISIS * flexible-algorithm * route` | `show_isis` |
+All ISIS parsers accept optional filtering parameters (default `*` for all). Parameters in `{}` are optional with defaults.
+
+| Parser Class | CLI Command | Parameters |
+|--------------|-------------|------------|
+| `ShowIsisAdjacency` | `show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency [<adj_router>]` | `network_instance`, `protocol_instance`, `interface`, `level`, `adj_router` |
+| `ShowIsisLsp` | `show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp [<lsp_id>]` | `network_instance`, `protocol_instance`, `level`, `lsp_id` |
+| `ShowIsisInterface` | `show network-instance {network_instance} protocol ISIS {protocol_instance} interface [<interface>]` | `network_instance`, `protocol_instance`, `interface` |
+| `ShowIsisConfig` | `show running-config network-instance {network_instance} protocol ISIS {protocol_instance}` | `network_instance`, `protocol_instance` |
+| `ShowIsisRoute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `prefix` |
+| `ShowIsisRedistributeRoute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `prefix` |
+| `ShowIsisGlobal` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global state` | `network_instance`, `protocol_instance` |
+| `ShowIsisFastReroute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `prefix` |
+| `ShowIsisFlexAlgoFastReroute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `algo`, `prefix` |
+| `ShowIsisFlexAlgoRoute` | `show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route [<prefix>]` | `network_instance`, `protocol_instance`, `afi`, `algo`, `prefix` |
 
 ### SRv6 Parsers
 
@@ -71,8 +73,16 @@ parsed_output = parser.cli(interface="swp1")
 from genie.libs.parser.arcos.show_isis import ShowIsisAdjacency
 
 parser = ShowIsisAdjacency(device=device)
-# Get all adjacencies
+
+# Get all adjacencies (all instances, interfaces, levels)
 output = parser.cli()
+
+# Filter by network instance and protocol instance
+output = parser.cli(network_instance="default", protocol_instance="default")
+
+# Filter by interface and level
+output = parser.cli(interface="swp1", level="2")
+
 # Get specific neighbor
 output = parser.cli(adj_router="rtr2")
 ```
@@ -83,10 +93,52 @@ output = parser.cli(adj_router="rtr2")
 from genie.libs.parser.arcos.show_isis import ShowIsisLsp
 
 parser = ShowIsisLsp(device=device)
+
 # Get all LSPs
 output = parser.cli()
+
+# Filter by instance and level
+output = parser.cli(network_instance="default", protocol_instance="default", level="2")
+
 # Get specific LSP
 output = parser.cli(lsp_id="0000.0000.0001.00-00")
+```
+
+### ISIS Routes with AFI Filter
+
+```python
+from genie.libs.parser.arcos.show_isis import ShowIsisRoute, ShowIsisFastReroute
+
+parser = ShowIsisRoute(device=device)
+
+# Get all routes
+output = parser.cli()
+
+# Filter by AFI (IPV4 or IPV6)
+output = parser.cli(afi="IPV4")
+
+# Filter by instance and AFI
+output = parser.cli(network_instance="default", protocol_instance="default", afi="IPV6")
+
+# Get specific prefix
+output = parser.cli(prefix="10.0.0.0/24")
+```
+
+### ISIS FlexAlgo
+
+```python
+from genie.libs.parser.arcos.show_isis import ShowIsisFlexAlgoRoute, ShowIsisFlexAlgoFastReroute
+
+parser = ShowIsisFlexAlgoRoute(device=device)
+
+# Get all FlexAlgo routes
+output = parser.cli()
+
+# Filter by algorithm ID
+output = parser.cli(algo="128")
+
+# Filter by instance, AFI, and algorithm
+output = parser.cli(network_instance="default", protocol_instance="default", afi="IPV6", algo="129")
 ```
 
 ### Routing Policy
