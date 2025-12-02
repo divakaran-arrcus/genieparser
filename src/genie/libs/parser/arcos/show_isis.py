@@ -389,6 +389,7 @@ class ShowIsisLspSchema(MetaParser):
                                 },
                                 Optional("extended_ipv4_reachability"): dict,
                                 Optional("mt_ipv6_reachability"): dict,
+                                Optional("extended_is_neighbor"): dict,
                                 Optional("attributes"): dict,
                             }
                         }
@@ -746,6 +747,52 @@ class ShowIsisLsp(ShowIsisLspSchema):
 
                                         mt6[prefix_str] = pfx_info
 
+                            # Extended IS Reachability (neighbors/links)
+                            elif "EXTENDED_IS_REACHABILITY" in tlv_type:
+                                neighbors_data = (
+                                    tlv.get("extended-is-reachability", {})
+                                    .get("neighbors", {})
+                                    .get("neighbor", [])
+                                )
+                                if neighbors_data:
+                                    ext_is = db_entry.setdefault(
+                                        "extended_is_neighbor", {}
+                                    )
+                                    for neighbor in neighbors_data:
+                                        sys_id = neighbor.get("system-id")
+                                        if not sys_id:
+                                            continue
+
+                                        instance_id = neighbor.get("instance-id")
+                                        nbr_state = neighbor.get("state", {})
+
+                                        # Use system-id + instance-id as key for uniqueness
+                                        nbr_key = f"{sys_id}"
+                                        if instance_id:
+                                            nbr_key = f"{sys_id}:{instance_id}"
+
+                                        nbr_info: Dict[str, TypeAny] = {
+                                            "system_id": sys_id,
+                                            "metric": nbr_state.get("metric"),
+                                        }
+
+                                        if instance_id:
+                                            nbr_info["instance_id"] = instance_id
+
+                                        two_way = nbr_state.get(
+                                            f"{ARCOS_ISIS_AUGMENTS}:two-way-connectivity"
+                                        )
+                                        if two_way is not None:
+                                            nbr_info["two_way"] = two_way
+
+                                        # Parse neighbor subTLVs
+                                        sub_tlvs = neighbor.get("subTLVs", {}).get(
+                                            "subTLVs", []
+                                        )
+                                        self._parse_is_neighbor_subtlvs(sub_tlvs, nbr_info)
+
+                                        ext_is[nbr_key] = nbr_info
+
                         if tlv_info:
                             db_entry["tlvs"] = tlv_info
 
@@ -760,6 +807,188 @@ class ShowIsisLsp(ShowIsisLspSchema):
             logger.warning("Error parsing ISIS LSP data: %s", exc)
 
         return ret_dict
+
+    def _parse_is_neighbor_subtlvs(
+        self, sub_tlvs: list, nbr_info: Dict[str, TypeAny]
+    ) -> None:
+        """Parse Extended IS Reachability neighbor subTLVs.
+
+        Handles: Link ID, IPv4/IPv6 addresses, Adjacency SID, ASLA, SRv6 End.X SID.
+        """
+        for sub in sub_tlvs:
+            stype = sub.get("subtlv-type", "")
+
+            # Link ID (local/remote)
+            if "TLV22_LINK_ID" in stype:
+                link_state = sub.get("link-id", {}).get("state", {})
+                if link_state:
+                    nbr_info["link_id"] = {
+                        "local": link_state.get("local"),
+                        "remote": link_state.get("remote"),
+                    }
+
+            # IPv4 Interface Address
+            elif "TLV22_IPV4_INTERFACE_ADDRESS" in stype:
+                addrs = (
+                    sub.get("ipv4-interface-address", {})
+                    .get("state", {})
+                    .get("ipv4-interface-address")
+                )
+                if addrs:
+                    nbr_info["ipv4_interface_address"] = addrs
+
+            # IPv4 Neighbor Address
+            elif "TLV22_IPV4_NEIGHBOR_ADDRESS" in stype:
+                addrs = (
+                    sub.get("ipv4-neighbor-address", {})
+                    .get("state", {})
+                    .get("ipv4-neighbor-address")
+                )
+                if addrs:
+                    nbr_info["ipv4_neighbor_address"] = addrs
+
+            # IPv6 Interface Address
+            elif "TLV22_IPV6_INTERFACE_ADDRESS" in stype:
+                addrs = (
+                    sub.get("ipv6-interface-address", {})
+                    .get("state", {})
+                    .get("ipv6-interface-address")
+                )
+                if addrs:
+                    nbr_info["ipv6_interface_address"] = addrs
+
+            # SR-MPLS Adjacency SID
+            elif "ADJACENCY_SID" in stype:
+                adj_sids_data = sub.get(
+                    f"{ARCOS_ISIS_AUGMENTS}:adjacency-sids", {}
+                ).get("adjacency-sid", [])
+                if adj_sids_data:
+                    adj_sids = []
+                    for adj_sid in adj_sids_data:
+                        sid_state = adj_sid.get("state", {})
+                        sid_info: Dict[str, TypeAny] = {
+                            "sid": sid_state.get("value"),
+                        }
+                        if "flags" in sid_state:
+                            sid_info["flags"] = sid_state["flags"]
+                        if "weight" in sid_state:
+                            sid_info["weight"] = sid_state["weight"]
+                        adj_sids.append(sid_info)
+                    if adj_sids:
+                        nbr_info["adjacency_sids"] = adj_sids
+
+            # ASLA (Application-Specific Link Attributes)
+            elif "ASLA" in stype:
+                aslas_data = sub.get(
+                    f"{ARCOS_ISIS_AUGMENTS}:aslas", {}
+                ).get("asla", [])
+                if aslas_data:
+                    for asla in aslas_data:
+                        asla_state = asla.get("state", {})
+                        asla_info: Dict[str, TypeAny] = {}
+
+                        app = asla_state.get("standard-applications")
+                        if app:
+                            asla_info["application"] = app
+
+                        # Parse ASLA subsubTLVs
+                        subsubtlvs = asla.get("subsubtlvs", {}).get("subsubtlv", [])
+                        for subsub in subsubtlvs:
+                            subsub_type = subsub.get("type", "")
+
+                            # Admin Groups
+                            if "ADMIN_GROUP_TYPE" in subsub_type:
+                                groups = (
+                                    subsub.get("admin-groups", {})
+                                    .get("state", {})
+                                    .get("admin-group")
+                                )
+                                if groups:
+                                    asla_info["admin_groups"] = groups
+
+                            # Extended Admin Groups
+                            elif "EXTENDED_ADMIN_GROUP_TYPE" in subsub_type:
+                                groups = (
+                                    subsub.get("extended-admin-groups", {})
+                                    .get("state", {})
+                                    .get("extended-admin-group")
+                                )
+                                if groups:
+                                    asla_info["extended_admin_groups"] = groups
+
+                            # TE Default Metric
+                            elif "TE_DEFAULT_METRIC_TYPE" in subsub_type:
+                                metric = (
+                                    subsub.get("te-default-metric", {})
+                                    .get("state", {})
+                                    .get("metric")
+                                )
+                                if metric is not None:
+                                    asla_info["te_metric"] = metric
+
+                            # Min/Max Delay
+                            elif "MIN_MAX_DELAY_METRIC_TYPE" in subsub_type:
+                                delay_state = subsub.get("min-max-delay", {}).get(
+                                    "state", {}
+                                )
+                                if "min-delay" in delay_state:
+                                    asla_info["min_delay"] = delay_state["min-delay"]
+                                if "max-delay" in delay_state:
+                                    asla_info["max_delay"] = delay_state["max-delay"]
+
+                        if asla_info:
+                            nbr_info["asla"] = asla_info
+
+            # SRv6 End.X SID
+            elif "SRV6_END_X_SID" in stype:
+                end_x_data = sub.get(
+                    f"{ARCOS_ISIS_AUGMENTS}:end-x-sids", {}
+                ).get("end-x-sid", [])
+                if end_x_data:
+                    end_x_sids = []
+                    for end_x in end_x_data:
+                        end_x_state = end_x.get("state", {})
+                        end_x_info: Dict[str, TypeAny] = {
+                            "sid": end_x_state.get("sid"),
+                        }
+
+                        algo = end_x_state.get("algorithm")
+                        if algo:
+                            # Strip namespace prefix
+                            if ":" in str(algo):
+                                algo = str(algo).split(":")[-1]
+                            end_x_info["algorithm"] = algo
+
+                        if "weight" in end_x_state:
+                            end_x_info["weight"] = end_x_state["weight"]
+
+                        func = end_x_state.get("endpoint-func")
+                        if func:
+                            # Strip namespace prefix
+                            if ":" in str(func):
+                                func = str(func).split(":")[-1]
+                            end_x_info["endpoint_func"] = func
+
+                        # Parse SID structure subsubTLV
+                        subsubtlvs = end_x.get("subsubtlvs", {}).get("subsubtlv", [])
+                        for subsub in subsubtlvs:
+                            if "SRV6_SID_STRUCTURE" in subsub.get("type", ""):
+                                struct_state = (
+                                    subsub.get("srv6-sid-structure", {})
+                                    .get("state", {})
+                                )
+                                if struct_state:
+                                    end_x_info["sid_structure"] = {
+                                        "lb": struct_state.get("lb-length"),
+                                        "ln": struct_state.get("ln-length"),
+                                        "fun": struct_state.get("fun-length"),
+                                        "arg": struct_state.get("arg-length"),
+                                    }
+
+                        end_x_sids.append(end_x_info)
+
+                    if end_x_sids:
+                        nbr_info["end_x_sids"] = end_x_sids
 
 
 class ShowIsisInterfaceSchema(MetaParser):
