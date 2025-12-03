@@ -4442,3 +4442,224 @@ class ShowIsisLevelCounters(ShowIsisLevelCountersSchema):
             logger.warning("Error parsing ISIS level counters: %s", exc)
 
         return ret_dict
+
+
+# =============================================================================
+# ShowIsisSpfLog
+# =============================================================================
+
+
+class ShowIsisSpfLogSchema(MetaParser):
+    """Schema for 'show isis spf-log'."""
+
+    schema = {
+        "network-instance": {
+            Any(): {
+                "isis": {
+                    Any(): {
+                        "spf-log": {
+                            Any(): {
+                                "id": int,
+                                "spf-type": str,
+                                "level": int,
+                                "topology-id": str,
+                                "algorithm": int,
+                                "schedule-time": str,
+                                "delay": int,
+                                Optional("start-time"): str,
+                                Optional("end-time"): str,
+                                Optional("duration"): int,
+                                Optional("node-count"): int,
+                                Optional("prefix-count"): int,
+                                Optional("route-download-count"): int,
+                                Optional("trigger-lsp"): list,
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisSpfLog(ShowIsisSpfLogSchema):
+    """Parser for 'show isis spf-log'.
+
+    CLI: show network-instance {network_instance} protocol ISIS {protocol_instance}
+         global spf-log
+    """
+
+    cli_command = (
+        "show network-instance {network_instance} protocol ISIS "
+        "{protocol_instance} global spf-log"
+    )
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> Dict[str, TypeAny]:
+        """Parse ISIS SPF log output."""
+
+        ret_dict: Dict[str, TypeAny] = {}
+
+        if output is None:
+            cmd = self.cli_command.format(
+                network_instance=network_instance,
+                protocol_instance=protocol_instance,
+            )
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            return ret_dict
+
+        try:
+            parsed_json = load_json_robust(output)
+            root = (
+                parsed_json.get("data", {})
+                .get("openconfig-network-instance:network-instances", {})
+                .get("network-instance", [])
+            )
+
+            if not root:
+                return ret_dict
+
+            ret_dict["network-instance"] = {}
+
+            for ni in root:
+                ni_name = ni.get("name", "")
+                if not ni_name:
+                    continue
+
+                protocols = ni.get("protocols", {}).get("protocol", [])
+                for proto in protocols:
+                    ident = proto.get("identifier", "")
+                    if "ISIS" not in ident:
+                        continue
+
+                    proto_name = proto.get("name", "")
+                    if not proto_name:
+                        continue
+
+                    isis_data = proto.get("isis", {})
+                    global_data = isis_data.get("global", {})
+                    spf_log_data = global_data.get(
+                        f"{ARCOS_ISIS_AUGMENTS}:spf-log", {}
+                    )
+                    events = spf_log_data.get("event", [])
+
+                    if not events:
+                        continue
+
+                    # Initialize nested dicts
+                    if ni_name not in ret_dict["network-instance"]:
+                        ret_dict["network-instance"][ni_name] = {"isis": {}}
+                    if proto_name not in ret_dict["network-instance"][ni_name]["isis"]:
+                        ret_dict["network-instance"][ni_name]["isis"][proto_name] = {
+                            "spf-log": {}
+                        }
+
+                    spf_log_dict = ret_dict["network-instance"][ni_name]["isis"][
+                        proto_name
+                    ]["spf-log"]
+
+                    for event in events:
+                        event_id = event.get("id")
+                        if event_id is None:
+                            continue
+
+                        entry: Dict[str, TypeAny] = {
+                            "id": event_id,
+                        }
+
+                        # Required fields
+                        if "spf-type" in event:
+                            entry["spf-type"] = event["spf-type"]
+
+                        if "level" in event:
+                            entry["level"] = event["level"]
+
+                        if "topology-id" in event:
+                            # Strip namespace prefix
+                            topo_id = event["topology-id"]
+                            if ":" in topo_id:
+                                topo_id = topo_id.split(":")[-1]
+                            entry["topology-id"] = topo_id
+
+                        if "algorithm" in event:
+                            entry["algorithm"] = event["algorithm"]
+
+                        if "schedule-time" in event:
+                            entry["schedule-time"] = event["schedule-time"]
+
+                        if "delay" in event:
+                            delay = event["delay"]
+                            entry["delay"] = (
+                                int(delay) if isinstance(delay, str) else delay
+                            )
+
+                        # Optional fields (only present for completed SPF)
+                        if "start-time" in event:
+                            entry["start-time"] = event["start-time"]
+
+                        if "end-time" in event:
+                            entry["end-time"] = event["end-time"]
+
+                        if "duration" in event:
+                            duration = event["duration"]
+                            entry["duration"] = (
+                                int(duration) if isinstance(duration, str) else duration
+                            )
+
+                        if "node-count" in event:
+                            node_count = event["node-count"]
+                            entry["node-count"] = (
+                                int(node_count)
+                                if isinstance(node_count, str)
+                                else node_count
+                            )
+
+                        if "prefix-count" in event:
+                            prefix_count = event["prefix-count"]
+                            entry["prefix-count"] = (
+                                int(prefix_count)
+                                if isinstance(prefix_count, str)
+                                else prefix_count
+                            )
+
+                        if "route-download-count" in event:
+                            route_dl = event["route-download-count"]
+                            entry["route-download-count"] = (
+                                int(route_dl) if isinstance(route_dl, str) else route_dl
+                            )
+
+                        # Trigger LSP list
+                        trigger_lsp_data = event.get("trigger-lsp", [])
+                        if trigger_lsp_data:
+                            trigger_list = []
+                            for trigger in trigger_lsp_data:
+                                trigger_entry: Dict[str, TypeAny] = {}
+                                if "id" in trigger:
+                                    trigger_entry["id"] = trigger["id"]
+                                if "lsp-id" in trigger:
+                                    trigger_entry["lsp-id"] = trigger["lsp-id"]
+                                if "sequence" in trigger:
+                                    trigger_entry["sequence"] = trigger["sequence"]
+                                if "trigger-time" in trigger:
+                                    trigger_entry["trigger-time"] = trigger[
+                                        "trigger-time"
+                                    ]
+                                if trigger_entry:
+                                    trigger_list.append(trigger_entry)
+                            if trigger_list:
+                                entry["trigger-lsp"] = trigger_list
+
+                        spf_log_dict[str(event_id)] = entry
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS SPF log: %s", exc)
+
+        return ret_dict
