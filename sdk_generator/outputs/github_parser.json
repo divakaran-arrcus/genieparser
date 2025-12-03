@@ -50798,6 +50798,18 @@
         },
         "uid": "show_isis_spf-log",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxr/show_isis.py#L1707"
+      },
+      "arcos": {
+        "class": "ShowIsisSpfLog",
+        "doc": "ArcOS ISIS SPF log with trigger LSPs and computation stats (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_spf_log_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },
@@ -51304,6 +51316,22 @@
           "os": "arcos"
         },
         "uid": "show_isis_level_counters_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global spf-log": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisSpfLog",
+        "doc": "ArcOS ISIS SPF log with trigger LSPs and computation stats (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_spf_log_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
