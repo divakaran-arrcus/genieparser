@@ -4092,3 +4092,353 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
         if "free-errors" in stats:
             result["free_errors"] = stats["free-errors"]
         return result
+
+
+# =============================================================================
+# ShowIsisLevelState
+# =============================================================================
+
+
+class ShowIsisLevelStateSchema(MetaParser):
+    """Schema for 'show isis level state'."""
+
+    schema = {
+        "network-instance": {
+            Any(): {
+                "isis": {
+                    Any(): {
+                        "levels": {
+                            Any(): {
+                                "level": int,
+                                Optional("enabled"): bool,
+                                Optional("metric-style"): str,
+                                Optional("lsp-count"): int,
+                                Optional("dynamic-hostname"): {
+                                    Any(): str,  # system-id -> hostname
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisLevelState(ShowIsisLevelStateSchema):
+    """Parser for 'show isis level state'.
+
+    CLI: show network-instance {network_instance} protocol ISIS {protocol_instance}
+         level {level} state
+    """
+
+    cli_command = (
+        "show network-instance {network_instance} protocol ISIS "
+        "{protocol_instance} level {level} state"
+    )
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        level: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> Dict[str, TypeAny]:
+        """Parse ISIS level state output."""
+
+        ret_dict: Dict[str, TypeAny] = {}
+
+        if output is None:
+            cmd = self.cli_command.format(
+                network_instance=network_instance,
+                protocol_instance=protocol_instance,
+                level=level,
+            )
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            return ret_dict
+
+        try:
+            parsed_json = load_json_robust(output)
+            root = (
+                parsed_json.get("data", {})
+                .get("openconfig-network-instance:network-instances", {})
+                .get("network-instance", [])
+            )
+
+            if not root:
+                return ret_dict
+
+            ret_dict["network-instance"] = {}
+
+            for ni in root:
+                ni_name = ni.get("name", "")
+                if not ni_name:
+                    continue
+
+                # Filter by network_instance if specified
+                if network_instance != "*" and ni_name != network_instance:
+                    continue
+
+                protocols = ni.get("protocols", {}).get("protocol", [])
+                for proto in protocols:
+                    ident = proto.get("identifier", "")
+                    if "ISIS" not in ident:
+                        continue
+
+                    proto_name = proto.get("name", "")
+                    if not proto_name:
+                        continue
+
+                    # Filter by protocol_instance if specified
+                    if protocol_instance != "*" and proto_name != protocol_instance:
+                        continue
+
+                    isis_data = proto.get("isis", {})
+                    levels_data = isis_data.get("levels", {}).get("level", [])
+
+                    if not levels_data:
+                        continue
+
+                    # Initialize nested dicts
+                    if ni_name not in ret_dict["network-instance"]:
+                        ret_dict["network-instance"][ni_name] = {"isis": {}}
+                    if proto_name not in ret_dict["network-instance"][ni_name]["isis"]:
+                        ret_dict["network-instance"][ni_name]["isis"][proto_name] = {
+                            "levels": {}
+                        }
+
+                    levels_dict = ret_dict["network-instance"][ni_name]["isis"][
+                        proto_name
+                    ]["levels"]
+
+                    for lvl in levels_data:
+                        level_num = lvl.get("level-number")
+                        if level_num is None:
+                            continue
+
+                        # Filter by level if specified
+                        if level != "*" and str(level_num) != str(level):
+                            continue
+
+                        lvl_state = lvl.get("state", {})
+                        level_entry: Dict[str, TypeAny] = {
+                            "level": level_num,
+                        }
+
+                        if "enabled" in lvl_state:
+                            level_entry["enabled"] = lvl_state["enabled"]
+
+                        if "metric-style" in lvl_state:
+                            level_entry["metric-style"] = lvl_state["metric-style"]
+
+                        # Level stats summary
+                        stats_summary = lvl_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:level-stats-summary", {}
+                        )
+                        lsp_count = stats_summary.get("lsp-count")
+                        if lsp_count is not None:
+                            # Convert string to int if needed
+                            level_entry["lsp-count"] = (
+                                int(lsp_count) if isinstance(lsp_count, str) else lsp_count
+                            )
+
+                        # Dynamic hostname - convert list to dict
+                        dyn_hostname_list = lvl_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:dynamic-hostname", []
+                        )
+                        if dyn_hostname_list:
+                            hostname_dict: Dict[str, str] = {}
+                            for entry in dyn_hostname_list:
+                                sys_id = entry.get("system-id")
+                                hostname = entry.get("hostname")
+                                if sys_id and hostname:
+                                    hostname_dict[sys_id] = hostname
+                            if hostname_dict:
+                                level_entry["dynamic-hostname"] = hostname_dict
+
+                        levels_dict[str(level_num)] = level_entry
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS level state: %s", exc)
+
+        return ret_dict
+
+
+# =============================================================================
+# ShowIsisLevelCounters
+# =============================================================================
+
+
+class ShowIsisLevelCountersSchema(MetaParser):
+    """Schema for 'show isis level counters'."""
+
+    schema = {
+        "network-instance": {
+            Any(): {
+                "isis": {
+                    Any(): {
+                        "levels": {
+                            Any(): {
+                                Optional("corrupted-lsps"): int,
+                                Optional("database-overloads"): int,
+                                Optional("manual-address-drop-from-areas"): int,
+                                Optional("exceed-max-seq-nums"): int,
+                                Optional("seq-num-skips"): int,
+                                Optional("own-lsp-purges"): int,
+                                Optional("id-len-mismatch"): int,
+                                Optional("part-changes"): int,
+                                Optional("max-area-address-mismatches"): int,
+                                Optional("auth-fails"): int,
+                                Optional("auth-type-fails"): int,
+                                Optional("spf-runs"): int,
+                                Optional("lsp-errors"): int,
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisLevelCounters(ShowIsisLevelCountersSchema):
+    """Parser for 'show isis level system-level-counters'.
+
+    CLI: show network-instance {network_instance} protocol ISIS {protocol_instance}
+         level {level} system-level-counters
+    """
+
+    cli_command = (
+        "show network-instance {network_instance} protocol ISIS "
+        "{protocol_instance} level {level} system-level-counters"
+    )
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        level: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> Dict[str, TypeAny]:
+        """Parse ISIS level counters output."""
+
+        ret_dict: Dict[str, TypeAny] = {}
+
+        if output is None:
+            cmd = self.cli_command.format(
+                network_instance=network_instance,
+                protocol_instance=protocol_instance,
+                level=level,
+            )
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            return ret_dict
+
+        try:
+            parsed_json = load_json_robust(output)
+            root = (
+                parsed_json.get("data", {})
+                .get("openconfig-network-instance:network-instances", {})
+                .get("network-instance", [])
+            )
+
+            if not root:
+                return ret_dict
+
+            ret_dict["network-instance"] = {}
+
+            for ni in root:
+                ni_name = ni.get("name", "")
+                if not ni_name:
+                    continue
+
+                # Filter by network_instance if specified
+                if network_instance != "*" and ni_name != network_instance:
+                    continue
+
+                protocols = ni.get("protocols", {}).get("protocol", [])
+                for proto in protocols:
+                    ident = proto.get("identifier", "")
+                    if "ISIS" not in ident:
+                        continue
+
+                    proto_name = proto.get("name", "")
+                    if not proto_name:
+                        continue
+
+                    # Filter by protocol_instance if specified
+                    if protocol_instance != "*" and proto_name != protocol_instance:
+                        continue
+
+                    isis_data = proto.get("isis", {})
+                    levels_data = isis_data.get("levels", {}).get("level", [])
+
+                    if not levels_data:
+                        continue
+
+                    # Initialize nested dicts
+                    if ni_name not in ret_dict["network-instance"]:
+                        ret_dict["network-instance"][ni_name] = {"isis": {}}
+                    if proto_name not in ret_dict["network-instance"][ni_name]["isis"]:
+                        ret_dict["network-instance"][ni_name]["isis"][proto_name] = {
+                            "levels": {}
+                        }
+
+                    levels_dict = ret_dict["network-instance"][ni_name]["isis"][
+                        proto_name
+                    ]["levels"]
+
+                    for lvl in levels_data:
+                        level_num = lvl.get("level-number")
+                        if level_num is None:
+                            continue
+
+                        # Filter by level if specified
+                        if level != "*" and str(level_num) != str(level):
+                            continue
+
+                        counters_data = lvl.get("system-level-counters", {}).get(
+                            "state", {}
+                        )
+
+                        if not counters_data:
+                            # Return empty dict for level if no counters
+                            levels_dict[str(level_num)] = {}
+                            continue
+
+                        counter_entry: Dict[str, TypeAny] = {}
+
+                        # All counter fields
+                        counter_fields = [
+                            "corrupted-lsps",
+                            "database-overloads",
+                            "manual-address-drop-from-areas",
+                            "exceed-max-seq-nums",
+                            "seq-num-skips",
+                            "own-lsp-purges",
+                            "id-len-mismatch",
+                            "part-changes",
+                            "max-area-address-mismatches",
+                            "auth-fails",
+                            "auth-type-fails",
+                            "spf-runs",
+                            "lsp-errors",
+                        ]
+
+                        for field in counter_fields:
+                            if field in counters_data:
+                                counter_entry[field] = counters_data[field]
+
+                        levels_dict[str(level_num)] = counter_entry
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS level counters: %s", exc)
+
+        return ret_dict
