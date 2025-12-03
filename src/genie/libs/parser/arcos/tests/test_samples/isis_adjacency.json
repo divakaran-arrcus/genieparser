@@ -35,7 +35,11 @@
                                       "restart-support": false,
                                       "restart-status": false,
                                       "nlpid": ["IPV4"],
-                                      "arcos-openconfig-isis-augments:usable": true
+                                      "arcos-openconfig-isis-augments:usable": true,
+                                      "arcos-openconfig-isis-augments:adjacency-up-time": "4d 23:18:45",
+                                      "arcos-openconfig-isis-augments:num-state-changes": 3,
+                                      "arcos-openconfig-isis-augments:last-state-change-timestamp": "2025-12-02T22:31:07.311688+00:00",
+                                      "arcos-openconfig-isis-augments:last-down-reason": "NONE"
                                     }
                                   }
                                 ]
