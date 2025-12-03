@@ -65,7 +65,10 @@ class ShowIsisAdjacencySchema(MetaParser):
                                 Optional("neighbor-ipv4-address"): str,
                                 Optional("neighbor-ipv6-address"): str,
                                 Optional("adjacency-type"): str,
-                                Optional("up-time"): int,
+                                Optional("up-time"): Or(int, str),
+                                Optional("num-state-changes"): int,
+                                Optional("last-state-change-timestamp"): str,
+                                Optional("last-down-reason"): str,
                                 Optional("neighbor-circuit-type"): str,
                                 Optional("local-extended-circuit-id"): int,
                                 Optional("neighbor-extended-circuit-id"): int,
@@ -205,10 +208,35 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
                         if neighbor_ipv6:
                             neighbor_entry["neighbor-ipv6-address"] = neighbor_ipv6
 
-                        # Up-time
-                        up_time = adj_state.get("up-time")
-                        if up_time is not None:
-                            neighbor_entry["up-time"] = up_time
+                        # Up-time: prefer human-readable format if available
+                        adj_up_time = adj_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:adjacency-up-time"
+                        )
+                        if adj_up_time:
+                            neighbor_entry["up-time"] = adj_up_time
+                        else:
+                            up_time = adj_state.get("up-time")
+                            if up_time is not None:
+                                neighbor_entry["up-time"] = up_time
+
+                        # State change tracking
+                        num_state_changes = adj_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:num-state-changes"
+                        )
+                        if num_state_changes is not None:
+                            neighbor_entry["num-state-changes"] = num_state_changes
+
+                        last_state_ts = adj_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:last-state-change-timestamp"
+                        )
+                        if last_state_ts:
+                            neighbor_entry["last-state-change-timestamp"] = last_state_ts
+
+                        last_down_reason = adj_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:last-down-reason"
+                        )
+                        if last_down_reason:
+                            neighbor_entry["last-down-reason"] = last_down_reason
 
                         # Circuit IDs
                         local_cid = adj_state.get("local-extended-circuit-id")
@@ -1406,6 +1434,10 @@ class ShowIsisInterfaceSchema(MetaParser):
                                 Optional("timers"): dict,
                                 Optional("bfd"): dict,
                                 Optional("fast-reroute"): dict,
+                                Optional("afi-safi"): dict,
+                                Optional("flexible-algorithm"): dict,
+                                Optional("csnp-enabled"): bool,
+                                Optional("mpls-ldp-sync-enabled"): bool,
                                 Optional("levels"): dict,
                                 Optional("adjacencies"): dict,
                             }
@@ -1629,6 +1661,90 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
                     if frr_info:
                         intf_entry["fast-reroute"] = frr_info
 
+                # AFI-SAFI per interface with fast-reroute config
+                afi_safi_data = intf.get("afi-safi", {}).get("af", [])
+                if afi_safi_data:
+                    afi_safi_dict: Dict[str, TypeAny] = {}
+                    for af in afi_safi_data:
+                        af_state = af.get("state", {})
+                        afi_name = af_state.get("afi-name", "")
+                        safi_name = af_state.get("safi-name", "")
+                        if not afi_name:
+                            continue
+
+                        # Create key like "IPV4-UNICAST"
+                        afi_key = afi_name.split(":")[-1] if ":" in afi_name else afi_name
+                        safi_key = (
+                            safi_name.split(":")[-1] if ":" in safi_name else safi_name
+                        )
+                        af_key = f"{afi_key}-{safi_key}" if safi_key else afi_key
+
+                        af_entry: Dict[str, TypeAny] = {
+                            "afi-name": afi_key,
+                            "safi-name": safi_key,
+                            "enabled": af_state.get("enabled", False),
+                        }
+
+                        # Fast-reroute config per AFI-SAFI
+                        af_frr = af_state.get(f"{ARCOS_ISIS_AUGMENTS}:fast-reroute", {})
+                        if af_frr:
+                            frr_config: Dict[str, TypeAny] = {}
+                            ip_frr = af_frr.get("ip", {}).get("config", {})
+                            if "enabled" in ip_frr:
+                                frr_config["ip-enabled"] = ip_frr["enabled"]
+
+                            ti_lfa = af_frr.get("ti-lfa", {}).get("config", {})
+                            if ti_lfa:
+                                srv6_cfg = ti_lfa.get("srv6", {})
+                                if "enabled" in srv6_cfg:
+                                    frr_config["ti-lfa-srv6-enabled"] = srv6_cfg["enabled"]
+                                sr_mpls_cfg = ti_lfa.get("sr-mpls", {})
+                                if "enabled" in sr_mpls_cfg:
+                                    frr_config["ti-lfa-sr-mpls-enabled"] = sr_mpls_cfg[
+                                        "enabled"
+                                    ]
+
+                            if frr_config:
+                                af_entry["fast-reroute"] = frr_config
+
+                        # IPv4 unnumbered
+                        ipv4_unnumbered = af_state.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:ipv4-unnumbered"
+                        )
+                        if ipv4_unnumbered is not None:
+                            af_entry["ipv4-unnumbered"] = ipv4_unnumbered
+
+                        afi_safi_dict[af_key] = af_entry
+
+                    if afi_safi_dict:
+                        intf_entry["afi-safi"] = afi_safi_dict
+
+                # Flexible-algorithm admin-groups at interface level
+                flex_algo_data = intf.get(
+                    f"{ARCOS_ISIS_AUGMENTS}:flexible-algorithm", {}
+                )
+                if flex_algo_data:
+                    flex_algo_state = flex_algo_data.get("state", {})
+                    admin_groups = flex_algo_state.get("admin-groups")
+                    if admin_groups:
+                        intf_entry["flexible-algorithm"] = {
+                            "admin-groups": admin_groups
+                        }
+
+                # CSNP enabled
+                csnp_data = intf.get(f"{ARCOS_ISIS_AUGMENTS}:csnp", {})
+                if csnp_data:
+                    csnp_state = csnp_data.get("state", {})
+                    if "enabled" in csnp_state:
+                        intf_entry["csnp-enabled"] = csnp_state["enabled"]
+
+                # MPLS igp-ldp-sync
+                mpls_data = intf.get(f"{ARCOS_ISIS_AUGMENTS}:mpls", {})
+                if mpls_data:
+                    ldp_sync_state = mpls_data.get("igp-ldp-sync", {}).get("state", {})
+                    if "enabled" in ldp_sync_state:
+                        intf_entry["mpls-ldp-sync-enabled"] = ldp_sync_state["enabled"]
+
                 levels_data = intf.get("levels", {}).get("level", [])
                 if levels_data:
                     levels_dict: Dict[str, TypeAny] = {}
@@ -1706,9 +1822,37 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
                                 if hold_time is not None:
                                     adj_entry["remaining-hold-time"] = hold_time
 
-                                up_time = adj_state.get("up-time")
-                                if up_time is not None:
-                                    adj_entry["up-time"] = up_time
+                                # Up-time: prefer human-readable format if available
+                                adj_up_time = adj_state.get(
+                                    f"{ARCOS_ISIS_AUGMENTS}:adjacency-up-time"
+                                )
+                                if adj_up_time:
+                                    adj_entry["up-time"] = adj_up_time
+                                else:
+                                    up_time = adj_state.get("up-time")
+                                    if up_time is not None:
+                                        adj_entry["up-time"] = up_time
+
+                                # State change tracking
+                                num_state_changes = adj_state.get(
+                                    f"{ARCOS_ISIS_AUGMENTS}:num-state-changes"
+                                )
+                                if num_state_changes is not None:
+                                    adj_entry["num-state-changes"] = num_state_changes
+
+                                last_state_ts = adj_state.get(
+                                    f"{ARCOS_ISIS_AUGMENTS}:last-state-change-timestamp"
+                                )
+                                if last_state_ts:
+                                    adj_entry["last-state-change-timestamp"] = (
+                                        last_state_ts
+                                    )
+
+                                last_down_reason = adj_state.get(
+                                    f"{ARCOS_ISIS_AUGMENTS}:last-down-reason"
+                                )
+                                if last_down_reason:
+                                    adj_entry["last-down-reason"] = last_down_reason
 
                                 local_cid = adj_state.get("local-extended-circuit-id")
                                 if local_cid is not None:
