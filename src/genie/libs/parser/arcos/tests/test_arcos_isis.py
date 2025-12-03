@@ -316,6 +316,80 @@ def test_show_isis_config_sample():
     assert loop1_lvls["2"].get("enabled") is True
 
 
+def test_show_isis_config_sr_mpls_sample():
+    """Validate parsing of ISIS config with SR-MPLS features (adjacency-sids, prefix-sids, ti-lfa-sr-mpls)."""
+
+    sample_file = SAMPLES_DIR / "isis_config_sr_mpls.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisConfig(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
+
+    cfg = isis.get("config", {})
+
+    # Global settings - segment routing enabled
+    glb = cfg.get("global", {})
+    assert glb.get("segment_routing_enabled") is True
+
+    # Interfaces
+    interfaces = cfg.get("interfaces", {})
+    assert "swp1" in interfaces
+    assert "loopback0" in interfaces
+
+    # swp1 - should have adjacency-sid and ti-lfa-sr-mpls
+    swp1 = interfaces["swp1"]
+    assert swp1["interface_id"] == "swp1"
+    assert swp1["enabled"] is True
+    assert swp1.get("network_type") == "POINT_TO_POINT"
+
+    swp1_afs = swp1.get("afi_safi", {})
+    assert "IPV4-UNICAST" in swp1_afs
+
+    swp1_v4_af = swp1_afs["IPV4-UNICAST"]
+    assert swp1_v4_af["enabled"] is True
+
+    # Adjacency SIDs
+    adj_sids = swp1_v4_af.get("adjacency_sids", [])
+    assert len(adj_sids) == 1
+    adj_sid = adj_sids[0]
+    assert adj_sid["neighbor"] == "POINT_TO_POINT"
+    assert adj_sid["sid_type"] == "INDEX"
+    assert adj_sid["value"] == 12
+
+    # Fast reroute - TI-LFA SR-MPLS
+    fr = swp1_v4_af.get("fast_reroute", {})
+    assert fr.get("ti_lfa_sr_mpls_enabled") is True
+
+    # loopback0 - should have prefix-sid
+    loop0 = interfaces["loopback0"]
+    assert loop0["interface_id"] == "loopback0"
+    assert loop0["enabled"] is True
+
+    loop0_afs = loop0.get("afi_safi", {})
+    assert "IPV4-UNICAST" in loop0_afs
+
+    loop0_v4_af = loop0_afs["IPV4-UNICAST"]
+    assert loop0_v4_af["enabled"] is True
+
+    # Prefix SIDs
+    prefix_sids = loop0_v4_af.get("prefix_sids", [])
+    assert len(prefix_sids) == 1
+    prefix_sid = prefix_sids[0]
+    assert prefix_sid["algorithm"] == "SPF"
+    assert prefix_sid["sid_type"] == "INDEX"
+    assert prefix_sid["value"] == 111
+    assert prefix_sid["label_option"] == "EXPLICIT_NULL"
+
+
 def test_show_isis_lsp_sample():
     """Validate parsing of an ISIS LSP database sample."""
 
