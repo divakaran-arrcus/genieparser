@@ -1,0 +1,108 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "global": {
+                    "arcos-openconfig-isis-augments:spf-log": {
+                      "event": [
+                        {
+                          "id": 105,
+                          "spf-type": "route-only",
+                          "level": 2,
+                          "topology-id": "arcos-openconfig-isis-augments:ISIS_MT_ID0_STANDARD",
+                          "algorithm": 132,
+                          "schedule-time": "2025-12-02T20:51:01.618349+00:00",
+                          "delay": "200000",
+                          "trigger-lsp": [
+                            {
+                              "id": 1,
+                              "lsp-id": "rtr1.00-00",
+                              "sequence": 244,
+                              "trigger-time": "2025-12-02T20:51:01.742482+00:00"
+                            },
+                            {
+                              "id": 2,
+                              "lsp-id": "rtr2.00-00",
+                              "sequence": 603,
+                              "trigger-time": "2025-12-02T20:51:01.74671+00:00"
+                            },
+                            {
+                              "id": 3,
+                              "lsp-id": "rtr3.00-00",
+                              "sequence": 577,
+                              "trigger-time": "2025-12-02T20:51:01.747514+00:00"
+                            }
+                          ]
+                        },
+                        {
+                          "id": 106,
+                          "spf-type": "full",
+                          "level": 2,
+                          "topology-id": "arcos-openconfig-isis-augments:ISIS_MT_ID2_IPV6_UNICAST",
+                          "algorithm": 0,
+                          "schedule-time": "2025-12-02T20:51:01.618377+00:00",
+                          "delay": "200000",
+                          "start-time": "2025-12-02T20:51:01.78713+00:00",
+                          "end-time": "2025-12-02T20:51:01.788434+00:00",
+                          "duration": "1284",
+                          "node-count": "1",
+                          "prefix-count": "0",
+                          "route-download-count": "0",
+                          "trigger-lsp": [
+                            {
+                              "id": 1,
+                              "lsp-id": "rtr1.00-00",
+                              "sequence": 244,
+                              "trigger-time": "2025-12-02T20:51:01.742834+00:00"
+                            },
+                            {
+                              "id": 2,
+                              "lsp-id": "rtr2.00-00",
+                              "sequence": 603,
+                              "trigger-time": "2025-12-02T20:51:01.746743+00:00"
+                            }
+                          ]
+                        },
+                        {
+                          "id": 109,
+                          "spf-type": "full",
+                          "level": 2,
+                          "topology-id": "arcos-openconfig-isis-augments:ISIS_MT_ID0_STANDARD",
+                          "algorithm": 0,
+                          "schedule-time": "2025-12-02T20:51:01.813119+00:00",
+                          "delay": "400000",
+                          "start-time": "2025-12-02T20:51:02.213226+00:00",
+                          "end-time": "2025-12-02T20:51:02.21354+00:00",
+                          "duration": "292",
+                          "node-count": "1",
+                          "prefix-count": "8",
+                          "route-download-count": "0",
+                          "trigger-lsp": [
+                            {
+                              "id": 1,
+                              "lsp-id": "rtr1.00-00",
+                              "sequence": 1,
+                              "trigger-time": "2025-12-02T20:51:01.875623+00:00"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

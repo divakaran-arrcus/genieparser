@@ -16,6 +16,7 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisMplsLabelDb,
     ShowIsisRedistributeRoute,
     ShowIsisRoute,
+    ShowIsisSpfLog,
 )
 
 
@@ -1242,3 +1243,137 @@ def test_show_isis_level_counters_with_filter():
     assert result.get("network-instance", {}).get("default", {}).get("isis", {}).get(
         "default", {}
     ).get("levels", {}) == {}
+
+
+def test_show_isis_spf_log_sample():
+    """Validate parsing of ISIS SPF log sample."""
+
+    sample_file = SAMPLES_DIR / "isis_spf_log.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    parser = ShowIsisSpfLog(device="dummy")
+    result = parser.cli(output=output)
+
+    # Verify structure
+    assert "network-instance" in result
+    assert "default" in result["network-instance"]
+    assert "isis" in result["network-instance"]["default"]
+    assert "default" in result["network-instance"]["default"]["isis"]
+    assert "spf-log" in result["network-instance"]["default"]["isis"]["default"]
+
+    spf_log = result["network-instance"]["default"]["isis"]["default"]["spf-log"]
+
+    # Verify we have 3 events
+    assert len(spf_log) == 3
+    assert "105" in spf_log
+    assert "106" in spf_log
+    assert "109" in spf_log
+
+    # Verify incomplete event (route-only, id=105 - no duration/end_time)
+    event_105 = spf_log["105"]
+    assert event_105["id"] == 105
+    assert event_105["spf-type"] == "route-only"
+    assert event_105["level"] == 2
+    assert event_105["topology-id"] == "ISIS_MT_ID0_STANDARD"
+    assert event_105["algorithm"] == 132
+    assert event_105["delay"] == 200000
+    assert "duration" not in event_105  # incomplete
+    assert "start-time" not in event_105
+    assert "end-time" not in event_105
+    # Verify trigger-lsp list
+    assert len(event_105["trigger-lsp"]) == 3
+    assert event_105["trigger-lsp"][0]["lsp-id"] == "rtr1.00-00"
+    assert event_105["trigger-lsp"][0]["sequence"] == 244
+
+    # Verify complete event (full, id=106)
+    event_106 = spf_log["106"]
+    assert event_106["id"] == 106
+    assert event_106["spf-type"] == "full"
+    assert event_106["level"] == 2
+    assert event_106["topology-id"] == "ISIS_MT_ID2_IPV6_UNICAST"
+    assert event_106["algorithm"] == 0
+    assert event_106["delay"] == 200000
+    assert event_106["duration"] == 1284
+    assert event_106["node-count"] == 1
+    assert event_106["prefix-count"] == 0
+    assert event_106["route-download-count"] == 0
+    assert "start-time" in event_106
+    assert "end-time" in event_106
+    assert len(event_106["trigger-lsp"]) == 2
+
+    # Verify another complete event (id=109) with different prefix count
+    event_109 = spf_log["109"]
+    assert event_109["id"] == 109
+    assert event_109["spf-type"] == "full"
+    assert event_109["algorithm"] == 0
+    assert event_109["duration"] == 292
+    assert event_109["prefix-count"] == 8
+    assert len(event_109["trigger-lsp"]) == 1
+
+
+def test_show_isis_spf_log_enhanced():
+    """Validate parsing of enhanced ISIS SPF log with many events and algorithms."""
+
+    sample_file = SAMPLES_DIR / "isis_spf_log_enhanced.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    parser = ShowIsisSpfLog(device="dummy")
+    result = parser.cli(output=output)
+
+    # Verify structure
+    assert "network-instance" in result
+    assert "default" in result["network-instance"]
+    assert "isis" in result["network-instance"]["default"]
+    assert "default" in result["network-instance"]["default"]["isis"]
+    assert "spf-log" in result["network-instance"]["default"]["isis"]["default"]
+
+    spf_log = result["network-instance"]["default"]["isis"]["default"]["spf-log"]
+
+    # Verify we have many events (128 in the enhanced sample)
+    assert len(spf_log) == 128
+
+    # Verify route-only event with algorithm 131 (id=226)
+    event_226 = spf_log["226"]
+    assert event_226["id"] == 226
+    assert event_226["spf-type"] == "route-only"
+    assert event_226["level"] == 2
+    assert event_226["topology-id"] == "ISIS_MT_ID0_STANDARD"
+    assert event_226["algorithm"] == 131
+    assert event_226["delay"] == 200000
+    assert event_226["duration"] == 9
+    assert event_226["node-count"] == 0
+    assert len(event_226["trigger-lsp"]) == 1
+
+    # Verify IPv6 topology event (id=227)
+    event_227 = spf_log["227"]
+    assert event_227["topology-id"] == "ISIS_MT_ID2_IPV6_UNICAST"
+    assert event_227["prefix-count"] == 2
+
+    # Verify full SPF with algorithm 0 (id=228)
+    event_228 = spf_log["228"]
+    assert event_228["spf-type"] == "full"
+    assert event_228["algorithm"] == 0
+    assert event_228["node-count"] == 3
+    assert event_228["prefix-count"] == 6
+    assert event_228["route-download-count"] == 2
+
+    # Verify event with algorithm 132 (id=230)
+    event_230 = spf_log["230"]
+    assert event_230["algorithm"] == 132
+
+    # Verify event with multiple trigger LSPs (id=246 has 3 triggers)
+    event_246 = spf_log["246"]
+    assert event_246["id"] == 246
+    assert event_246["spf-type"] == "full"
+    assert event_246["delay"] == 3200000
+    assert len(event_246["trigger-lsp"]) == 3
+    # Verify trigger LSP details
+    trigger_lsps = event_246["trigger-lsp"]
+    assert trigger_lsps[0]["lsp-id"] == "rtr1.00-00"
+    assert trigger_lsps[0]["sequence"] == 25
+    assert trigger_lsps[1]["lsp-id"] == "rtr1.00-01"
+    assert trigger_lsps[2]["lsp-id"] == "rtr3.00-00"
