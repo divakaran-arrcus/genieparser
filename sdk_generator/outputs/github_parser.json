@@ -51322,6 +51322,102 @@
       }
     }
   },
+  "show isis level": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelState",
+        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show isis level {level}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelState",
+        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show isis counters": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelCounters",
+        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_counters_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show isis level {level} counters": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelCounters",
+        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_counters_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelState",
+        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} system-level-counters": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelCounters",
+        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_counters_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show isis mpls": {
     "folders": {
       "arcos": {

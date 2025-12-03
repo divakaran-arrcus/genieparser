@@ -10,6 +10,8 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisFlexAlgoRoute,
     ShowIsisFastReroute,
     ShowIsisInterface,
+    ShowIsisLevelCounters,
+    ShowIsisLevelState,
     ShowIsisLsp,
     ShowIsisMplsLabelDb,
     ShowIsisRedistributeRoute,
@@ -1110,3 +1112,133 @@ def test_show_isis_lsp_srv6_locator():
     algo132_loc = next((loc for loc in locators if loc.get("algorithm") == 132), None)
     assert algo132_loc is not None
     assert algo132_loc["locator"] == "2400:2020:32:1191::/64"
+
+
+def test_show_isis_level_state_sample():
+    """Validate parsing of ISIS level state sample."""
+
+    sample_file = SAMPLES_DIR / "isis_level_state.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisLevelState(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+
+    isis = ni["isis"].get("default", {})
+    assert "levels" in isis
+
+    levels = isis["levels"]
+    assert "2" in levels
+
+    level2 = levels["2"]
+    assert level2["level"] == 2
+    assert level2["enabled"] is True
+    assert level2["metric-style"] == "WIDE_METRIC"
+    assert level2["lsp-count"] == 4
+
+    # Dynamic hostname - should be dict keyed by system-id
+    dyn_hostname = level2.get("dynamic-hostname", {})
+    assert "1111.1111.1111" in dyn_hostname
+    assert dyn_hostname["1111.1111.1111"] == "rtr1"
+    assert dyn_hostname["2222.2222.2222"] == "rtr2"
+    assert dyn_hostname["3333.3333.3333"] == "rtr3"
+
+
+def test_show_isis_level_state_with_filter():
+    """Test level state parser with level filter."""
+
+    sample_file = SAMPLES_DIR / "isis_level_state.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisLevelState(device="dummy")
+
+    # Filter by specific level
+    result = parser.cli(level="2", output=output)
+    levels = result["network-instance"]["default"]["isis"]["default"]["levels"]
+    assert "2" in levels
+    assert len(levels) == 1
+
+    # Filter by non-existent level
+    result = parser.cli(level="1", output=output)
+    # Should return empty since level 1 doesn't exist in sample
+    assert result.get("network-instance", {}).get("default", {}).get("isis", {}).get(
+        "default", {}
+    ).get("levels", {}) == {}
+
+
+def test_show_isis_level_counters_sample():
+    """Validate parsing of ISIS level counters sample."""
+
+    sample_file = SAMPLES_DIR / "isis_level_counters.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisLevelCounters(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+
+    isis = ni["isis"].get("default", {})
+    assert "levels" in isis
+
+    levels = isis["levels"]
+    assert "2" in levels
+
+    level2 = levels["2"]
+
+    # Verify all counter fields
+    assert level2["corrupted-lsps"] == 0
+    assert level2["database-overloads"] == 0
+    assert level2["manual-address-drop-from-areas"] == 0
+    assert level2["exceed-max-seq-nums"] == 0
+    assert level2["seq-num-skips"] == 0
+    assert level2["own-lsp-purges"] == 0
+    assert level2["id-len-mismatch"] == 0
+    assert level2["part-changes"] == 0
+    assert level2["max-area-address-mismatches"] == 0
+    assert level2["auth-fails"] == 0
+    assert level2["auth-type-fails"] == 0
+    assert level2["spf-runs"] == 35
+    assert level2["lsp-errors"] == 0
+
+
+def test_show_isis_level_counters_with_filter():
+    """Test level counters parser with level filter."""
+
+    sample_file = SAMPLES_DIR / "isis_level_counters.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisLevelCounters(device="dummy")
+
+    # Filter by specific level
+    result = parser.cli(level="2", output=output)
+    levels = result["network-instance"]["default"]["isis"]["default"]["levels"]
+    assert "2" in levels
+    assert levels["2"]["spf-runs"] == 35
+
+    # Filter by non-existent level
+    result = parser.cli(level="1", output=output)
+    # Should return empty since level 1 doesn't exist in sample
+    assert result.get("network-instance", {}).get("default", {}).get("isis", {}).get(
+        "default", {}
+    ).get("levels", {}) == {}
