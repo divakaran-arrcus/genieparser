@@ -2029,11 +2029,17 @@ class ShowIsisConfigSchema(MetaParser):
                                 Optional("graceful_restart_enabled"): bool,
                                 Optional("lsp_mtu_size"): int,
                                 Optional("segment_routing_enabled"): bool,
+                                Optional("srms"): {
+                                    Optional("mapping"): str,
+                                    Optional("receive_enabled"): bool,
+                                    Optional("advertise_enabled"): bool,
+                                },
                                 Optional("srv6"): {
                                     Optional("enabled"): bool,
                                     Optional("locators"): list,  # list of locator names
                                 },
                                 Optional("traffic_engineering"): {
+                                    Optional("ipv4_router_id"): str,
                                     Optional("ipv6_router_id"): str,
                                 },
                                 Optional("micro_loop_avoidance"): {
@@ -2080,6 +2086,7 @@ class ShowIsisConfigSchema(MetaParser):
                                         Optional("auth_password"): str,
                                         Optional("crypto_algorithm"): str,
                                     },
+                                    Optional("labeled_preference"): int,
                                 }
                             },
                             Optional("afi_safi"): {
@@ -2127,7 +2134,10 @@ class ShowIsisConfigSchema(MetaParser):
                                             "enabled": bool,
                                             Optional("fast_reroute"): {
                                                 Optional("ti_lfa_srv6_enabled"): bool,
+                                                Optional("ti_lfa_sr_mpls_enabled"): bool,
                                             },
+                                            Optional("adjacency_sids"): list,
+                                            Optional("prefix_sids"): list,
                                         }
                                     },
                                     Optional("levels"): {
@@ -2225,11 +2235,28 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 cfg_root["global"]["lsp_mtu_size"] = transport_config["lsp-mtu-size"]
 
             # Segment Routing
-            sr_config = global_config.get("segment-routing", {}).get("config", {})
+            sr_root = global_config.get("segment-routing", {})
+            sr_config = sr_root.get("config", {})
             if sr_config and "enabled" in sr_config:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
                 cfg_root["global"]["segment_routing_enabled"] = sr_config["enabled"]
+
+            # SRMS (Segment Routing Mapping Server)
+            srms_root = sr_root.get(f"{ARCOS_ISIS_AUGMENTS}:srms", {})
+            srms_config = srms_root.get("config", {})
+            if srms_config:
+                srms_dict: Dict[str, TypeAny] = {}
+                if "mapping" in srms_config:
+                    srms_dict["mapping"] = srms_config["mapping"]
+                if "receive-enabled" in srms_config:
+                    srms_dict["receive_enabled"] = srms_config["receive-enabled"]
+                if "advertise-enabled" in srms_config:
+                    srms_dict["advertise_enabled"] = srms_config["advertise-enabled"]
+                if srms_dict:
+                    if "global" not in cfg_root:
+                        cfg_root["global"] = {}
+                    cfg_root["global"]["srms"] = srms_dict
 
             # SRv6
             srv6_root = global_config.get(f"{ARCOS_ISIS_AUGMENTS}:srv6", {})
@@ -2254,12 +2281,16 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 f"{ARCOS_ISIS_AUGMENTS}:traffic-engineering", {}
             )
             te_config = te_root.get("config", {})
-            if te_config and "ipv6-router-id" in te_config:
-                if "global" not in cfg_root:
-                    cfg_root["global"] = {}
-                cfg_root["global"]["traffic_engineering"] = {
-                    "ipv6_router_id": te_config["ipv6-router-id"]
-                }
+            if te_config:
+                te_dict = {}
+                if "ipv4-router-id" in te_config:
+                    te_dict["ipv4_router_id"] = te_config["ipv4-router-id"]
+                if "ipv6-router-id" in te_config:
+                    te_dict["ipv6_router_id"] = te_config["ipv6-router-id"]
+                if te_dict:
+                    if "global" not in cfg_root:
+                        cfg_root["global"] = {}
+                    cfg_root["global"]["traffic_engineering"] = te_dict
 
             # Micro Loop Avoidance
             mla_root = global_config.get(
@@ -2431,6 +2462,16 @@ class ShowIsisConfig(ShowIsisConfigSchema):
 
                     if auth_entry:
                         lvl_entry["authentication"] = auth_entry
+
+                    # Labeled preference (for SR/LDP coexistence)
+                    labeled_pref_root = level.get(
+                        f"{ARCOS_ISIS_AUGMENTS}:labeled-preference", {}
+                    )
+                    labeled_pref_cfg = labeled_pref_root.get("config", {})
+                    if "labeled-preference" in labeled_pref_cfg:
+                        lvl_entry["labeled_preference"] = labeled_pref_cfg[
+                            "labeled-preference"
+                        ]
 
                     levels_dict[str(level_num)] = lvl_entry
 
@@ -2607,16 +2648,69 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                 "enabled": af_config.get("enabled", False),
                             }
 
-                            # Fast Reroute (TI-LFA SRv6)
+                            # Fast Reroute (TI-LFA SRv6 and SR-MPLS)
                             frr_root = af_config.get(
                                 f"{ARCOS_ISIS_AUGMENTS}:fast-reroute", {}
                             )
                             tilfa_root = frr_root.get("ti-lfa", {}).get("config", {})
+                            frr_entry: Dict[str, TypeAny] = {}
                             srv6_root = tilfa_root.get("srv6", {})
                             if "enabled" in srv6_root:
-                                intf_af_entry["fast_reroute"] = {
-                                    "ti_lfa_srv6_enabled": srv6_root["enabled"]
-                                }
+                                frr_entry["ti_lfa_srv6_enabled"] = srv6_root["enabled"]
+                            sr_mpls_root = tilfa_root.get("sr-mpls", {})
+                            if "enabled" in sr_mpls_root:
+                                frr_entry["ti_lfa_sr_mpls_enabled"] = sr_mpls_root[
+                                    "enabled"
+                                ]
+                            if frr_entry:
+                                intf_af_entry["fast_reroute"] = frr_entry
+
+                            # Adjacency SIDs
+                            adj_sids_root = af_config.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:adjacency-sids", {}
+                            )
+                            adj_sid_list = adj_sids_root.get("adjacency-sid", [])
+                            if adj_sid_list:
+                                adjacency_sids = []
+                                for adj_sid in adj_sid_list:
+                                    adj_config = adj_sid.get("config", {})
+                                    neighbor = adj_sid.get("neighbor", "")
+                                    # Strip namespace prefix
+                                    if ":" in neighbor:
+                                        neighbor = neighbor.split(":")[-1]
+                                    adj_entry = {
+                                        "neighbor": neighbor,
+                                        "sid_type": adj_config.get("sid-type"),
+                                        "value": adj_config.get("value"),
+                                    }
+                                    adjacency_sids.append(adj_entry)
+                                if adjacency_sids:
+                                    intf_af_entry["adjacency_sids"] = adjacency_sids
+
+                            # Prefix SIDs
+                            prefix_sids_root = af_config.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:prefix-sids", {}
+                            )
+                            prefix_sid_list = prefix_sids_root.get("prefix-sid", [])
+                            if prefix_sid_list:
+                                prefix_sids = []
+                                for prefix_sid in prefix_sid_list:
+                                    pfx_config = prefix_sid.get("config", {})
+                                    algorithm = prefix_sid.get("algorithm", "")
+                                    # Strip namespace prefix
+                                    if ":" in algorithm:
+                                        algorithm = algorithm.split(":")[-1]
+                                    pfx_entry: Dict[str, TypeAny] = {
+                                        "algorithm": algorithm,
+                                        "sid_type": pfx_config.get("sid-type"),
+                                        "value": pfx_config.get("value"),
+                                    }
+                                    label_option = pfx_config.get("label-option")
+                                    if label_option:
+                                        pfx_entry["label_option"] = label_option
+                                    prefix_sids.append(pfx_entry)
+                                if prefix_sids:
+                                    intf_af_entry["prefix_sids"] = prefix_sids
 
                             intf_entry["afi_safi"][af_key] = intf_af_entry
 
