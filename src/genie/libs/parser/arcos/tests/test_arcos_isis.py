@@ -59,6 +59,12 @@ def test_show_isis_adjacency_sample():
     assert adj["adjacency-type"] == "LEVEL_2"
     assert adj.get("usable") is True
 
+    # Verify new state change tracking fields
+    assert adj["up-time"] == "4d 23:18:45"  # Human-readable format preferred
+    assert adj["num-state-changes"] == 3
+    assert adj["last-state-change-timestamp"] == "2025-12-02T22:31:07.311688+00:00"
+    assert adj["last-down-reason"] == "NONE"
+
 
 def test_show_isis_config_sample():
     """Validate parsing of an ISIS configuration sample."""
@@ -402,6 +408,30 @@ def test_show_isis_interface_sample():
     assert swp1["enabled"] is True
     assert swp1.get("network-type") == "POINT_TO_POINT"
 
+    # Verify new interface-level fields
+    assert swp1.get("csnp-enabled") is True
+    assert swp1.get("mpls-ldp-sync-enabled") is False
+
+    # AFI-SAFI with fast-reroute
+    afi_safi = swp1.get("afi-safi", {})
+    assert "IPV4-UNICAST" in afi_safi
+    assert "IPV6-UNICAST" in afi_safi
+
+    ipv4_af = afi_safi["IPV4-UNICAST"]
+    assert ipv4_af["afi-name"] == "IPV4"
+    assert ipv4_af["safi-name"] == "UNICAST"
+    assert ipv4_af["enabled"] is True
+    assert ipv4_af.get("ipv4-unnumbered") is False
+    assert ipv4_af.get("fast-reroute", {}).get("ti-lfa-sr-mpls-enabled") is True
+
+    ipv6_af = afi_safi["IPV6-UNICAST"]
+    assert ipv6_af.get("fast-reroute", {}).get("ti-lfa-srv6-enabled") is True
+    assert ipv6_af.get("fast-reroute", {}).get("ti-lfa-sr-mpls-enabled") is False
+
+    # Flexible-algorithm admin-groups
+    flex_algo = swp1.get("flexible-algorithm", {})
+    assert flex_algo.get("admin-groups") == ["blue", "green", "red"]
+
     levels = swp1.get("levels", {})
     assert "2" in levels
     level2 = levels["2"]
@@ -413,6 +443,25 @@ def test_show_isis_interface_sample():
     assert adj["neighbor-ipv4-address"] == "10.20.0.10"
     assert adj["adjacency-state"] == "UP"
     assert adj.get("usable") is True
+
+    # Verify adjacency state change tracking fields
+    assert adj["up-time"] == "0d 04:19:34"  # Human-readable format preferred
+    assert adj["num-state-changes"] == 2
+    assert adj["last-state-change-timestamp"] == "2025-12-03T06:30:00.123456+00:00"
+    assert adj["last-down-reason"] == "HOLD_TIME"
+
+    # Verify BFD parsing in adjacency
+    bfd = adj.get("bfd", {})
+    assert bfd.get("bfd-required") is False
+    bfd_topo = bfd.get("topologies", {}).get(0, {})
+    assert bfd_topo.get("mt-id") == 0
+    assert bfd_topo.get("ipv4-up") is True
+
+    # Verify dynamic delay measurement
+    ddm = adj.get("dynamic-delay-measurement", {})
+    assert ddm.get("enabled") is True
+    assert ddm.get("num-advertisements-sent") == 5
+    assert ddm.get("last-sampled-avg-delay-value") == 150
 
 
 def test_show_isis_route_sample():

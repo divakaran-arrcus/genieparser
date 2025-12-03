@@ -25,6 +25,77 @@
                           "arcos-openconfig-isis-augments:snpa": "6e:80:ef:da:2f:14",
                           "arcos-openconfig-isis-augments:mtu": 8974
                         },
+                        "afi-safi": {
+                          "af": [
+                            {
+                              "afi-name": "openconfig-isis-types:IPV4",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "state": {
+                                "afi-name": "openconfig-isis-types:IPV4",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true,
+                                "arcos-openconfig-isis-augments:fast-reroute": {
+                                  "ip": {
+                                    "config": {
+                                      "enabled": false
+                                    }
+                                  },
+                                  "ti-lfa": {
+                                    "config": {
+                                      "sr-mpls": {
+                                        "enabled": true
+                                      }
+                                    }
+                                  }
+                                },
+                                "arcos-openconfig-isis-augments:ipv4-unnumbered": false
+                              }
+                            },
+                            {
+                              "afi-name": "openconfig-isis-types:IPV6",
+                              "safi-name": "openconfig-isis-types:UNICAST",
+                              "state": {
+                                "afi-name": "openconfig-isis-types:IPV6",
+                                "safi-name": "openconfig-isis-types:UNICAST",
+                                "enabled": true,
+                                "arcos-openconfig-isis-augments:fast-reroute": {
+                                  "ip": {
+                                    "config": {
+                                      "enabled": false
+                                    }
+                                  },
+                                  "ti-lfa": {
+                                    "config": {
+                                      "srv6": {
+                                        "enabled": true
+                                      },
+                                      "sr-mpls": {
+                                        "enabled": false
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "arcos-openconfig-isis-augments:flexible-algorithm": {
+                          "state": {
+                            "admin-groups": ["blue", "green", "red"]
+                          }
+                        },
+                        "arcos-openconfig-isis-augments:csnp": {
+                          "state": {
+                            "enabled": true
+                          }
+                        },
+                        "arcos-openconfig-isis-augments:mpls": {
+                          "igp-ldp-sync": {
+                            "state": {
+                              "enabled": false
+                            }
+                          }
+                        },
                         "levels": {
                           "level": [
                             {
@@ -51,7 +122,42 @@
                                       "restart-support": false,
                                       "restart-status": false,
                                       "nlpid": ["IPV4"],
-                                      "arcos-openconfig-isis-augments:usable": true
+                                      "arcos-openconfig-isis-augments:usable": true,
+                                      "arcos-openconfig-isis-augments:adjacency-up-time": "0d 04:19:34",
+                                      "arcos-openconfig-isis-augments:num-state-changes": 2,
+                                      "arcos-openconfig-isis-augments:last-state-change-timestamp": "2025-12-03T06:30:00.123456+00:00",
+                                      "arcos-openconfig-isis-augments:last-down-reason": "HOLD_TIME"
+                                    },
+                                    "arcos-openconfig-isis-augments:bfd": {
+                                      "topologies": {
+                                        "topology": [
+                                          {
+                                            "mt-id": 0,
+                                            "state": {
+                                              "mt-id": 0,
+                                              "ipv4-bfd-required": false,
+                                              "bfd-required": false,
+                                              "ipv4-bfd-up": false,
+                                              "ipv4-up": true,
+                                              "usable": true
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "state": {
+                                        "bfd-required": false
+                                      }
+                                    },
+                                    "arcos-openconfig-isis-augments:dynamic-delay-measurement": {
+                                      "state": {
+                                        "enabled": true,
+                                        "num-advertisements-sent": 5,
+                                        "last-sampled-avg-delay-value": 150,
+                                        "last-advertised-min-delay-value": 120,
+                                        "last-advertised-max-delay-value": 180,
+                                        "last-advertised-timestamp": "2025-12-03T10:30:00.000000+00:00",
+                                        "last-advertisement-reason": "threshold-exceeded"
+                                      }
                                     }
                                   }
                                 ]
