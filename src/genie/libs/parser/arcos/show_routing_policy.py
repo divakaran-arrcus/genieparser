@@ -280,7 +280,7 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
 class ShowRoutingPolicyPolicyDefinitionSchema(MetaParser):
     schema = {
         "routing_policy": {
-            "policy_definitions": {
+            Optional("policy_definitions"): {
                 Any(): {
                     "name": str,
                     "statements": {
@@ -504,7 +504,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         return actions
 
 
-class ShowRunningConfigRoutingPolicySchema(MetaParser):
+class ShowRoutingPolicyConfigSchema(MetaParser):
     """Schema for ``show running-config routing-policy`` on ArcOS.
 
     This parser combines the normalized ``defined_sets`` and
@@ -523,7 +523,7 @@ class ShowRunningConfigRoutingPolicySchema(MetaParser):
     }
 
 
-class ShowRunningConfigRoutingPolicy(ShowRunningConfigRoutingPolicySchema):
+class ShowRoutingPolicyConfig(ShowRoutingPolicyConfigSchema):
     cli_command = "show running-config routing-policy"
 
     def cli(self, output: TypeOptional[TypeAny] = None) -> TypeDict[str, TypeAny]:  # type: ignore[override]

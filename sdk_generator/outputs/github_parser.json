@@ -51470,7 +51470,9 @@
         "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
-        "tokens": { "os": "arcos" },
+        "tokens": {
+          "os": "arcos"
+        },
         "uid": "show_isis_config_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
@@ -51484,7 +51486,9 @@
         "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
         "schema": "",
-        "tokens": { "os": "arcos" },
+        "tokens": {
+          "os": "arcos"
+        },
         "uid": "show_isis_config_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
@@ -51498,7 +51502,9 @@
         "module_name": "arcos.show_mpls",
         "package": "genie.libs.parser",
         "schema": "",
-        "tokens": { "os": "arcos" },
+        "tokens": {
+          "os": "arcos"
+        },
         "uid": "show_mpls_reserved_label_block_config_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
@@ -51512,7 +51518,9 @@
         "module_name": "arcos.show_mpls",
         "package": "genie.libs.parser",
         "schema": "",
-        "tokens": { "os": "arcos" },
+        "tokens": {
+          "os": "arcos"
+        },
         "uid": "show_mpls_reserved_label_block_config_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
@@ -51904,7 +51912,7 @@
   "show running routing-policy": {
     "folders": {
       "arcos": {
-        "class": "ShowRunningConfigRoutingPolicy",
+        "class": "ShowRoutingPolicyConfig",
         "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
         "module_name": "arcos.show_routing_policy",
         "package": "genie.libs.parser",
@@ -51920,7 +51928,7 @@
   "show running-config routing-policy": {
     "folders": {
       "arcos": {
-        "class": "ShowRunningConfigRoutingPolicy",
+        "class": "ShowRoutingPolicyConfig",
         "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
         "module_name": "arcos.show_routing_policy",
         "package": "genie.libs.parser",
