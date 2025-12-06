@@ -4,7 +4,7 @@ import pytest
 from pathlib import Path
 
 from genie.libs.parser.arcos.show_routing_policy import (
-    ShowRunningConfigRoutingPolicy,
+    ShowRoutingPolicyConfig,
     ShowRoutingPolicyDefinedSets,
     ShowRoutingPolicyPolicyDefinition,
 )
@@ -32,7 +32,7 @@ def test_show_running_config_routing_policy_from_config() -> None:
 
     output = _load_sample("routing_policy_config.json")
 
-    parser = ShowRunningConfigRoutingPolicy(device="dummy")
+    parser = ShowRoutingPolicyConfig(device="dummy")
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
