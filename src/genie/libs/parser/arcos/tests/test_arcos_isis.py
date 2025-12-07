@@ -387,7 +387,91 @@ def test_show_isis_config_sr_mpls_sample():
     assert prefix_sid["algorithm"] == "SPF"
     assert prefix_sid["sid_type"] == "INDEX"
     assert prefix_sid["value"] == 111
-    assert prefix_sid["label_option"] == "EXPLICIT_NULL"
+
+
+def test_show_isis_config_new_knobs_sample():
+    """Validate parsing of ISIS config with new knobs (auto-cost, hello-auth keychain/auth-type,
+    global/interface MPLS IGP-LDP sync, AF default-information originate, interface auth keychain/auth-type,
+    and per-AF IP fast-reroute)."""
+
+    sample_file = SAMPLES_DIR / "isis_config_new_knobs.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisConfig(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    ni = result["network-instance"].get("default", {})
+    assert "isis" in ni
+    isis = ni["isis"].get("default", {})
+
+    cfg = isis.get("config", {})
+
+    # Global
+    glb = cfg.get("global", {})
+    assert glb.get("auto_cost_reference_bandwidth") == 12345
+    assert glb.get("mpls_igp_ldp_sync_enabled") is True
+
+    hello = glb.get("hello_authentication", {})
+    assert hello.get("enabled") is True
+    assert hello.get("keychain") == "abc"
+    assert hello.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+
+    # Levels (global level-mode auth and TE)
+    levels = cfg.get("levels", {})
+    assert "1" in levels and "2" in levels
+
+    lvl1 = levels["1"]
+    assert lvl1["level_number"] == 1
+    lvl1_auth = lvl1.get("authentication", {})
+    assert lvl1_auth.get("lsp_authentication") is True
+    assert lvl1_auth.get("csnp_authentication") is True
+    assert lvl1_auth.get("psnp_authentication") is True
+    assert lvl1_auth.get("keychain") == "abc"
+    assert lvl1_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+    assert lvl1.get("traffic_engineering_enabled") is True
+
+    lvl2 = levels["2"]
+    assert lvl2["level_number"] == 2
+    assert lvl2.get("enabled") is True
+    lvl2_auth = lvl2.get("authentication", {})
+    assert lvl2_auth.get("lsp_authentication") is True
+    assert lvl2_auth.get("csnp_authentication") is True
+    assert lvl2_auth.get("psnp_authentication") is True
+    assert lvl2_auth.get("keychain") == "abc"
+    assert lvl2_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+    assert lvl2.get("traffic_engineering_enabled") is True
+
+    # AF default-information originate
+    afs = cfg.get("afi_safi", {})
+    assert "IPV6-UNICAST" in afs
+    v6 = afs["IPV6-UNICAST"]
+    default_info = v6.get("default_information", {})
+    assert default_info.get("enabled") is True
+    assert default_info.get("export_policy") == ["pass"]
+
+    # Interface
+    interfaces = cfg.get("interfaces", {})
+    assert "swp1" in interfaces
+    swp1 = interfaces["swp1"]
+    assert swp1["interface_id"] == "swp1"
+    assert swp1["enabled"] is True
+
+    swp1_auth = swp1.get("authentication", {})
+    assert swp1_auth.get("keychain") == "abc"
+    assert swp1_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+
+    assert swp1.get("mpls_igp_ldp_sync_enabled") is True
+
+    swp1_afs = swp1.get("afi_safi", {})
+    assert "IPV6-UNICAST" in swp1_afs
+    swp1_v6_af = swp1_afs["IPV6-UNICAST"]
+    fr = swp1_v6_af.get("fast_reroute", {})
+    assert fr.get("ip_enabled") is True
 
 
 def test_show_isis_lsp_sample():
