@@ -2029,6 +2029,13 @@ class ShowIsisConfigSchema(MetaParser):
                                 Optional("graceful_restart_enabled"): bool,
                                 Optional("lsp_mtu_size"): int,
                                 Optional("segment_routing_enabled"): bool,
+                                Optional("auto_cost_reference_bandwidth"): int,
+                                Optional("mpls_igp_ldp_sync_enabled"): bool,
+                                Optional("hello_authentication"): {
+                                    Optional("enabled"): bool,
+                                    Optional("keychain"): str,
+                                    Optional("auth_type"): str,
+                                },
                                 Optional("srms"): {
                                     Optional("mapping"): str,
                                     Optional("receive_enabled"): bool,
@@ -2049,6 +2056,7 @@ class ShowIsisConfigSchema(MetaParser):
                                 Optional("lsp_bit"): {
                                     Optional("overload_bit"): {
                                         Optional("set_bit_on_boot"): bool,
+                                        Optional("set_bit"): bool,
                                         Optional("advertise_high_metric"): bool,
                                         Optional("reset_triggers"): list,
                                     },
@@ -2083,10 +2091,15 @@ class ShowIsisConfigSchema(MetaParser):
                                     Optional("enabled"): bool,
                                     Optional("authentication"): {
                                         Optional("lsp_authentication"): bool,
+                                        Optional("csnp_authentication"): bool,
+                                        Optional("psnp_authentication"): bool,
                                         Optional("auth_password"): str,
                                         Optional("crypto_algorithm"): str,
+                                        Optional("auth_type"): str,
+                                        Optional("keychain"): str,
                                     },
                                     Optional("labeled_preference"): int,
+                                    Optional("traffic_engineering_enabled"): bool,
                                 }
                             },
                             Optional("afi_safi"): {
@@ -2110,6 +2123,10 @@ class ShowIsisConfigSchema(MetaParser):
                                         Optional("adv_maximum"): int,
                                         Optional("rx_process"): bool,
                                     },
+                                    Optional("default_information"): {
+                                        Optional("enabled"): bool,
+                                        Optional("export_policy"): list,
+                                    },
                                 }
                             },
                             Optional("interfaces"): {
@@ -2122,7 +2139,10 @@ class ShowIsisConfigSchema(MetaParser):
                                         Optional("hello_authentication"): bool,
                                         Optional("auth_password"): str,
                                         Optional("crypto_algorithm"): str,
+                                        Optional("auth_type"): str,
+                                        Optional("keychain"): str,
                                     },
+                                    Optional("mpls_igp_ldp_sync_enabled"): bool,
                                     Optional("timers"): {
                                         Optional("hello_interval"): int,
                                         Optional("hello_multiplier"): int,
@@ -2133,6 +2153,7 @@ class ShowIsisConfigSchema(MetaParser):
                                             "safi_name": str,
                                             "enabled": bool,
                                             Optional("fast_reroute"): {
+                                                Optional("ip_enabled"): bool,
                                                 Optional("ti_lfa_srv6_enabled"): bool,
                                                 Optional("ti_lfa_sr_mpls_enabled"): bool,
                                             },
@@ -2219,6 +2240,45 @@ class ShowIsisConfig(ShowIsisConfigSchema):
 
                 if global_entry:
                     cfg_root["global"] = global_entry
+
+            # Auto-cost reference-bandwidth
+            ref_bw_root = global_config.get("reference-bandwidth", {})
+            ref_bw_cfg = ref_bw_root.get("config", {})
+            if "reference-bandwidth" in ref_bw_cfg:
+                if "global" not in cfg_root:
+                    cfg_root["global"] = {}
+                cfg_root["global"][
+                    "auto_cost_reference_bandwidth"
+                ] = ref_bw_cfg["reference-bandwidth"]
+
+            # Global MPLS IGP-LDP sync
+            mpls_root = global_config.get("mpls", {})
+            igp_ldp_cfg = mpls_root.get("igp-ldp-sync", {}).get("config", {})
+            if "enabled" in igp_ldp_cfg:
+                if "global" not in cfg_root:
+                    cfg_root["global"] = {}
+                cfg_root["global"]["mpls_igp_ldp_sync_enabled"] = igp_ldp_cfg[
+                    "enabled"
+                ]
+
+            # Global hello-authentication (augmented)
+            hello_root = global_config.get(
+                f"{ARCOS_ISIS_AUGMENTS}:hello-authentication", {}
+            )
+            hello_cfg = hello_root.get("config", {})
+            if hello_cfg:
+                hello_entry: Dict[str, TypeAny] = {}
+                if "hello-authentication" in hello_cfg:
+                    hello_entry["enabled"] = hello_cfg["hello-authentication"]
+                if "keychain" in hello_cfg:
+                    hello_entry["keychain"] = hello_cfg["keychain"]
+                if "auth-type" in hello_cfg:
+                    hello_entry["auth_type"] = hello_cfg["auth-type"]
+
+                if hello_entry:
+                    if "global" not in cfg_root:
+                        cfg_root["global"] = {}
+                    cfg_root["global"]["hello_authentication"] = hello_entry
 
             # Graceful restart
             gr_config = global_config.get("graceful-restart", {}).get("config", {})
@@ -2366,6 +2426,12 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 ov_entry: Dict[str, TypeAny] = {}
                 if "set-bit-on-boot" in ov_cfg:
                     ov_entry["set_bit_on_boot"] = ov_cfg["set-bit-on-boot"]
+                # Permanent overload-bit set-bit (config or state)
+                if "set-bit" in ov_cfg:
+                    ov_entry["set_bit"] = ov_cfg["set-bit"]
+                ov_state = ov_root.get("state", {})
+                if "set-bit" in ov_state and "set_bit" not in ov_entry:
+                    ov_entry["set_bit"] = ov_state["set-bit"]
                 if "advertise-high-metric" in ov_cfg:
                     ov_entry["advertise_high_metric"] = ov_cfg["advertise-high-metric"]
 
@@ -2452,6 +2518,18 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     auth_entry: Dict[str, TypeAny] = {}
                     if "lsp-authentication" in auth_cfg:
                         auth_entry["lsp_authentication"] = auth_cfg["lsp-authentication"]
+                    if "csnp-authentication" in auth_cfg:
+                        auth_entry["csnp_authentication"] = auth_cfg[
+                            "csnp-authentication"
+                        ]
+                    if "psnp-authentication" in auth_cfg:
+                        auth_entry["psnp_authentication"] = auth_cfg[
+                            "psnp-authentication"
+                        ]
+                    if "auth-type" in auth_cfg:
+                        auth_entry["auth_type"] = auth_cfg["auth-type"]
+                    if "keychain" in auth_cfg:
+                        auth_entry["keychain"] = auth_cfg["keychain"]
 
                     key_cfg = auth_root.get("key", {}).get("config", {})
                     if "auth-password" in key_cfg:
@@ -2471,6 +2549,20 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     if "labeled-preference" in labeled_pref_cfg:
                         lvl_entry["labeled_preference"] = labeled_pref_cfg[
                             "labeled-preference"
+                        ]
+
+                    # Per-level traffic engineering enabled
+                    # Some releases use plain "traffic-engineering" under levels,
+                    # others may use the augmented namespace.
+                    lvl_te_root = level.get("traffic-engineering", {})
+                    if not lvl_te_root:
+                        lvl_te_root = level.get(
+                            f"{ARCOS_ISIS_AUGMENTS}:traffic-engineering", {}
+                        )
+                    lvl_te_cfg = lvl_te_root.get("config", {})
+                    if "enabled" in lvl_te_cfg:
+                        lvl_entry["traffic_engineering_enabled"] = lvl_te_cfg[
+                            "enabled"
                         ]
 
                     levels_dict[str(level_num)] = lvl_entry
@@ -2557,6 +2649,23 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         if unreach_dict:
                             af_entry["prefix_unreachable"] = unreach_dict
 
+                    # Default-information originate per AF
+                    default_info_root = af.get(
+                        f"{ARCOS_ISIS_AUGMENTS}:default-information", {}
+                    )
+                    originate_root = default_info_root.get("originate", {})
+                    originate_cfg = originate_root.get("config", {})
+                    if originate_cfg:
+                        default_info: Dict[str, TypeAny] = {}
+                        if "enabled" in originate_cfg:
+                            default_info["enabled"] = originate_cfg["enabled"]
+                        if "export-policy" in originate_cfg:
+                            default_info["export_policy"] = originate_cfg[
+                                "export-policy"
+                            ]
+                        if default_info:
+                            af_entry["default_information"] = default_info
+
                     afi_safi_dict[af_key] = af_entry
 
                 if afi_safi_dict:
@@ -2599,6 +2708,11 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                 "hello-authentication"
                             ]
 
+                        if "keychain" in auth_config:
+                            auth_dict["keychain"] = auth_config["keychain"]
+                        if "auth-type" in auth_config:
+                            auth_dict["auth_type"] = auth_config["auth-type"]
+
                         auth_key = auth_root.get("key", {}).get("config", {})
                         if "auth-password" in auth_key:
                             auth_dict["auth_password"] = auth_key["auth-password"]
@@ -2624,6 +2738,16 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                             ]
                         if timers_dict:
                             intf_entry["timers"] = timers_dict
+
+                    # MPLS IGP-LDP sync (interface level)
+                    intf_mpls_root = intf.get(f"{ARCOS_ISIS_AUGMENTS}:mpls", {})
+                    igp_ldp_cfg = intf_mpls_root.get("igp-ldp-sync", {}).get(
+                        "config", {}
+                    )
+                    if "enabled" in igp_ldp_cfg:
+                        intf_entry["mpls_igp_ldp_sync_enabled"] = igp_ldp_cfg[
+                            "enabled"
+                        ]
 
                     intf_afi_safi = intf.get("afi-safi", {})
                     intf_af_list = intf_afi_safi.get("af", [])
@@ -2654,6 +2778,9 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                             )
                             tilfa_root = frr_root.get("ti-lfa", {}).get("config", {})
                             frr_entry: Dict[str, TypeAny] = {}
+                            ip_root = frr_root.get("ip", {}).get("config", {})
+                            if "enabled" in ip_root:
+                                frr_entry["ip_enabled"] = ip_root["enabled"]
                             srv6_root = tilfa_root.get("srv6", {})
                             if "enabled" in srv6_root:
                                 frr_entry["ti_lfa_srv6_enabled"] = srv6_root["enabled"]
