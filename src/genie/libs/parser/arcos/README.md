@@ -52,7 +52,7 @@ All ISIS parsers accept optional filtering parameters (default `*` for all). Par
 |--------------|-------------|--------|
 | `ShowRoutingPolicyDefinedSets` | `show routing-policy defined-sets` | `show_routing_policy` |
 | `ShowRoutingPolicyPolicyDefinition` | `show routing-policy policy-definition` | `show_routing_policy` |
-| `ShowRunningConfigRoutingPolicy` | `show running-config routing-policy` | `show_routing_policy` |
+| `ShowRoutingPolicyConfig` | `show running-config routing-policy` | `show_routing_policy` |
 
 ### System Parsers
 
@@ -195,7 +195,7 @@ output = parser.cli(network_instance="default", protocol_instance="default")
 from genie.libs.parser.arcos.show_routing_policy import (
     ShowRoutingPolicyDefinedSets,
     ShowRoutingPolicyPolicyDefinition,
-    ShowRunningConfigRoutingPolicy,
+    ShowRoutingPolicyConfig,
 )
 
 # Parse defined-sets (prefix-sets, string-sets, tag-sets, next-hop-sets)
@@ -207,7 +207,7 @@ parser = ShowRoutingPolicyPolicyDefinition(device=device)
 output = parser.cli()
 
 # Parse full running-config (combines defined-sets and policy-definitions)
-parser = ShowRunningConfigRoutingPolicy(device=device)
+parser = ShowRoutingPolicyConfig(device=device)
 output = parser.cli()
 ```
 
