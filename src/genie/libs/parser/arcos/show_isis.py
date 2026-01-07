@@ -2281,11 +2281,20 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     cfg_root["global"]["hello_authentication"] = hello_entry
 
             # Graceful restart
-            gr_config = global_config.get("graceful-restart", {}).get("config", {})
-            if gr_config and "enabled" in gr_config:
+            gr_root = global_config.get("graceful-restart", {}) or {}
+            gr_cfg = gr_root.get("config", {}) or {}
+            gr_state = gr_root.get("state", {}) or {}
+
+            gr_val = None
+            if "enabled" in gr_cfg:
+                gr_val = gr_cfg["enabled"]
+            elif "enabled" in gr_state:
+                gr_val = gr_state["enabled"]
+
+            if gr_val is not None:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
-                cfg_root["global"]["graceful_restart_enabled"] = gr_config["enabled"]
+                cfg_root["global"]["graceful_restart_enabled"] = gr_val
 
             # Transport (LSP MTU)
             transport_config = global_config.get("transport", {}).get("config", {})
