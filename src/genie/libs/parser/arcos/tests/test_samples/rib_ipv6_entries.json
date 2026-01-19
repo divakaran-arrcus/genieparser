@@ -1,0 +1,401 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-rib:rib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-entries": {
+                "entry": [
+                  {
+                    "prefix": "1:1::1:1/128",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 10,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "268435502",
+                          "last-updated": "2025-12-23T12:00:37.480341-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435501",
+                                "type": "IPV6",
+                                "next-hop": "fe80::b6a9:fcff:fed5:c5af",
+                                "network-instance": "default",
+                                "interface": "swp26",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2:2::2:2/128",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "268435458",
+                          "last-updated": "2025-12-23T08:07:30.801478-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435457",
+                                "type": "IPV6",
+                                "next-hop": "2:2::2:2",
+                                "network-instance": "default",
+                                "interface": "loopback0",
+                                "weight": 100,
+                                "flags": "GLEAN LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "3:3::3:3/128",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 10,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "268435522",
+                          "last-updated": "2025-12-26T10:12:53.352035-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435521",
+                                "type": "IPV6",
+                                "next-hop": "fe80::b6a9:fcff:fed5:c90b",
+                                "network-instance": "default",
+                                "interface": "swp59",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "4:4::4:4/128",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "268435522",
+                          "last-updated": "2025-12-26T10:12:53.351759-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435521",
+                                "type": "IPV6",
+                                "next-hop": "fe80::b6a9:fcff:fed5:c90b",
+                                "network-instance": "default",
+                                "interface": "swp59",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:10:1::1:0/127",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "268435502",
+                          "last-updated": "2025-12-23T12:00:37.480182-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435501",
+                                "type": "IPV6",
+                                "next-hop": "fe80::b6a9:fcff:fed5:c5af",
+                                "network-instance": "default",
+                                "interface": "swp26",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:10:1::1:2/127",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "268435472",
+                          "last-updated": "2025-12-23T11:29:12.826072-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435471",
+                                "type": "IPV6",
+                                "next-hop": "2001:10:1::1:2",
+                                "network-instance": "default",
+                                "interface": "swp26",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:10:1::1:2/128",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "268435474",
+                          "last-updated": "2025-12-23T11:29:12.826103-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435473",
+                                "type": "IPV6",
+                                "next-hop": "2001:10:1::1:2",
+                                "network-instance": "default",
+                                "interface": "swp26",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:20:1::1:0/127",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "268435522",
+                          "last-updated": "2025-12-26T10:12:53.351966-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435521",
+                                "type": "IPV6",
+                                "next-hop": "fe80::b6a9:fcff:fed5:c90b",
+                                "network-instance": "default",
+                                "interface": "swp59",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:20:1::1:2/127",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "268435518",
+                          "last-updated": "2025-12-26T10:12:49.492491-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435517",
+                                "type": "IPV6",
+                                "next-hop": "2001:20:1::1:2",
+                                "network-instance": "default",
+                                "interface": "swp59",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2001:20:1::1:2/128",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "268435520",
+                          "last-updated": "2025-12-26T10:12:49.492574-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "268435519",
+                                "type": "IPV6",
+                                "next-hop": "2001:20:1::1:2",
+                                "network-instance": "default",
+                                "interface": "swp59",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

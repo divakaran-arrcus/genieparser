@@ -5,7 +5,10 @@ Shared utility functions for ArcOS parsers.
 
 import json
 import re
+import logging
 from typing import Any as TypeAny, Dict
+
+logger = logging.getLogger(__name__)
 
 
 def validate_input(input_str: str, param_name: str) -> None:
@@ -32,7 +35,8 @@ def load_json_robust(output: TypeAny) -> Dict:
 
     Some devices or helper layers may return a Python dict instead of a raw
     JSON string. CLI output may also contain prompts or banners around the
-    JSON. This helper normalizes those cases.
+    JSON. This helper normalizes those cases and attempts to fix common
+    JSON formatting issues from network devices.
     """
 
     if isinstance(output, dict):
@@ -48,4 +52,47 @@ def load_json_robust(output: TypeAny) -> Dict:
     else:
         json_str = output
 
-    return json.loads(json_str)
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError as e:
+        logger.warning("Initial JSON parsing failed at position %d: %s", e.pos, e.msg)
+        
+        # Try to fix common JSON issues
+        fixed_json = _fix_json_issues(json_str, e.pos)
+        
+        try:
+            return json.loads(fixed_json)
+        except json.JSONDecodeError as e2:
+            # If still failing, provide detailed error context
+            error_context_start = max(0, e2.pos - 200)
+            error_context_end = min(len(fixed_json), e2.pos + 200)
+            error_context = fixed_json[error_context_start:error_context_end]
+            
+            logger.error("JSON parsing failed even after fixes. Context: ...%s...", error_context)
+            
+            raise json.JSONDecodeError(
+                f"{e2.msg}. Context around error position: ...{error_context}...",
+                e2.doc,
+                e2.pos
+            ) from e
+
+
+def _fix_json_issues(json_str: str, error_pos: int) -> str:
+    """Attempt to fix common JSON formatting issues.
+    
+    Args:
+        json_str: The malformed JSON string
+        error_pos: Position where the error occurred
+        
+    Returns:
+        Fixed JSON string
+    """
+    # Common issue: trailing commas before closing brackets/braces
+    # Pattern: ,\s*} or ,\s*]
+    fixed = re.sub(r',(\s*[}\]])', r'\1', json_str)
+    
+    # Check if we made any changes
+    if fixed != json_str:
+        logger.info("Fixed %d trailing comma issues", len(re.findall(r',(\s*[}\]])', json_str)))
+    
+    return fixed

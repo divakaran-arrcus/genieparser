@@ -1,0 +1,208 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-rib:rib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-entries": {
+                "entry": [
+                  {
+                    "prefix": "1.1.1.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "6",
+                          "last-updated": "2025-12-22T15:44:02.154169-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "5",
+                                "type": "IPV4",
+                                "next-hop": "1.1.1.1",
+                                "network-instance": "default",
+                                "interface": "loopback0",
+                                "weight": 100,
+                                "flags": "GLEAN LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2.2.2.2/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L1",
+                          "nhid": "8",
+                          "last-updated": "2026-01-05T11:02:39.438808-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "7",
+                                "type": "IPV4",
+                                "next-hop": "10.10.10.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.10.10.0/24",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "2",
+                          "last-updated": "2025-12-22T15:44:02.140451-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "1",
+                                "type": "IPV4",
+                                "next-hop": "10.10.10.1",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.10.10.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "4",
+                          "last-updated": "2025-12-22T15:44:02.140465-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "3",
+                                "type": "IPV4",
+                                "next-hop": "10.10.10.1",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.10.10.2/32",
+                    "best-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                          "protocol-name": "adjacency",
+                          "metric": 1,
+                          "pref": 1,
+                          "tag": 1,
+                          "nhid": "8",
+                          "last-updated": "2025-12-22T15:44:17.178427-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "7",
+                                "type": "IPV4",
+                                "next-hop": "10.10.10.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

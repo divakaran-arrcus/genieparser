@@ -49914,7 +49914,6 @@
         },
         "uid": "show_isis_adjacency",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L1089"
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L1088"
       },
       "arcos": {
         "class": "ShowIsisAdjacency",
@@ -50319,7 +50318,6 @@
         },
         "uid": "show_isis_interface",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L595"
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L594"
       },
       "arcos": {
       "class": "ShowIsisInterface",
@@ -50899,18 +50897,6 @@
   },
   "show isis spf-log": {
     "folders": {
-      "iosxr": {
-        "class": "ShowIsisSpfLog",
-        "doc": " Parser for commands:\n        * show isis spf-log\n    ",
-        "module_name": "iosxr.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "{\n    'instance': {\n        Any('*'): {\n            'address_family': {\n                Any('*'): {\n                    'spf_log': {\n                        Any('*'): {\n                            'type': str,\n                            'start_timestamp': str,\n                            'time_ms': int,\n                            'level': int,\n                            'total_nodes': int,\n                            'trigger_count': int,\n                            Optional('first_trigger_lsp'): str,\n                            'triggers': str,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
-        "tokens": {
-          "os": "iosxr"
-        },
-        "uid": "show_isis_spf-log",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxr/show_isis.py#L1707"
-      },
       "arcos": {
         "class": "ShowIsisSpfLog",
         "doc": "ArcOS ISIS SPF log with trigger LSPs and computation stats (OpenConfig JSON)",
@@ -50922,6 +50908,18 @@
         },
         "uid": "show_isis_spf_log_arcos",
         "url": "https://github.com/CiscoTestAutomation/genieparser"
+      },
+      "iosxr": {
+        "class": "ShowIsisSpfLog",
+        "doc": " Parser for commands:\n        * show isis spf-log\n    ",
+        "module_name": "iosxr.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'instance': {\n        Any('*'): {\n            'address_family': {\n                Any('*'): {\n                    'spf_log': {\n                        Any('*'): {\n                            'type': str,\n                            'start_timestamp': str,\n                            'time_ms': int,\n                            'level': int,\n                            'total_nodes': int,\n                            'trigger_count': int,\n                            Optional('first_trigger_lsp'): str,\n                            'triggers': str,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "iosxr"
+        },
+        "uid": "show_isis_spf-log",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxr/show_isis.py#L1707"
       }
     }
   },
@@ -51126,820 +51124,6 @@
         },
         "uid": "show_isis_address_family_topology",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxe/show_isis.py#L2595"
-      }
-    }
-  },
-  "show isis lsp": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLsp",
-        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_lsp_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis lsp {lsp_id}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLsp",
-        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_lsp_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRoute",
-        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRoute",
-        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis redistribute-route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRedistributeRoute",
-        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_redistribute_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis redistribute-route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRedistributeRoute",
-        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_redistribute_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis fast-reroute": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFastReroute",
-        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis fast-reroute {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFastReroute",
-        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis flexible-algorithm route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoRoute",
-        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis flexible-algorithm route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoRoute",
-        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis flexible-algorithm fast-reroute": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoFastReroute",
-        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis flexible-algorithm fast-reroute {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoFastReroute",
-        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis global": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisGlobal",
-        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_global",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis level": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelState",
-        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_state_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis level {level}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelState",
-        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_state_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis counters": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelCounters",
-        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_counters_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis level {level} counters": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelCounters",
-        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_counters_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} state": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelState",
-        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_state_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} system-level-counters": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLevelCounters",
-        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_level_counters_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global spf-log": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisSpfLog",
-        "doc": "ArcOS ISIS SPF log with trigger LSPs and computation stats (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_spf_log_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show isis mpls": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisMplsLabelDb",
-        "doc": "ArcOS ISIS MPLS label database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_mpls_label_db_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running isis": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisConfig",
-        "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running-config network-instance {network_instance} protocol ISIS {protocol_instance}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisConfig",
-        "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running-config network-instance {network_instance} mpls global reserved-label-block": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlockConfig",
-        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running-config mpls reserved-label-block": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlockConfig",
-        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show mpls reserved-label-block": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlock",
-        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show mpls reserved-label-block {local_id}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlock",
-        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} mpls global reserved-label-block": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlock",
-        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} mpls global reserved-label-block {local_id}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowMplsReservedLabelBlock",
-        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_mpls",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_mpls_reserved_label_block_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisInterface",
-        "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_interface_arcos_alias",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisInterface",
-        "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_interface_arcos_alias",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisAdjacency",
-        "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_adjacency_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency {adj_router}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisAdjacency",
-        "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_adjacency_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLsp",
-        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_lsp_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp {lsp_id}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisLsp",
-        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_lsp_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisMplsLabelDb",
-        "doc": "ArcOS ISIS MPLS label database (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_mpls_label_db_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global state": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisGlobal",
-        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_global",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRoute",
-        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRoute",
-        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRedistributeRoute",
-        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_redistribute_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisRedistributeRoute",
-        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_redistribute_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFastReroute",
-        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFastReroute",
-        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoRoute",
-        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoRoute",
-        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_route_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoFastReroute",
-        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute {prefix}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowIsisFlexAlgoFastReroute",
-        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
-        "module_name": "arcos.show_isis",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_isis_flex_algo_fast_reroute_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show routing-policy defined-sets": {
-    "folders": {
-      "arcos": {
-        "class": "ShowRoutingPolicyDefinedSets",
-        "doc": "ArcOS routing-policy defined-sets (OpenConfig JSON)",
-        "module_name": "arcos.show_routing_policy",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_routing_policy_defined_sets_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show routing-policy policy-definition": {
-    "folders": {
-      "arcos": {
-        "class": "ShowRoutingPolicyPolicyDefinition",
-        "doc": "ArcOS routing-policy policy-definitions (OpenConfig JSON)",
-        "module_name": "arcos.show_routing_policy",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_routing_policy_policy_definition_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running routing-policy": {
-    "folders": {
-      "arcos": {
-        "class": "ShowRoutingPolicyConfig",
-        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_routing_policy",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_running_config_routing_policy_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running-config routing-policy": {
-    "folders": {
-      "arcos": {
-        "class": "ShowRoutingPolicyConfig",
-        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_routing_policy",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_running_config_routing_policy_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },
@@ -75871,6 +75055,38 @@
       }
     }
   },
+  "show mpls reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show mpls reserved-label-block {local_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show mpls tp lsps detail": {
     "folders": {
       "iosxe": {
@@ -77500,6 +76716,517 @@
         },
         "uid": "show_network-clocks_synchronization_t0_detail",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxe/show_network_clocks.py#L1694"
+      }
+    }
+  },
+  "show network-instance {instance} srv6 locator": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrv6Locator",
+        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
+        "module_name": "arcos.show_srv6",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_srv6_locator_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {instance} srv6 locator {locator_name}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrv6Locator",
+        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
+        "module_name": "arcos.show_srv6",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_srv6_locator_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} mpls global reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} mpls global reserved-label-block {local_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlock",
+        "doc": "ArcOS MPLS reserved-label-block operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFastReroute",
+        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_fast_reroute_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFastReroute",
+        "doc": "ArcOS ISIS fast-reroute per AF/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_fast_reroute_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFlexAlgoFastReroute",
+        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_flex_algo_fast_reroute_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFlexAlgoFastReroute",
+        "doc": "ArcOS ISIS flex-algo fast-reroute per AF/algorithm/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_flex_algo_fast_reroute_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFlexAlgoRoute",
+        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_flex_algo_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisFlexAlgoRoute",
+        "doc": "ArcOS ISIS flex-algo routes per AF/algorithm/prefix (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_flex_algo_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisRedistributeRoute",
+        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_redistribute_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisRedistributeRoute",
+        "doc": "ArcOS ISIS redistributed routes per AF (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_redistribute_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisRoute",
+        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisRoute",
+        "doc": "ArcOS ISIS routes per AF (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_route_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisMplsLabelDb",
+        "doc": "ArcOS ISIS MPLS label database (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_mpls_label_db_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global spf-log": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisSpfLog",
+        "doc": "ArcOS ISIS SPF log with trigger LSPs and computation stats (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_spf_log_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisGlobal",
+        "doc": "ArcOS ISIS global state parser (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_global",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisInterface",
+        "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_interface_arcos_alias",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisInterface",
+        "doc": "ArcOS ISIS per-interface operational state (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_interface_arcos_alias",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisAdjacency",
+        "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_adjacency_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency {adj_router}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisAdjacency",
+        "doc": "ArcOS ISIS adjacency (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_adjacency_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLsp",
+        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_lsp_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp {lsp_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLsp",
+        "doc": "ArcOS ISIS LSP database (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_lsp_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelState",
+        "doc": "ArcOS ISIS level state with dynamic-hostname and metric-style (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} system-level-counters": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisLevelCounters",
+        "doc": "ArcOS ISIS level counters including spf-runs, auth-fails, lsp-errors (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_level_counters_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV4 ipv4-entries": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv4Entries",
+        "doc": "Parser for show network-instance <instance> rib IPV4 ipv4-entries on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv4_entries_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV4 ipv4-entries {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv4Entries",
+        "doc": "Parser for show network-instance <instance> rib IPV4 ipv4-entries <prefix> on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv4_entries_prefix_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV4 ipv4-label-entries": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv4LabelEntries",
+        "doc": "Parser for show network-instance <instance> rib IPV4 ipv4-label-entries on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv4_label_entries_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV4 state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv4State",
+        "doc": "Parser for show network-instance <instance> rib IPV4 state on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv4_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV6 ipv6-entries": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv6Entries",
+        "doc": "Parser for show network-instance <instance> rib IPV6 ipv6-entries on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv6_entries_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV6 ipv6-entries {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv6Entries",
+        "doc": "Parser for show network-instance <instance> rib IPV6 ipv6-entries <prefix> on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv6_entries_prefix_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show network-instance {network_instance} rib IPV6 state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRibIpv6State",
+        "doc": "Parser for show network-instance <instance> rib IPV6 state on ArcOS",
+        "module_name": "arcos.show_rib",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_rib_ipv6_state_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },
@@ -102962,6 +102689,38 @@
       }
     }
   },
+  "show routing-policy defined-sets": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyDefinedSets",
+        "doc": "ArcOS routing-policy defined-sets (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_routing_policy_defined_sets_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show routing-policy policy-definition": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyPolicyDefinition",
+        "doc": "ArcOS routing-policy policy-definitions (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_routing_policy_policy_definition_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show rpl prefix-set": {
     "folders": {
       "iosxr": {
@@ -103306,6 +103065,54 @@
       }
     }
   },
+  "show running isis": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisConfig",
+        "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running routing-policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyConfig",
+        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running_config_routing_policy_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running srv6": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrv6Config",
+        "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_srv6",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_srv6_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show running-config aaa": {
     "folders": {
       "iosxe": {
@@ -103558,6 +103365,22 @@
       }
     }
   },
+  "show running-config mpls reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlockConfig",
+        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
   "show running-config msdp": {
     "folders": {
       "nxos": {
@@ -103571,6 +103394,54 @@
         },
         "uid": "show_running-config_msdp",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_msdp.py#L870"
+      }
+    }
+  },
+  "show running-config network-instance {instance} srv6": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrv6Config",
+        "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_srv6",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_srv6_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running-config network-instance {network_instance} mpls global reserved-label-block": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMplsReservedLabelBlockConfig",
+        "doc": "ArcOS MPLS reserved-label-block running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_mpls",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_mpls_reserved_label_block_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
+      }
+    }
+  },
+  "show running-config network-instance {network_instance} protocol ISIS {protocol_instance}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisConfig",
+        "doc": "ArcOS ISIS running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_isis_config_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },
@@ -103619,6 +103490,22 @@
         },
         "uid": "show_running-config_nve",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxe/show_run.py#L3502"
+      }
+    }
+  },
+  "show running-config routing-policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRoutingPolicyConfig",
+        "doc": "ArcOS routing-policy running configuration (OpenConfig JSON)",
+        "module_name": "arcos.show_routing_policy",
+        "package": "genie.libs.parser",
+        "schema": "",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running_config_routing_policy_arcos",
+        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },
@@ -105602,102 +105489,6 @@
         },
         "uid": "show_segment-routing_srv6_sid",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/iosxr/show_segment_routing.py#L1474"
-      }
-    }
-  },
-  "show running-config network-instance {instance} srv6": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Config",
-        "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {instance} srv6 locator": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Locator",
-        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_locator_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show network-instance {instance} srv6 locator {locator_name}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Locator",
-        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_locator_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show running srv6": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Config",
-        "doc": "ArcOS SRv6 running configuration (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_config_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show srv6 locator": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Locator",
-        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_locator_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
-      }
-    }
-  },
-  "show srv6 locator {locator}": {
-    "folders": {
-      "arcos": {
-        "class": "ShowSrv6Locator",
-        "doc": "ArcOS SRv6 locator state (OpenConfig JSON)",
-        "module_name": "arcos.show_srv6",
-        "package": "genie.libs.parser",
-        "schema": "",
-        "tokens": {
-          "os": "arcos"
-        },
-        "uid": "show_srv6_locator_arcos",
-        "url": "https://github.com/CiscoTestAutomation/genieparser"
       }
     }
   },

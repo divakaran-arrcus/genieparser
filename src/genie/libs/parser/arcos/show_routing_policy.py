@@ -516,9 +516,47 @@ class ShowRoutingPolicyConfigSchema(MetaParser):
             Optional("defined_sets"): ShowRoutingPolicyDefinedSetsSchema.schema["routing_policy"][
                 "defined_sets"
             ],
-            Optional("policy_definitions"): ShowRoutingPolicyPolicyDefinitionSchema.schema[
-                "routing_policy"
-            ]["policy_definitions"],
+            Optional("policy_definitions"): {
+                Any(): {
+                    "name": str,
+                    "statements": {
+                        Any(): {
+                            "name": str,
+                            Optional("auto_seq_num"): int,
+                            Optional("conditions"): {
+                                Optional("match_prefix_set"): {
+                                    Optional("prefix_set"): str,
+                                    "match_set_options": str,
+                                },
+                                Optional("match_next_hop_set"): dict,
+                                Optional("match_tag_set"): dict,
+                                Optional("match_interface"): dict,
+                                Optional("install_protocol_eq"): str,
+                                Optional("call_policy"): dict,
+                                Optional("call_policy_expression"): str,
+                                Optional("bgp_conditions"): dict,
+                                Optional("igp_conditions"): dict,
+                            },
+                            Optional("actions"): {
+                                Optional("accept_route"): bool,
+                                Optional("reject_route"): bool,
+                                Optional("next_policy"): bool,
+                                Optional("igp_actions"): {
+                                    Optional("set_tag"): int,
+                                    Optional("isis_actions"): {
+                                        Optional("set_level"): int,
+                                    },
+                                },
+                                Optional("bgp_actions"): dict,
+                                Optional("ospf_actions"): {
+                                    Optional("set_metric"): int,
+                                },
+                                Optional("srv6_oam_actions"): dict,
+                            },
+                        }
+                    },
+                }
+            },
         }
     }
 

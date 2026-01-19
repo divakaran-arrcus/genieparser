@@ -1,0 +1,43 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-rib:rib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-label-entries": {
+                "entry": [
+                  {
+                    "label": 200011,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "1.1.1.1/32",
+                    "nhid": "66",
+                    "last-updated": "2025-12-23T12:00:37.480204-00:00",
+                    "time-since-creation": "13d 20:54:34",
+                    "flags": "ECMP_FEC_OPTIMIZE"
+                  },
+                  {
+                    "label": 200012,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "3.3.3.3/32",
+                    "nhid": "90",
+                    "last-updated": "2025-12-26T10:12:53.352086-00:00",
+                    "time-since-creation": "10d 22:42:18",
+                    "flags": "ECMP_FEC_OPTIMIZE"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
