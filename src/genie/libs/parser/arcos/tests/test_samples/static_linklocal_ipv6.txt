@@ -1,0 +1,52 @@
+root@rtr1# show running-config network-instance default protocol STATIC static-routes | display json | nomore
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:STATIC",
+                "name": "static-routes",
+                "config": {
+                  "identifier": "openconfig-policy-types:STATIC",
+                  "name": "static-routes"
+                },
+                "static-routes": {
+                  "static": [
+                    {
+                      "prefix": "192:168:100::/64",
+                      "config": {
+                        "prefix": "192:168:100::/64"
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "next-hop1",
+                            "config": {
+                              "index": "next-hop1",
+                              "next-hop": "fe80::5054:ff:fef7:8d0e"
+                            },
+                            "interface-ref": {
+                              "config": {
+                                "interface": "swp3",
+                                "subinterface": 0
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+root@rtr1#

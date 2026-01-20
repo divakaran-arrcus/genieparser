@@ -54,6 +54,12 @@ All ISIS parsers accept optional filtering parameters (default `*` for all). Par
 | `ShowRoutingPolicyPolicyDefinition` | `show routing-policy policy-definition` | `show_routing_policy` |
 | `ShowRoutingPolicyConfig` | `show running-config routing-policy` | `show_routing_policy` |
 
+### Static Routing Parsers
+
+| Parser Class | CLI Command | Parameters |
+|--------------|-------------|------------|
+| `ShowStaticRoutingConfig` | `show running-config network-instance {network_instance} protocol STATIC {protocol_instance}` | `network_instance`, `protocol_instance` |
+
 ### System Parsers
 
 | Parser Class | CLI Command | Module |
@@ -237,6 +243,25 @@ output = parser.cli(instance="default")
 output = parser.cli(instance="default", locator_name="LOC1")
 ```
 
+### Static Routing Configuration
+
+```python
+from genie.libs.parser.arcos.show_static_routing import ShowStaticRoutingConfig
+
+# Parse all static routing configurations (all network instances and protocol instances)
+parser = ShowStaticRoutingConfig(device=device)
+output = parser.cli()
+
+# Parse specific network instance
+output = parser.cli(network_instance="default", protocol_instance="static-routes")
+
+# Parse specific VRF
+output = parser.cli(network_instance="vrfA", protocol_instance="static-routes")
+
+# Parse all static routes in all network instances using wildcard
+output = parser.cli(network_instance="*", protocol_instance="*")
+```
+
 ## Input Validation
 
 To ensure security and stability, all parsers validate input parameters before executing commands. Inputs are checked for:
@@ -270,7 +295,9 @@ arcos/
 ├── show_isis.py          # ISIS protocol parsers
 ├── show_mpls.py          # MPLS parsers
 ├── show_routing_policy.py # Routing policy parsers
+├── show_segment_routing.py # Segment Routing parsers
 ├── show_srv6.py          # SRv6 parsers
+├── show_static_routing.py # Static routing parsers
 ├── show_version.py       # System version parser
 └── tests/                # Unit tests
     ├── test_arcos_interface.py
