@@ -49914,7 +49914,6 @@
         },
         "uid": "show_isis_adjacency",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L1089"
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L1088"
       },
       "arcos": {
         "class": "ShowIsisAdjacency",
@@ -50319,7 +50318,6 @@
         },
         "uid": "show_isis_interface",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L595"
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src/genie/libs/parser/nxos/show_isis.py#L594"
       },
       "arcos": {
       "class": "ShowIsisInterface",

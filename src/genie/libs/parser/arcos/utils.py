@@ -33,6 +33,9 @@ def load_json_robust(output: TypeAny) -> Dict:
     Some devices or helper layers may return a Python dict instead of a raw
     JSON string. CLI output may also contain prompts or banners around the
     JSON. This helper normalizes those cases.
+    
+    Uses JSONDecoder.raw_decode() to handle cases where there's extra data
+    after the valid JSON object (e.g., trailing prompts or status messages).
     """
 
     if isinstance(output, dict):
@@ -42,10 +45,20 @@ def load_json_robust(output: TypeAny) -> Dict:
         output = str(output)
 
     start = output.find("{")
-    end = output.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        json_str = output[start : end + 1]
-    else:
-        json_str = output
-
-    return json.loads(json_str)
+    if start == -1:
+        # No JSON found, try to parse as-is
+        return json.loads(output)
+    
+    # Use raw_decode to parse JSON and ignore trailing data
+    decoder = json.JSONDecoder()
+    try:
+        obj, end_pos = decoder.raw_decode(output, start)
+        return obj
+    except json.JSONDecodeError:
+        # Fallback to original logic if raw_decode fails
+        end = output.rfind("}")
+        if end != -1 and end > start:
+            json_str = output[start : end + 1]
+        else:
+            json_str = output
+        return json.loads(json_str)

@@ -1,0 +1,70 @@
+root@rtr1# show running-config network-instance default protocol STATIC static-routes | display json | nomore
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:STATIC",
+                "name": "static-routes",
+                "config": {
+                  "identifier": "openconfig-policy-types:STATIC",
+                  "name": "static-routes"
+                },
+                "static-routes": {
+                  "static": [
+                    {
+                      "prefix": "192.168.100.0/24",
+                      "config": {
+                        "prefix": "192.168.100.0/24",
+                        "arcos-openconfig-local-routing-augments:description": "Basic static route test"
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "1",
+                            "config": {
+                              "index": "1",
+                              "next-hop": "10.9.201.1"
+                            },
+                            "interface-ref": {
+                              "config": {
+                                "interface": "swp1"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "prefix": "192.168.250.0/24",
+                      "config": {
+                        "prefix": "192.168.250.0/24",
+                        "arcos-openconfig-local-routing-augments:description": "Static route with DROP"
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "1",
+                            "config": {
+                              "index": "1",
+                              "next-hop": "openconfig-local-routing:DROP"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+root@rtr1#
