@@ -141,231 +141,324 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
             validate_input(protocol_instance, "protocol_instance")
             validate_input(interface, "interface")
             validate_input(level, "level")
-            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency"
-            if adj_router:
-                validate_input(adj_router, "adj_router")
-                cmd += f" {adj_router}"
-            logger.debug("Executing command: %s", cmd)
-            output = self.device.execute(f"{cmd} | display json | nomore")
+            
+            # For L1/L2 routers, wildcard level doesn't work correctly
+            # Query each level separately and merge results
+            if level == "*":
+                all_outputs = []
+                for level_num in [1, 2]:
+                    cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level_num} adjacency"
+                    if adj_router:
+                        validate_input(adj_router, "adj_router")
+                        cmd += f" {adj_router}"
+                    logger.debug(f"Executing command: {cmd}")
+                    try:
+                        level_output = self.device.execute(f"{cmd} | display json | nomore")
+                        
+                        # WORKAROUND: Router bug - LEVEL output may be missing "data" wrapper and start with comma
+                        # Fix malformed JSON by wrapping it properly
+                        if level_output.strip().startswith(','):
+                            logger.debug(f"Detected malformed JSON for level {level_num}, fixing structure")
+                            # Remove leading comma and whitespace, wrap in proper structure
+                            fixed_output = level_output.strip()[1:].strip()  # Remove leading comma
+                            # Check if it starts with array of interfaces
+                            if fixed_output.startswith('{') and '"interface-id"' in fixed_output[:100]:
+                                # Wrap the interface array in proper structure
+                                level_output = f'''{{
+  "data": {{
+    "openconfig-network-instance:network-instances": {{
+      "network-instance": [
+        {{
+          "name": "default",
+          "protocols": {{
+            "protocol": [
+              {{
+                "identifier": "openconfig-policy-types:ISIS",
+                "name": "default",
+                "isis": {{
+                  "interfaces": {{
+                    "interface": [
+                      {fixed_output}
+                    ]
+                  }}
+                }}
+              }}
+            ]
+          }}
+        }}
+      ]
+    }}
+  }}
+}}'''
+                        
+                        # Validate JSON before adding to list
+                        try:
+                            test_parse = load_json_robust(level_output)
+                            # Check if contains valid ISIS adjacency data
+                            has_data = False
+                            if test_parse and "data" in test_parse:
+                                # Validate that ISIS adjacency structure exists
+                                isis_data = get_isis_data(test_parse)
+                                interfaces = isis_data.get("interfaces", {}).get("interface", [])
+                                # Check if any interface has adjacencies
+                                for intf in interfaces:
+                                    levels = intf.get("levels", {}).get("level", [])
+                                    for lvl in levels:
+                                        adjacencies = lvl.get("adjacencies", {}).get("adjacency", [])
+                                        if adjacencies:
+                                            has_data = True
+                                            break
+                                    if has_data:
+                                        break
+                            
+                            if has_data:
+                                all_outputs.append(level_output)
+                            else:
+                                logger.debug(f"No adjacencies found for level {level_num}")
+                        except json.JSONDecodeError as je:
+                            logger.debug(f"Level {level_num} JSON decode error: {je}")
+                            continue
+                    except Exception as e:
+                        logger.debug(f"Level {level_num} query failed: {e}")
+                        continue
+                
+                # Merge outputs by combining the parsed results
+                output = None  # Will parse each output separately and merge
+            else:
+                cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency"
+                if adj_router:
+                    validate_input(adj_router, "adj_router")
+                    cmd += f" {adj_router}"
+                logger.debug("Executing command: %s", cmd)
+                output = self.device.execute(f"{cmd} | display json | nomore")
+                all_outputs = [output]
 
-        logger.debug("Parsing output: %s", output)
+        else:
+            all_outputs = [output]
+
+        logger.debug("Parsing output")
         # Initialize return dictionary
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
 
+        neighbors_dict: Dict[str, TypeAny] = {}
+        ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+
         try:
-            parsed_json = load_json_robust(output)
+            # Process each output (one per level when wildcard is used)
+            for output_data in all_outputs:
+                parsed_json = load_json_robust(output_data)
 
-            isis_data = get_isis_data(parsed_json)
-            interfaces_data = isis_data.get("interfaces", {}).get("interface", [])
+                isis_data = get_isis_data(parsed_json)
+                interfaces_data = isis_data.get("interfaces", {}).get("interface", [])
 
-            if not interfaces_data:
-                return ret_dict
-
-            neighbors_dict: Dict[str, TypeAny] = {}
-            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
-
-            # Extract neighbors from each interface's adjacencies
-            for intf in interfaces_data:
-                intf_id = intf.get("interface-id")
-                if not intf_id:
+                if not interfaces_data:
+                    logger.debug("No interfaces data found in this ISIS output")
                     continue
 
-                levels_data = intf.get("levels", {}).get("level", [])
-                for level in levels_data:
-                    adjacencies_data = level.get("adjacencies", {}).get("adjacency", [])
+                logger.debug(f"Processing {len(interfaces_data)} interfaces")
+                
+                # Extract neighbors from each interface's adjacencies
+                for intf in interfaces_data:
+                    intf_id = intf.get("interface-id")
+                    if not intf_id:
+                        continue
 
-                    for adj in adjacencies_data:
-                        sys_id = adj.get("system-id")
-                        if not sys_id:
-                            continue
+                    levels_data = intf.get("levels", {}).get("level", [])
+                    for level in levels_data:
+                        adjacencies_data = level.get("adjacencies", {}).get("adjacency", [])
 
-                        adj_state = adj.get("state", {})
+                        for adj in adjacencies_data:
+                            sys_id = adj.get("system-id")
+                            if not sys_id:
+                                continue
 
-                        neighbor_entry: Dict[str, TypeAny] = {
-                            "interface": intf_id,
-                            "state": adj_state.get("adjacency-state", "UNKNOWN"),
-                        }
+                            adj_state = adj.get("state", {})
 
-                        # Hold time
-                        hold_time = adj_state.get("remaining-hold-time")
-                        if hold_time is not None:
-                            neighbor_entry["holdtime"] = hold_time
+                            neighbor_entry: Dict[str, TypeAny] = {
+                                "interface": intf_id,
+                                "state": adj_state.get("adjacency-state", "UNKNOWN"),
+                            }
 
-                        # Adjacency type / level
-                        adj_type = adj_state.get("adjacency-type", "")
-                        if adj_type:
-                            neighbor_entry["level"] = adj_type
-                            neighbor_entry["adjacency-type"] = adj_type
+                            # Hold time
+                            hold_time = adj_state.get("remaining-hold-time")
+                            if hold_time is not None:
+                                neighbor_entry["holdtime"] = hold_time
 
-                        # Neighbor IPv4 / IPv6 addresses
-                        neighbor_ipv4 = adj_state.get("neighbor-ipv4-address")
-                        if neighbor_ipv4:
-                            neighbor_entry["neighbor-ipv4-address"] = neighbor_ipv4
+                            # Adjacency type / level
+                            adj_type = adj_state.get("adjacency-type", "")
+                            if adj_type:
+                                neighbor_entry["level"] = adj_type
+                                neighbor_entry["adjacency-type"] = adj_type
 
-                        neighbor_ipv6 = adj_state.get("neighbor-ipv6-address")
-                        if neighbor_ipv6:
-                            neighbor_entry["neighbor-ipv6-address"] = neighbor_ipv6
+                            # Neighbor IPv4 / IPv6 addresses
+                            neighbor_ipv4 = adj_state.get("neighbor-ipv4-address")
+                            if neighbor_ipv4:
+                                neighbor_entry["neighbor-ipv4-address"] = neighbor_ipv4
 
-                        # Up-time: prefer human-readable format if available
-                        adj_up_time = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:adjacency-up-time"
-                        )
-                        if adj_up_time:
-                            neighbor_entry["up-time"] = adj_up_time
-                        else:
-                            up_time = adj_state.get("up-time")
-                            if up_time is not None:
-                                neighbor_entry["up-time"] = up_time
+                            neighbor_ipv6 = adj_state.get("neighbor-ipv6-address")
+                            if neighbor_ipv6:
+                                neighbor_entry["neighbor-ipv6-address"] = neighbor_ipv6
 
-                        # State change tracking
-                        num_state_changes = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:num-state-changes"
-                        )
-                        if num_state_changes is not None:
-                            neighbor_entry["num-state-changes"] = num_state_changes
-
-                        last_state_ts = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:last-state-change-timestamp"
-                        )
-                        if last_state_ts:
-                            neighbor_entry["last-state-change-timestamp"] = last_state_ts
-
-                        last_down_reason = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:last-down-reason"
-                        )
-                        if last_down_reason:
-                            neighbor_entry["last-down-reason"] = last_down_reason
-
-                        # Circuit IDs
-                        local_cid = adj_state.get("local-extended-circuit-id")
-                        if local_cid is not None:
-                            neighbor_entry["local-extended-circuit-id"] = local_cid
-
-                        neighbor_cid = adj_state.get("neighbor-extended-circuit-id")
-                        if neighbor_cid is not None:
-                            neighbor_entry["neighbor-extended-circuit-id"] = (
-                                neighbor_cid
+                            # Up-time: prefer human-readable format if available
+                            adj_up_time = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:adjacency-up-time"
                             )
+                            if adj_up_time:
+                                neighbor_entry["up-time"] = adj_up_time
+                            else:
+                                up_time = adj_state.get("up-time")
+                                if up_time is not None:
+                                    neighbor_entry["up-time"] = up_time
 
-                        # Neighbor circuit type
-                        neighbor_ct = adj_state.get("neighbor-circuit-type")
-                        if neighbor_ct:
-                            neighbor_entry["neighbor-circuit-type"] = neighbor_ct
-
-                        # Restart support / suppress / status
-                        restart_support = adj_state.get("restart-support")
-                        if restart_support is not None:
-                            neighbor_entry["restart-support"] = restart_support
-
-                        restart_suppress = adj_state.get("restart-suppress")
-                        if restart_suppress is not None:
-                            neighbor_entry["restart-suppress"] = restart_suppress
-
-                        restart_status = adj_state.get("restart-status")
-                        if restart_status is not None:
-                            neighbor_entry["restart-status"] = restart_status
-
-                        # NLPID
-                        nlpid = adj_state.get("nlpid")
-                        if nlpid:
-                            neighbor_entry["nlpid"] = nlpid
-
-                        # ArcOS augments
-                        usable = adj_state.get(f"{ARCOS_ISIS_AUGMENTS}:usable")
-                        if usable is not None:
-                            neighbor_entry["usable"] = usable
-
-                        restart_ack = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:restart-ack"
-                        )
-                        if restart_ack is not None:
-                            neighbor_entry["restart-ack"] = restart_ack
-
-                        restart_req = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:restart-request"
-                        )
-                        if restart_req is not None:
-                            neighbor_entry["restart-request"] = restart_req
-
-                        recv_mt_ids = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:received-multi-topology-ids"
-                        )
-                        if recv_mt_ids:
-                            neighbor_entry["received-multi-topology-ids"] = recv_mt_ids
-
-                        active_mt_ids = adj_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:active-multi-topology-ids"
-                        )
-                        if active_mt_ids:
-                            neighbor_entry["active-multi-topology-ids"] = active_mt_ids
-
-                        # BFD information
-                        bfd_data = adj.get(f"{ARCOS_ISIS_AUGMENTS}:bfd", {})
-                        if bfd_data:
-                            bfd_info: Dict[str, TypeAny] = {}
-                            bfd_state = bfd_data.get("state", {})
-                            if bfd_state.get("bfd-required") is not None:
-                                bfd_info["bfd-required"] = bfd_state["bfd-required"]
-
-                            topologies_data = bfd_data.get("topologies", {}).get(
-                                "topology", []
+                            # State change tracking
+                            num_state_changes = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:num-state-changes"
                             )
-                            if topologies_data:
-                                topologies: Dict[TypeAny, TypeAny] = {}
-                                for topo in topologies_data:
-                                    mt_id = topo.get("mt-id")
-                                    if mt_id is None:
-                                        continue
+                            if num_state_changes is not None:
+                                neighbor_entry["num-state-changes"] = num_state_changes
 
-                                    topo_state = topo.get("state", {})
-                                    topologies[mt_id] = {"mt-id": mt_id}
+                            last_state_ts = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:last-state-change-timestamp"
+                            )
+                            if last_state_ts:
+                                neighbor_entry["last-state-change-timestamp"] = last_state_ts
+
+                            last_down_reason = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:last-down-reason"
+                            )
+                            if last_down_reason:
+                                neighbor_entry["last-down-reason"] = last_down_reason
+
+                            # Circuit IDs
+                            local_cid = adj_state.get("local-extended-circuit-id")
+                            if local_cid is not None:
+                                neighbor_entry["local-extended-circuit-id"] = local_cid
+
+                            neighbor_cid = adj_state.get("neighbor-extended-circuit-id")
+                            if neighbor_cid is not None:
+                                neighbor_entry["neighbor-extended-circuit-id"] = (
+                                    neighbor_cid
+                                )
+
+                            # Neighbor circuit type
+                            neighbor_ct = adj_state.get("neighbor-circuit-type")
+                            if neighbor_ct:
+                                neighbor_entry["neighbor-circuit-type"] = neighbor_ct
+
+                            # Restart support / suppress / status
+                            restart_support = adj_state.get("restart-support")
+                            if restart_support is not None:
+                                neighbor_entry["restart-support"] = restart_support
+
+                            restart_suppress = adj_state.get("restart-suppress")
+                            if restart_suppress is not None:
+                                neighbor_entry["restart-suppress"] = restart_suppress
+
+                            restart_status = adj_state.get("restart-status")
+                            if restart_status is not None:
+                                neighbor_entry["restart-status"] = restart_status
+
+                            # NLPID
+                            nlpid = adj_state.get("nlpid")
+                            if nlpid:
+                                neighbor_entry["nlpid"] = nlpid
+
+                            # ArcOS augments
+                            usable = adj_state.get(f"{ARCOS_ISIS_AUGMENTS}:usable")
+                            if usable is not None:
+                                neighbor_entry["usable"] = usable
+
+                            restart_ack = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:restart-ack"
+                            )
+                            if restart_ack is not None:
+                                neighbor_entry["restart-ack"] = restart_ack
+
+                            restart_req = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:restart-request"
+                            )
+                            if restart_req is not None:
+                                neighbor_entry["restart-request"] = restart_req
+
+                            recv_mt_ids = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:received-multi-topology-ids"
+                            )
+                            if recv_mt_ids:
+                                neighbor_entry["received-multi-topology-ids"] = recv_mt_ids
+
+                            active_mt_ids = adj_state.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:active-multi-topology-ids"
+                            )
+                            if active_mt_ids:
+                                neighbor_entry["active-multi-topology-ids"] = active_mt_ids
+
+                            # BFD information
+                            bfd_data = adj.get(f"{ARCOS_ISIS_AUGMENTS}:bfd", {})
+                            if bfd_data:
+                                bfd_info: Dict[str, TypeAny] = {}
+                                bfd_state = bfd_data.get("state", {})
+                                if bfd_state.get("bfd-required") is not None:
+                                    bfd_info["bfd-required"] = bfd_state["bfd-required"]
+
+                                topologies_data = bfd_data.get("topologies", {}).get(
+                                    "topology", []
+                                )
+                                if topologies_data:
+                                    topologies: Dict[TypeAny, TypeAny] = {}
+                                    for topo in topologies_data:
+                                        mt_id = topo.get("mt-id")
+                                        if mt_id is None:
+                                            continue
+
+                                        topo_state = topo.get("state", {})
+                                        topologies[mt_id] = {"mt-id": mt_id}
+                                        for key in [
+                                            "ipv4-bfd-required",
+                                            "ipv6-bfd-required",
+                                            "bfd-required",
+                                            "ipv4-bfd-up",
+                                            "ipv6-bfd-up",
+                                            "ipv4-up",
+                                            "ipv6-up",
+                                            "usable",
+                                        ]:
+                                            if key in topo_state:
+                                                topologies[mt_id][key] = topo_state[key]
+
+                                    if topologies:
+                                        bfd_info["topologies"] = topologies
+
+                                if bfd_info:
+                                    neighbor_entry["bfd"] = bfd_info
+
+                            # Dynamic delay measurement
+                            ddm_data = adj.get(
+                                f"{ARCOS_ISIS_AUGMENTS}:dynamic-delay-measurement", {}
+                            )
+                            if ddm_data:
+                                ddm_state = ddm_data.get("state", {})
+                                if ddm_state:
+                                    ddm_info: Dict[str, TypeAny] = {}
                                     for key in [
-                                        "ipv4-bfd-required",
-                                        "ipv6-bfd-required",
-                                        "bfd-required",
-                                        "ipv4-bfd-up",
-                                        "ipv6-bfd-up",
-                                        "ipv4-up",
-                                        "ipv6-up",
-                                        "usable",
+                                        "enabled",
+                                        "num-advertisements-sent",
+                                        "last-sampled-avg-delay-value",
+                                        "last-advertised-min-delay-value",
+                                        "last-advertised-max-delay-value",
+                                        "last-advertised-timestamp",
+                                        "last-advertisement-reason",
                                     ]:
-                                        if key in topo_state:
-                                            topologies[mt_id][key] = topo_state[key]
+                                        if key in ddm_state:
+                                            ddm_info[key] = ddm_state[key]
 
-                                if topologies:
-                                    bfd_info["topologies"] = topologies
+                                    if ddm_info:
+                                        neighbor_entry["dynamic-delay-measurement"] = (
+                                            ddm_info
+                                        )
 
-                            if bfd_info:
-                                neighbor_entry["bfd"] = bfd_info
-
-                        # Dynamic delay measurement
-                        ddm_data = adj.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:dynamic-delay-measurement", {}
-                        )
-                        if ddm_data:
-                            ddm_state = ddm_data.get("state", {})
-                            if ddm_state:
-                                ddm_info: Dict[str, TypeAny] = {}
-                                for key in [
-                                    "enabled",
-                                    "num-advertisements-sent",
-                                    "last-sampled-avg-delay-value",
-                                    "last-advertised-min-delay-value",
-                                    "last-advertised-max-delay-value",
-                                    "last-advertised-timestamp",
-                                    "last-advertisement-reason",
-                                ]:
-                                    if key in ddm_state:
-                                        ddm_info[key] = ddm_state[key]
-
-                                if ddm_info:
-                                    neighbor_entry["dynamic-delay-measurement"] = (
-                                        ddm_info
-                                    )
-
-                        neighbors_dict[sys_id] = neighbor_entry
+                            neighbors_dict[sys_id] = neighbor_entry
 
             if neighbors_dict:
                 ni_isis["neighbors"] = neighbors_dict
@@ -373,7 +466,10 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
         except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("Error parsing ISIS neighbor data: %s", exc)
+            import traceback
+            logger.error("Error parsing ISIS neighbor data: %s", exc)
+            logger.error("Traceback: %s", traceback.format_exc())
+            logger.error("neighbors_dict at time of error: %s", neighbors_dict)
 
         return ret_dict
 
