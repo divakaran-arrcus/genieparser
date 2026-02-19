@@ -85,10 +85,13 @@ class ShowStaticRoutingConfigSchema(MetaParser):
                                         Optional("next_network_instance"): str,
                                         Optional("remote_label_stack"): list,
                                         Optional("bfd"): {
-                                            Optional("destination_address"): {
-                                                Optional("ipv4"): str,
-                                                Optional("ipv6"): str,
-                                            }
+                                            Optional("destination_address"): Or(
+                                                str,
+                                                {
+                                                    Optional("ipv4"): str,
+                                                    Optional("ipv6"): str,
+                                                },
+                                            )
                                         },
                                     }
                                 },
