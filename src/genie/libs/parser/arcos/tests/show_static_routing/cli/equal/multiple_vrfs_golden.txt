@@ -1,0 +1,105 @@
+root@rtr1# show running-config network-instance default protocol STATIC static-routes | display json | nomore
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:STATIC",
+                "name": "static-routes",
+                "config": {
+                  "identifier": "openconfig-policy-types:STATIC",
+                  "name": "static-routes"
+                },
+                "static-routes": {
+                  "static": [
+                    {
+                      "prefix": "10.0.0.0/8",
+                      "config": {"prefix": "10.0.0.0/8"},
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "1",
+                            "config": {"index": "1", "next-hop": "192.168.1.1"}
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "prefix": "192.168.100.1/32",
+                      "config": {
+                        "prefix": "192.168.100.1/32",
+                        "arcos-openconfig-local-routing-augments:description": "Static route with BFD",
+                        "arcos-openconfig-local-routing-augments:bfd": {"profile": "GLOBAL"}
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "next-hop1",
+                            "config": {
+                              "index": "next-hop1",
+                              "arcos-openconfig-local-routing-augments:bfd": {
+                                "destination-address": "10.0.0.2"
+                              }
+                            },
+                            "interface-ref": {"config": {"interface": "swp3"}}
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "prefix": "192.168.200.0/24",
+                      "config": {
+                        "prefix": "192.168.200.0/24",
+                        "arcos-openconfig-local-routing-augments:description": "ECMP static route",
+                        "arcos-openconfig-local-routing-augments:preference": 10
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "nh1",
+                            "config": {"index": "nh1", "next-hop": "10.9.201.1"},
+                            "interface-ref": {"config": {"interface": "swp1"}}
+                          },
+                          {
+                            "index": "nh2",
+                            "config": {"index": "nh2", "next-hop": "10.9.202.1"},
+                            "interface-ref": {"config": {"interface": "swp2"}}
+                          },
+                          {
+                            "index": "nh3",
+                            "config": {"index": "nh3", "next-hop": "10.9.203.1"},
+                            "interface-ref": {"config": {"interface": "swp3"}}
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "prefix": "2001:db8:100::/64",
+                      "config": {
+                        "prefix": "2001:db8:100::/64",
+                        "arcos-openconfig-local-routing-augments:description": "IPv6 static route"
+                      },
+                      "next-hops": {
+                        "next-hop": [
+                          {
+                            "index": "1",
+                            "config": {"index": "1", "next-hop": "2001:db8:1::1"},
+                            "interface-ref": {"config": {"interface": "swp1"}}
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
