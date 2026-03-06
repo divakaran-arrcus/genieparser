@@ -30,30 +30,30 @@ class ShowInterfaceSchema(MetaParser):
             "type": str,
             "mtu": int,
             "enabled": bool,
-            "admin_status": str,
-            "oper_status": str,
+            "admin-status": str,
+            "oper-status": str,
             "description": str,
-            Optional("mac_address"): str,
-            Optional("last_change"): str,
-            Optional("ipv4_addresses"): {
+            Optional("mac-address"): str,
+            Optional("last-change"): str,
+            Optional("ipv4-addresses"): {
                 Any(): {  # IP address
                     "ip": str,
-                    "prefix_length": int,
+                    "prefix-length": int,
                 }
             },
-            Optional("ipv6_addresses"): {
+            Optional("ipv6-addresses"): {
                 Any(): {  # IP address
                     "ip": str,
-                    "prefix_length": int,
+                    "prefix-length": int,
                 }
             },
             Optional("counters"): {
-                "in_octets": str,
-                "in_unicast_pkts": str,
-                "in_errors": str,
-                "out_octets": str,
-                "out_unicast_pkts": str,
-                "out_errors": str,
+                "in-octets": str,
+                "in-unicast-pkts": str,
+                "in-errors": str,
+                "out-octets": str,
+                "out-unicast-pkts": str,
+                "out-errors": str,
             },
         }
     }
@@ -162,29 +162,29 @@ class ShowInterface(ShowInterfaceSchema):
                 "type": state.get("type", "unknown"),
                 "mtu": state.get("mtu", 0),
                 "enabled": state.get("enabled", False),
-                "admin_status": state.get("admin-status", "UNKNOWN"),
-                "oper_status": state.get("oper-status", "UNKNOWN"),
+                "admin-status": state.get("admin-status", "UNKNOWN"),
+                "oper-status": state.get("oper-status", "UNKNOWN"),
                 "description": state.get("description", ""),
             }
 
             # MAC address
             if "mac-address" in ethernet:
-                intf_dict["mac_address"] = ethernet["mac-address"]
+                intf_dict["mac-address"] = ethernet["mac-address"]
 
             # Last-change timestamp
             if "last-change" in state:
-                intf_dict["last_change"] = state["last-change"]
+                intf_dict["last-change"] = state["last-change"]
 
             # Counters
             counters = state.get("counters", {})
             if counters:
                 intf_dict["counters"] = {
-                    "in_octets": str(counters.get("in-octets", "0")),
-                    "in_unicast_pkts": str(counters.get("in-unicast-pkts", "0")),
-                    "in_errors": str(counters.get("in-errors", "0")),
-                    "out_octets": str(counters.get("out-octets", "0")),
-                    "out_unicast_pkts": str(counters.get("out-unicast-pkts", "0")),
-                    "out_errors": str(counters.get("out-errors", "0")),
+                    "in-octets": str(counters.get("in-octets", "0")),
+                    "in-unicast-pkts": str(counters.get("in-unicast-pkts", "0")),
+                    "in-errors": str(counters.get("in-errors", "0")),
+                    "out-octets": str(counters.get("out-octets", "0")),
+                    "out-unicast-pkts": str(counters.get("out-unicast-pkts", "0")),
+                    "out-errors": str(counters.get("out-errors", "0")),
                 }
 
             # Subinterfaces for IP addresses
@@ -194,14 +194,14 @@ class ShowInterface(ShowInterfaceSchema):
                 ipv4 = subintf.get("openconfig-if-ip:ipv4", {})
                 ipv4_addrs = ipv4.get("addresses", {}).get("address", [])
                 if ipv4_addrs:
-                    intf_dict.setdefault("ipv4_addresses", {})
+                    intf_dict.setdefault("ipv4-addresses", {})
                     for addr in ipv4_addrs:
                         addr_state = addr.get("state", {})
                         ip = addr_state.get("ip")
                         if ip:
-                            intf_dict["ipv4_addresses"][ip] = {
+                            intf_dict["ipv4-addresses"][ip] = {
                                 "ip": ip,
-                                "prefix_length": addr_state.get(
+                                "prefix-length": addr_state.get(
                                     "prefix-length", 0
                                 ),
                             }
@@ -210,14 +210,14 @@ class ShowInterface(ShowInterfaceSchema):
                 ipv6 = subintf.get("openconfig-if-ip:ipv6", {})
                 ipv6_addrs = ipv6.get("addresses", {}).get("address", [])
                 if ipv6_addrs:
-                    intf_dict.setdefault("ipv6_addresses", {})
+                    intf_dict.setdefault("ipv6-addresses", {})
                     for addr in ipv6_addrs:
                         addr_state = addr.get("state", {})
                         ip = addr_state.get("ip")
                         if ip:
-                            intf_dict["ipv6_addresses"][ip] = {
+                            intf_dict["ipv6-addresses"][ip] = {
                                 "ip": ip,
-                                "prefix_length": addr_state.get(
+                                "prefix-length": addr_state.get(
                                     "prefix-length", 0
                                 ),
                             }

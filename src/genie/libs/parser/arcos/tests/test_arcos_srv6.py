@@ -29,14 +29,14 @@ def test_show_srv6_config_minimal():
     result = parser.cli(output=output)
 
     # New structure: network_instances[instance]["srv6"]["config"]
-    assert "network_instances" in result
-    assert "default" in result["network_instances"]
-    ni = result["network_instances"]["default"]
+    assert "network-instances" in result
+    assert "default" in result["network-instances"]
+    ni = result["network-instances"]["default"]
     assert "srv6" in ni
 
     cfg = ni["srv6"].get("config", {})
     encap = cfg.get("encapsulation", {})
-    assert encap.get("source_address") == "2400:2020:0:1191::91"
+    assert encap.get("source-address") == "2400:2020:0:1191::91"
 
     locators = cfg.get("locators", {})
     # The sample includes three locators: base_slice0, base_slice131, base_slice132
@@ -46,9 +46,9 @@ def test_show_srv6_config_minimal():
 
     loc0 = locators["base_slice0"]
     assert loc0["name"] == "base_slice0"
-    assert loc0["locator_node_length"] == 24
+    assert loc0["locator-node-length"] == 24
     assert loc0["prefix"] == "2400:2020:0:1191::/64"
-    assert loc0["function_length"] == 16
+    assert loc0["function-length"] == 16
     # base_slice0 in the config sample has no explicit algorithm field
 
     loc131 = locators["base_slice131"]
@@ -74,10 +74,10 @@ def test_show_srv6_locator_minimal():
     parser = ShowSrv6Locator(device="dummy")
     result = parser.cli(output=output)
 
-    assert "network_instances" in result
-    assert "default" in result["network_instances"]
+    assert "network-instances" in result
+    assert "default" in result["network-instances"]
 
-    ni = result["network_instances"]["default"]
+    ni = result["network-instances"]["default"]
     assert "srv6" in ni
     locators = ni["srv6"].get("locators", {})
     # The locator state sample includes base_slice0, base_slice131, base_slice132
@@ -87,10 +87,10 @@ def test_show_srv6_locator_minimal():
 
     loc0 = locators["base_slice0"]
     assert loc0["name"] == "base_slice0"
-    assert loc0["locator_node_length"] == 24
+    assert loc0["locator-node-length"] == 24
     assert loc0["prefix"] == "2400:2020:0:1191::/64"
-    assert loc0["micro_segment_behavior_unode"] is False
-    assert loc0["function_length"] == 16
+    assert loc0["micro-segment-behavior-unode"] is False
+    assert loc0["function-length"] == 16
     assert loc0["algorithm"] == 0
 
     loc131 = locators["base_slice131"]
@@ -112,8 +112,8 @@ def test_show_srv6_config_with_instance_parameter():
     # Test with explicit instance parameter (output provided, so no command executed)
     result = parser.cli(instance="default", output=output)
 
-    assert "network_instances" in result
-    assert "default" in result["network_instances"]
+    assert "network-instances" in result
+    assert "default" in result["network-instances"]
 
 
 def test_show_srv6_locator_with_instance_parameter():
@@ -129,8 +129,8 @@ def test_show_srv6_locator_with_instance_parameter():
     # Test with explicit instance parameter (output provided, so no command executed)
     result = parser.cli(instance="default", output=output)
 
-    assert "network_instances" in result
-    assert "default" in result["network_instances"]
+    assert "network-instances" in result
+    assert "default" in result["network-instances"]
 
 
 def test_show_srv6_config_instance_validation():

@@ -40,10 +40,10 @@ def test_show_interface_loopback_sample():
 
     assert intf["name"] == "loopback0"
     assert intf["mtu"] == 9000
-    assert intf["oper_status"] == "UP"
+    assert intf["oper-status"] == "UP"
     assert intf["enabled"] is True
 
     # At least one IPv6 address with expected prefix length
-    ipv6 = intf.get("ipv6_addresses", {})
+    ipv6 = intf.get("ipv6-addresses", {})
     assert "1::1" in ipv6
-    assert ipv6["1::1"]["prefix_length"] == 128
+    assert ipv6["1::1"]["prefix-length"] == 128

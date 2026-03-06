@@ -54,19 +54,19 @@ class ShowSrv6ConfigSchema(MetaParser):
     """
 
     schema = {
-        "network_instances": {
+        "network-instances": {
             Any(): {  # network-instance name
                 "srv6": {
                     Optional("config"): {
                         Optional("encapsulation"): {
-                            Optional("source_address"): str,
+                            Optional("source-address"): str,
                         },
                         Optional("locators"): {
                             Any(): {  # locator name
                                 "name": str,
-                                Optional("locator_node_length"): int,
+                                Optional("locator-node-length"): int,
                                 Optional("prefix"): str,
-                                Optional("function_length"): int,
+                                Optional("function-length"): int,
                                 Optional("algorithm"): int,
                             }
                         },
@@ -100,7 +100,7 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
+        ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -135,7 +135,7 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
             encap_cfg = srv6.get("encapsulation", {}).get("config", {})
             if encap_cfg:
                 src = encap_cfg.get("source-address")
-                ni_entry["encapsulation"] = {"source_address": src}
+                ni_entry["encapsulation"] = {"source-address": src}
 
             # Locator configuration
             loc_list = srv6.get("locator", []) or []
@@ -150,11 +150,11 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                     loc_entry: Dict[str, TypeAny] = {"name": name}
 
                     if "locator-node-length" in cfg:
-                        loc_entry["locator_node_length"] = cfg["locator-node-length"]
+                        loc_entry["locator-node-length"] = cfg["locator-node-length"]
                     if "prefix" in cfg:
                         loc_entry["prefix"] = cfg["prefix"]
                     if "function-length" in cfg:
-                        loc_entry["function_length"] = cfg["function-length"]
+                        loc_entry["function-length"] = cfg["function-length"]
                     if "algorithm" in cfg:
                         loc_entry["algorithm"] = cfg["algorithm"]
 
@@ -164,7 +164,7 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                ni_dict = ret_dict["network_instances"].setdefault(inst_name, {})
+                ni_dict = ret_dict["network-instances"].setdefault(inst_name, {})
                 srv6_dict = ni_dict.setdefault("srv6", {})
                 srv6_dict["config"] = ni_entry
 
@@ -180,16 +180,16 @@ class ShowSrv6LocatorSchema(MetaParser):
     """
 
     schema = {
-        "network_instances": {
+        "network-instances": {
             Any(): {  # network-instance name
                 "srv6": {
                     Optional("locators"): {
                         Any(): {  # locator name
                             "name": str,
-                            Optional("locator_node_length"): int,
+                            Optional("locator-node-length"): int,
                             Optional("prefix"): str,
-                            Optional("micro_segment_behavior_unode"): bool,
-                            Optional("function_length"): int,
+                            Optional("micro-segment-behavior-unode"): bool,
+                            Optional("function-length"): int,
                             Optional("algorithm"): int,
                         }
                     }
@@ -224,7 +224,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
+        ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -266,15 +266,15 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                     loc_entry: Dict[str, TypeAny] = {"name": name}
 
                     if "locator-node-length" in state:
-                        loc_entry["locator_node_length"] = state["locator-node-length"]
+                        loc_entry["locator-node-length"] = state["locator-node-length"]
                     if "prefix" in state:
                         loc_entry["prefix"] = state["prefix"]
                     if "micro-segment-behavior-unode" in state:
-                        loc_entry["micro_segment_behavior_unode"] = state[
+                        loc_entry["micro-segment-behavior-unode"] = state[
                             "micro-segment-behavior-unode"
                         ]
                     if "function-length" in state:
-                        loc_entry["function_length"] = state["function-length"]
+                        loc_entry["function-length"] = state["function-length"]
                     if "algorithm" in state:
                         loc_entry["algorithm"] = state["algorithm"]
 
@@ -284,7 +284,7 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                     ni_entry["locators"] = locators_dict
 
             if ni_entry:
-                ni_dict = ret_dict["network_instances"].setdefault(inst_name, {})
+                ni_dict = ret_dict["network-instances"].setdefault(inst_name, {})
                 ni_dict["srv6"] = ni_entry
 
         return ret_dict

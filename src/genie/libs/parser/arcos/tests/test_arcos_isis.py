@@ -92,12 +92,12 @@ def test_show_isis_config_sample():
     # Global settings
     glb = cfg.get("global", {})
     assert glb.get("net") == ["49.0001.1111.1111.1111.00"]
-    assert glb.get("level_capability") == "LEVEL_2"
+    assert glb.get("level-capability") == "LEVEL_2"
     # Advanced global knobs
-    assert glb.get("max_ecmp_paths") == 16
-    assert glb.get("graceful_restart_enabled") is True
-    assert glb.get("lsp_mtu_size") == 8000
-    assert glb.get("segment_routing_enabled") is False
+    assert glb.get("max-ecmp-paths") == 16
+    assert glb.get("graceful-restart-enabled") is True
+    assert glb.get("lsp-mtu-size") == 8000
+    assert glb.get("segment-routing-enabled") is False
 
     # SRv6
     srv6 = glb.get("srv6", {})
@@ -109,83 +109,83 @@ def test_show_isis_config_sample():
     ]
 
     # Traffic engineering
-    te = glb.get("traffic_engineering", {})
-    assert te.get("ipv6_router_id") == "2400:2020:0:905::1"
+    te = glb.get("traffic-engineering", {})
+    assert te.get("ipv6-router-id") == "2400:2020:0:905::1"
 
     # Micro-loop avoidance
-    mla = glb.get("micro_loop_avoidance", {})
-    assert mla.get("srv6_enabled") is True
-    assert mla.get("rib_update_delay") == 60000
+    mla = glb.get("micro-loop-avoidance", {})
+    assert mla.get("srv6-enabled") is True
+    assert mla.get("rib-update-delay") == 60000
 
     # Flexible algorithms
-    flex_algos = glb.get("flexible_algorithms", {})
+    flex_algos = glb.get("flexible-algorithms", {})
     assert "131" in flex_algos and "132" in flex_algos
     algo_131 = flex_algos["131"]
     assert algo_131["id"] == 131
-    assert algo_131.get("advertise_definition_enabled") is True
-    assert algo_131.get("metric_type") == "arcos-openconfig-isis-augments:LINK_DELAY"
+    assert algo_131.get("advertise-definition-enabled") is True
+    assert algo_131.get("metric-type") == "arcos-openconfig-isis-augments:LINK_DELAY"
 
     algo_132 = flex_algos["132"]
     assert algo_132["id"] == 132
-    assert algo_132.get("advertise_definition_enabled") is True
-    assert algo_132.get("metric_type") == "arcos-openconfig-isis-augments:IGP_METRIC"
+    assert algo_132.get("advertise-definition-enabled") is True
+    assert algo_132.get("metric-type") == "arcos-openconfig-isis-augments:IGP_METRIC"
 
     # Dynamic delay measurement
-    ddm = glb.get("dynamic_delay_measurement", {})
-    assert ddm.get("probe_interval") == 20
-    assert ddm.get("advertisement_interval") == 60
+    ddm = glb.get("dynamic-delay-measurement", {})
+    assert ddm.get("probe-interval") == 20
+    assert ddm.get("advertisement-interval") == 60
 
     # LSP-bit settings
-    lsp = glb.get("lsp_bit", {})
-    ov = lsp.get("overload_bit", {})
-    assert ov.get("set_bit_on_boot") is True
-    assert ov.get("advertise_high_metric") is True
+    lsp = glb.get("lsp-bit", {})
+    ov = lsp.get("overload-bit", {})
+    assert ov.get("set-bit-on-boot") is True
+    assert ov.get("advertise-high-metric") is True
 
-    resets = ov.get("reset_triggers")
+    resets = ov.get("reset-triggers")
     assert isinstance(resets, list) and len(resets) == 1
     r0 = resets[0]
-    assert r0.get("reset_trigger") == "arcos-isis-types:WAIT_DELAY"
+    assert r0.get("reset-trigger") == "arcos-isis-types:WAIT_DELAY"
     assert r0.get("delay") == 500
 
-    att = lsp.get("attached_bit", {})
-    assert att.get("ignore_bit") is True
-    assert att.get("suppress_bit") is True
+    att = lsp.get("attached-bit", {})
+    assert att.get("ignore-bit") is True
+    assert att.get("suppress-bit") is True
 
     # Global levels
     levels = cfg.get("levels", {})
     assert "2" in levels
     lvl2 = levels["2"]
-    assert lvl2["level_number"] == 2
+    assert lvl2["level-number"] == 2
     assert lvl2.get("enabled") is True
 
     # Per-level authentication (level 2)
     lvl2_auth = lvl2.get("authentication", {})
-    assert lvl2_auth.get("lsp_authentication") is False
+    assert lvl2_auth.get("lsp-authentication") is False
     assert (
-        lvl2_auth.get("auth_password")
+        lvl2_auth.get("auth-password")
         == "$8$P116vHF0+EDlx1jNJecNY+oosPeqDFOS82XLteuqzMI="
     )
     assert (
-        lvl2_auth.get("crypto_algorithm")
+        lvl2_auth.get("crypto-algorithm")
         == "arcos-openconfig-isis-augments:MD5"
     )
 
     # AFI/SAFI
-    afs = cfg.get("afi_safi", {})
+    afs = cfg.get("afi-safi", {})
     assert "IPV6-UNICAST" in afs and "IPV4-UNICAST" in afs
     v6 = afs["IPV6-UNICAST"]
-    assert v6["afi_name"] == "IPV6"
-    assert v6["safi_name"] == "UNICAST"
+    assert v6["afi-name"] == "IPV6"
+    assert v6["safi-name"] == "UNICAST"
     assert v6["enabled"] is True
-    assert v6.get("multi_topology_enabled") is True
+    assert v6.get("multi-topology-enabled") is True
 
     v4 = afs["IPV4-UNICAST"]
-    assert v4["afi_name"] == "IPV4"
-    assert v4["safi_name"] == "UNICAST"
+    assert v4["afi-name"] == "IPV4"
+    assert v4["safi-name"] == "UNICAST"
     assert v4["enabled"] is True
 
     # IPv6 AF summary-prefixes and prefix-unreachable
-    summaries = v6.get("summary_prefixes", {})
+    summaries = v6.get("summary-prefixes", {})
     assert "2400:2020:0:100::/56" in summaries
     assert "2400:2020:0:900::/56" in summaries
 
@@ -193,7 +193,7 @@ def test_show_isis_config_sample():
     assert sum1["prefix"] == "2400:2020:0:100::/56"
     assert sum1.get("level") == "LEVEL_2"
     assert sum1.get("algorithm") == 0
-    assert sum1.get("adv_unreachable") is True
+    assert sum1.get("adv-unreachable") is True
 
     sum2 = summaries["2400:2020:0:900::/56"]
     assert sum2["prefix"] == "2400:2020:0:900::/56"
@@ -201,118 +201,118 @@ def test_show_isis_config_sample():
     assert sum2.get("algorithm") == 0
     assert sum2.get("tag") == 100
 
-    pref_unreach = v6.get("prefix_unreachable", {})
-    assert pref_unreach.get("adv_lifetime") == 65535
-    assert pref_unreach.get("adv_metric") == 4294967294
-    assert pref_unreach.get("adv_maximum") == 65535
-    assert pref_unreach.get("rx_process") is True
+    pref_unreach = v6.get("prefix-unreachable", {})
+    assert pref_unreach.get("adv-lifetime") == 65535
+    assert pref_unreach.get("adv-metric") == 4294967294
+    assert pref_unreach.get("adv-maximum") == 65535
+    assert pref_unreach.get("rx-process") is True
 
     # Interfaces
     interfaces = cfg.get("interfaces", {})
     assert "swp1" in interfaces and "loopback0" in interfaces
 
     swp1 = interfaces["swp1"]
-    assert swp1["interface_id"] == "swp1"
+    assert swp1["interface-id"] == "swp1"
     assert swp1["enabled"] is True
-    assert swp1.get("network_type") == "POINT_TO_POINT"
+    assert swp1.get("network-type") == "POINT_TO_POINT"
 
     # swp1 authentication
     swp1_auth = swp1.get("authentication", {})
-    assert swp1_auth.get("hello_authentication") is True
-    assert swp1_auth.get("auth_password") == (
+    assert swp1_auth.get("hello-authentication") is True
+    assert swp1_auth.get("auth-password") == (
         "$8$ob8IZ1eMMUhk0tZVHJ933X4+F7xnbfJdC4jAQch+oBs="
     )
     assert (
-        swp1_auth.get("crypto_algorithm")
+        swp1_auth.get("crypto-algorithm")
         == "arcos-openconfig-isis-augments:MD5"
     )
 
     # swp1 timers
     swp1_timers = swp1.get("timers", {})
-    assert swp1_timers.get("hello_interval") == 15
-    assert swp1_timers.get("hello_multiplier") == 5
+    assert swp1_timers.get("hello-interval") == 15
+    assert swp1_timers.get("hello-multiplier") == 5
 
-    swp1_afs = swp1.get("afi_safi", {})
+    swp1_afs = swp1.get("afi-safi", {})
     assert "IPV6-UNICAST" in swp1_afs and "IPV4-UNICAST" in swp1_afs
 
     # swp1 per-AF fast-reroute
     swp1_v6_af = swp1_afs["IPV6-UNICAST"]
-    fr = swp1_v6_af.get("fast_reroute", {})
-    assert fr.get("ti_lfa_srv6_enabled") is True
+    fr = swp1_v6_af.get("fast-reroute", {})
+    assert fr.get("ti-lfa-srv6-enabled") is True
 
     swp1_lvls = swp1.get("levels", {})
     # Level 1 metric only
     assert "1" in swp1_lvls
     lvl1 = swp1_lvls["1"]
-    assert lvl1["level_number"] == 1
+    assert lvl1["level-number"] == 1
     assert lvl1.get("metric") == 100
 
     # Level 2 enabled + metric + flexible-algorithm TE/delay metrics
     assert "2" in swp1_lvls
     lvl2_intf = swp1_lvls["2"]
-    assert lvl2_intf["level_number"] == 2
+    assert lvl2_intf["level-number"] == 2
     assert lvl2_intf.get("enabled") is True
     assert lvl2_intf.get("metric") == 200
-    flex_lvl2 = lvl2_intf.get("flexible_algorithm", {})
-    assert flex_lvl2.get("delay_metric") == 1000000
-    assert flex_lvl2.get("te_metric") == 1000000
+    flex_lvl2 = lvl2_intf.get("flexible-algorithm", {})
+    assert flex_lvl2.get("delay-metric") == 1000000
+    assert flex_lvl2.get("te-metric") == 1000000
 
     # swp1 interface-ref
-    swp1_ref = swp1.get("interface_ref", {})
+    swp1_ref = swp1.get("interface-ref", {})
     assert swp1_ref.get("interface") == "swp1"
     assert swp1_ref.get("subinterface") == 0
 
     # Other interfaces: swp3
     swp3 = interfaces["swp3"]
-    assert swp3["interface_id"] == "swp3"
+    assert swp3["interface-id"] == "swp3"
     assert swp3["enabled"] is True
-    swp3_ref = swp3.get("interface_ref", {})
+    swp3_ref = swp3.get("interface-ref", {})
     assert swp3_ref.get("interface") == "swp3"
     assert swp3_ref.get("subinterface") == 0
-    swp3_afs = swp3.get("afi_safi", {})
+    swp3_afs = swp3.get("afi-safi", {})
     swp3_v6_af = swp3_afs["IPV6-UNICAST"]
-    fr3 = swp3_v6_af.get("fast_reroute", {})
-    assert fr3.get("ti_lfa_srv6_enabled") is True
+    fr3 = swp3_v6_af.get("fast-reroute", {})
+    assert fr3.get("ti-lfa-srv6-enabled") is True
 
     # swp4
     swp4 = interfaces["swp4"]
-    assert swp4["interface_id"] == "swp4"
+    assert swp4["interface-id"] == "swp4"
     assert swp4["enabled"] is True
-    swp4_ref = swp4.get("interface_ref", {})
+    swp4_ref = swp4.get("interface-ref", {})
     assert swp4_ref.get("interface") == "swp4"
     assert swp4_ref.get("subinterface") == 0
-    swp4_afs = swp4.get("afi_safi", {})
+    swp4_afs = swp4.get("afi-safi", {})
     swp4_v6_af = swp4_afs["IPV6-UNICAST"]
-    fr4 = swp4_v6_af.get("fast_reroute", {})
-    assert fr4.get("ti_lfa_srv6_enabled") is True
+    fr4 = swp4_v6_af.get("fast-reroute", {})
+    assert fr4.get("ti-lfa-srv6-enabled") is True
 
     # loopback0
     loop0 = interfaces["loopback0"]
-    assert loop0["interface_id"] == "loopback0"
+    assert loop0["interface-id"] == "loopback0"
     assert loop0["enabled"] is True
     assert loop0.get("tag") == [1]
-    loop0_ref = loop0.get("interface_ref", {})
+    loop0_ref = loop0.get("interface-ref", {})
     assert loop0_ref.get("interface") == "loopback0"
     assert loop0_ref.get("subinterface") == 0
-    loop0_afs = loop0.get("afi_safi", {})
+    loop0_afs = loop0.get("afi-safi", {})
     assert "IPV6-UNICAST" in loop0_afs and "IPV4-UNICAST" in loop0_afs
     loop0_lvls = loop0.get("levels", {})
     assert "2" in loop0_lvls
-    assert loop0_lvls["2"]["level_number"] == 2
+    assert loop0_lvls["2"]["level-number"] == 2
     assert loop0_lvls["2"].get("enabled") is True
 
     # loopback1
     loop1 = interfaces["loopback1"]
-    assert loop1["interface_id"] == "loopback1"
+    assert loop1["interface-id"] == "loopback1"
     assert loop1["enabled"] is True
-    loop1_ref = loop1.get("interface_ref", {})
+    loop1_ref = loop1.get("interface-ref", {})
     assert loop1_ref.get("interface") == "loopback1"
     assert loop1_ref.get("subinterface") == 0
-    loop1_afs = loop1.get("afi_safi", {})
+    loop1_afs = loop1.get("afi-safi", {})
     assert "IPV6-UNICAST" in loop1_afs
     loop1_lvls = loop1.get("levels", {})
     assert "2" in loop1_lvls
-    assert loop1_lvls["2"]["level_number"] == 2
+    assert loop1_lvls["2"]["level-number"] == 2
     assert loop1_lvls["2"].get("enabled") is True
 
 
@@ -338,7 +338,7 @@ def test_show_isis_config_sr_mpls_sample():
 
     # Global settings - segment routing enabled
     glb = cfg.get("global", {})
-    assert glb.get("segment_routing_enabled") is True
+    assert glb.get("segment-routing-enabled") is True
 
     # Interfaces
     interfaces = cfg.get("interfaces", {})
@@ -347,45 +347,45 @@ def test_show_isis_config_sr_mpls_sample():
 
     # swp1 - should have adjacency-sid and ti-lfa-sr-mpls
     swp1 = interfaces["swp1"]
-    assert swp1["interface_id"] == "swp1"
+    assert swp1["interface-id"] == "swp1"
     assert swp1["enabled"] is True
-    assert swp1.get("network_type") == "POINT_TO_POINT"
+    assert swp1.get("network-type") == "POINT_TO_POINT"
 
-    swp1_afs = swp1.get("afi_safi", {})
+    swp1_afs = swp1.get("afi-safi", {})
     assert "IPV4-UNICAST" in swp1_afs
 
     swp1_v4_af = swp1_afs["IPV4-UNICAST"]
     assert swp1_v4_af["enabled"] is True
 
     # Adjacency SIDs
-    adj_sids = swp1_v4_af.get("adjacency_sids", [])
+    adj_sids = swp1_v4_af.get("adjacency-sids", [])
     assert len(adj_sids) == 1
     adj_sid = adj_sids[0]
     assert adj_sid["neighbor"] == "POINT_TO_POINT"
-    assert adj_sid["sid_type"] == "INDEX"
+    assert adj_sid["sid-type"] == "INDEX"
     assert adj_sid["value"] == 12
 
     # Fast reroute - TI-LFA SR-MPLS
-    fr = swp1_v4_af.get("fast_reroute", {})
-    assert fr.get("ti_lfa_sr_mpls_enabled") is True
+    fr = swp1_v4_af.get("fast-reroute", {})
+    assert fr.get("ti-lfa-sr-mpls-enabled") is True
 
     # loopback0 - should have prefix-sid
     loop0 = interfaces["loopback0"]
-    assert loop0["interface_id"] == "loopback0"
+    assert loop0["interface-id"] == "loopback0"
     assert loop0["enabled"] is True
 
-    loop0_afs = loop0.get("afi_safi", {})
+    loop0_afs = loop0.get("afi-safi", {})
     assert "IPV4-UNICAST" in loop0_afs
 
     loop0_v4_af = loop0_afs["IPV4-UNICAST"]
     assert loop0_v4_af["enabled"] is True
 
     # Prefix SIDs
-    prefix_sids = loop0_v4_af.get("prefix_sids", [])
+    prefix_sids = loop0_v4_af.get("prefix-sids", [])
     assert len(prefix_sids) == 1
     prefix_sid = prefix_sids[0]
     assert prefix_sid["algorithm"] == "SPF"
-    assert prefix_sid["sid_type"] == "INDEX"
+    assert prefix_sid["sid-type"] == "INDEX"
     assert prefix_sid["value"] == 111
 
 
@@ -413,65 +413,65 @@ def test_show_isis_config_new_knobs_sample():
 
     # Global
     glb = cfg.get("global", {})
-    assert glb.get("auto_cost_reference_bandwidth") == 12345
-    assert glb.get("mpls_igp_ldp_sync_enabled") is True
+    assert glb.get("auto-cost-reference-bandwidth") == 12345
+    assert glb.get("mpls-igp-ldp-sync-enabled") is True
 
-    hello = glb.get("hello_authentication", {})
+    hello = glb.get("hello-authentication", {})
     assert hello.get("enabled") is True
     assert hello.get("keychain") == "abc"
-    assert hello.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+    assert hello.get("auth-type") == "openconfig-keychain-types:KEYCHAIN"
 
     # Levels (global level-mode auth and TE)
     levels = cfg.get("levels", {})
     assert "1" in levels and "2" in levels
 
     lvl1 = levels["1"]
-    assert lvl1["level_number"] == 1
+    assert lvl1["level-number"] == 1
     lvl1_auth = lvl1.get("authentication", {})
-    assert lvl1_auth.get("lsp_authentication") is True
-    assert lvl1_auth.get("csnp_authentication") is True
-    assert lvl1_auth.get("psnp_authentication") is True
+    assert lvl1_auth.get("lsp-authentication") is True
+    assert lvl1_auth.get("csnp-authentication") is True
+    assert lvl1_auth.get("psnp-authentication") is True
     assert lvl1_auth.get("keychain") == "abc"
-    assert lvl1_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
-    assert lvl1.get("traffic_engineering_enabled") is True
+    assert lvl1_auth.get("auth-type") == "openconfig-keychain-types:KEYCHAIN"
+    assert lvl1.get("traffic-engineering-enabled") is True
 
     lvl2 = levels["2"]
-    assert lvl2["level_number"] == 2
+    assert lvl2["level-number"] == 2
     assert lvl2.get("enabled") is True
     lvl2_auth = lvl2.get("authentication", {})
-    assert lvl2_auth.get("lsp_authentication") is True
-    assert lvl2_auth.get("csnp_authentication") is True
-    assert lvl2_auth.get("psnp_authentication") is True
+    assert lvl2_auth.get("lsp-authentication") is True
+    assert lvl2_auth.get("csnp-authentication") is True
+    assert lvl2_auth.get("psnp-authentication") is True
     assert lvl2_auth.get("keychain") == "abc"
-    assert lvl2_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
-    assert lvl2.get("traffic_engineering_enabled") is True
+    assert lvl2_auth.get("auth-type") == "openconfig-keychain-types:KEYCHAIN"
+    assert lvl2.get("traffic-engineering-enabled") is True
 
     # AF default-information originate
-    afs = cfg.get("afi_safi", {})
+    afs = cfg.get("afi-safi", {})
     assert "IPV6-UNICAST" in afs
     v6 = afs["IPV6-UNICAST"]
-    default_info = v6.get("default_information", {})
+    default_info = v6.get("default-information", {})
     assert default_info.get("enabled") is True
-    assert default_info.get("export_policy") == ["pass"]
+    assert default_info.get("export-policy") == ["pass"]
 
     # Interface
     interfaces = cfg.get("interfaces", {})
     assert "swp1" in interfaces
     swp1 = interfaces["swp1"]
-    assert swp1["interface_id"] == "swp1"
+    assert swp1["interface-id"] == "swp1"
     assert swp1["enabled"] is True
 
     swp1_auth = swp1.get("authentication", {})
     assert swp1_auth.get("keychain") == "abc"
-    assert swp1_auth.get("auth_type") == "openconfig-keychain-types:KEYCHAIN"
+    assert swp1_auth.get("auth-type") == "openconfig-keychain-types:KEYCHAIN"
 
-    assert swp1.get("mpls_igp_ldp_sync_enabled") is True
+    assert swp1.get("mpls-igp-ldp-sync-enabled") is True
 
-    swp1_afs = swp1.get("afi_safi", {})
+    swp1_afs = swp1.get("afi-safi", {})
     assert "IPV6-UNICAST" in swp1_afs
     swp1_v6_af = swp1_afs["IPV6-UNICAST"]
-    fr = swp1_v6_af.get("fast_reroute", {})
-    assert fr.get("ip_enabled") is True
+    fr = swp1_v6_af.get("fast-reroute", {})
+    assert fr.get("ip-enabled") is True
 
 
 def test_show_isis_lsp_sample():
@@ -507,19 +507,19 @@ def test_show_isis_lsp_sample():
     assert tlvs.get("hostname") == "rtr1"
 
     # Extended IPv4 reachability for 1.1.1.1/32 on rtr1.00-00
-    ext4 = lsp.get("extended_ipv4_reachability", {})
+    ext4 = lsp.get("extended-ipv4-reachability", {})
     assert "1.1.1.1/32" in ext4
     pfx4 = ext4["1.1.1.1/32"]
-    assert pfx4["ip_prefix"] == "1.1.1.1"
-    assert pfx4["prefix_len"] == 32
+    assert pfx4["ip-prefix"] == "1.1.1.1"
+    assert pfx4["prefix-len"] == 32
     assert pfx4["metric"] == 10
 
     # MT IPv6 reachability for 2400:2020:0:1191::91/128 on rtr1.00-00
-    mt6 = lsp.get("mt_ipv6_reachability", {})
+    mt6 = lsp.get("mt-ipv6-reachability", {})
     assert "2400:2020:0:1191::91/128" in mt6
     pfx6 = mt6["2400:2020:0:1191::91/128"]
-    assert pfx6["ip_prefix"] == "2400:2020:0:1191::91"
-    assert pfx6["prefix_len"] == 128
+    assert pfx6["ip-prefix"] == "2400:2020:0:1191::91"
+    assert pfx6["prefix-len"] == 128
     assert pfx6["metric"] == 10
     assert pfx6["mt-id"] == 2
 
@@ -527,26 +527,31 @@ def test_show_isis_lsp_sample():
     # extended IPv4 reachability, and MT IPv6 2400:2020:0:2291::91/128,
     # as per the golden sample.
     lsp2 = database["rtr2.00-00"]
-    ext4_lsp2 = lsp2.get("extended_ipv4_reachability", {})
+    ext4_lsp2 = lsp2.get("extended-ipv4-reachability", {})
     assert "2.2.2.2/32" in ext4_lsp2
     pfx4_lsp2 = ext4_lsp2["2.2.2.2/32"]
-    assert pfx4_lsp2["ip_prefix"] == "2.2.2.2"
-    assert pfx4_lsp2["prefix_len"] == 32
+    assert pfx4_lsp2["ip-prefix"] == "2.2.2.2"
+    assert pfx4_lsp2["prefix-len"] == 32
     assert pfx4_lsp2["metric"] == 10
 
-    mt6_lsp2 = lsp2.get("mt_ipv6_reachability", {})
+    mt6_lsp2 = lsp2.get("mt-ipv6-reachability", {})
     assert "2400:2020:0:2291::91/128" in mt6_lsp2
     pfx6_lsp2 = mt6_lsp2["2400:2020:0:2291::91/128"]
-    assert pfx6_lsp2["ip_prefix"] == "2400:2020:0:2291::91"
-    assert pfx6_lsp2["prefix_len"] == 128
+    assert pfx6_lsp2["ip-prefix"] == "2400:2020:0:2291::91"
+    assert pfx6_lsp2["prefix-len"] == 128
     assert pfx6_lsp2["metric"] == 10
     assert pfx6_lsp2["mt-id"] == 2
 
 
 def test_show_isis_interface_sample():
-    """Validate parsing of an ISIS interface sample."""
+    """Validate parsing of an ISIS interface sample (convention-compliant).
 
-    sample_file = SAMPLES_DIR / "isis_interface.json"
+    Uses the enhanced golden sample with 4 interfaces.
+    All assertions use hyphenated field names and stripped prefix values
+    per the 4 mandatory parser conventions.
+    """
+
+    sample_file = SAMPLES_DIR / "isis_interface_enhanced.json"
     if not sample_file.exists():
         pytest.skip(f"Sample file not found: {sample_file}")
 
@@ -562,67 +567,186 @@ def test_show_isis_interface_sample():
     isis = ni["isis"].get("default", {})
 
     interfaces = isis.get("interfaces", {})
-    assert "swp1" in interfaces and "loopback0" in interfaces
+    # All 4 interfaces present
+    assert set(interfaces.keys()) == {"swp1", "swp2", "swp3", "loopback0"}
 
+    # ---- swp1: full-featured physical interface ----
     swp1 = interfaces["swp1"]
+
+    # Interface state (flattened, hyphenated, prefixes stripped)
     assert swp1["interface-id"] == "swp1"
     assert swp1["enabled"] is True
-    assert swp1.get("network-type") == "POINT_TO_POINT"
+    assert swp1["circuit-type"] == "LEVEL_2"  # stripped: arcos-isis-types:LEVEL_2
+    assert swp1["network-type"] == "POINT_TO_POINT"
+    assert swp1["protocol-up"] is True
+    assert swp1["snpa"] == "f2:d2:c6:b5:9e:a6"
+    assert swp1["mtu"] == 8974
 
-    # Verify new interface-level fields
-    assert swp1.get("csnp-enabled") is True
-    assert swp1.get("mpls-ldp-sync-enabled") is False
+    # Augmented interface-level fields (hyphenated)
+    assert swp1["csnp-enabled"] is True
+    assert swp1["mpls-ldp-sync-enabled"] is False
 
-    # AFI-SAFI with fast-reroute
+    # Authentication (flattened from state{} and key.state{})
+    auth = swp1.get("authentication", {})
+    assert auth["hello-authentication"] is True
+    assert auth["auth-type"] == "SIMPLE_KEY"  # stripped: openconfig-keychain-types:SIMPLE_KEY
+    assert auth["crypto-algorithm"] == "MD5"  # stripped: arcos-openconfig-isis-augments:MD5
+
+    # AFI-SAFI (hyphenated key, stripped values)
     afi_safi = swp1.get("afi-safi", {})
-    assert "IPV4-UNICAST" in afi_safi
     assert "IPV6-UNICAST" in afi_safi
 
-    ipv4_af = afi_safi["IPV4-UNICAST"]
-    assert ipv4_af["afi-name"] == "IPV4"
-    assert ipv4_af["safi-name"] == "UNICAST"
-    assert ipv4_af["enabled"] is True
-    assert ipv4_af.get("ipv4-unnumbered") is False
-    assert ipv4_af.get("fast-reroute", {}).get("ti-lfa-sr-mpls-enabled") is True
-
     ipv6_af = afi_safi["IPV6-UNICAST"]
+    assert ipv6_af["afi-name"] == "IPV6"
+    assert ipv6_af["safi-name"] == "UNICAST"
+    assert ipv6_af["enabled"] is True
     assert ipv6_af.get("fast-reroute", {}).get("ti-lfa-srv6-enabled") is True
     assert ipv6_af.get("fast-reroute", {}).get("ti-lfa-sr-mpls-enabled") is False
+    assert ipv6_af.get("fast-reroute", {}).get("ip-enabled") is False
 
-    # Flexible-algorithm admin-groups
-    flex_algo = swp1.get("flexible-algorithm", {})
-    assert flex_algo.get("admin-groups") == ["blue", "green", "red"]
+    # Timers (flattened from state{}, lsp-pacing-interval forced to int)
+    timers = swp1.get("timers", {})
+    assert timers["csnp-interval"] == 10
+    assert timers["lsp-pacing-interval"] == 33
+    assert isinstance(timers["lsp-pacing-interval"], int)
+    assert timers["hello-interval"] == 10
+    assert timers["hello-multiplier"] == 3
 
+    # BFD (interface level)
+    bfd = swp1.get("bfd", {})
+    assert bfd.get("bfd-tlv") is False
+
+    # Circuit counters
+    cc = swp1.get("circuit-counters", {})
+    assert cc["adj-changes"] == 1
+    assert cc["adj-number"] == 1
+
+    # Levels (key as string "2")
     levels = swp1.get("levels", {})
     assert "2" in levels
     level2 = levels["2"]
-    assert level2.get("enabled") is True
+    assert level2["enabled"] is True
+    assert level2["priority"] == 64
+    assert level2["metric"] == 1000000
 
-    adjacencies = swp1.get("adjacencies", {})
-    assert "rtr1" in adjacencies
-    adj = adjacencies["rtr1"]
-    assert adj["neighbor-ipv4-address"] == "10.20.0.10"
+    # Level packet counters (hyphenated keys)
+    pkt = level2.get("packet-counters", {})
+    assert "iih" in pkt
+    assert pkt["iih"]["sent"] > 0
+
+    # Level hello-authentication (reuses _parse_authentication)
+    level_auth = level2.get("hello-authentication", {})
+    assert level_auth["hello-authentication"] is True
+    assert level_auth["auth-type"] == "SIMPLE_KEY"
+    assert level_auth["crypto-algorithm"] == "MD5"
+
+    # Adjacency (hyphenated keys)
+    adjacencies = level2.get("adjacencies", {})
+    assert "zr11" in adjacencies
+    adj = adjacencies["zr11"]
+    assert adj["system-id"] == "zr11"
     assert adj["adjacency-state"] == "UP"
     assert adj.get("usable") is True
+    assert adj["up-time"] == 27988988
 
-    # Verify adjacency state change tracking fields
-    assert adj["up-time"] == "0d 04:19:34"  # Human-readable format preferred
-    assert adj["num-state-changes"] == 2
-    assert adj["last-state-change-timestamp"] == "2025-12-03T06:30:00.123456+00:00"
-    assert adj["last-down-reason"] == "HOLD_TIME"
+    # Adjacency BFD with topologies (mt-id as int key)
+    adj_bfd = adj.get("bfd", {})
+    assert adj_bfd["bfd-required"] is False
+    topos = adj_bfd.get("topologies", {})
+    assert 0 in topos
+    assert 2 in topos
+    # mt-id 0: ipv4 fields
+    topo0 = topos[0]
+    assert topo0["mt-id"] == 0
+    assert topo0["ipv4-bfd-up"] is False
+    assert topo0["ipv4-up"] is False
+    assert topo0["usable"] is False
+    # mt-id 2: ipv6 fields
+    topo2 = topos[2]
+    assert topo2["mt-id"] == 2
+    assert topo2["ipv6-bfd-up"] is True
+    assert topo2["ipv6-up"] is True
+    assert topo2["usable"] is True
 
-    # Verify BFD parsing in adjacency
-    bfd = adj.get("bfd", {})
-    assert bfd.get("bfd-required") is False
-    bfd_topo = bfd.get("topologies", {}).get(0, {})
-    assert bfd_topo.get("mt-id") == 0
-    assert bfd_topo.get("ipv4-up") is True
-
-    # Verify dynamic delay measurement
+    # Dynamic delay measurement (hyphenated)
     ddm = adj.get("dynamic-delay-measurement", {})
-    assert ddm.get("enabled") is True
-    assert ddm.get("num-advertisements-sent") == 5
-    assert ddm.get("last-sampled-avg-delay-value") == 150
+    assert ddm["enabled"] is False
+    assert ddm["num-advertisements-sent"] == 0
+    assert ddm["last-sampled-avg-delay-value"] == 0
+
+    # ---- loopback0: special interface ----
+    lo0 = interfaces["loopback0"]
+    assert lo0["interface-id"] == "loopback0"
+    assert lo0["enabled"] is True
+    assert lo0["circuit-type"] == "LEVEL_1_2"  # stripped prefix
+    assert lo0["passive"] is False
+
+    # loopback0 has 2 levels (1 and 2)
+    lo_levels = lo0.get("levels", {})
+    assert "1" in lo_levels
+    assert "2" in lo_levels
+
+    # loopback0 has no adjacencies
+    for lvl_key in ("1", "2"):
+        assert "adjacencies" not in lo_levels[lvl_key]
+
+    # loopback0 should not have circuit-counters (all zeros, empty state{})
+    assert "circuit-counters" not in lo0
+
+
+def test_show_isis_interface_convention_compliance():
+    """Verify all 4 mandatory parser conventions are met in output."""
+
+    sample_file = SAMPLES_DIR / "isis_interface_enhanced.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    parser = ShowIsisInterface(device="dummy")
+    result = parser.cli(interface=None, output=output)
+
+    def check_keys(obj, path=""):
+        """Recursively verify all keys use hyphenation convention (no underscores in field names)."""
+        if isinstance(obj, dict):
+            for key, val in obj.items():
+                full_path = f"{path}.{key}" if path else key
+
+                # Conv 1: Check that keys use hyphens where appropriate (no underscores in field names)
+                # Exception: keys that are genuinely numeric or have no hyphens in original YANG models
+                # (like "enabled", "passive", "metric", "priority", "name", "net", etc.)
+                # should not have underscores for readability.
+                # Multi-word keys should use hyphens, not underscores.
+                # Examples: "interface-id" (correct), "interface_id" (incorrect)
+                if "_" in str(key):
+                    # All dictionary keys should use hyphens, not underscores
+                    assert False, (
+                        f"Underscored key at {full_path}: {key} (should use hyphens)"
+                    )
+
+                # Conv 2: no state/config wrapper keys
+                assert key not in ("state", "config"), (
+                    f"state/config wrapper at {full_path}"
+                )
+
+                # Conv 4: check value prefixes are stripped
+                if isinstance(val, str):
+                    for prefix in (
+                        "arcos-isis-types:",
+                        "openconfig-isis-types:",
+                        "oc-isis-types:",
+                        "arcos-openconfig-isis-augments:",
+                        "openconfig-keychain-types:",
+                        "oc-pol-types:",
+                    ):
+                        assert not val.startswith(prefix), (
+                            f"Prefixed value at {full_path}: {val}"
+                        )
+                check_keys(val, full_path)
+        elif isinstance(obj, list):
+            for i, item in enumerate(obj):
+                check_keys(item, f"{path}[{i}]")
+
+    check_keys(result)
 
 
 def test_show_isis_route_sample():
@@ -647,15 +771,15 @@ def test_show_isis_route_sample():
     assert "IPV4-UNICAST" in routes_afs and "IPV6-UNICAST" in routes_afs
 
     v4 = routes_afs["IPV4-UNICAST"]
-    assert v4["afi_name"] == "IPV4"
-    assert v4["safi_name"] == "UNICAST"
+    assert v4["afi-name"] == "IPV4"
+    assert v4["safi-name"] == "UNICAST"
 
     v4_routes = v4["routes"]
     assert "1.1.1.1/32" in v4_routes and "2.2.2.2/32" in v4_routes
 
     r1 = v4_routes["1.1.1.1/32"]
     assert r1["prefix"] == "1.1.1.1/32"
-    assert r1["best_level_number"] == 2
+    assert r1["best-level-number"] == 2
     lvl2_r1 = r1["levels"]["2"]
     assert lvl2_r1["metric"] == 10
     assert "connected" in lvl2_r1["flags"] and "best" in lvl2_r1["flags"]
@@ -664,11 +788,11 @@ def test_show_isis_route_sample():
     lvl2_r2 = r2["levels"]["2"]
     assert lvl2_r2["metric"] == 20
     assert "remote" in lvl2_r2["flags"] and "best" in lvl2_r2["flags"]
-    assert lvl2_r2["next_hop_id"] == "2147483649"
+    assert lvl2_r2["next-hop-id"] == "2147483649"
 
     v6 = routes_afs["IPV6-UNICAST"]
-    assert v6["afi_name"] == "IPV6"
-    assert v6["safi_name"] == "UNICAST"
+    assert v6["afi-name"] == "IPV6"
+    assert v6["safi-name"] == "UNICAST"
 
     v6_routes = v6["routes"]
     assert "1:1:1::1/128" in v6_routes and "2:2:2::2/128" in v6_routes
@@ -702,7 +826,7 @@ def test_show_isis_redistribute_route_sample():
     assert "isis" in ni
     isis = ni["isis"].get("default", {})
 
-    redist_afs = isis.get("redistribute_routes", {})
+    redist_afs = isis.get("redistribute-routes", {})
     assert "IPV6-UNICAST" in redist_afs and "IPV4-UNICAST" in redist_afs
 
     v6 = redist_afs["IPV6-UNICAST"]
@@ -712,10 +836,10 @@ def test_show_isis_redistribute_route_sample():
     r6_1 = routes_v6["1:1:1::1/128"]
     lvl2_r6_1 = r6_1["levels"]["2"]
     assert lvl2_r6_1["metric"] == 10
-    assert lvl2_r6_1["route_tag"] == 0
+    assert lvl2_r6_1["route-tag"] == 0
     assert "connected" in lvl2_r6_1["flags"]
-    assert lvl2_r6_1["source_identifier"] == "ISIS"
-    assert lvl2_r6_1["source_name"] == "default@default"
+    assert lvl2_r6_1["source-identifier"] == "ISIS"
+    assert lvl2_r6_1["source-name"] == "default@default"
 
     v4 = redist_afs["IPV4-UNICAST"]
     routes_v4 = v4["routes"]
@@ -724,10 +848,10 @@ def test_show_isis_redistribute_route_sample():
     r4_1 = routes_v4["1.1.1.1/32"]
     lvl2_r4_1 = r4_1["levels"]["2"]
     assert lvl2_r4_1["metric"] == 10
-    assert lvl2_r4_1["route_tag"] == 0
+    assert lvl2_r4_1["route-tag"] == 0
     assert "connected" in lvl2_r4_1["flags"]
-    assert lvl2_r4_1["source_identifier"] == "ISIS"
-    assert lvl2_r4_1["source_name"] == "default@default"
+    assert lvl2_r4_1["source-identifier"] == "ISIS"
+    assert lvl2_r4_1["source-name"] == "default@default"
 
 
 def test_show_isis_fast_reroute_minimal():
@@ -748,12 +872,12 @@ def test_show_isis_fast_reroute_minimal():
     assert "isis" in ni
     isis = ni["isis"].get("default", {})
 
-    frr = isis.get("fast_reroute", {})
+    frr = isis.get("fast-reroute", {})
     assert "IPV6-UNICAST" in frr
 
     af = frr["IPV6-UNICAST"]
-    assert af["afi_name"] == "IPV6"
-    assert af["safi_name"] == "UNICAST"
+    assert af["afi-name"] == "IPV6"
+    assert af["safi-name"] == "UNICAST"
 
     prefixes = af["prefixes"]
     # The sample contains multiple prefixes; validate a representative one.
@@ -761,9 +885,9 @@ def test_show_isis_fast_reroute_minimal():
     pfx = prefixes["2::2/128"]
     lvl2 = pfx["levels"]["2"]
     assert lvl2["metric"] == 20
-    assert lvl2["nexthop_interface"] == "swp4"
-    assert lvl2["nexthop_address"] == "::"
-    assert lvl2["origin_system_id"] == "rtr2.00"
+    assert lvl2["nexthop-interface"] == "swp4"
+    assert lvl2["nexthop-address"] == "::"
+    assert lvl2["origin-system-id"] == "rtr2.00"
 
 
 def test_show_isis_flex_algo_fast_reroute_minimal():
@@ -784,7 +908,7 @@ def test_show_isis_flex_algo_fast_reroute_minimal():
     assert "isis" in ni
     isis = ni["isis"].get("default", {})
 
-    flex = isis.get("flex_algo_fast_reroute", {})
+    flex = isis.get("flex-algo-fast-reroute", {})
     assert "IPV6-UNICAST" in flex
 
     af = flex["IPV6-UNICAST"]
@@ -798,8 +922,8 @@ def test_show_isis_flex_algo_fast_reroute_minimal():
     pfx = prefixes["2400:2020:32:2291::/64"]
     lvl2 = pfx["levels"]["2"]
     assert lvl2["metric"] == 20
-    assert lvl2["nexthop_interface"] == "swp4"
-    assert lvl2["nexthop_address"] == "::"
+    assert lvl2["nexthop-interface"] == "swp4"
+    assert lvl2["nexthop-address"] == "::"
 
 
 def test_show_isis_flex_algo_route_minimal():
@@ -820,7 +944,7 @@ def test_show_isis_flex_algo_route_minimal():
     assert "isis" in ni
     isis = ni["isis"].get("default", {})
 
-    flex = isis.get("flex_algo_routes", {})
+    flex = isis.get("flex-algo-routes", {})
     assert "IPV6-UNICAST" in flex
 
     af = flex["IPV6-UNICAST"]
@@ -833,7 +957,7 @@ def test_show_isis_flex_algo_route_minimal():
     routes = algo["routes"]
     assert "2400:2020:32:2291::/64" in routes
     r = routes["2400:2020:32:2291::/64"]
-    assert r["best_level_number"] == 2
+    assert r["best-level-number"] == 2
     lvl2 = r["levels"]["2"]
     assert lvl2["metric"] == 20
     assert "best" in lvl2["flags"]
@@ -858,68 +982,68 @@ def test_show_isis_mpls_label_db_sample():
     isis = ni["isis"].get("default", {})
 
     mpls = isis.get("mpls", {})
-    assert mpls.get("igp_ldp_sync_enabled") is False
+    assert mpls.get("igp-ldp-sync-enabled") is False
 
-    label_db = mpls.get("label_db", {})
+    label_db = mpls.get("label-db", {})
     state = label_db.get("state", {})
-    assert state.get("protocol_identifier") == "ISIS"
-    assert state.get("protocol_name") == "default"
-    assert state.get("configured_blocks") == 2
-    assert state.get("active_blocks") == 2
-    assert state.get("active_usages") == 2
+    assert state.get("protocol-identifier") == "ISIS"
+    assert state.get("protocol-name") == "default"
+    assert state.get("configured-blocks") == 2
+    assert state.get("active-blocks") == 2
+    assert state.get("active-usages") == 2
 
     # Statistics
     stats = label_db.get("statistics", {})
-    assert stats.get("label_space") == 20000
+    assert stats.get("label-space") == 20000
     assert stats.get("labels") == 6
     assert stats.get("allocs") == "7"
     assert stats.get("frees") == "5"
 
     # Usages
     usages = label_db.get("usages", {})
-    assert "ISIS_SRGB" in usages
-    assert "ISIS_SRLB" in usages
+    assert "ISIS-SRGB" in usages
+    assert "ISIS-SRLB" in usages
 
     # SRGB usage
-    srgb = usages["ISIS_SRGB"]
-    assert srgb["usage"] == "ISIS_SRGB"
-    assert srgb.get("blocks_count") == 1
-    assert srgb.get("opaque_flags") == "0c"
+    srgb = usages["ISIS-SRGB"]
+    assert srgb["usage"] == "ISIS-SRGB"
+    assert srgb.get("blocks-count") == 1
+    assert srgb.get("opaque-flags") == "0c"
 
     srgb_stats = srgb.get("statistics", {})
-    assert srgb_stats.get("label_space") == 10000
+    assert srgb_stats.get("label-space") == 10000
     assert srgb_stats.get("labels") == 3
 
     # SRGB blocks
     srgb_blocks = srgb.get("blocks", {})
     assert "10000" in srgb_blocks
     block_10000 = srgb_blocks["10000"]
-    assert block_10000["lower_bound"] == 10000
-    assert block_10000["upper_bound"] == 19999
-    assert block_10000.get("block_name") == "rb1"
+    assert block_10000["lower-bound"] == 10000
+    assert block_10000["upper-bound"] == 19999
+    assert block_10000.get("block-name") == "rb1"
 
     # SRGB labels
     srgb_labels = srgb.get("labels", {})
     assert "10111" in srgb_labels
     label_10111 = srgb_labels["10111"]
     assert label_10111["label"] == 10111
-    assert label_10111.get("block_name") == "rb1"
-    key_10111 = label_10111.get("label_key", {})
+    assert label_10111.get("block-name") == "rb1"
+    key_10111 = label_10111.get("label-key", {})
     assert key_10111.get("type") == "KEY_IPV4_PREFIX"
-    assert key_10111.get("ip_prefix") == "1.1.1.1/32"
+    assert key_10111.get("ip-prefix") == "1.1.1.1/32"
 
     # SRLB usage
-    srlb = usages["ISIS_SRLB"]
-    assert srlb["usage"] == "ISIS_SRLB"
+    srlb = usages["ISIS-SRLB"]
+    assert srlb["usage"] == "ISIS-SRLB"
 
     # SRLB labels (adjacency labels)
     srlb_labels = srlb.get("labels", {})
     assert "20012" in srlb_labels
     label_20012 = srlb_labels["20012"]
     assert label_20012["label"] == 20012
-    key_20012 = label_20012.get("label_key", {})
+    key_20012 = label_20012.get("label-key", {})
     assert key_20012.get("type") == "KEY_IPV4_ADJ"
-    assert key_20012.get("nh_address") == "10.20.0.20"
+    assert key_20012.get("nh-address") == "10.20.0.20"
     assert key_20012.get("ifindex") == "802"
 
 
@@ -950,7 +1074,7 @@ def test_show_isis_lsp_extended_is_neighbor():
     lsp = database["rtr1.00-00"]
 
     # Verify Extended IS Neighbor parsing
-    ext_is = lsp.get("extended_is_neighbor", {})
+    ext_is = lsp.get("extended-is-neighbor", {})
     assert len(ext_is) >= 2  # At least rtr2 and rtr3 neighbors
 
     # Check neighbor rtr2.00 with instance 802
@@ -958,25 +1082,25 @@ def test_show_isis_lsp_extended_is_neighbor():
     assert nbr_key in ext_is
     nbr = ext_is[nbr_key]
 
-    assert nbr["system_id"] == "rtr2.00"
-    assert nbr["instance_id"] == "802"
+    assert nbr["system-id"] == "rtr2.00"
+    assert nbr["instance-id"] == "802"
     assert nbr["metric"] == 10
-    assert nbr.get("two_way") is True
+    assert nbr.get("two-way") is True
 
     # Link ID
     assert "link_id" in nbr
-    assert nbr["link_id"]["local"] == 802
-    assert nbr["link_id"]["remote"] == 801
+    assert nbr["link-id"]["local"] == 802
+    assert nbr["link-id"]["remote"] == 801
 
     # IPv4 addresses
-    assert nbr.get("ipv4_interface_address") == ["10.20.0.10"]
-    assert nbr.get("ipv4_neighbor_address") == ["10.20.0.20"]
+    assert nbr.get("ipv4-interface-address") == ["10.20.0.10"]
+    assert nbr.get("ipv4-neighbor-address") == ["10.20.0.20"]
 
     # IPv6 address
-    assert nbr.get("ipv6_interface_address") == ["10:20::10"]
+    assert nbr.get("ipv6-interface-address") == ["10:20::10"]
 
     # Adjacency SID (SR-MPLS)
-    adj_sids = nbr.get("adjacency_sids", [])
+    adj_sids = nbr.get("adjacency-sids", [])
     assert len(adj_sids) >= 1
     adj_sid = adj_sids[0]
     assert adj_sid["sid"] == 20012
@@ -988,10 +1112,10 @@ def test_show_isis_lsp_extended_is_neighbor():
     asla = nbr.get("asla", {})
     assert asla.get("application") == "flexible-algorithm"
     assert "admin_groups" in asla
-    assert "red" in asla["admin_groups"]
-    assert asla.get("te_metric") == 10
-    assert asla.get("min_delay") == 5
-    assert asla.get("max_delay") == 5
+    assert "red" in asla["admin-groups"]
+    assert asla.get("te-metric") == 10
+    assert asla.get("min-delay") == 5
+    assert asla.get("max-delay") == 5
 
 
 def test_show_isis_lsp_srv6_end_x_sid():
@@ -1017,7 +1141,7 @@ def test_show_isis_lsp_srv6_end_x_sid():
     lsp = database["rtr1.00-00"]
 
     # Verify Extended IS Neighbor parsing
-    ext_is = lsp.get("extended_is_neighbor", {})
+    ext_is = lsp.get("extended-is-neighbor", {})
     assert len(ext_is) >= 1
 
     # Check neighbor rtr2.00:802
@@ -1026,7 +1150,7 @@ def test_show_isis_lsp_srv6_end_x_sid():
     nbr = ext_is[nbr_key]
 
     # Adjacency SID should be present
-    adj_sids = nbr.get("adjacency_sids", [])
+    adj_sids = nbr.get("adjacency-sids", [])
     assert len(adj_sids) >= 1
     assert adj_sids[0]["sid"] == 20012
 
@@ -1054,7 +1178,7 @@ def test_show_isis_lsp_mt_is_neighbor():
     lsp = database["rtr1.00-00"]
 
     # Verify MT IS Neighbor parsing
-    mt_is = lsp.get("mt_is_neighbor", {})
+    mt_is = lsp.get("mt-is-neighbor", {})
     assert len(mt_is) >= 1
 
     # Check neighbor rtr2.00 with mt-id 2, instance 802
@@ -1062,37 +1186,37 @@ def test_show_isis_lsp_mt_is_neighbor():
     assert nbr_key in mt_is
     nbr = mt_is[nbr_key]
 
-    assert nbr["system_id"] == "rtr2.00"
-    assert nbr["mt_id"] == 2
-    assert nbr["instance_id"] == "802"
+    assert nbr["system-id"] == "rtr2.00"
+    assert nbr["mt-id"] == 2
+    assert nbr["instance-id"] == "802"
     assert nbr["metric"] == 10
-    assert nbr.get("two_way") is True
+    assert nbr.get("two-way") is True
 
     # Link ID
     assert "link_id" in nbr
-    assert nbr["link_id"]["local"] == 802
+    assert nbr["link-id"]["local"] == 802
 
     # IPv4/IPv6 addresses
-    assert nbr.get("ipv4_interface_address") == ["10.20.0.10"]
-    assert nbr.get("ipv6_interface_address") == ["10:20::10"]
+    assert nbr.get("ipv4-interface-address") == ["10.20.0.10"]
+    assert nbr.get("ipv6-interface-address") == ["10:20::10"]
 
     # ASLA (FlexAlgo attributes)
     asla = nbr.get("asla", {})
     assert asla.get("application") == "flexible-algorithm"
     assert "admin_groups" in asla
-    assert asla.get("min_delay") == 109  # Different delay value in MT_ISN
+    assert asla.get("min-delay") == 109  # Different delay value in MT_ISN
 
     # SRv6 End.X SID (should be present in MT_ISN)
-    end_x_sids = nbr.get("end_x_sids", [])
+    end_x_sids = nbr.get("end-x-sids", [])
     assert len(end_x_sids) >= 1
     end_x = end_x_sids[0]
     assert end_x["sid"] == "2400:2020:0:1191:8004::"
     assert end_x.get("algorithm") == "SPF"
-    assert end_x.get("endpoint_func") == "END_X_PSP_USD"
+    assert end_x.get("endpoint-func") == "END_X_PSP_USD"
     assert end_x.get("weight") == 0
 
     # SID structure
-    sid_struct = end_x.get("sid_structure", {})
+    sid_struct = end_x.get("sid-structure", {})
     assert sid_struct.get("lb") == 40
     assert sid_struct.get("ln") == 24
     assert sid_struct.get("fun") == 16
@@ -1122,19 +1246,19 @@ def test_show_isis_lsp_prefix_sid():
     lsp = database["rtr1.00-00"]
 
     # Verify Extended IPv4 Reachability
-    ext4 = lsp.get("extended_ipv4_reachability", {})
+    ext4 = lsp.get("extended-ipv4-reachability", {})
     assert "1.1.1.1/32" in ext4
 
     pfx = ext4["1.1.1.1/32"]
-    assert pfx["ip_prefix"] == "1.1.1.1"
-    assert pfx["prefix_len"] == 32
+    assert pfx["ip-prefix"] == "1.1.1.1"
+    assert pfx["prefix-len"] == 32
     assert pfx["metric"] == 10
 
     # Prefix Tag
     assert pfx.get("tag") == [1]
 
     # Prefix SID (SR-MPLS)
-    prefix_sids = pfx.get("prefix_sids", [])
+    prefix_sids = pfx.get("prefix-sids", [])
     assert len(prefix_sids) >= 1
 
     psid = prefix_sids[0]
@@ -1173,20 +1297,20 @@ def test_show_isis_lsp_router_capability():
     assert router_cap
 
     # Basic info
-    assert router_cap.get("instance_number") == 1
-    assert router_cap.get("router_id") == "1.1.1.1"
+    assert router_cap.get("instance-number") == 1
+    assert router_cap.get("router-id") == "1.1.1.1"
 
     # IPv6 TE Router ID
-    assert router_cap.get("ipv6_te_router_id") == "1::1"
+    assert router_cap.get("ipv6-te-router-id") == "1::1"
 
     # SR Algorithms
-    sr_algos = router_cap.get("sr_algorithms", [])
+    sr_algos = router_cap.get("sr-algorithms", [])
     assert "SPF" in sr_algos
     assert 131 in sr_algos
     assert 132 in sr_algos
 
     # SR Capability (SRGB)
-    sr_cap = router_cap.get("sr_capability", {})
+    sr_cap = router_cap.get("sr-capability", {})
     assert "IPV4_MPLS" in sr_cap.get("flags", [])
     assert "IPV6_MPLS" in sr_cap.get("flags", [])
     assert sr_cap.get("range") == 10000
@@ -1198,19 +1322,19 @@ def test_show_isis_lsp_router_capability():
     assert srlb.get("label") == 20000
 
     # Node MSD
-    node_msd = router_cap.get("node_msd", {})
-    assert node_msd.get("srv6_max_segments_left") == 10
-    assert node_msd.get("srv6_max_end_pop") == 5
-    assert node_msd.get("srv6_max_h_encaps") == 3
-    assert node_msd.get("srv6_max_end_d") == 10
+    node_msd = router_cap.get("node-msd", {})
+    assert node_msd.get("srv6-max-segments-left") == 10
+    assert node_msd.get("srv6-max-end-pop") == 5
+    assert node_msd.get("srv6-max-h-encaps") == 3
+    assert node_msd.get("srv6-max-end-d") == 10
 
     # Flex-Algo Definitions
-    fads = router_cap.get("flex_algo_definitions", {})
+    fads = router_cap.get("flex-algo-definitions", {})
     assert "131" in fads
     assert fads["131"].get("priority") == 128
-    assert fads["131"].get("metric_type") == "LINK_DELAY"
+    assert fads["131"].get("metric-type") == "LINK_DELAY"
     assert "132" in fads
-    assert fads["132"].get("metric_type") == "IGP_METRIC"
+    assert fads["132"].get("metric-type") == "IGP_METRIC"
 
 
 def test_show_isis_lsp_srv6_locator():
@@ -1244,19 +1368,19 @@ def test_show_isis_lsp_srv6_locator():
     spf_loc = next((loc for loc in locators if loc.get("algorithm") == "SPF"), None)
     assert spf_loc is not None
     assert spf_loc["locator"] == "2400:2020:0:1191::/64"
-    assert spf_loc["mt_id"] == 2
+    assert spf_loc["mt-id"] == 2
     assert spf_loc["metric"] == 10
 
     # Verify End SID parsing
-    end_sids = spf_loc.get("end_sids", [])
+    end_sids = spf_loc.get("end-sids", [])
     assert len(end_sids) >= 1
 
     end_sid = end_sids[0]
     assert end_sid["sid"] == "2400:2020:0:1191:1::"
-    assert end_sid.get("endpoint_func") == "END_PSP_USD"
+    assert end_sid.get("endpoint-func") == "END_PSP_USD"
 
     # Verify SID structure
-    sid_struct = end_sid.get("sid_structure", {})
+    sid_struct = end_sid.get("sid-structure", {})
     assert sid_struct.get("lb") == 40
     assert sid_struct.get("ln") == 24
     assert sid_struct.get("fun") == 16

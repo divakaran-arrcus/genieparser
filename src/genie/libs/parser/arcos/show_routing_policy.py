@@ -37,35 +37,35 @@ class ShowRoutingPolicyDefinedSetsSchema(MetaParser):
     ``routing_policy.defined_sets`` dictionary with the following shape::
 
         {
-          "routing_policy": {
-            "defined_sets": {
-              "prefix_sets": {
+          "routing-policy": {
+            "defined-sets": {
+              "prefix-sets": {
                 <name>: {
                   "name": <str>,
                   "prefixes": [
-                    {"ip_prefix": <str>, "masklength_range": <str>},
+                    {"ip-prefix": <str>, "masklength-range": <str>},
                     ...
                   ],
-                  "is_martian": <bool>,   # optional
+                  "is-martian": <bool>,   # optional
                 },
                 ...
               },
-              "string_sets": {
+              "string-sets": {
                 <name>: {
                   "name": <str>,
                   "strings": [
-                    {"value": <str>, "match_type": <str?>},
+                    {"value": <str>, "match-type": <str?>},
                     ...
                   ],
                 },
               },
-              "tag_sets": {
+              "tag-sets": {
                 <name>: {
                   "name": <str>,
                   "tags": [<int>, ...],
                 },
               },
-              "next_hop_sets": {
+              "next-hop-sets": {
                 <name>: {
                   "name": <str>,
                   "addresses": [<str>, ...],
@@ -77,18 +77,18 @@ class ShowRoutingPolicyDefinedSetsSchema(MetaParser):
     """
 
     schema = {
-        "routing_policy": {
-            "defined_sets": {
-                Optional("prefix_sets"): {
+        "routing-policy": {
+            "defined-sets": {
+                Optional("prefix-sets"): {
                     Any(): {
                         "name": str,
                         # Loosen validation: just require a list of prefixes; the
                         # parser already normalizes element structure.
                         "prefixes": list,
-                        Optional("is_martian"): bool,
+                        Optional("is-martian"): bool,
                     }
                 },
-                Optional("string_sets"): {
+                Optional("string-sets"): {
                     Any(): {
                         "name": str,
                         # Require only that strings is a list; individual elements
@@ -96,14 +96,14 @@ class ShowRoutingPolicyDefinedSetsSchema(MetaParser):
                         "strings": list,
                     }
                 },
-                Optional("tag_sets"): {
+                Optional("tag-sets"): {
                     Any(): {
                         "name": str,
                         # Likewise, just enforce list type here.
                         "tags": list,
                     }
                 },
-                Optional("next_hop_sets"): {
+                Optional("next-hop-sets"): {
                     Any(): {
                         "name": str,
                         # And for next-hop-sets, only require a list of addresses.
@@ -137,9 +137,9 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
 
         logger.debug("Parsing output: %s", output)
 
-        ret: TypeDict[str, TypeAny] = {"routing_policy": {"defined_sets": {}}}
-        defined_sets_out: TypeDict[str, TypeAny] = ret["routing_policy"][
-            "defined_sets"
+        ret: TypeDict[str, TypeAny] = {"routing-policy": {"defined-sets": {}}}
+        defined_sets_out: TypeDict[str, TypeAny] = ret["routing-policy"][
+            "defined-sets"
         ]
 
         parsed_json = load_json_robust(output)
@@ -168,7 +168,7 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
                 if ip_prefix is None or mask_range is None:
                     continue
                 prefixes.append(
-                    {"ip_prefix": str(ip_prefix), "masklength_range": str(mask_range)}
+                    {"ip-prefix": str(ip_prefix), "masklength-range": str(mask_range)}
                 )
 
             if not prefixes:
@@ -176,12 +176,12 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
 
             entry: TypeDict[str, TypeAny] = {"name": str(name), "prefixes": prefixes}
             if name in {"__IPV4_MARTIAN_PREFIX_SET__", "__IPV6_MARTIAN_PREFIX_SET__"}:
-                entry["is_martian"] = True
+                entry["is-martian"] = True
 
             prefix_sets[str(name)] = entry
 
         if prefix_sets:
-            defined_sets_out["prefix_sets"] = prefix_sets
+            defined_sets_out["prefix-sets"] = prefix_sets
 
         # --------------------------------------------------------------
         # String-sets (ArcOS augments)
@@ -205,7 +205,7 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
                 entry: TypeDict[str, TypeAny] = {"value": str(value)}
                 match_type = node.get("type")
                 if match_type is not None:
-                    entry["match_type"] = str(match_type)
+                    entry["match-type"] = str(match_type)
                 strings.append(entry)
 
             if not strings:
@@ -214,7 +214,7 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
             string_sets[str(name)] = {"name": str(name), "strings": strings}
 
         if string_sets:
-            defined_sets_out["string_sets"] = string_sets
+            defined_sets_out["string-sets"] = string_sets
 
         # --------------------------------------------------------------
         # Tag-sets
@@ -246,7 +246,7 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
             tag_sets[str(name)] = {"name": str(name), "tags": tags}
 
         if tag_sets:
-            defined_sets_out["tag_sets"] = tag_sets
+            defined_sets_out["tag-sets"] = tag_sets
 
         # --------------------------------------------------------------
         # Next-hop-sets (ArcOS augments)
@@ -272,50 +272,50 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
             next_hop_sets[str(name)] = {"name": str(name), "addresses": addresses}
 
         if next_hop_sets:
-            defined_sets_out["next_hop_sets"] = next_hop_sets
+            defined_sets_out["next-hop-sets"] = next_hop_sets
 
         return ret
 
 
 class ShowRoutingPolicyPolicyDefinitionSchema(MetaParser):
     schema = {
-        "routing_policy": {
-            Optional("policy_definitions"): {
+        "routing-policy": {
+            Optional("policy-definitions"): {
                 Any(): {
                     "name": str,
                     "statements": {
                         Any(): {
                             "name": str,
-                            Optional("auto_seq_num"): int,
+                            Optional("auto-seq-num"): int,
                             Optional("conditions"): {
-                                Optional("match_prefix_set"): {
-                                    Optional("prefix_set"): str,
-                                    "match_set_options": str,
+                                Optional("match-prefix-set"): {
+                                    Optional("prefix-set"): str,
+                                    "match-set-options": str,
                                 },
-                                Optional("match_next_hop_set"): dict,
-                                Optional("match_tag_set"): dict,
-                                Optional("match_interface"): dict,
-                                Optional("install_protocol_eq"): str,
-                                Optional("call_policy"): dict,
-                                Optional("call_policy_expression"): str,
-                                Optional("bgp_conditions"): dict,
-                                Optional("igp_conditions"): dict,
+                                Optional("match-next-hop-set"): dict,
+                                Optional("match-tag-set"): dict,
+                                Optional("match-interface"): dict,
+                                Optional("install-protocol-eq"): str,
+                                Optional("call-policy"): dict,
+                                Optional("call-policy-expression"): str,
+                                Optional("bgp-conditions"): dict,
+                                Optional("igp-conditions"): dict,
                             },
                             Optional("actions"): {
-                                Optional("accept_route"): bool,
-                                Optional("reject_route"): bool,
-                                Optional("next_policy"): bool,
-                                Optional("igp_actions"): {
-                                    Optional("set_tag"): int,
-                                    Optional("isis_actions"): {
-                                        Optional("set_level"): int,
+                                Optional("accept-route"): bool,
+                                Optional("reject-route"): bool,
+                                Optional("next-policy"): bool,
+                                Optional("igp-actions"): {
+                                    Optional("set-tag"): int,
+                                    Optional("isis-actions"): {
+                                        Optional("set-level"): int,
                                     },
                                 },
-                                Optional("bgp_actions"): dict,
-                                Optional("ospf_actions"): {
-                                    Optional("set_metric"): int,
+                                Optional("bgp-actions"): dict,
+                                Optional("ospf-actions"): {
+                                    Optional("set-metric"): int,
                                 },
-                                Optional("srv6_oam_actions"): dict,
+                                Optional("srv6-oam-actions"): dict,
                             },
                         }
                     },
@@ -336,8 +336,8 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
 
         logger.debug("Parsing output: %s", output)
 
-        ret: TypeDict[str, TypeAny] = {"routing_policy": {"policy_definitions": {}}}
-        policy_definitions: TypeDict[str, TypeAny] = ret["routing_policy"]["policy_definitions"]
+        ret: TypeDict[str, TypeAny] = {"routing-policy": {"policy-definitions": {}}}
+        policy_definitions: TypeDict[str, TypeAny] = ret["routing-policy"]["policy-definitions"]
 
         parsed_json = load_json_robust(output)
         data = parsed_json.get("data", {})
@@ -368,7 +368,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
                 auto_seq = state_block.get("auto-seq-num")
                 if auto_seq is not None:
                     try:
-                        stmt_entry["auto_seq_num"] = int(auto_seq)
+                        stmt_entry["auto-seq-num"] = int(auto_seq)
                     except Exception:
                         pass
 
@@ -388,7 +388,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
                 policy_definitions[policy_name] = policy_entry
 
         if not policy_definitions:
-            ret["routing_policy"].pop("policy_definitions", None)
+            ret["routing-policy"].pop("policy-definitions", None)
 
         return ret
 
@@ -405,12 +405,12 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         if prefix_set is not None or match_set_options is not None:
             entry: TypeDict[str, TypeAny] = {}
             if prefix_set is not None:
-                entry["prefix_set"] = str(prefix_set)
+                entry["prefix-set"] = str(prefix_set)
             if match_set_options is not None:
-                entry["match_set_options"] = str(match_set_options)
+                entry["match-set-options"] = str(match_set_options)
             else:
-                entry["match_set_options"] = "ANY"
-            conditions["match_prefix_set"] = entry
+                entry["match-set-options"] = "ANY"
+            conditions["match-prefix-set"] = entry
 
         # Match tag-set
         match_tag_set_raw = conditions_raw.get("match-tag-set") or {}
@@ -419,7 +419,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
 
         mts_options = source.get("match-set-options")
         if mts_options is not None:
-            conditions["match_tag_set"] = {"match_set_options": str(mts_options)}
+            conditions["match-tag-set"] = {"match-set-options": str(mts_options)}
 
         # Match next-hop-set (ArcOS augments use a namespaced key)
         nh_key_ns = "arcos-openconfig-routing-policy-augments:match-next-hop-set"
@@ -429,7 +429,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
 
         mnh_options = source.get("match-set-options")
         if mnh_options is not None:
-            conditions["match_next_hop_set"] = {"match_set_options": str(mnh_options)}
+            conditions["match-next-hop-set"] = {"match-set-options": str(mnh_options)}
 
         return conditions
 
@@ -440,16 +440,16 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         cfg = node or {}
 
         if "accept-route" in cfg:
-            actions["accept_route"] = bool(cfg.get("accept-route"))
+            actions["accept-route"] = bool(cfg.get("accept-route"))
         if "reject-route" in cfg:
-            actions["reject_route"] = bool(cfg.get("reject-route"))
+            actions["reject-route"] = bool(cfg.get("reject-route"))
 
         # ArcOS augments: next-policy may appear under a namespaced key
         next_policy_ns_key = "arcos-openconfig-routing-policy-augments:next-policy"
         if next_policy_ns_key in cfg:
-            actions["next_policy"] = True
+            actions["next-policy"] = True
         elif "next-policy" in cfg:
-            actions["next_policy"] = bool(cfg.get("next-policy"))
+            actions["next-policy"] = bool(cfg.get("next-policy"))
 
         igp_raw = actions_raw.get("igp-actions") or {}
         igp_actions: TypeDict[str, TypeAny] = {}
@@ -461,7 +461,7 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         set_tag = igp_cfg.get("set-tag")
         if set_tag is not None:
             try:
-                igp_actions["set_tag"] = int(set_tag)
+                igp_actions["set-tag"] = int(set_tag)
             except Exception:
                 pass
 
@@ -472,14 +472,14 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         isis_actions: TypeDict[str, TypeAny] = {}
         if set_level is not None:
             try:
-                isis_actions["set_level"] = int(set_level)
+                isis_actions["set-level"] = int(set_level)
             except Exception:
                 pass
         if isis_actions:
-            igp_actions["isis_actions"] = isis_actions
+            igp_actions["isis-actions"] = isis_actions
 
         if igp_actions:
-            actions["igp_actions"] = igp_actions
+            actions["igp-actions"] = igp_actions
 
         ospf_raw = actions_raw.get("arcos-ospf-policy:ospf-actions") or {}
         ospf_actions: TypeDict[str, TypeAny] = {}
@@ -494,12 +494,12 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         metric = metric_cfg.get("metric")
         if metric is not None:
             try:
-                ospf_actions["set_metric"] = int(metric)
+                ospf_actions["set-metric"] = int(metric)
             except Exception:
                 pass
 
         if ospf_actions:
-            actions["ospf_actions"] = ospf_actions
+            actions["ospf-actions"] = ospf_actions
 
         return actions
 
@@ -512,13 +512,13 @@ class ShowRoutingPolicyConfigSchema(MetaParser):
     """
 
     schema = {
-        "routing_policy": {
-            Optional("defined_sets"): ShowRoutingPolicyDefinedSetsSchema.schema["routing_policy"][
-                "defined_sets"
+        "routing-policy": {
+            Optional("defined-sets"): ShowRoutingPolicyDefinedSetsSchema.schema["routing-policy"][
+                "defined-sets"
             ],
-            Optional("policy_definitions"): ShowRoutingPolicyPolicyDefinitionSchema.schema[
-                "routing_policy"
-            ]["policy_definitions"],
+            Optional("policy-definitions"): ShowRoutingPolicyPolicyDefinitionSchema.schema[
+                "routing-policy"
+            ]["policy-definitions"],
         }
     }
 
@@ -534,22 +534,22 @@ class ShowRoutingPolicyConfig(ShowRoutingPolicyConfigSchema):
 
         logger.debug("Parsing output: %s", output)
 
-        ret: TypeDict[str, TypeAny] = {"routing_policy": {}}
+        ret: TypeDict[str, TypeAny] = {"routing-policy": {}}
 
         # Reuse the existing parsers on the same JSON output so that
         # running-config uses the exact same normalization logic.
         ds_parser = ShowRoutingPolicyDefinedSets(device=self.device)
         ds_result = ds_parser.cli(output=output)
-        ds_root = ds_result.get("routing_policy", {})
-        defined_sets = ds_root.get("defined_sets") or {}
+        ds_root = ds_result.get("routing-policy", {})
+        defined_sets = ds_root.get("defined-sets") or {}
         if defined_sets:
-            ret["routing_policy"]["defined_sets"] = defined_sets
+            ret["routing-policy"]["defined-sets"] = defined_sets
 
         pd_parser = ShowRoutingPolicyPolicyDefinition(device=self.device)
         pd_result = pd_parser.cli(output=output)
-        pd_root = pd_result.get("routing_policy", {})
-        policy_definitions = pd_root.get("policy_definitions") or {}
+        pd_root = pd_result.get("routing-policy", {})
+        policy_definitions = pd_root.get("policy-definitions") or {}
         if policy_definitions:
-            ret["routing_policy"]["policy_definitions"] = policy_definitions
+            ret["routing-policy"]["policy-definitions"] = policy_definitions
 
         return ret

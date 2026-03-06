@@ -59,33 +59,33 @@ class ShowStaticRoutingConfigSchema(MetaParser):
     """
 
     schema = {
-        "network_instances": {
+        "network-instances": {
             Any(): {  # network-instance name
                 "protocols": {
                     Any(): {  # protocol instance name
                         "identifier": str,
                         "name": str,
-                        Optional("static_routes"): {
+                        Optional("static-routes"): {
                             Any(): {  # static route prefix
                                 "prefix": str,
                                 Optional("description"): str,
-                                Optional("set_tag"): Or(int, str),
+                                Optional("set-tag"): Or(int, str),
                                 Optional("preference"): int,
-                                Optional("local_label_index"): int,
+                                Optional("local-label-index"): int,
                                 Optional("bfd"): {
                                     Optional("profile"): str,
                                 },
-                                Optional("next_hops"): {
+                                Optional("next-hops"): {
                                     Any(): {  # next-hop index
                                         "index": str,
-                                        Optional("next_hop"): str,
+                                        Optional("next-hop"): str,
                                         Optional("interface"): str,
                                         Optional("subinterface"): int,
                                         Optional("metric"): int,
-                                        Optional("next_network_instance"): str,
-                                        Optional("remote_label_stack"): list,
+                                        Optional("next-network-instance"): str,
+                                        Optional("remote-label-stack"): list,
                                         Optional("bfd"): {
-                                            Optional("destination_address"): Or(
+                                            Optional("destination-address"): Or(
                                                 str,
                                                 {
                                                     Optional("ipv4"): str,
@@ -130,7 +130,7 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
+        ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -160,7 +160,7 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                     continue
 
                 # Initialize network instance and protocol entry
-                ni_dict = ret_dict["network_instances"].setdefault(ni_name, {})
+                ni_dict = ret_dict["network-instances"].setdefault(ni_name, {})
                 protocols_dict = ni_dict.setdefault("protocols", {})
                 protocol_dict = protocols_dict.setdefault(protocol_name, {})
 
@@ -191,9 +191,9 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
 
                         tag_key = "arcos-openconfig-local-routing-augments:set-tag"
                         if tag_key in config:
-                            route_entry["set_tag"] = config[tag_key]
+                            route_entry["set-tag"] = config[tag_key]
                         elif "set-tag" in config:
-                            route_entry["set_tag"] = config["set-tag"]
+                            route_entry["set-tag"] = config["set-tag"]
 
                         pref_key = "arcos-openconfig-local-routing-augments:preference"
                         if pref_key in config:
@@ -203,9 +203,9 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
 
                         label_key = "arcos-openconfig-local-routing-augments:local-label-index"
                         if label_key in config:
-                            route_entry["local_label_index"] = config[label_key]
+                            route_entry["local-label-index"] = config[label_key]
                         elif "local-label-index" in config:
-                            route_entry["local_label_index"] = config["local-label-index"]
+                            route_entry["local-label-index"] = config["local-label-index"]
 
                         # Parse BFD configuration at route level (handle ARCOS augmented)
                         bfd_key = "arcos-openconfig-local-routing-augments:bfd"
@@ -233,7 +233,7 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
 
                                 # Next-hop address or DROP
                                 if "next-hop" in nh_config:
-                                    nh_entry["next_hop"] = nh_config["next-hop"]
+                                    nh_entry["next-hop"] = nh_config["next-hop"]
 
                                 # Interface configuration
                                 interface_ref = nh.get("interface-ref", {})
@@ -254,9 +254,9 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                                 # Next network instance (for VRF leaking, handle ARCOS augmented)
                                 ni_key = "arcos-openconfig-local-routing-augments:next-network-instance-name"
                                 if ni_key in nh_config:
-                                    nh_entry["next_network_instance"] = nh_config[ni_key]
+                                    nh_entry["next-network-instance"] = nh_config[ni_key]
                                 elif "next-network-instance" in nh_config:
-                                    nh_entry["next_network_instance"] = nh_config[
+                                    nh_entry["next-network-instance"] = nh_config[
                                         "next-network-instance"
                                     ]
 
@@ -265,15 +265,15 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                                 if rls_key in nh_config:
                                     labels = nh_config[rls_key]
                                     if isinstance(labels, list):
-                                        nh_entry["remote_label_stack"] = labels
+                                        nh_entry["remote-label-stack"] = labels
                                     else:
-                                        nh_entry["remote_label_stack"] = [labels]
+                                        nh_entry["remote-label-stack"] = [labels]
                                 elif "remote-label-stack" in nh_config:
                                     labels = nh_config["remote-label-stack"]
                                     if isinstance(labels, list):
-                                        nh_entry["remote_label_stack"] = labels
+                                        nh_entry["remote-label-stack"] = labels
                                     else:
-                                        nh_entry["remote_label_stack"] = [labels]
+                                        nh_entry["remote-label-stack"] = [labels]
 
                                 # BFD configuration at next-hop level (handle ARCOS augmented)
                                 bfd_nh_key = "arcos-openconfig-local-routing-augments:bfd"
@@ -282,7 +282,7 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                                     if "destination-address" in bfd_cfg:
                                         dest_addr = bfd_cfg["destination-address"]
                                         # ARCOS uses simple string for destination address
-                                        nh_entry["bfd"] = {"destination_address": dest_addr}
+                                        nh_entry["bfd"] = {"destination-address": dest_addr}
                                 else:
                                     nh_bfd = nh.get("bfd", {})
                                     if nh_bfd:
@@ -297,7 +297,7 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                                             if "ipv6" in dest_addr:
                                                 dest_entry["ipv6"] = dest_addr["ipv6"]
                                             if dest_entry:
-                                                bfd_entry["destination_address"] = dest_entry
+                                                bfd_entry["destination-address"] = dest_entry
 
                                         if bfd_entry:
                                             nh_entry["bfd"] = bfd_entry
@@ -305,11 +305,11 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                                 next_hops_dict[nh_index] = nh_entry
 
                             if next_hops_dict:
-                                route_entry["next_hops"] = next_hops_dict
+                                route_entry["next-hops"] = next_hops_dict
 
                         static_routes_dict[prefix] = route_entry
 
                     if static_routes_dict:
-                        protocol_dict["static_routes"] = static_routes_dict
+                        protocol_dict["static-routes"] = static_routes_dict
 
         return ret_dict

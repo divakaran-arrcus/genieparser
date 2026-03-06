@@ -67,7 +67,7 @@ class TestShowMplsReservedLabelBlockConfig:
             validate_input("invalid;command", "network_instance")
 
         with pytest.raises(ValueError):
-            validate_input("rb1;drop", "local_id")
+            validate_input("rb1;drop", "local-id")
 
     def test_valid_parameters_accepted(self):
         """Test that valid parameters are accepted."""
