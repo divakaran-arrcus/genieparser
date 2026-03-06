@@ -48,20 +48,20 @@ class ShowSrmsMappingsConfigSchema(MetaParser):
     """
 
     schema = {
-        "network_instances": {
+        "network-instances": {
             Any(): {  # network-instance name
                 Optional("srms"): {
                     Optional("mappings"): {
                         Any(): {  # mapping local-id
-                            "local_id": str,
-                            Optional("ipv4_prefixes"): [
+                            "local-id": str,
+                            Optional("ipv4-prefixes"): [
                                 {
                                     "prefix": str,
                                     Optional("sid"): int,
                                     Optional("range"): int,
                                 }
                             ],
-                            Optional("ipv6_prefixes"): [
+                            Optional("ipv6-prefixes"): [
                                 {
                                     "prefix": str,
                                     Optional("sid"): int,
@@ -95,7 +95,7 @@ class ShowSrmsMappingsConfig(ShowSrmsMappingsConfigSchema):
             output = self.device.execute(f"{cmd} | display json | nomore")
 
         log.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {"network_instances": {}}
+        ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
 
         try:
             parsed_json = load_json_robust(output)
@@ -138,7 +138,7 @@ class ShowSrmsMappingsConfig(ShowSrmsMappingsConfigSchema):
                 if not local_id:
                     continue
 
-                mapping_entry: Dict[str, TypeAny] = {"local_id": local_id}
+                mapping_entry: Dict[str, TypeAny] = {"local-id": local_id}
 
                 # IPv4 prefixes
                 ipv4_root = mapping.get("ipv4", {})
@@ -157,7 +157,7 @@ class ShowSrmsMappingsConfig(ShowSrmsMappingsConfigSchema):
                             p_entry["range"] = cfg["range"]
                         ipv4_list.append(p_entry)
                     if ipv4_list:
-                        mapping_entry["ipv4_prefixes"] = ipv4_list
+                        mapping_entry["ipv4-prefixes"] = ipv4_list
 
                 # IPv6 prefixes
                 ipv6_root = mapping.get("ipv6", {})
@@ -176,12 +176,12 @@ class ShowSrmsMappingsConfig(ShowSrmsMappingsConfigSchema):
                             p_entry["range"] = cfg["range"]
                         ipv6_list.append(p_entry)
                     if ipv6_list:
-                        mapping_entry["ipv6_prefixes"] = ipv6_list
+                        mapping_entry["ipv6-prefixes"] = ipv6_list
 
                 mappings_dict[local_id] = mapping_entry
 
             if mappings_dict:
-                ni_dict = ret_dict["network_instances"].setdefault(inst_name, {})
+                ni_dict = ret_dict["network-instances"].setdefault(inst_name, {})
                 ni_dict["srms"] = {"mappings": mappings_dict}
 
         return ret_dict

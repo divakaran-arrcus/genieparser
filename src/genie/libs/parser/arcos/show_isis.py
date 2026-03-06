@@ -532,11 +532,11 @@ class ShowIsisLspSchema(MetaParser):
                                     Optional("srv6-locators"): list,
                                     Optional("router-capabilities"): dict,
                                 },
-                                Optional("extended_ipv4_reachability"): dict,
-                                Optional("ipv6_reachability"): dict,
-                                Optional("mt_ipv6_reachability"): dict,
-                                Optional("extended_is_neighbor"): dict,
-                                Optional("mt_is_neighbor"): dict,
+                                Optional("extended-ipv4-reachability"): dict,
+                                Optional("ipv6-reachability"): dict,
+                                Optional("mt-ipv6-reachability"): dict,
+                                Optional("extended-is-neighbor"): dict,
+                                Optional("mt-is-neighbor"): dict,
                                 Optional("attributes"): dict,
                             }
                         }
@@ -764,7 +764,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
 
                                         loc_info: Dict[str, TypeAny] = {
                                             "locator": loc_state.get("locator"),
-                                            "mt_id": loc_state.get("mt-id"),
+                                            "mt-id": loc_state.get("mt-id"),
                                             "metric": loc_state.get("metric"),
                                             "algorithm": algo,
                                         }
@@ -803,7 +803,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                         if func:
                                                             if ":" in str(func):
                                                                 func = str(func).split(":")[-1]
-                                                            es_info["endpoint_func"] = func
+                                                            es_info["endpoint-func"] = func
 
                                                         # Parse SID structure
                                                         es_subtlvs = end_sid.get(
@@ -816,7 +816,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                                     .get("state", {})
                                                                 )
                                                                 if struct:
-                                                                    es_info["sid_structure"] = {
+                                                                    es_info["sid-structure"] = {
                                                                         "lb": struct.get("lb-length"),
                                                                         "ln": struct.get("ln-length"),
                                                                         "fun": struct.get("fun-length"),
@@ -826,7 +826,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                         end_sids.append(es_info)
 
                                                     if end_sids:
-                                                        loc_info["end_sids"] = end_sids
+                                                        loc_info["end-sids"] = end_sids
 
                                         locators.append(loc_info)
                                     if locators:
@@ -844,9 +844,9 @@ class ShowIsisLsp(ShowIsisLspSchema):
 
                                     # Basic capability info
                                     if "instance-number" in cap_state:
-                                        cap_info["instance_number"] = cap_state["instance-number"]
+                                        cap_info["instance-number"] = cap_state["instance-number"]
                                     if "router-id" in cap_state:
-                                        cap_info["router_id"] = cap_state["router-id"]
+                                        cap_info["router-id"] = cap_state["router-id"]
 
                                     # Parse Router Capability subTLVs
                                     subtlvs = cap.get("subtlvs", {}).get("subtlvs", [])
@@ -861,7 +861,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                 .get("algorithm")
                                             )
                                             if algos:
-                                                cap_info["sr_algorithms"] = algos
+                                                cap_info["sr-algorithms"] = algos
 
                                         # SR Capability (SRGB)
                                         elif "SR_CAPABILITY" in subtlv_type and "SRV6" not in subtlv_type:
@@ -878,7 +878,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                 if "label" in sr_state:
                                                     sr_cap["label"] = sr_state["label"]
                                                 if sr_cap:
-                                                    cap_info["sr_capability"] = sr_cap
+                                                    cap_info["sr-capability"] = sr_cap
 
                                         # SRLB
                                         elif "SRLB" in subtlv_type:
@@ -903,7 +903,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                 .get("router-id")
                                             )
                                             if ipv6_rid:
-                                                cap_info["ipv6_te_router_id"] = ipv6_rid
+                                                cap_info["ipv6-te-router-id"] = ipv6_rid
 
                                         # Node MSD
                                         elif "NODE_MSD" in subtlv_type:
@@ -922,7 +922,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                         key = msd_type.split(":")[-1].lower()
                                                         msd_info[key] = msd_val
                                                 if msd_info:
-                                                    cap_info["node_msd"] = msd_info
+                                                    cap_info["node-msd"] = msd_info
 
                                         # Flex-Algo Definition (FAD)
                                         elif "FLEX_ALGO_DEFINITION" in subtlv_type:
@@ -943,11 +943,11 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                     metric_type = fad_state.get("metric-type")
                                                     if metric_type:
                                                         # Strip namespace prefix
-                                                        fad_entry["metric_type"] = metric_type.split(":")[-1]
+                                                        fad_entry["metric-type"] = metric_type.split(":")[-1]
                                                     if fad_entry:
                                                         fad_info[str(fad_id)] = fad_entry
                                                 if fad_info:
-                                                    cap_info["flex_algo_definitions"] = fad_info
+                                                    cap_info["flex-algo-definitions"] = fad_info
 
                                     if cap_info:
                                         tlv_info["router-capabilities"] = cap_info
@@ -961,7 +961,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                 )
                                 if prefixes_data:
                                     ext4 = db_entry.setdefault(
-                                        "extended_ipv4_reachability", {}
+                                        "extended-ipv4-reachability", {}
                                     )
                                     for pfx in prefixes_data:
                                         prefix_str = pfx.get("prefix")
@@ -982,20 +982,20 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         up_down = state_pfx.get("up-down")
 
                                         pfx_info: Dict[str, TypeAny] = {
-                                            "ip_prefix": ip_prefix,
+                                            "ip-prefix": ip_prefix,
                                         }
 
                                         if prefix_len is not None:
                                             try:
-                                                pfx_info["prefix_len"] = int(prefix_len)
+                                                pfx_info["prefix-len"] = int(prefix_len)
                                             except Exception:  # pragma: no cover
-                                                pfx_info["prefix_len"] = prefix_len
+                                                pfx_info["prefix-len"] = prefix_len
 
                                         if metric is not None:
                                             pfx_info["metric"] = metric
 
                                         if up_down is not None:
-                                            pfx_info["up_down"] = bool(up_down)
+                                            pfx_info["up-down"] = bool(up_down)
 
                                         # Parse prefix subTLVs
                                         sub_tlvs = pfx.get("subTLVs", {}).get(
@@ -1052,7 +1052,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                             prefix_sids.append(psid_info)
 
                                                     if prefix_sids:
-                                                        pfx_info["prefix_sids"] = prefix_sids
+                                                        pfx_info["prefix-sids"] = prefix_sids
 
                                         ext4[prefix_str] = pfx_info
 
@@ -1065,7 +1065,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                 )
                                 if prefixes_data:
                                     mt6 = db_entry.setdefault(
-                                        "mt_ipv6_reachability", {}
+                                        "mt-ipv6-reachability", {}
                                     )
                                     for pfx in prefixes_data:
                                         prefix_str = pfx.get("prefix")
@@ -1089,14 +1089,14 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         up_down = state_pfx.get("up-down")
 
                                         pfx_info: Dict[str, TypeAny] = {
-                                            "ip_prefix": ip_prefix,
+                                            "ip-prefix": ip_prefix,
                                         }
 
                                         if prefix_len is not None:
                                             try:
-                                                pfx_info["prefix_len"] = int(prefix_len)
+                                                pfx_info["prefix-len"] = int(prefix_len)
                                             except Exception:  # pragma: no cover
-                                                pfx_info["prefix_len"] = prefix_len
+                                                pfx_info["prefix-len"] = prefix_len
 
                                         if metric is not None:
                                             pfx_info["metric"] = metric
@@ -1105,7 +1105,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                             pfx_info["mt-id"] = mt_id
 
                                         if up_down is not None:
-                                            pfx_info["up_down"] = bool(up_down)
+                                            pfx_info["up-down"] = bool(up_down)
 
                                         # Parse MT IPv6 prefix subTLVs (Prefix SID)
                                         sub_tlvs = pfx.get("subTLVs", {}).get(
@@ -1124,7 +1124,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                 )
                                 if prefixes_data:
                                     ipv6_reach = db_entry.setdefault(
-                                        "ipv6_reachability", {}
+                                        "ipv6-reachability", {}
                                     )
                                     for pfx in prefixes_data:
                                         prefix_str = pfx.get("prefix")
@@ -1145,20 +1145,20 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                         up_down = state_pfx.get("up-down")
 
                                         pfx_info: Dict[str, TypeAny] = {
-                                            "ip_prefix": ip_prefix,
+                                            "ip-prefix": ip_prefix,
                                         }
 
                                         if prefix_len is not None:
                                             try:
-                                                pfx_info["prefix_len"] = int(prefix_len)
+                                                pfx_info["prefix-len"] = int(prefix_len)
                                             except Exception:  # pragma: no cover
-                                                pfx_info["prefix_len"] = prefix_len
+                                                pfx_info["prefix-len"] = prefix_len
 
                                         if metric is not None:
                                             pfx_info["metric"] = metric
 
                                         if up_down is not None:
-                                            pfx_info["up_down"] = bool(up_down)
+                                            pfx_info["up-down"] = bool(up_down)
 
                                         # Parse IPv6 prefix subTLVs (Prefix SID)
                                         sub_tlvs = pfx.get("subTLVs", {}).get(
@@ -1177,7 +1177,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                 )
                                 if neighbors_data:
                                     ext_is = db_entry.setdefault(
-                                        "extended_is_neighbor", {}
+                                        "extended-is-neighbor", {}
                                     )
                                     for neighbor in neighbors_data:
                                         sys_id = neighbor.get("system-id")
@@ -1193,18 +1193,18 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                             nbr_key = f"{sys_id}:{instance_id}"
 
                                         nbr_info: Dict[str, TypeAny] = {
-                                            "system_id": sys_id,
+                                            "system-id": sys_id,
                                             "metric": nbr_state.get("metric"),
                                         }
 
                                         if instance_id:
-                                            nbr_info["instance_id"] = instance_id
+                                            nbr_info["instance-id"] = instance_id
 
                                         two_way = nbr_state.get(
                                             f"{ARCOS_ISIS_AUGMENTS}:two-way-connectivity"
                                         )
                                         if two_way is not None:
-                                            nbr_info["two_way"] = two_way
+                                            nbr_info["two-way"] = two_way
 
                                         # Parse neighbor subTLVs
                                         sub_tlvs = neighbor.get("subTLVs", {}).get(
@@ -1222,7 +1222,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     .get("neighbor", [])
                                 )
                                 if mt_neighbors_data:
-                                    mt_is = db_entry.setdefault("mt_is_neighbor", {})
+                                    mt_is = db_entry.setdefault("mt-is-neighbor", {})
                                     for neighbor in mt_neighbors_data:
                                         sys_id = neighbor.get("system-id")
                                         mt_id = neighbor.get("mt-id")
@@ -1246,21 +1246,21 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                                 nbr_key = f"{nbr_key}:{inst_id}"
 
                                             nbr_info: Dict[str, TypeAny] = {
-                                                "system_id": sys_id,
+                                                "system-id": sys_id,
                                                 "metric": inst_state.get("metric"),
                                             }
 
                                             if mt_id is not None:
-                                                nbr_info["mt_id"] = mt_id
+                                                nbr_info["mt-id"] = mt_id
 
                                             if inst_id:
-                                                nbr_info["instance_id"] = inst_id
+                                                nbr_info["instance-id"] = inst_id
 
                                             two_way = inst_state.get(
                                                 f"{ARCOS_ISIS_AUGMENTS}:two-way-connectivity"
                                             )
                                             if two_way is not None:
-                                                nbr_info["two_way"] = two_way
+                                                nbr_info["two-way"] = two_way
 
                                             # Parse instance subTLVs (same as Extended IS)
                                             sub_tlvs = instance.get("subTLVs", {}).get(
@@ -1299,7 +1299,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
             if "TLV22_LINK_ID" in stype:
                 link_state = sub.get("link-id", {}).get("state", {})
                 if link_state:
-                    nbr_info["link_id"] = {
+                    nbr_info["link-id"] = {
                         "local": link_state.get("local"),
                         "remote": link_state.get("remote"),
                     }
@@ -1312,7 +1312,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                     .get("ipv4-interface-address")
                 )
                 if addrs:
-                    nbr_info["ipv4_interface_address"] = addrs
+                    nbr_info["ipv4-interface-address"] = addrs
 
             # IPv4 Neighbor Address
             elif "TLV22_IPV4_NEIGHBOR_ADDRESS" in stype:
@@ -1322,7 +1322,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                     .get("ipv4-neighbor-address")
                 )
                 if addrs:
-                    nbr_info["ipv4_neighbor_address"] = addrs
+                    nbr_info["ipv4-neighbor-address"] = addrs
 
             # IPv6 Interface Address
             elif "TLV22_IPV6_INTERFACE_ADDRESS" in stype:
@@ -1332,7 +1332,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                     .get("ipv6-interface-address")
                 )
                 if addrs:
-                    nbr_info["ipv6_interface_address"] = addrs
+                    nbr_info["ipv6-interface-address"] = addrs
 
             # SR-MPLS Adjacency SID
             elif "ADJACENCY_SID" in stype:
@@ -1352,7 +1352,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                             sid_info["weight"] = sid_state["weight"]
                         adj_sids.append(sid_info)
                     if adj_sids:
-                        nbr_info["adjacency_sids"] = adj_sids
+                        nbr_info["adjacency-sids"] = adj_sids
 
             # ASLA (Application-Specific Link Attributes)
             elif "ASLA" in stype:
@@ -1381,7 +1381,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     .get("admin-group")
                                 )
                                 if groups:
-                                    asla_info["admin_groups"] = groups
+                                    asla_info["admin-groups"] = groups
 
                             # Extended Admin Groups
                             elif "EXTENDED_ADMIN_GROUP_TYPE" in subsub_type:
@@ -1391,7 +1391,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     .get("extended-admin-group")
                                 )
                                 if groups:
-                                    asla_info["extended_admin_groups"] = groups
+                                    asla_info["extended-admin-groups"] = groups
 
                             # TE Default Metric
                             elif "TE_DEFAULT_METRIC_TYPE" in subsub_type:
@@ -1401,7 +1401,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     .get("metric")
                                 )
                                 if metric is not None:
-                                    asla_info["te_metric"] = metric
+                                    asla_info["te-metric"] = metric
 
                             # Min/Max Delay
                             elif "MIN_MAX_DELAY_METRIC_TYPE" in subsub_type:
@@ -1409,9 +1409,9 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     "state", {}
                                 )
                                 if "min-delay" in delay_state:
-                                    asla_info["min_delay"] = delay_state["min-delay"]
+                                    asla_info["min-delay"] = delay_state["min-delay"]
                                 if "max-delay" in delay_state:
-                                    asla_info["max_delay"] = delay_state["max-delay"]
+                                    asla_info["max-delay"] = delay_state["max-delay"]
 
                         if asla_info:
                             nbr_info["asla"] = asla_info
@@ -1444,7 +1444,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                             # Strip namespace prefix
                             if ":" in str(func):
                                 func = str(func).split(":")[-1]
-                            end_x_info["endpoint_func"] = func
+                            end_x_info["endpoint-func"] = func
 
                         # Parse SID structure subsubTLV
                         subsubtlvs = end_x.get("subsubtlvs", {}).get("subsubtlv", [])
@@ -1455,7 +1455,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                                     .get("state", {})
                                 )
                                 if struct_state:
-                                    end_x_info["sid_structure"] = {
+                                    end_x_info["sid-structure"] = {
                                         "lb": struct_state.get("lb-length"),
                                         "ln": struct_state.get("ln-length"),
                                         "fun": struct_state.get("fun-length"),
@@ -1465,7 +1465,7 @@ class ShowIsisLsp(ShowIsisLspSchema):
                         end_x_sids.append(end_x_info)
 
                     if end_x_sids:
-                        nbr_info["end_x_sids"] = end_x_sids
+                        nbr_info["end-x-sids"] = end_x_sids
 
     def _parse_prefix_subtlvs(
         self, sub_tlvs: list, pfx_info: Dict[str, TypeAny]
@@ -1521,42 +1521,183 @@ class ShowIsisLsp(ShowIsisLspSchema):
                             prefix_sids.append(psid_info)
 
                     if prefix_sids:
-                        pfx_info["prefix_sids"] = prefix_sids
+                        pfx_info["prefix-sids"] = prefix_sids
 
 
 class ShowIsisInterfaceSchema(MetaParser):
-    """Schema for ArcOS ISIS per-interface operational state and counters."""
+    """Schema for ArcOS ISIS per-interface operational state and counters.
+
+    Convention-compliant: underscored keys, flattened state/config,
+    ALL fields Optional, ALL prefixes stripped.
+    """
 
     schema = {
         "network-instance": {
             Any(): {
-                "isis": {
+                Optional("isis"): {
                     Any(): {
                         Optional("interfaces"): {
-                            Any(): {  # interface name
-                                "enabled": bool,
-                                "interface-id": str,
+                            Any(): {
+                                # Interface state (flattened from state{})
+                                Optional("enabled"): bool,
+                                Optional("interface-id"): str,
+                                Optional("passive"): bool,
+                                Optional("hello-padding"): str,
                                 Optional("circuit-type"): str,
                                 Optional("network-type"): str,
                                 Optional("protocol-up"): bool,
-                                Optional("passive"): bool,
-                                Optional("hello-padding"): str,
                                 Optional("snpa"): str,
                                 Optional("mtu"): int,
                                 Optional("ifindex"): int,
                                 Optional("update-index"): int,
                                 Optional("speed"): int,
-                                Optional("circuit-counters"): dict,
-                                Optional("authentication"): dict,
-                                Optional("timers"): dict,
-                                Optional("bfd"): dict,
-                                Optional("fast-reroute"): dict,
-                                Optional("afi-safi"): dict,
-                                Optional("flexible-algorithm"): dict,
+                                # Circuit counters
+                                Optional("circuit-counters"): {
+                                    Optional("adj-changes"): int,
+                                    Optional("init-fails"): int,
+                                    Optional("rejected-adj"): int,
+                                    Optional("id-field-len-mismatches"): int,
+                                    Optional("max-area-address-mismatches"): int,
+                                    Optional("auth-type-fails"): int,
+                                    Optional("auth-fails"): int,
+                                    Optional("lan-dis-changes"): int,
+                                    Optional("adj-number"): int,
+                                    Optional("subnet-mismatches"): int,
+                                    Optional("duplicate-addresses"): int,
+                                    Optional("martian-addresses"): int,
+                                    Optional("missing-addresses"): int,
+                                },
+                                # Authentication
+                                Optional("authentication"): {
+                                    Optional("hello-authentication"): bool,
+                                    Optional("auth-type"): str,
+                                    Optional("crypto-algorithm"): str,
+                                },
+                                # AFI-SAFI
+                                Optional("afi-safi"): {
+                                    Any(): {
+                                        Optional("afi-name"): str,
+                                        Optional("safi-name"): str,
+                                        Optional("enabled"): bool,
+                                        Optional("ipv4-unnumbered"): bool,
+                                        Optional("fast-reroute"): {
+                                            Optional("ip-enabled"): bool,
+                                            Optional("ti-lfa-srv6-enabled"): bool,
+                                            Optional("ti-lfa-sr-mpls-enabled"): bool,
+                                        },
+                                    }
+                                },
+                                # Timers
+                                Optional("timers"): {
+                                    Optional("csnp-interval"): int,
+                                    Optional("lsp-pacing-interval"): int,
+                                    Optional("hello-interval"): int,
+                                    Optional("hello-multiplier"): int,
+                                },
+                                # BFD
+                                Optional("bfd"): {
+                                    Optional("bfd-tlv"): bool,
+                                    Optional("profile"): str,
+                                },
+                                # Fast-reroute
+                                Optional("fast-reroute"): {
+                                    Optional("srv6-enabled"): bool,
+                                    Optional("tiebreakers"): {
+                                        Optional("srlg-disjoint"): {
+                                            Optional("priority"): int,
+                                        },
+                                        Optional("node-protecting"): {
+                                            Optional("priority"): int,
+                                        },
+                                    },
+                                },
+                                # Flexible algorithm
+                                Optional("flexible-algorithm"): {
+                                    Optional("admin-groups"): list,
+                                },
+                                # CSNP
                                 Optional("csnp-enabled"): bool,
+                                # MPLS LDP sync
                                 Optional("mpls-ldp-sync-enabled"): bool,
-                                Optional("levels"): dict,
-                                Optional("adjacencies"): dict,
+                                # Levels
+                                Optional("levels"): {
+                                    Any(): {
+                                        Optional("enabled"): bool,
+                                        Optional("priority"): int,
+                                        Optional("metric"): int,
+                                        Optional("flexible-algorithm"): {
+                                            Optional("te-metric"): int,
+                                            Optional("delay-metric"): int,
+                                        },
+                                        Optional("packet-counters"): {
+                                            Any(): {
+                                                Optional("received"): int,
+                                                Optional("processed"): int,
+                                                Optional("dropped"): int,
+                                                Optional("sent"): int,
+                                                Optional("retransmit"): int,
+                                                Optional("no-memory"): int,
+                                            }
+                                        },
+                                        Optional("hello-authentication"): {
+                                            Optional("hello-authentication"): bool,
+                                            Optional("auth-type"): str,
+                                            Optional("crypto-algorithm"): str,
+                                        },
+                                        Optional("adjacencies"): {
+                                            Any(): {
+                                                Optional("system-id"): str,
+                                                Optional("neighbor-ipv4-address"): str,
+                                                Optional("neighbor-ipv6-address"): str,
+                                                Optional("local-extended-circuit-id"): int,
+                                                Optional("neighbor-extended-circuit-id"): int,
+                                                Optional("neighbor-circuit-type"): str,
+                                                Optional("adjacency-type"): str,
+                                                Optional("adjacency-state"): str,
+                                                Optional("remaining-hold-time"): int,
+                                                Optional("up-time"): int,
+                                                Optional("adjacency-up-time"): str,
+                                                Optional("num-state-changes"): int,
+                                                Optional("last-state-change-timestamp"): str,
+                                                Optional("last-down-reason"): str,
+                                                Optional("restart-support"): bool,
+                                                Optional("restart-suppress"): bool,
+                                                Optional("restart-status"): bool,
+                                                Optional("nlpid"): list,
+                                                Optional("usable"): bool,
+                                                Optional("restart-ack"): bool,
+                                                Optional("restart-request"): bool,
+                                                Optional("received-multi-topology-ids"): list,
+                                                Optional("active-multi-topology-ids"): list,
+                                                Optional("bfd"): {
+                                                    Optional("bfd-required"): bool,
+                                                    Optional("topologies"): {
+                                                        Any(): {
+                                                            Optional("mt-id"): int,
+                                                            Optional("ipv4-bfd-required"): bool,
+                                                            Optional("ipv6-bfd-required"): bool,
+                                                            Optional("bfd-required"): bool,
+                                                            Optional("ipv4-bfd-up"): bool,
+                                                            Optional("ipv6-bfd-up"): bool,
+                                                            Optional("ipv4-up"): bool,
+                                                            Optional("ipv6-up"): bool,
+                                                            Optional("usable"): bool,
+                                                        }
+                                                    },
+                                                },
+                                                Optional("dynamic-delay-measurement"): {
+                                                    Optional("enabled"): bool,
+                                                    Optional("num-advertisements-sent"): int,
+                                                    Optional("last-sampled-avg-delay-value"): int,
+                                                    Optional("last-advertised-min-delay-value"): int,
+                                                    Optional("last-advertised-max-delay-value"): int,
+                                                    Optional("last-advertised-timestamp"): str,
+                                                    Optional("last-advertisement-reason"): str,
+                                                },
+                                            }
+                                        },
+                                    }
+                                },
                             }
                         }
                     }
@@ -1566,16 +1707,72 @@ class ShowIsisInterfaceSchema(MetaParser):
     }
 
 
+# ---------------------------------------------------------------------------
+# Prefix-stripping helpers for ShowIsisInterface
+# ---------------------------------------------------------------------------
+
+# Key prefixes: augment namespace prefixes on JSON keys
+_KEY_PREFIXES = [
+    f"{ARCOS_ISIS_AUGMENTS}:",
+]
+
+# Value prefixes: namespace prefixes on JSON values
+_VALUE_PREFIXES = [
+    "arcos-isis-types:",
+    "openconfig-isis-types:",
+    "oc-isis-types:",
+    f"{ARCOS_ISIS_AUGMENTS}:",
+    "openconfig-keychain-types:",
+    "oc-pol-types:",
+]
+
+
+def _strip_key(key: str) -> str:
+    """Strip known augment namespace prefix from a JSON key."""
+    for prefix in _KEY_PREFIXES:
+        if key.startswith(prefix):
+            return key[len(prefix):]
+    return key
+
+
+def _strip_value(value: str) -> str:
+    """Strip known namespace prefix from a JSON value string."""
+    if not isinstance(value, str):
+        return value
+    for prefix in _VALUE_PREFIXES:
+        if value.startswith(prefix):
+            return value[len(prefix):]
+    return value
+
+
+
+
+def _get_str(d: Dict, key: str) -> TypeOptional[str]:
+    """Get a string value, stripping value prefix. Returns None if absent."""
+    val = d.get(key)
+    if val is None:
+        # Try with augment prefix
+        val = d.get(f"{ARCOS_ISIS_AUGMENTS}:{key}")
+    if val is None:
+        return None
+    return _strip_value(str(val))
+
+
 class ShowIsisInterface(ShowIsisInterfaceSchema):
     """Parser for ArcOS ISIS interface command (JSON format).
 
+    Convention-compliant rewrite: underscored keys, flattened state/config,
+    all fields Optional, all prefixes stripped.
+
     Command pattern (before JSON pipe)::
 
-        show network-instance {network_instance} protocol ISIS {protocol_instance} interface [<interface>]
+        show network-instance {network_instance} protocol ISIS
+            {protocol_instance} interface [<interface>]
     """
 
     cli_command = [
-        "show network-instance {network_instance} protocol ISIS {protocol_instance} interface",
+        "show network-instance {network_instance} protocol ISIS "
+        "{protocol_instance} interface",
     ]
 
     def cli(
@@ -1588,542 +1785,642 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
         if output is None:
             validate_input(network_instance, "network_instance")
             validate_input(protocol_instance, "protocol_instance")
-            cmd = f"show network-instance {network_instance} protocol ISIS {protocol_instance} interface"
+            cmd = (
+                f"show network-instance {network_instance} "
+                f"protocol ISIS {protocol_instance} interface"
+            )
             if interface:
                 validate_input(interface, "interface")
                 cmd += f" {interface}"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        logger.debug("Parsing output: %s", output)
-        ret_dict: Dict[str, TypeAny] = {
-            "network-instance": {"default": {"isis": {"default": {}}}}
-        }
+        parsed_json = load_json_robust(output)
 
-        try:
-            parsed_json = load_json_robust(output)
+        # Navigate to network-instance list
+        data = parsed_json.get("data", {})
+        ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
+        ni_list = ni_container.get("network-instance", [])
 
-            isis_data = get_isis_data(parsed_json)
-            interfaces_data = isis_data.get("interfaces", {}).get("interface", [])
+        result: Dict[str, TypeAny] = {"network-instance": {}}
 
-            if not interfaces_data:
-                return ret_dict
+        for ni in ni_list:
+            ni_name = ni.get("name")
+            if not ni_name:
+                continue
 
-            interfaces_dict: Dict[str, TypeAny] = {}
-            ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+            for protocol in ni.get("protocols", {}).get("protocol", []):
+                if "isis" not in protocol:
+                    continue
+                proto_name = protocol.get("name", DEFAULT_INSTANCE)
 
-            for intf in interfaces_data:
-                intf_id = intf.get("interface-id")
-                if not intf_id:
+                isis_data = protocol["isis"]
+                interfaces_list = (
+                    isis_data.get("interfaces", {}).get("interface", [])
+                )
+                if not interfaces_list:
                     continue
 
-                state = intf.get("state", {})
+                interfaces_dict: Dict[str, TypeAny] = {}
 
-                intf_entry: Dict[str, TypeAny] = {
-                    "enabled": state.get("enabled", False),
-                    "interface-id": intf_id,
-                }
+                for intf in interfaces_list:
+                    intf_id = intf.get("interface-id")
+                    if not intf_id:
+                        continue
 
-                circuit_type = state.get("circuit-type", "")
-                if circuit_type:
-                    intf_entry["circuit-type"] = circuit_type.split(":")[-1]
+                    intf_entry = self._parse_interface(intf)
+                    if intf_entry:
+                        interfaces_dict[intf_id] = intf_entry
 
-                network_type = state.get(f"{ARCOS_ISIS_AUGMENTS}:network-type")
-                if network_type:
-                    intf_entry["network-type"] = network_type
+                if interfaces_dict:
+                    result["network-instance"].setdefault(ni_name, {})
+                    result["network-instance"][ni_name].setdefault("isis", {})
+                    result["network-instance"][ni_name]["isis"][proto_name] = {
+                        "interfaces": interfaces_dict
+                    }
 
-                protocol_up = state.get(f"{ARCOS_ISIS_AUGMENTS}:protocol-up")
-                if protocol_up is not None:
-                    intf_entry["protocol-up"] = protocol_up
+        return result
 
-                passive = state.get("passive")
-                if passive is not None:
-                    intf_entry["passive"] = passive
+    # ------------------------------------------------------------------
+    # Interface-level extraction
+    # ------------------------------------------------------------------
 
-                hello_padding = state.get("hello-padding")
-                if hello_padding:
-                    intf_entry["hello-padding"] = hello_padding
+    def _parse_interface(self, intf: Dict) -> Dict[str, TypeAny]:
+        """Parse a single interface entry."""
+        entry: Dict[str, TypeAny] = {}
+        aug = ARCOS_ISIS_AUGMENTS
 
-                snpa = state.get(f"{ARCOS_ISIS_AUGMENTS}:snpa")
-                if snpa:
-                    intf_entry["snpa"] = snpa
+        # --- Interface state (flatten state{}) ---
+        state = intf.get("state", {})
+        self._set(entry, "enabled", state.get("enabled"))
+        self._set(entry, "interface-id", state.get("interface-id"))
+        self._set(entry, "passive", state.get("passive"))
+        self._set(entry, "hello-padding", state.get("hello-padding"))
 
-                mtu = state.get(f"{ARCOS_ISIS_AUGMENTS}:mtu")
-                if mtu is not None:
-                    intf_entry["mtu"] = mtu
+        circuit_type = state.get("circuit-type")
+        if circuit_type:
+            entry["circuit-type"] = _strip_value(circuit_type)
 
-                ifindex = state.get(f"{ARCOS_ISIS_AUGMENTS}:ifindex")
-                if ifindex is not None:
-                    intf_entry["ifindex"] = ifindex
+        self._set(entry, "network-type", state.get(f"{aug}:network-type"))
+        self._set(entry, "protocol-up", state.get(f"{aug}:protocol-up"))
+        self._set(entry, "snpa", state.get(f"{aug}:snpa"))
+        self._set(entry, "mtu", state.get(f"{aug}:mtu"))
+        self._set(entry, "ifindex", state.get(f"{aug}:ifindex"))
+        self._set(entry, "update-index", state.get(f"{aug}:update-index"))
+        self._set(entry, "speed", state.get(f"{aug}:speed"))
 
-                update_index = state.get(f"{ARCOS_ISIS_AUGMENTS}:update-index")
-                if update_index is not None:
-                    intf_entry["update-index"] = update_index
+        # --- Circuit counters ---
+        cc = self._parse_circuit_counters(
+            intf.get("circuit-counters", {}).get("state", {})
+        )
+        if cc:
+            entry["circuit-counters"] = cc
 
-                speed = state.get(f"{ARCOS_ISIS_AUGMENTS}:speed")
-                if speed is not None:
-                    intf_entry["speed"] = speed
+        # --- Authentication ---
+        auth = self._parse_authentication(intf.get("authentication", {}))
+        if auth:
+            entry["authentication"] = auth
 
-                circuit_counters_data = intf.get("circuit-counters", {}).get(
-                    "state", {}
+        # --- AFI-SAFI ---
+        afi_safi = self._parse_afi_safi(intf.get("afi-safi", {}))
+        if afi_safi:
+            entry["afi-safi"] = afi_safi
+
+        # --- Timers ---
+        timers = self._parse_timers(intf.get("timers", {}).get("state", {}))
+        if timers:
+            entry["timers"] = timers
+
+        # --- BFD ---
+        bfd = self._parse_interface_bfd(intf.get("bfd", {}))
+        if bfd:
+            entry["bfd"] = bfd
+
+        # --- Fast-reroute ---
+        frr = self._parse_fast_reroute(intf.get(f"{aug}:fast-reroute", {}))
+        if frr:
+            entry["fast-reroute"] = frr
+
+        # --- Flexible algorithm ---
+        flex = intf.get(f"{aug}:flexible-algorithm", {}).get("state", {})
+        admin_groups = flex.get("admin-groups")
+        if admin_groups:
+            entry["flexible-algorithm"] = {"admin-groups": admin_groups}
+
+        # --- CSNP ---
+        csnp_state = intf.get(f"{aug}:csnp", {}).get("state", {})
+        if "enabled" in csnp_state:
+            entry["csnp-enabled"] = csnp_state["enabled"]
+
+        # --- MPLS LDP sync ---
+        mpls_state = (
+            intf.get(f"{aug}:mpls", {})
+            .get("igp-ldp-sync", {})
+            .get("state", {})
+        )
+        if "enabled" in mpls_state:
+            entry["mpls-ldp-sync-enabled"] = mpls_state["enabled"]
+
+        # --- Levels ---
+        levels = self._parse_levels(intf.get("levels", {}).get("level", []))
+        if levels:
+            entry["levels"] = levels
+
+        return entry
+
+    # ------------------------------------------------------------------
+    # Circuit counters
+    # ------------------------------------------------------------------
+
+    def _parse_circuit_counters(self, state: Dict) -> Dict[str, TypeAny]:
+        """Parse circuit-counters.state{}, flatten and strip prefixes."""
+        if not state:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        cc: Dict[str, TypeAny] = {}
+
+        # Standard OC fields
+        for key in (
+            "adj-changes", "init-fails", "rejected-adj",
+            "id-field-len-mismatches", "max-area-address-mismatches",
+            "auth-type-fails", "auth-fails", "lan-dis-changes", "adj-number",
+        ):
+            if key in state:
+                cc[key] = state[key]
+
+        # Augmented fields
+        for key in (
+            "subnet-mismatches", "duplicate-addresses",
+            "martian-addresses", "missing-addresses",
+        ):
+            aug_key = f"{aug}:{key}"
+            if aug_key in state:
+                cc[key] = state[aug_key]
+
+        return cc
+
+    # ------------------------------------------------------------------
+    # Authentication
+    # ------------------------------------------------------------------
+
+    def _parse_authentication(self, auth_data: Dict) -> Dict[str, TypeAny]:
+        """Parse authentication block, flatten state + key.state."""
+        if not auth_data:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        auth: Dict[str, TypeAny] = {}
+
+        auth_state = auth_data.get("state", {})
+        if "hello-authentication" in auth_state:
+            auth["hello-authentication"] = auth_state["hello-authentication"]
+
+        auth_type = auth_state.get("auth-type")
+        if auth_type:
+            auth["auth-type"] = _strip_value(auth_type)
+
+        crypto = (
+            auth_data.get("key", {})
+            .get("state", {})
+            .get(f"{aug}:crypto-algorithm")
+        )
+        if crypto:
+            auth["crypto-algorithm"] = _strip_value(crypto)
+
+        return auth
+
+    # ------------------------------------------------------------------
+    # AFI-SAFI
+    # ------------------------------------------------------------------
+
+    def _parse_afi_safi(self, afi_safi_data: Dict) -> Dict[str, TypeAny]:
+        """Parse afi-safi.af[] list, flatten state, strip prefixes."""
+        af_list = afi_safi_data.get("af", [])
+        if not af_list:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        result: Dict[str, TypeAny] = {}
+
+        for af in af_list:
+            af_state = af.get("state", {})
+            afi_name_raw = af_state.get("afi-name", "")
+            safi_name_raw = af_state.get("safi-name", "")
+            if not afi_name_raw:
+                continue
+
+            afi_name = _strip_value(afi_name_raw)
+            safi_name = _strip_value(safi_name_raw)
+            af_key = f"{afi_name}-{safi_name}" if safi_name else afi_name
+
+            af_entry: Dict[str, TypeAny] = {
+                "afi-name": afi_name,
+                "safi-name": safi_name,
+            }
+            self._set(af_entry, "enabled", af_state.get("enabled"))
+
+            # ipv4-unnumbered augment
+            ipv4_unnum = af_state.get(f"{aug}:ipv4-unnumbered")
+            if ipv4_unnum is not None:
+                af_entry["ipv4-unnumbered"] = ipv4_unnum
+
+            # Fast-reroute config per AFI-SAFI
+            af_frr = af_state.get(f"{aug}:fast-reroute", {})
+            if af_frr:
+                frr_entry: Dict[str, TypeAny] = {}
+                ip_enabled = (
+                    af_frr.get("ip", {}).get("config", {}).get("enabled")
                 )
-                if circuit_counters_data:
-                    circuit_counters: Dict[str, TypeAny] = {}
-                    for key in [
-                        "adj-changes",
-                        "init-fails",
-                        "rejected-adj",
-                        "id-field-len-mismatches",
-                        "max-area-address-mismatches",
-                        "auth-type-fails",
-                        "auth-fails",
-                        "lan-dis-changes",
-                        "adj-number",
-                    ]:
-                        if key in circuit_counters_data:
-                            circuit_counters[key] = circuit_counters_data[key]
-
-                    for key in [
-                        "subnet-mismatches",
-                        "duplicate-addresses",
-                        "martian-addresses",
-                        "missing-addresses",
-                    ]:
-                        aug_key = f"{ARCOS_ISIS_AUGMENTS}:{key}"
-                        if aug_key in circuit_counters_data:
-                            circuit_counters[key] = circuit_counters_data[aug_key]
-
-                    if circuit_counters:
-                        intf_entry["circuit-counters"] = circuit_counters
-
-                auth_data = intf.get("authentication", {})
-                if auth_data:
-                    auth_state = auth_data.get("state", {})
-                    auth_info: Dict[str, TypeAny] = {}
-                    if "hello-authentication" in auth_state:
-                        auth_info["hello-authentication"] = auth_state[
-                            "hello-authentication"
-                        ]
-                    if "auth-type" in auth_state:
-                        auth_info["auth-type"] = auth_state["auth-type"]
-
-                    key_state = auth_data.get("key", {}).get("state", {})
-                    crypto_alg = key_state.get(
-                        f"{ARCOS_ISIS_AUGMENTS}:crypto-algorithm"
-                    )
-                    if crypto_alg:
-                        auth_info["crypto-algorithm"] = crypto_alg
-
-                    if auth_info:
-                        intf_entry["authentication"] = auth_info
-
-                timers_data = intf.get("timers", {}).get("state", {})
-                if timers_data:
-                    timers: Dict[str, TypeAny] = {}
-                    if "csnp-interval" in timers_data:
-                        timers["csnp-interval"] = timers_data["csnp-interval"]
-                    if "lsp-pacing-interval" in timers_data:
-                        timers["lsp-pacing-interval"] = timers_data[
-                            "lsp-pacing-interval"
-                        ]
-
-                    hello_interval = timers_data.get(
-                        f"{ARCOS_ISIS_AUGMENTS}:hello-interval"
-                    )
-                    if hello_interval is not None:
-                        timers["hello-interval"] = hello_interval
-
-                    hello_mult = timers_data.get(
-                        f"{ARCOS_ISIS_AUGMENTS}:hello-multiplier"
-                    )
-                    if hello_mult is not None:
-                        timers["hello-multiplier"] = hello_mult
-
-                    if timers:
-                        intf_entry["timers"] = timers
-
-                bfd_data = intf.get("bfd", {})
-                if bfd_data:
-                    bfd_info: Dict[str, TypeAny] = {}
-                    bfd_state = bfd_data.get("state", {})
-                    if "bfd-tlv" in bfd_state:
-                        bfd_info["bfd-tlv"] = bfd_state["bfd-tlv"]
-
-                    aug_state = bfd_data.get(f"{ARCOS_ISIS_AUGMENTS}:state", {})
-                    if "profile" in aug_state:
-                        bfd_info["profile"] = aug_state["profile"]
-
-                    if bfd_info:
-                        intf_entry["bfd"] = bfd_info
-
-                frr_data = intf.get(f"{ARCOS_ISIS_AUGMENTS}:fast-reroute", {})
-                if frr_data:
-                    frr_info: Dict[str, TypeAny] = {}
-                    ti_lfa_state = frr_data.get("ti-lfa", {}).get("state", {})
-                    if "srv6-enabled" in ti_lfa_state:
-                        frr_info["srv6-enabled"] = ti_lfa_state["srv6-enabled"]
-
-                    tiebreaker_data = frr_data.get("tiebreaker", {})
-                    if tiebreaker_data:
-                        tiebreakers: Dict[str, TypeAny] = {}
-                        for tb_type in ["srlg-disjoint", "node-protecting"]:
-                            tb_state = tiebreaker_data.get(tb_type, {}).get("state", {})
-                            if "priority" in tb_state:
-                                tiebreakers[tb_type] = {
-                                    "priority": tb_state["priority"]
-                                }
-                        if tiebreakers:
-                            frr_info["tiebreakers"] = tiebreakers
-
-                    if frr_info:
-                        intf_entry["fast-reroute"] = frr_info
-
-                # AFI-SAFI per interface with fast-reroute config
-                afi_safi_data = intf.get("afi-safi", {}).get("af", [])
-                if afi_safi_data:
-                    afi_safi_dict: Dict[str, TypeAny] = {}
-                    for af in afi_safi_data:
-                        af_state = af.get("state", {})
-                        afi_name = af_state.get("afi-name", "")
-                        safi_name = af_state.get("safi-name", "")
-                        if not afi_name:
-                            continue
-
-                        # Create key like "IPV4-UNICAST"
-                        afi_key = afi_name.split(":")[-1] if ":" in afi_name else afi_name
-                        safi_key = (
-                            safi_name.split(":")[-1] if ":" in safi_name else safi_name
-                        )
-                        af_key = f"{afi_key}-{safi_key}" if safi_key else afi_key
-
-                        af_entry: Dict[str, TypeAny] = {
-                            "afi-name": afi_key,
-                            "safi-name": safi_key,
-                            "enabled": af_state.get("enabled", False),
-                        }
-
-                        # Fast-reroute config per AFI-SAFI
-                        af_frr = af_state.get(f"{ARCOS_ISIS_AUGMENTS}:fast-reroute", {})
-                        if af_frr:
-                            frr_config: Dict[str, TypeAny] = {}
-                            ip_frr = af_frr.get("ip", {}).get("config", {})
-                            if "enabled" in ip_frr:
-                                frr_config["ip-enabled"] = ip_frr["enabled"]
-
-                            ti_lfa = af_frr.get("ti-lfa", {}).get("config", {})
-                            if ti_lfa:
-                                srv6_cfg = ti_lfa.get("srv6", {})
-                                if "enabled" in srv6_cfg:
-                                    frr_config["ti-lfa-srv6-enabled"] = srv6_cfg["enabled"]
-                                sr_mpls_cfg = ti_lfa.get("sr-mpls", {})
-                                if "enabled" in sr_mpls_cfg:
-                                    frr_config["ti-lfa-sr-mpls-enabled"] = sr_mpls_cfg[
-                                        "enabled"
-                                    ]
-
-                            if frr_config:
-                                af_entry["fast-reroute"] = frr_config
-
-                        # IPv4 unnumbered
-                        ipv4_unnumbered = af_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:ipv4-unnumbered"
-                        )
-                        if ipv4_unnumbered is not None:
-                            af_entry["ipv4-unnumbered"] = ipv4_unnumbered
-
-                        afi_safi_dict[af_key] = af_entry
-
-                    if afi_safi_dict:
-                        intf_entry["afi-safi"] = afi_safi_dict
-
-                # Flexible-algorithm admin-groups at interface level
-                flex_algo_data = intf.get(
-                    f"{ARCOS_ISIS_AUGMENTS}:flexible-algorithm", {}
-                )
-                if flex_algo_data:
-                    flex_algo_state = flex_algo_data.get("state", {})
-                    admin_groups = flex_algo_state.get("admin-groups")
-                    if admin_groups:
-                        intf_entry["flexible-algorithm"] = {
-                            "admin-groups": admin_groups
-                        }
-
-                # CSNP enabled
-                csnp_data = intf.get(f"{ARCOS_ISIS_AUGMENTS}:csnp", {})
-                if csnp_data:
-                    csnp_state = csnp_data.get("state", {})
-                    if "enabled" in csnp_state:
-                        intf_entry["csnp-enabled"] = csnp_state["enabled"]
-
-                # MPLS igp-ldp-sync
-                mpls_data = intf.get(f"{ARCOS_ISIS_AUGMENTS}:mpls", {})
-                if mpls_data:
-                    ldp_sync_state = mpls_data.get("igp-ldp-sync", {}).get("state", {})
-                    if "enabled" in ldp_sync_state:
-                        intf_entry["mpls-ldp-sync-enabled"] = ldp_sync_state["enabled"]
-
-                levels_data = intf.get("levels", {}).get("level", [])
-                if levels_data:
-                    levels_dict: Dict[str, TypeAny] = {}
-                    for level in levels_data:
-                        level_num = level.get("level-number")
-                        if level_num is None:
-                            continue
-
-                        level_state = level.get("state", {})
-                        level_entry: Dict[str, TypeAny] = {
-                            "enabled": level_state.get("enabled", False),
-                        }
-
-                        metric = level_state.get(f"{ARCOS_ISIS_AUGMENTS}:metric")
-                        if metric is not None:
-                            level_entry["metric"] = metric
-
-                        priority = level_state.get("priority")
-                        if priority is not None:
-                            level_entry["priority"] = priority
-
-                        flex_alg = level_state.get(
-                            f"{ARCOS_ISIS_AUGMENTS}:flexible-algorithm"
-                        )
-                        if flex_alg:
-                            level_entry["flexible-algorithm"] = flex_alg
-
-                        packet_counters_data = level.get("packet-counters", {})
-                        if packet_counters_data:
-                            packet_counters: Dict[str, TypeAny] = {}
-                            for pkt_type in [
-                                "lsp",
-                                "iih",
-                                "psnp",
-                                "csnp",
-                                "unknown",
-                            ]:
-                                pkt_state = packet_counters_data.get(pkt_type, {}).get(
-                                    "state", {}
-                                )
-                                if pkt_state:
-                                    packet_counters[pkt_type] = pkt_state
-                            if packet_counters:
-                                level_entry["packet-counters"] = packet_counters
-
-                        levels_dict[str(level_num)] = level_entry
-
-                        adjacencies_data = level.get("adjacencies", {}).get(
-                            "adjacency", []
-                        )
-                        if adjacencies_data:
-                            adjacencies_dict: Dict[str, TypeAny] = {}
-                            for adj in adjacencies_data:
-                                sys_id = adj.get("system-id")
-                                if not sys_id:
-                                    continue
-
-                                adj_state = adj.get("state", {})
-                                adj_entry: Dict[str, TypeAny] = {
-                                    "system-id": sys_id,
-                                    "adjacency-state": adj_state.get(
-                                        "adjacency-state", "UNKNOWN"
-                                    ),
-                                }
-
-                                neighbor_ipv4 = adj_state.get("neighbor-ipv4-address")
-                                if neighbor_ipv4:
-                                    adj_entry["neighbor-ipv4-address"] = neighbor_ipv4
-
-                                neighbor_ipv6 = adj_state.get("neighbor-ipv6-address")
-                                if neighbor_ipv6:
-                                    adj_entry["neighbor-ipv6-address"] = neighbor_ipv6
-
-                                hold_time = adj_state.get("remaining-hold-time")
-                                if hold_time is not None:
-                                    adj_entry["remaining-hold-time"] = hold_time
-
-                                # Up-time: prefer human-readable format if available
-                                adj_up_time = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:adjacency-up-time"
-                                )
-                                if adj_up_time:
-                                    adj_entry["up-time"] = adj_up_time
-                                else:
-                                    up_time = adj_state.get("up-time")
-                                    if up_time is not None:
-                                        adj_entry["up-time"] = up_time
-
-                                # State change tracking
-                                num_state_changes = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:num-state-changes"
-                                )
-                                if num_state_changes is not None:
-                                    adj_entry["num-state-changes"] = num_state_changes
-
-                                last_state_ts = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:last-state-change-timestamp"
-                                )
-                                if last_state_ts:
-                                    adj_entry["last-state-change-timestamp"] = (
-                                        last_state_ts
-                                    )
-
-                                last_down_reason = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:last-down-reason"
-                                )
-                                if last_down_reason:
-                                    adj_entry["last-down-reason"] = last_down_reason
-
-                                local_cid = adj_state.get("local-extended-circuit-id")
-                                if local_cid is not None:
-                                    adj_entry["local-extended-circuit-id"] = local_cid
-
-                                neighbor_cid = adj_state.get(
-                                    "neighbor-extended-circuit-id"
-                                )
-                                if neighbor_cid is not None:
-                                    adj_entry["neighbor-extended-circuit-id"] = (
-                                        neighbor_cid
-                                    )
-
-                                neighbor_ct = adj_state.get("neighbor-circuit-type")
-                                if neighbor_ct:
-                                    adj_entry["neighbor-circuit-type"] = neighbor_ct
-
-                                adj_type = adj_state.get("adjacency-type")
-                                if adj_type:
-                                    adj_entry["adjacency-type"] = adj_type
-
-                                restart_support = adj_state.get("restart-support")
-                                if restart_support is not None:
-                                    adj_entry["restart-support"] = restart_support
-
-                                restart_suppress = adj_state.get("restart-suppress")
-                                if restart_suppress is not None:
-                                    adj_entry["restart-suppress"] = restart_suppress
-
-                                restart_status = adj_state.get("restart-status")
-                                if restart_status is not None:
-                                    adj_entry["restart-status"] = restart_status
-
-                                nlpid = adj_state.get("nlpid")
-                                if nlpid:
-                                    adj_entry["nlpid"] = nlpid
-
-                                usable = adj_state.get(f"{ARCOS_ISIS_AUGMENTS}:usable")
-                                if usable is not None:
-                                    adj_entry["usable"] = usable
-
-                                restart_ack = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:restart-ack"
-                                )
-                                if restart_ack is not None:
-                                    adj_entry["restart-ack"] = restart_ack
-
-                                restart_req = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:restart-request"
-                                )
-                                if restart_req is not None:
-                                    adj_entry["restart-request"] = restart_req
-
-                                recv_mt_ids = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:received-multi-topology-ids"
-                                )
-                                if recv_mt_ids:
-                                    adj_entry["received-multi-topology-ids"] = (
-                                        recv_mt_ids
-                                    )
-
-                                active_mt_ids = adj_state.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:active-multi-topology-ids"
-                                )
-                                if active_mt_ids:
-                                    adj_entry["active-multi-topology-ids"] = (
-                                        active_mt_ids
-                                    )
-
-                                bfd_data = adj.get(f"{ARCOS_ISIS_AUGMENTS}:bfd", {})
-                                if bfd_data:
-                                    bfd_info: Dict[str, TypeAny] = {}
-                                    bfd_state = bfd_data.get("state", {})
-                                    if bfd_state.get("bfd-required") is not None:
-                                        bfd_info["bfd-required"] = bfd_state[
-                                            "bfd-required"
-                                        ]
-
-                                    topologies_data = bfd_data.get(
-                                        "topologies", {}
-                                    ).get("topology", [])
-                                    if topologies_data:
-                                        topologies: Dict[TypeAny, TypeAny] = {}
-                                        for topo in topologies_data:
-                                            mt_id = topo.get("mt-id")
-                                            if mt_id is None:
-                                                continue
-
-                                            topo_state = topo.get("state", {})
-                                            topologies[mt_id] = {"mt-id": mt_id}
-                                            for key in [
-                                                "ipv4-bfd-required",
-                                                "ipv6-bfd-required",
-                                                "bfd-required",
-                                                "ipv4-bfd-up",
-                                                "ipv6-bfd-up",
-                                                "ipv4-up",
-                                                "ipv6-up",
-                                                "usable",
-                                            ]:
-                                                if key in topo_state:
-                                                    topologies[mt_id][key] = topo_state[
-                                                        key
-                                                    ]
-
-                                        if topologies:
-                                            bfd_info["topologies"] = topologies
-
-                                    if bfd_info:
-                                        adj_entry["bfd"] = bfd_info
-
-                                ddm_data = adj.get(
-                                    f"{ARCOS_ISIS_AUGMENTS}:dynamic-delay-measurement",
-                                    {},
-                                )
-                                if ddm_data:
-                                    ddm_state = ddm_data.get("state", {})
-                                    if ddm_state:
-                                        ddm_info: Dict[str, TypeAny] = {}
-                                        for key in [
-                                            "enabled",
-                                            "num-advertisements-sent",
-                                            "last-sampled-avg-delay-value",
-                                            "last-advertised-min-delay-value",
-                                            "last-advertised-max-delay-value",
-                                            "last-advertised-timestamp",
-                                            "last-advertisement-reason",
-                                        ]:
-                                            if key in ddm_state:
-                                                ddm_info[key] = ddm_state[key]
-                                        if ddm_info:
-                                            adj_entry["dynamic-delay-measurement"] = (
-                                                ddm_info
-                                            )
-
-                                adjacencies_dict[sys_id] = adj_entry
-
-                            if adjacencies_dict:
-                                intf_entry["adjacencies"] = adjacencies_dict
-
-                    if levels_dict:
-                        intf_entry["levels"] = levels_dict
-
-                interfaces_dict[intf_id] = intf_entry
-
-            if interfaces_dict:
-                ni_isis["interfaces"] = interfaces_dict
-
-        except json.JSONDecodeError as exc:
-            logger.warning("Failed to parse JSON output: %s", exc)
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.warning("Error parsing ISIS interface data: %s", exc)
-
-        return ret_dict
+                if ip_enabled is not None:
+                    frr_entry["ip-enabled"] = ip_enabled
+
+                ti_lfa_cfg = af_frr.get("ti-lfa", {}).get("config", {})
+                srv6_en = ti_lfa_cfg.get("srv6", {}).get("enabled")
+                if srv6_en is not None:
+                    frr_entry["ti-lfa-srv6-enabled"] = srv6_en
+                sr_mpls_en = ti_lfa_cfg.get("sr-mpls", {}).get("enabled")
+                if sr_mpls_en is not None:
+                    frr_entry["ti-lfa-sr-mpls-enabled"] = sr_mpls_en
+
+                if frr_entry:
+                    af_entry["fast-reroute"] = frr_entry
+
+            result[af_key] = af_entry
+
+        return result
+
+    # ------------------------------------------------------------------
+    # Timers
+    # ------------------------------------------------------------------
+
+    def _parse_timers(self, state: Dict) -> Dict[str, TypeAny]:
+        """Parse timers.state{}, flatten and strip prefixes."""
+        if not state:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        timers: Dict[str, TypeAny] = {}
+
+        if "csnp-interval" in state:
+            timers["csnp-interval"] = int(state["csnp-interval"])
+        if "lsp-pacing-interval" in state:
+            timers["lsp-pacing-interval"] = int(state["lsp-pacing-interval"])
+
+        hello_int = state.get(f"{aug}:hello-interval")
+        if hello_int is not None:
+            timers["hello-interval"] = int(hello_int)
+        hello_mult = state.get(f"{aug}:hello-multiplier")
+        if hello_mult is not None:
+            timers["hello-multiplier"] = int(hello_mult)
+
+        return timers
+
+    # ------------------------------------------------------------------
+    # Interface-level BFD
+    # ------------------------------------------------------------------
+
+    def _parse_interface_bfd(self, bfd_data: Dict) -> Dict[str, TypeAny]:
+        """Parse bfd block at interface level."""
+        if not bfd_data:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        bfd: Dict[str, TypeAny] = {}
+
+        bfd_state = bfd_data.get("state", {})
+        if "bfd-tlv" in bfd_state:
+            bfd["bfd-tlv"] = bfd_state["bfd-tlv"]
+
+        aug_state = bfd_data.get(f"{aug}:state", {})
+        if "profile" in aug_state:
+            bfd["profile"] = aug_state["profile"]
+
+        return bfd
+
+    # ------------------------------------------------------------------
+    # Fast-reroute (interface level)
+    # ------------------------------------------------------------------
+
+    def _parse_fast_reroute(self, frr_data: Dict) -> Dict[str, TypeAny]:
+        """Parse augmented fast-reroute block at interface level."""
+        if not frr_data:
+            return {}
+
+        frr: Dict[str, TypeAny] = {}
+
+        ti_lfa_state = frr_data.get("ti-lfa", {}).get("state", {})
+        if "srv6-enabled" in ti_lfa_state:
+            frr["srv6-enabled"] = ti_lfa_state["srv6-enabled"]
+
+        tiebreaker_data = frr_data.get("tiebreaker", {})
+        if tiebreaker_data:
+            tiebreakers: Dict[str, TypeAny] = {}
+            for tb_type in ("srlg-disjoint", "node-protecting"):
+                tb_state = tiebreaker_data.get(tb_type, {}).get("state", {})
+                if "priority" in tb_state:
+                    tiebreakers[tb_type] = {
+                        "priority": tb_state["priority"]
+                    }
+            if tiebreakers:
+                frr["tiebreakers"] = tiebreakers
+
+        return frr
+
+    # ------------------------------------------------------------------
+    # Levels
+    # ------------------------------------------------------------------
+
+    def _parse_levels(
+        self, levels_list: list
+    ) -> Dict[str, TypeAny]:
+        """Parse levels.level[] list."""
+        if not levels_list:
+            return {}
+
+        levels_dict: Dict[str, TypeAny] = {}
+
+        for level in levels_list:
+            level_num = level.get("level-number")
+            if level_num is None:
+                continue
+
+            level_entry = self._parse_single_level(level)
+            if level_entry:
+                levels_dict[str(level_num)] = level_entry
+
+        return levels_dict
+
+    def _parse_single_level(self, level: Dict) -> Dict[str, TypeAny]:
+        """Parse a single level entry."""
+        aug = ARCOS_ISIS_AUGMENTS
+        entry: Dict[str, TypeAny] = {}
+
+        # Level state (flatten)
+        state = level.get("state", {})
+        self._set(entry, "enabled", state.get("enabled"))
+        self._set(entry, "priority", state.get("priority"))
+
+        metric = state.get(f"{aug}:metric")
+        if metric is not None:
+            entry["metric"] = metric
+
+        flex_alg = state.get(f"{aug}:flexible-algorithm")
+        if flex_alg and isinstance(flex_alg, dict):
+            fa_entry: Dict[str, TypeAny] = {}
+            if "te-metric" in flex_alg:
+                fa_entry["te-metric"] = flex_alg["te-metric"]
+            if "delay-metric" in flex_alg:
+                fa_entry["delay-metric"] = flex_alg["delay-metric"]
+            if fa_entry:
+                entry["flexible-algorithm"] = fa_entry
+
+        # Packet counters
+        pkt_counters = self._parse_packet_counters(
+            level.get("packet-counters", {})
+        )
+        if pkt_counters:
+            entry["packet-counters"] = pkt_counters
+
+        # Level hello-authentication
+        hello_auth = self._parse_authentication(
+            level.get("hello-authentication", {})
+        )
+        if hello_auth:
+            entry["hello-authentication"] = hello_auth
+
+        # Adjacencies
+        adjacencies = self._parse_adjacencies(
+            level.get("adjacencies", {}).get("adjacency", [])
+        )
+        if adjacencies:
+            entry["adjacencies"] = adjacencies
+
+        return entry
+
+    # ------------------------------------------------------------------
+    # Packet counters
+    # ------------------------------------------------------------------
+
+    def _parse_packet_counters(
+        self, pkt_data: Dict
+    ) -> Dict[str, TypeAny]:
+        """Parse packet-counters for a level."""
+        if not pkt_data:
+            return {}
+
+        aug = ARCOS_ISIS_AUGMENTS
+        counters: Dict[str, TypeAny] = {}
+
+        for pkt_type in ("lsp", "iih", "psnp", "csnp", "unknown"):
+            pkt_state = pkt_data.get(pkt_type, {}).get("state", {})
+            if not pkt_state:
+                continue
+
+            pkt_entry: Dict[str, TypeAny] = {}
+            for key in (
+                "received", "processed", "dropped", "sent", "retransmit",
+            ):
+                if key in pkt_state:
+                    pkt_entry[key] = pkt_state[key]
+
+            # Augment: no-memory
+            no_mem = pkt_state.get(f"{aug}:no-memory")
+            if no_mem is not None:
+                pkt_entry["no-memory"] = no_mem
+
+            if pkt_entry:
+                counters[pkt_type] = pkt_entry
+
+        return counters
+
+    # ------------------------------------------------------------------
+    # Adjacencies
+    # ------------------------------------------------------------------
+
+    def _parse_adjacencies(
+        self, adj_list: list
+    ) -> Dict[str, TypeAny]:
+        """Parse adjacencies.adjacency[] list."""
+        if not adj_list:
+            return {}
+
+        result: Dict[str, TypeAny] = {}
+
+        for adj in adj_list:
+            sys_id = adj.get("system-id")
+            if not sys_id:
+                continue
+
+            adj_entry = self._parse_single_adjacency(adj)
+            if adj_entry:
+                result[sys_id] = adj_entry
+
+        return result
+
+    def _parse_single_adjacency(self, adj: Dict) -> Dict[str, TypeAny]:
+        """Parse a single adjacency entry."""
+        aug = ARCOS_ISIS_AUGMENTS
+        entry: Dict[str, TypeAny] = {}
+
+        state = adj.get("state", {})
+
+        # Standard fields
+        self._set(entry, "system-id", state.get("system-id"))
+        self._set(entry, "neighbor-ipv4-address",
+                  state.get("neighbor-ipv4-address"))
+        self._set(entry, "neighbor-ipv6-address",
+                  state.get("neighbor-ipv6-address"))
+        self._set(entry, "local-extended-circuit-id",
+                  state.get("local-extended-circuit-id"))
+        self._set(entry, "neighbor-extended-circuit-id",
+                  state.get("neighbor-extended-circuit-id"))
+        self._set(entry, "neighbor-circuit-type",
+                  state.get("neighbor-circuit-type"))
+        self._set(entry, "adjacency-type", state.get("adjacency-type"))
+        self._set(entry, "adjacency-state", state.get("adjacency-state"))
+        self._set(entry, "remaining-hold-time",
+                  state.get("remaining-hold-time"))
+        self._set(entry, "up-time", state.get("up-time"))
+        self._set(entry, "restart-support", state.get("restart-support"))
+        self._set(entry, "restart-suppress", state.get("restart-suppress"))
+        self._set(entry, "restart-status", state.get("restart-status"))
+        self._set(entry, "nlpid", state.get("nlpid"))
+
+        # Augmented fields
+        adj_up_time = state.get(f"{aug}:adjacency-up-time")
+        if adj_up_time:
+            entry["adjacency-up-time"] = adj_up_time
+
+        num_sc = state.get(f"{aug}:num-state-changes")
+        if num_sc is not None:
+            entry["num-state-changes"] = num_sc
+
+        last_ts = state.get(f"{aug}:last-state-change-timestamp")
+        if last_ts:
+            entry["last-state-change-timestamp"] = last_ts
+
+        last_down = state.get(f"{aug}:last-down-reason")
+        if last_down:
+            entry["last-down-reason"] = last_down
+
+        self._set(entry, "usable", state.get(f"{aug}:usable"))
+        self._set(entry, "restart-ack", state.get(f"{aug}:restart-ack"))
+        self._set(entry, "restart-request",
+                  state.get(f"{aug}:restart-request"))
+
+        # Multi-topology IDs (strip value prefixes from list items)
+        recv_mt = state.get(f"{aug}:received-multi-topology-ids")
+        if recv_mt:
+            entry["received-multi-topology-ids"] = [
+                _strip_value(v) for v in recv_mt
+            ]
+
+        active_mt = state.get(f"{aug}:active-multi-topology-ids")
+        if active_mt:
+            entry["active-multi-topology-ids"] = [
+                _strip_value(v) for v in active_mt
+            ]
+
+        # Adjacency BFD
+        bfd = self._parse_adjacency_bfd(adj.get(f"{aug}:bfd", {}))
+        if bfd:
+            entry["bfd"] = bfd
+
+        # Dynamic delay measurement
+        ddm = self._parse_ddm(
+            adj.get(f"{aug}:dynamic-delay-measurement", {})
+        )
+        if ddm:
+            entry["dynamic-delay-measurement"] = ddm
+
+        return entry
+
+    # ------------------------------------------------------------------
+    # Adjacency BFD
+    # ------------------------------------------------------------------
+
+    def _parse_adjacency_bfd(self, bfd_data: Dict) -> Dict[str, TypeAny]:
+        """Parse adjacency-level BFD block."""
+        if not bfd_data:
+            return {}
+
+        bfd: Dict[str, TypeAny] = {}
+
+        bfd_state = bfd_data.get("state", {})
+        if bfd_state.get("bfd-required") is not None:
+            bfd["bfd-required"] = bfd_state["bfd-required"]
+
+        topologies_list = (
+            bfd_data.get("topologies", {}).get("topology", [])
+        )
+        if topologies_list:
+            topologies: Dict[TypeAny, TypeAny] = {}
+            for topo in topologies_list:
+                mt_id = topo.get("mt-id")
+                if mt_id is None:
+                    continue
+
+                topo_state = topo.get("state", {})
+                topo_entry: Dict[str, TypeAny] = {}
+                self._set(topo_entry, "mt-id", topo_state.get("mt-id"))
+
+                for key in (
+                    "ipv4-bfd-required", "ipv6-bfd-required",
+                    "bfd-required",
+                    "ipv4-bfd-up", "ipv6-bfd-up",
+                    "ipv4-up", "ipv6-up",
+                    "usable",
+                ):
+                    if key in topo_state:
+                        topo_entry[key] = topo_state[key]
+
+                if topo_entry:
+                    topologies[mt_id] = topo_entry
+
+            if topologies:
+                bfd["topologies"] = topologies
+
+        return bfd
+
+    # ------------------------------------------------------------------
+    # Dynamic delay measurement
+    # ------------------------------------------------------------------
+
+    def _parse_ddm(self, ddm_data: Dict) -> Dict[str, TypeAny]:
+        """Parse dynamic-delay-measurement block."""
+        if not ddm_data:
+            return {}
+
+        ddm_state = ddm_data.get("state", {})
+        if not ddm_state:
+            return {}
+
+        ddm: Dict[str, TypeAny] = {}
+        for key in (
+            "enabled",
+            "num-advertisements-sent",
+            "last-sampled-avg-delay-value",
+            "last-advertised-min-delay-value",
+            "last-advertised-max-delay-value",
+            "last-advertised-timestamp",
+            "last-advertisement-reason",
+        ):
+            if key in ddm_state:
+                ddm[key] = ddm_state[key]
+
+        return ddm
+
+    # ------------------------------------------------------------------
+    # Helper: set key only if value is not None
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _set(d: Dict, key: str, value: TypeAny) -> None:
+        """Set *key* in *d* only when *value* is not ``None``."""
+        if value is not None:
+            d[key] = value
+
 
 
 class ShowIsisConfigSchema(MetaParser):
@@ -2141,155 +2438,155 @@ class ShowIsisConfigSchema(MetaParser):
                         Optional("config"): {
                             Optional("global"): {
                                 Optional("net"): list,
-                                Optional("level_capability"): str,
-                                Optional("max_ecmp_paths"): int,
-                                Optional("graceful_restart_enabled"): bool,
-                                Optional("lsp_mtu_size"): int,
-                                Optional("segment_routing_enabled"): bool,
-                                Optional("auto_cost_reference_bandwidth"): int,
-                                Optional("mpls_igp_ldp_sync_enabled"): bool,
-                                Optional("hello_authentication"): {
+                                Optional("level-capability"): str,
+                                Optional("max-ecmp-paths"): int,
+                                Optional("graceful-restart-enabled"): bool,
+                                Optional("lsp-mtu-size"): int,
+                                Optional("segment-routing-enabled"): bool,
+                                Optional("auto-cost-reference-bandwidth"): int,
+                                Optional("mpls-igp-ldp-sync-enabled"): bool,
+                                Optional("hello-authentication"): {
                                     Optional("enabled"): bool,
                                     Optional("keychain"): str,
-                                    Optional("auth_type"): str,
+                                    Optional("auth-type"): str,
                                 },
                                 Optional("srms"): {
                                     Optional("mapping"): str,
-                                    Optional("receive_enabled"): bool,
-                                    Optional("advertise_enabled"): bool,
+                                    Optional("receive-enabled"): bool,
+                                    Optional("advertise-enabled"): bool,
                                 },
                                 Optional("srv6"): {
                                     Optional("enabled"): bool,
                                     Optional("locators"): list,  # list of locator names
                                 },
-                                Optional("traffic_engineering"): {
-                                    Optional("ipv4_router_id"): str,
-                                    Optional("ipv6_router_id"): str,
+                                Optional("traffic-engineering"): {
+                                    Optional("ipv4-router-id"): str,
+                                    Optional("ipv6-router-id"): str,
                                 },
-                                Optional("micro_loop_avoidance"): {
-                                    Optional("srv6_enabled"): bool,
-                                    Optional("rib_update_delay"): int,
+                                Optional("micro-loop-avoidance"): {
+                                    Optional("srv6-enabled"): bool,
+                                    Optional("rib-update-delay"): int,
                                 },
-                                Optional("lsp_bit"): {
-                                    Optional("overload_bit"): {
-                                        Optional("set_bit_on_boot"): bool,
-                                        Optional("set_bit"): bool,
-                                        Optional("advertise_high_metric"): bool,
-                                        Optional("reset_triggers"): list,
+                                Optional("lsp-bit"): {
+                                    Optional("overload-bit"): {
+                                        Optional("set-bit-on-boot"): bool,
+                                        Optional("set-bit"): bool,
+                                        Optional("advertise-high-metric"): bool,
+                                        Optional("reset-triggers"): list,
                                     },
-                                    Optional("attached_bit"): {
-                                        Optional("ignore_bit"): bool,
-                                        Optional("suppress_bit"): bool,
+                                    Optional("attached-bit"): {
+                                        Optional("ignore-bit"): bool,
+                                        Optional("suppress-bit"): bool,
                                     },
                                 },
-                                Optional("flexible_algorithms"): {
+                                Optional("flexible-algorithms"): {
                                     Any(): {  # algorithm ID
                                         "id": int,
-                                        Optional("advertise_definition_enabled"): bool,
-                                        Optional("metric_type"): str,
+                                        Optional("advertise-definition-enabled"): bool,
+                                        Optional("metric-type"): str,
                                     }
                                 },
-                                Optional("dynamic_delay_measurement"): {
-                                    Optional("probe_interval"): int,
-                                    Optional("advertisement_interval"): int,
+                                Optional("dynamic-delay-measurement"): {
+                                    Optional("probe-interval"): int,
+                                    Optional("advertisement-interval"): int,
                                 },
-                                Optional("inter_level_policies"): {
-                                    Optional("level1_to_level2"): {
-                                        Optional("import_policy"): list,
+                                Optional("inter-level-policies"): {
+                                    Optional("level1-to-level2"): {
+                                        Optional("import-policy"): list,
                                     },
-                                    Optional("level2_to_level1"): {
-                                        Optional("import_policy"): list,
+                                    Optional("level2-to-level1"): {
+                                        Optional("import-policy"): list,
                                     },
                                 },
                             },
                             Optional("levels"): {
                                 Any(): {  # level number
-                                    "level_number": int,
+                                    "level-number": int,
                                     Optional("enabled"): bool,
                                     Optional("authentication"): {
-                                        Optional("lsp_authentication"): bool,
-                                        Optional("csnp_authentication"): bool,
-                                        Optional("psnp_authentication"): bool,
-                                        Optional("auth_password"): str,
-                                        Optional("crypto_algorithm"): str,
-                                        Optional("auth_type"): str,
+                                        Optional("lsp-authentication"): bool,
+                                        Optional("csnp-authentication"): bool,
+                                        Optional("psnp-authentication"): bool,
+                                        Optional("auth-password"): str,
+                                        Optional("crypto-algorithm"): str,
+                                        Optional("auth-type"): str,
                                         Optional("keychain"): str,
                                     },
-                                    Optional("labeled_preference"): int,
-                                    Optional("traffic_engineering_enabled"): bool,
+                                    Optional("labeled-preference"): int,
+                                    Optional("traffic-engineering-enabled"): bool,
                                 }
                             },
-                            Optional("afi_safi"): {
+                            Optional("afi-safi"): {
                                 Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
-                                    "afi_name": str,
-                                    "safi_name": str,
+                                    "afi-name": str,
+                                    "safi-name": str,
                                     "enabled": bool,
-                                    Optional("multi_topology_enabled"): bool,
-                                    Optional("summary_prefixes"): {
+                                    Optional("multi-topology-enabled"): bool,
+                                    Optional("summary-prefixes"): {
                                         Any(): {  # prefix
                                             "prefix": str,
                                             Optional("level"): str,
                                             Optional("algorithm"): int,
                                             Optional("tag"): int,
-                                            Optional("adv_unreachable"): bool,
+                                            Optional("adv-unreachable"): bool,
                                         }
                                     },
-                                    Optional("prefix_unreachable"): {
-                                        Optional("adv_lifetime"): int,
-                                        Optional("adv_metric"): int,
-                                        Optional("adv_maximum"): int,
-                                        Optional("rx_process"): bool,
+                                    Optional("prefix-unreachable"): {
+                                        Optional("adv-lifetime"): int,
+                                        Optional("adv-metric"): int,
+                                        Optional("adv-maximum"): int,
+                                        Optional("rx-process"): bool,
                                     },
-                                    Optional("default_information"): {
+                                    Optional("default-information"): {
                                         Optional("enabled"): bool,
-                                        Optional("export_policy"): list,
+                                        Optional("export-policy"): list,
                                     },
                                 }
                             },
                             Optional("interfaces"): {
                                 Any(): {  # interface name
-                                    "interface_id": str,
+                                    "interface-id": str,
                                     "enabled": bool,
-                                    Optional("network_type"): str,
+                                    Optional("network-type"): str,
                                     Optional("tag"): list,  # list of integers
                                     Optional("authentication"): {
-                                        Optional("hello_authentication"): bool,
-                                        Optional("auth_password"): str,
-                                        Optional("crypto_algorithm"): str,
-                                        Optional("auth_type"): str,
+                                        Optional("hello-authentication"): bool,
+                                        Optional("auth-password"): str,
+                                        Optional("crypto-algorithm"): str,
+                                        Optional("auth-type"): str,
                                         Optional("keychain"): str,
                                     },
-                                    Optional("mpls_igp_ldp_sync_enabled"): bool,
+                                    Optional("mpls-igp-ldp-sync-enabled"): bool,
                                     Optional("timers"): {
-                                        Optional("hello_interval"): int,
-                                        Optional("hello_multiplier"): int,
+                                        Optional("hello-interval"): int,
+                                        Optional("hello-multiplier"): int,
                                     },
-                                    Optional("afi_safi"): {
+                                    Optional("afi-safi"): {
                                         Any(): {  # AFI-SAFI key
-                                            "afi_name": str,
-                                            "safi_name": str,
+                                            "afi-name": str,
+                                            "safi-name": str,
                                             "enabled": bool,
-                                            Optional("fast_reroute"): {
-                                                Optional("ip_enabled"): bool,
-                                                Optional("ti_lfa_srv6_enabled"): bool,
-                                                Optional("ti_lfa_sr_mpls_enabled"): bool,
+                                            Optional("fast-reroute"): {
+                                                Optional("ip-enabled"): bool,
+                                                Optional("ti-lfa-srv6-enabled"): bool,
+                                                Optional("ti-lfa-sr-mpls-enabled"): bool,
                                             },
-                                            Optional("adjacency_sids"): list,
-                                            Optional("prefix_sids"): list,
+                                            Optional("adjacency-sids"): list,
+                                            Optional("prefix-sids"): list,
                                         }
                                     },
                                     Optional("levels"): {
                                         Any(): {  # level number
-                                            "level_number": int,
+                                            "level-number": int,
                                             Optional("enabled"): bool,
                                             Optional("metric"): int,
-                                            Optional("flexible_algorithm"): {
-                                                Optional("delay_metric"): Or(int, str),
-                                                Optional("te_metric"): Or(int, str),
+                                            Optional("flexible-algorithm"): {
+                                                Optional("delay-metric"): Or(int, str),
+                                                Optional("te-metric"): Or(int, str),
                                             },
                                         }
                                     },
-                                    Optional("interface_ref"): {
+                                    Optional("interface-ref"): {
                                         Optional("interface"): str,
                                         Optional("subinterface"): int,
                                     },
@@ -2351,9 +2648,9 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 if "net" in config:
                     global_entry["net"] = config["net"]
                 if "level-capability" in config:
-                    global_entry["level_capability"] = config["level-capability"]
+                    global_entry["level-capability"] = config["level-capability"]
                 if "max-ecmp-paths" in config:
-                    global_entry["max_ecmp_paths"] = config["max-ecmp-paths"]
+                    global_entry["max-ecmp-paths"] = config["max-ecmp-paths"]
 
                 if global_entry:
                     cfg_root["global"] = global_entry
@@ -2365,7 +2662,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
                 cfg_root["global"][
-                    "auto_cost_reference_bandwidth"
+                    "auto-cost-reference-bandwidth"
                 ] = ref_bw_cfg["reference-bandwidth"]
 
             # Global MPLS IGP-LDP sync
@@ -2374,7 +2671,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if "enabled" in igp_ldp_cfg:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
-                cfg_root["global"]["mpls_igp_ldp_sync_enabled"] = igp_ldp_cfg[
+                cfg_root["global"]["mpls-igp-ldp-sync-enabled"] = igp_ldp_cfg[
                     "enabled"
                 ]
 
@@ -2390,12 +2687,12 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 if "keychain" in hello_cfg:
                     hello_entry["keychain"] = hello_cfg["keychain"]
                 if "auth-type" in hello_cfg:
-                    hello_entry["auth_type"] = hello_cfg["auth-type"]
+                    hello_entry["auth-type"] = hello_cfg["auth-type"]
 
                 if hello_entry:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["hello_authentication"] = hello_entry
+                    cfg_root["global"]["hello-authentication"] = hello_entry
 
             # Graceful restart
             gr_root = global_config.get("graceful-restart", {}) or {}
@@ -2411,14 +2708,14 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if gr_val is not None:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
-                cfg_root["global"]["graceful_restart_enabled"] = gr_val
+                cfg_root["global"]["graceful-restart-enabled"] = gr_val
 
             # Transport (LSP MTU)
             transport_config = global_config.get("transport", {}).get("config", {})
             if transport_config and "lsp-mtu-size" in transport_config:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
-                cfg_root["global"]["lsp_mtu_size"] = transport_config["lsp-mtu-size"]
+                cfg_root["global"]["lsp-mtu-size"] = transport_config["lsp-mtu-size"]
 
             # Segment Routing
             sr_root = global_config.get("segment-routing", {})
@@ -2426,7 +2723,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if sr_config and "enabled" in sr_config:
                 if "global" not in cfg_root:
                     cfg_root["global"] = {}
-                cfg_root["global"]["segment_routing_enabled"] = sr_config["enabled"]
+                cfg_root["global"]["segment-routing-enabled"] = sr_config["enabled"]
 
             # SRMS (Segment Routing Mapping Server)
             srms_root = sr_root.get(f"{ARCOS_ISIS_AUGMENTS}:srms", {})
@@ -2436,9 +2733,9 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 if "mapping" in srms_config:
                     srms_dict["mapping"] = srms_config["mapping"]
                 if "receive-enabled" in srms_config:
-                    srms_dict["receive_enabled"] = srms_config["receive-enabled"]
+                    srms_dict["receive-enabled"] = srms_config["receive-enabled"]
                 if "advertise-enabled" in srms_config:
-                    srms_dict["advertise_enabled"] = srms_config["advertise-enabled"]
+                    srms_dict["advertise-enabled"] = srms_config["advertise-enabled"]
                 if srms_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
@@ -2470,13 +2767,13 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if te_config:
                 te_dict = {}
                 if "ipv4-router-id" in te_config:
-                    te_dict["ipv4_router_id"] = te_config["ipv4-router-id"]
+                    te_dict["ipv4-router-id"] = te_config["ipv4-router-id"]
                 if "ipv6-router-id" in te_config:
-                    te_dict["ipv6_router_id"] = te_config["ipv6-router-id"]
+                    te_dict["ipv6-router-id"] = te_config["ipv6-router-id"]
                 if te_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["traffic_engineering"] = te_dict
+                    cfg_root["global"]["traffic-engineering"] = te_dict
 
             # Micro Loop Avoidance
             mla_root = global_config.get(
@@ -2486,13 +2783,13 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if mla_config:
                 mla_dict = {}
                 if "srv6-enabled" in mla_config:
-                    mla_dict["srv6_enabled"] = mla_config["srv6-enabled"]
+                    mla_dict["srv6-enabled"] = mla_config["srv6-enabled"]
                 if "rib-update-delay" in mla_config:
-                    mla_dict["rib_update_delay"] = mla_config["rib-update-delay"]
+                    mla_dict["rib-update-delay"] = mla_config["rib-update-delay"]
                 if mla_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["micro_loop_avoidance"] = mla_dict
+                    cfg_root["global"]["micro-loop-avoidance"] = mla_dict
 
             # Flexible Algorithms
             flexalgo_root = global_config.get(
@@ -2509,19 +2806,19 @@ class ShowIsisConfig(ShowIsisConfigSchema):
 
                         adv_def = algo_config.get("advertise-definition", {})
                         if "enabled" in adv_def:
-                            algo_entry["advertise_definition_enabled"] = adv_def[
+                            algo_entry["advertise-definition-enabled"] = adv_def[
                                 "enabled"
                             ]
 
                         if "metric-type" in algo_config:
-                            algo_entry["metric_type"] = algo_config["metric-type"]
+                            algo_entry["metric-type"] = algo_config["metric-type"]
 
                         flexalgo_dict[str(algo_id)] = algo_entry
 
                 if flexalgo_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["flexible_algorithms"] = flexalgo_dict
+                    cfg_root["global"]["flexible-algorithms"] = flexalgo_dict
 
             # Dynamic Delay Measurement
             ddm_root = global_config.get(
@@ -2531,15 +2828,15 @@ class ShowIsisConfig(ShowIsisConfigSchema):
             if ddm_config:
                 ddm_dict = {}
                 if "probe-interval" in ddm_config:
-                    ddm_dict["probe_interval"] = ddm_config["probe-interval"]
+                    ddm_dict["probe-interval"] = ddm_config["probe-interval"]
                 if "advertisement-interval" in ddm_config:
-                    ddm_dict["advertisement_interval"] = ddm_config[
+                    ddm_dict["advertisement-interval"] = ddm_config[
                         "advertisement-interval"
                     ]
                 if ddm_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["dynamic_delay_measurement"] = ddm_dict
+                    cfg_root["global"]["dynamic-delay-measurement"] = ddm_dict
 
             # LSP-bit settings (overload/attached bits + reset triggers)
             lsp_root = global_config.get("lsp-bit", {})
@@ -2551,15 +2848,15 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 ov_cfg = ov_root.get("config", {})
                 ov_entry: Dict[str, TypeAny] = {}
                 if "set-bit-on-boot" in ov_cfg:
-                    ov_entry["set_bit_on_boot"] = ov_cfg["set-bit-on-boot"]
+                    ov_entry["set-bit-on-boot"] = ov_cfg["set-bit-on-boot"]
                 # Permanent overload-bit set-bit (config or state)
                 if "set-bit" in ov_cfg:
-                    ov_entry["set_bit"] = ov_cfg["set-bit"]
+                    ov_entry["set-bit"] = ov_cfg["set-bit"]
                 ov_state = ov_root.get("state", {})
-                if "set-bit" in ov_state and "set_bit" not in ov_entry:
-                    ov_entry["set_bit"] = ov_state["set-bit"]
+                if "set-bit" in ov_state and "set-bit" not in ov_entry:
+                    ov_entry["set-bit"] = ov_state["set-bit"]
                 if "advertise-high-metric" in ov_cfg:
-                    ov_entry["advertise_high_metric"] = ov_cfg["advertise-high-metric"]
+                    ov_entry["advertise-high-metric"] = ov_cfg["advertise-high-metric"]
 
                 rt_root = ov_root.get("reset-triggers", {})
                 rt_list = rt_root.get("reset-trigger", [])
@@ -2571,33 +2868,33 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         rt_cfg = rt.get("config", {})
                         trigger = rt_cfg.get("reset-trigger") or rt.get("reset-trigger")
                         if trigger is not None:
-                            rt_entry["reset_trigger"] = trigger
+                            rt_entry["reset-trigger"] = trigger
                         if "delay" in rt_cfg:
                             rt_entry["delay"] = rt_cfg["delay"]
                         if rt_entry:
                             resets.append(rt_entry)
                     if resets:
-                        ov_entry["reset_triggers"] = resets
+                        ov_entry["reset-triggers"] = resets
 
                 if ov_entry:
-                    lsp_dict["overload_bit"] = ov_entry
+                    lsp_dict["overload-bit"] = ov_entry
 
                 # Attached bit
                 att_root = lsp_root.get("attached-bit", {})
                 att_cfg = att_root.get("config", {})
                 att_entry: Dict[str, TypeAny] = {}
                 if "ignore-bit" in att_cfg:
-                    att_entry["ignore_bit"] = att_cfg["ignore-bit"]
+                    att_entry["ignore-bit"] = att_cfg["ignore-bit"]
                 if "suppress-bit" in att_cfg:
-                    att_entry["suppress_bit"] = att_cfg["suppress-bit"]
+                    att_entry["suppress-bit"] = att_cfg["suppress-bit"]
 
                 if att_entry:
-                    lsp_dict["attached_bit"] = att_entry
+                    lsp_dict["attached-bit"] = att_entry
 
                 if lsp_dict:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["lsp_bit"] = lsp_dict
+                    cfg_root["global"]["lsp-bit"] = lsp_dict
 
             # Inter-level propagation policies
             inter_root = global_config.get("inter-level-propagation-policies", {})
@@ -2607,21 +2904,21 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                 l1_root = inter_root.get("level1-to-level2", {})
                 l1_cfg = l1_root.get("config", {})
                 if "import-policy" in l1_cfg:
-                    inter_policies["level1_to_level2"] = {
-                        "import_policy": l1_cfg["import-policy"]
+                    inter_policies["level1-to-level2"] = {
+                        "import-policy": l1_cfg["import-policy"]
                     }
 
                 l2_root = inter_root.get("level2-to-level1", {})
                 l2_cfg = l2_root.get("config", {})
                 if "import-policy" in l2_cfg:
-                    inter_policies["level2_to_level1"] = {
-                        "import_policy": l2_cfg["import-policy"]
+                    inter_policies["level2-to-level1"] = {
+                        "import-policy": l2_cfg["import-policy"]
                     }
 
                 if inter_policies:
                     if "global" not in cfg_root:
                         cfg_root["global"] = {}
-                    cfg_root["global"]["inter_level_policies"] = inter_policies
+                    cfg_root["global"]["inter-level-policies"] = inter_policies
 
             # Global ISIS levels
             levels_root = isis.get("levels", {})
@@ -2634,7 +2931,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         continue
 
                     level_config = level.get("config", {})
-                    lvl_entry: Dict[str, TypeAny] = {"level_number": level_num}
+                    lvl_entry: Dict[str, TypeAny] = {"level-number": level_num}
                     if "enabled" in level_config:
                         lvl_entry["enabled"] = level_config["enabled"]
 
@@ -2643,26 +2940,26 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     auth_cfg = auth_root.get("config", {})
                     auth_entry: Dict[str, TypeAny] = {}
                     if "lsp-authentication" in auth_cfg:
-                        auth_entry["lsp_authentication"] = auth_cfg["lsp-authentication"]
+                        auth_entry["lsp-authentication"] = auth_cfg["lsp-authentication"]
                     if "csnp-authentication" in auth_cfg:
-                        auth_entry["csnp_authentication"] = auth_cfg[
+                        auth_entry["csnp-authentication"] = auth_cfg[
                             "csnp-authentication"
                         ]
                     if "psnp-authentication" in auth_cfg:
-                        auth_entry["psnp_authentication"] = auth_cfg[
+                        auth_entry["psnp-authentication"] = auth_cfg[
                             "psnp-authentication"
                         ]
                     if "auth-type" in auth_cfg:
-                        auth_entry["auth_type"] = auth_cfg["auth-type"]
+                        auth_entry["auth-type"] = auth_cfg["auth-type"]
                     if "keychain" in auth_cfg:
                         auth_entry["keychain"] = auth_cfg["keychain"]
 
                     key_cfg = auth_root.get("key", {}).get("config", {})
                     if "auth-password" in key_cfg:
-                        auth_entry["auth_password"] = key_cfg["auth-password"]
+                        auth_entry["auth-password"] = key_cfg["auth-password"]
                     crypto_key = key_cfg.get(f"{ARCOS_ISIS_AUGMENTS}:crypto-algorithm")
                     if crypto_key is not None:
-                        auth_entry["crypto_algorithm"] = crypto_key
+                        auth_entry["crypto-algorithm"] = crypto_key
 
                     if auth_entry:
                         lvl_entry["authentication"] = auth_entry
@@ -2673,7 +2970,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     )
                     labeled_pref_cfg = labeled_pref_root.get("config", {})
                     if "labeled-preference" in labeled_pref_cfg:
-                        lvl_entry["labeled_preference"] = labeled_pref_cfg[
+                        lvl_entry["labeled-preference"] = labeled_pref_cfg[
                             "labeled-preference"
                         ]
 
@@ -2687,7 +2984,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         )
                     lvl_te_cfg = lvl_te_root.get("config", {})
                     if "enabled" in lvl_te_cfg:
-                        lvl_entry["traffic_engineering_enabled"] = lvl_te_cfg[
+                        lvl_entry["traffic-engineering-enabled"] = lvl_te_cfg[
                             "enabled"
                         ]
 
@@ -2715,15 +3012,15 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     af_key = f"{afi_name}-{safi_name}"
                     af_config = af.get("config", {})
                     af_entry: Dict[str, TypeAny] = {
-                        "afi_name": afi_name,
-                        "safi_name": safi_name,
+                        "afi-name": afi_name,
+                        "safi-name": safi_name,
                         "enabled": af_config.get("enabled", False),
                     }
 
                     mt = af.get(f"{ARCOS_ISIS_AUGMENTS}:multi-topology", {})
                     mt_config = mt.get("config", {})
                     if "enabled" in mt_config:
-                        af_entry["multi_topology_enabled"] = mt_config["enabled"]
+                        af_entry["multi-topology-enabled"] = mt_config["enabled"]
 
                     # Summary prefixes
                     summary_root = af.get(f"{ARCOS_ISIS_AUGMENTS}:summary-prefixes", {})
@@ -2742,12 +3039,12 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                 if "tag" in sum_config:
                                     sum_entry["tag"] = sum_config["tag"]
                                 if "adv-unreachable" in sum_config:
-                                    sum_entry["adv_unreachable"] = sum_config[
+                                    sum_entry["adv-unreachable"] = sum_config[
                                         "adv-unreachable"
                                     ]
                                 summary_dict[prefix] = sum_entry
                         if summary_dict:
-                            af_entry["summary_prefixes"] = summary_dict
+                            af_entry["summary-prefixes"] = summary_dict
 
                     # Prefix unreachable
                     prefix_unreach_root = af.get(
@@ -2757,23 +3054,23 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     if prefix_unreach_config:
                         unreach_dict = {}
                         if "adv-lifetime" in prefix_unreach_config:
-                            unreach_dict["adv_lifetime"] = prefix_unreach_config[
+                            unreach_dict["adv-lifetime"] = prefix_unreach_config[
                                 "adv-lifetime"
                             ]
                         if "adv-metric" in prefix_unreach_config:
-                            unreach_dict["adv_metric"] = prefix_unreach_config[
+                            unreach_dict["adv-metric"] = prefix_unreach_config[
                                 "adv-metric"
                             ]
                         if "adv-maximum" in prefix_unreach_config:
-                            unreach_dict["adv_maximum"] = prefix_unreach_config[
+                            unreach_dict["adv-maximum"] = prefix_unreach_config[
                                 "adv-maximum"
                             ]
                         if "rx-process" in prefix_unreach_config:
-                            unreach_dict["rx_process"] = prefix_unreach_config[
+                            unreach_dict["rx-process"] = prefix_unreach_config[
                                 "rx-process"
                             ]
                         if unreach_dict:
-                            af_entry["prefix_unreachable"] = unreach_dict
+                            af_entry["prefix-unreachable"] = unreach_dict
 
                     # Default-information originate per AF
                     default_info_root = af.get(
@@ -2786,16 +3083,16 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         if "enabled" in originate_cfg:
                             default_info["enabled"] = originate_cfg["enabled"]
                         if "export-policy" in originate_cfg:
-                            default_info["export_policy"] = originate_cfg[
+                            default_info["export-policy"] = originate_cfg[
                                 "export-policy"
                             ]
                         if default_info:
-                            af_entry["default_information"] = default_info
+                            af_entry["default-information"] = default_info
 
                     afi_safi_dict[af_key] = af_entry
 
                 if afi_safi_dict:
-                    cfg_root["afi_safi"] = afi_safi_dict
+                    cfg_root["afi-safi"] = afi_safi_dict
 
             # Interface configurations
             interfaces_config = isis.get("interfaces", {})
@@ -2809,7 +3106,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
 
                     intf_config = intf.get("config", {})
                     intf_entry: Dict[str, TypeAny] = {
-                        "interface_id": intf_id,
+                        "interface-id": intf_id,
                         "enabled": intf_config.get("enabled", False),
                     }
 
@@ -2817,7 +3114,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         f"{ARCOS_ISIS_AUGMENTS}:network-type"
                     )
                     if network_type:
-                        intf_entry["network_type"] = network_type
+                        intf_entry["network-type"] = network_type
 
                     # Interface tag list
                     tag_list = intf_config.get(f"{ARCOS_ISIS_AUGMENTS}:tag")
@@ -2830,20 +3127,20 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     if auth_config:
                         auth_dict = {}
                         if "hello-authentication" in auth_config:
-                            auth_dict["hello_authentication"] = auth_config[
+                            auth_dict["hello-authentication"] = auth_config[
                                 "hello-authentication"
                             ]
 
                         if "keychain" in auth_config:
                             auth_dict["keychain"] = auth_config["keychain"]
                         if "auth-type" in auth_config:
-                            auth_dict["auth_type"] = auth_config["auth-type"]
+                            auth_dict["auth-type"] = auth_config["auth-type"]
 
                         auth_key = auth_root.get("key", {}).get("config", {})
                         if "auth-password" in auth_key:
-                            auth_dict["auth_password"] = auth_key["auth-password"]
+                            auth_dict["auth-password"] = auth_key["auth-password"]
                         if f"{ARCOS_ISIS_AUGMENTS}:crypto-algorithm" in auth_key:
-                            auth_dict["crypto_algorithm"] = auth_key[
+                            auth_dict["crypto-algorithm"] = auth_key[
                                 f"{ARCOS_ISIS_AUGMENTS}:crypto-algorithm"
                             ]
 
@@ -2855,11 +3152,11 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                     if timers_root:
                         timers_dict = {}
                         if f"{ARCOS_ISIS_AUGMENTS}:hello-interval" in timers_root:
-                            timers_dict["hello_interval"] = timers_root[
+                            timers_dict["hello-interval"] = timers_root[
                                 f"{ARCOS_ISIS_AUGMENTS}:hello-interval"
                             ]
                         if f"{ARCOS_ISIS_AUGMENTS}:hello-multiplier" in timers_root:
-                            timers_dict["hello_multiplier"] = timers_root[
+                            timers_dict["hello-multiplier"] = timers_root[
                                 f"{ARCOS_ISIS_AUGMENTS}:hello-multiplier"
                             ]
                         if timers_dict:
@@ -2871,14 +3168,14 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         "config", {}
                     )
                     if "enabled" in igp_ldp_cfg:
-                        intf_entry["mpls_igp_ldp_sync_enabled"] = igp_ldp_cfg[
+                        intf_entry["mpls-igp-ldp-sync-enabled"] = igp_ldp_cfg[
                             "enabled"
                         ]
 
                     intf_afi_safi = intf.get("afi-safi", {})
                     intf_af_list = intf_afi_safi.get("af", [])
                     if intf_af_list:
-                        intf_entry["afi_safi"] = {}
+                        intf_entry["afi-safi"] = {}
                         for af in intf_af_list:
                             afi_name = af.get("afi-name", "")
                             afi_name = afi_name.replace(
@@ -2893,8 +3190,8 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                             af_key = f"{afi_name}-{safi_name}"
                             af_config = af.get("config", {})
                             intf_af_entry = {
-                                "afi_name": afi_name,
-                                "safi_name": safi_name,
+                                "afi-name": afi_name,
+                                "safi-name": safi_name,
                                 "enabled": af_config.get("enabled", False),
                             }
 
@@ -2906,17 +3203,17 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                             frr_entry: Dict[str, TypeAny] = {}
                             ip_root = frr_root.get("ip", {}).get("config", {})
                             if "enabled" in ip_root:
-                                frr_entry["ip_enabled"] = ip_root["enabled"]
+                                frr_entry["ip-enabled"] = ip_root["enabled"]
                             srv6_root = tilfa_root.get("srv6", {})
                             if "enabled" in srv6_root:
-                                frr_entry["ti_lfa_srv6_enabled"] = srv6_root["enabled"]
+                                frr_entry["ti-lfa-srv6-enabled"] = srv6_root["enabled"]
                             sr_mpls_root = tilfa_root.get("sr-mpls", {})
                             if "enabled" in sr_mpls_root:
-                                frr_entry["ti_lfa_sr_mpls_enabled"] = sr_mpls_root[
+                                frr_entry["ti-lfa-sr-mpls-enabled"] = sr_mpls_root[
                                     "enabled"
                                 ]
                             if frr_entry:
-                                intf_af_entry["fast_reroute"] = frr_entry
+                                intf_af_entry["fast-reroute"] = frr_entry
 
                             # Adjacency SIDs
                             adj_sids_root = af_config.get(
@@ -2933,12 +3230,12 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                         neighbor = neighbor.split(":")[-1]
                                     adj_entry = {
                                         "neighbor": neighbor,
-                                        "sid_type": adj_config.get("sid-type"),
+                                        "sid-type": adj_config.get("sid-type"),
                                         "value": adj_config.get("value"),
                                     }
                                     adjacency_sids.append(adj_entry)
                                 if adjacency_sids:
-                                    intf_af_entry["adjacency_sids"] = adjacency_sids
+                                    intf_af_entry["adjacency-sids"] = adjacency_sids
 
                             # Prefix SIDs
                             prefix_sids_root = af_config.get(
@@ -2955,17 +3252,17 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                         algorithm = algorithm.split(":")[-1]
                                     pfx_entry: Dict[str, TypeAny] = {
                                         "algorithm": algorithm,
-                                        "sid_type": pfx_config.get("sid-type"),
+                                        "sid-type": pfx_config.get("sid-type"),
                                         "value": pfx_config.get("value"),
                                     }
                                     label_option = pfx_config.get("label-option")
                                     if label_option:
-                                        pfx_entry["label_option"] = label_option
+                                        pfx_entry["label-option"] = label_option
                                     prefix_sids.append(pfx_entry)
                                 if prefix_sids:
-                                    intf_af_entry["prefix_sids"] = prefix_sids
+                                    intf_af_entry["prefix-sids"] = prefix_sids
 
-                            intf_entry["afi_safi"][af_key] = intf_af_entry
+                            intf_entry["afi-safi"][af_key] = intf_af_entry
 
                     intf_levels = intf.get("levels", {})
                     level_list = intf_levels.get("level", [])
@@ -2976,7 +3273,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                             if level_num is not None:
                                 level_config = level.get("config", {})
                                 level_entry = {
-                                    "level_number": level_num,
+                                    "level-number": level_num,
                                 }
                                 if "enabled" in level_config:
                                     level_entry["enabled"] = level_config["enabled"]
@@ -2992,15 +3289,15 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                                 if flexalgo_root:
                                     flex_entry: Dict[str, TypeAny] = {}
                                     if "delay-metric" in flexalgo_root:
-                                        flex_entry["delay_metric"] = flexalgo_root[
+                                        flex_entry["delay-metric"] = flexalgo_root[
                                             "delay-metric"
                                         ]
                                     if "te-metric" in flexalgo_root:
-                                        flex_entry["te_metric"] = flexalgo_root[
+                                        flex_entry["te-metric"] = flexalgo_root[
                                             "te-metric"
                                         ]
                                     if flex_entry:
-                                        level_entry["flexible_algorithm"] = flex_entry
+                                        level_entry["flexible-algorithm"] = flex_entry
 
                                 intf_entry["levels"][str(level_num)] = level_entry
 
@@ -3013,7 +3310,7 @@ class ShowIsisConfig(ShowIsisConfigSchema):
                         if "subinterface" in iface_ref_root:
                             iface_ref["subinterface"] = iface_ref_root["subinterface"]
                         if iface_ref:
-                            intf_entry["interface_ref"] = iface_ref
+                            intf_entry["interface-ref"] = iface_ref
 
                     interfaces_dict[intf_id] = intf_entry
 
@@ -3043,12 +3340,12 @@ class ShowIsisRouteSchema(MetaParser):
                     Any(): {  # protocol instance name
                         Optional("routes"): {
                             Any(): {  # AFI-SAFI key like "IPV4-UNICAST" or "IPV6-UNICAST"
-                                "afi_name": str,
-                                "safi_name": str,
+                                "afi-name": str,
+                                "safi-name": str,
                                 "routes": {
                                     Any(): {  # prefix
                                         "prefix": str,
-                                        "best_level_number": int,
+                                        "best-level-number": int,
                                         Optional("levels"): dict,
                                     }
                                 },
@@ -3129,8 +3426,8 @@ class ShowIsisRoute(ShowIsisRouteSchema):
                     continue
 
                 af_entry: Dict[str, TypeAny] = {
-                    "afi_name": afi_name,
-                    "safi_name": safi_name,
+                    "afi-name": afi_name,
+                    "safi-name": safi_name,
                     "routes": {},
                 }
 
@@ -3142,7 +3439,7 @@ class ShowIsisRoute(ShowIsisRouteSchema):
                     state = route.get("state", {})
                     route_entry: Dict[str, TypeAny] = {
                         "prefix": prefix_val,
-                        "best_level_number": state.get("best-level-number", 0),
+                        "best-level-number": state.get("best-level-number", 0),
                     }
 
                     levels_obj = route.get("levels", {})
@@ -3157,7 +3454,7 @@ class ShowIsisRoute(ShowIsisRouteSchema):
 
                             level_state = level.get("state", {})
                             level_entry: Dict[str, TypeAny] = {
-                                "level_number": level_num,
+                                "level-number": level_num,
                                 "metric": level_state.get("metric", 0),
                             }
 
@@ -3169,17 +3466,17 @@ class ShowIsisRoute(ShowIsisRouteSchema):
                                 ]
 
                             if "next-hop-id" in level_state:
-                                level_entry["next_hop_id"] = str(
+                                level_entry["next-hop-id"] = str(
                                     level_state["next-hop-id"]
                                 )
                             if "prefix-origin-count" in level_state:
-                                level_entry["prefix_origin_count"] = level_state[
+                                level_entry["prefix-origin-count"] = level_state[
                                     "prefix-origin-count"
                                 ]
                             if "route-tag" in level_state:
-                                level_entry["route_tag"] = level_state["route-tag"]
+                                level_entry["route-tag"] = level_state["route-tag"]
                             if "last-updated-time" in level_state:
-                                level_entry["last_updated_time"] = level_state[
+                                level_entry["last-updated-time"] = level_state[
                                     "last-updated-time"
                                 ]
 
@@ -3187,30 +3484,30 @@ class ShowIsisRoute(ShowIsisRouteSchema):
                             next_hop_list = next_hops_obj.get("next-hop", [])
 
                             if next_hop_list:
-                                level_entry["next_hops"] = []
+                                level_entry["next-hops"] = []
                                 for nh in next_hop_list:
                                     nh_entry: Dict[str, TypeAny] = {}
 
                                     if "next-hop-address" in nh:
-                                        nh_entry["next_hop_address"] = nh[
+                                        nh_entry["next-hop-address"] = nh[
                                             "next-hop-address"
                                         ]
 
                                     if "outgoing-interface" in nh:
-                                        nh_entry["outgoing_interface"] = nh[
+                                        nh_entry["outgoing-interface"] = nh[
                                             "outgoing-interface"
                                         ]
 
                                     nh_state = nh.get("state", {})
                                     if nh_state:
                                         if "tunnel-id" in nh_state:
-                                            nh_entry["tunnel_id"] = nh_state[
+                                            nh_entry["tunnel-id"] = nh_state[
                                                 "tunnel-id"
                                             ]
                                         if "backup" in nh_state:
                                             nh_entry["backup"] = nh_state["backup"]
 
-                                    level_entry["next_hops"].append(nh_entry)
+                                    level_entry["next-hops"].append(nh_entry)
 
                             route_entry["levels"][str(level_num)] = level_entry
 
@@ -3232,7 +3529,7 @@ class ShowIsisRedistributeRouteSchema(MetaParser):
 
     Structured like :class:`ShowIsisInterfaceSchema` and
     :class:`ShowIsisRouteSchema`, with data nested under
-    ``isis[instance]['redistribute_routes']``.
+    ``isis[instance]['redistribute-routes']``.
     """
 
     schema = {
@@ -3240,10 +3537,10 @@ class ShowIsisRedistributeRouteSchema(MetaParser):
             Any(): {  # network instance name
                 "isis": {
                     Any(): {  # protocol instance name
-                        Optional("redistribute_routes"): {
+                        Optional("redistribute-routes"): {
                             Any(): {  # AF key (e.g., "IPV4-UNICAST")
-                                "afi_name": str,
-                                "safi_name": str,
+                                "afi-name": str,
+                                "safi-name": str,
                                 "routes": {
                                     Any(): {  # prefix
                                         "prefix": str,
@@ -3288,7 +3585,7 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        # Align with other ISIS parsers: nest under isis["default"]["redistribute_routes"].
+        # Align with other ISIS parsers: nest under isis["default"]["redistribute-routes"].
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
@@ -3306,7 +3603,7 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
 
             ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
             redist_dict: Dict[str, TypeAny] = ni_isis.setdefault(
-                "redistribute_routes", {}
+                "redistribute-routes", {}
             )
 
             for af in af_list:
@@ -3329,8 +3626,8 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
                     continue
 
                 af_entry: Dict[str, TypeAny] = {
-                    "afi_name": afi_name,
-                    "safi_name": safi_name,
+                    "afi-name": afi_name,
+                    "safi-name": safi_name,
                     "routes": {},
                 }
 
@@ -3355,12 +3652,12 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
                         state = level.get("state", {})
 
                         level_entry: Dict[str, TypeAny] = {
-                            "level_number": level_num,
+                            "level-number": level_num,
                             "metric": state.get("metric", 0),
                         }
 
                         if "route-tag" in state:
-                            level_entry["route_tag"] = state["route-tag"]
+                            level_entry["route-tag"] = state["route-tag"]
 
                         if "flags" in state:
                             flags = state["flags"]
@@ -3373,11 +3670,11 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
                         source_state = source.get("state", {})
                         if "identifier" in source_state:
                             identifier = source_state["identifier"]
-                            level_entry["source_identifier"] = identifier.replace(
+                            level_entry["source-identifier"] = identifier.replace(
                                 "openconfig-policy-types:", ""
                             )
                         if "name" in source_state:
-                            level_entry["source_name"] = source_state["name"]
+                            level_entry["source-name"] = source_state["name"]
 
                         route_entry["levels"][str(level_num)] = level_entry
 
@@ -3403,12 +3700,12 @@ class ShowIsisGlobalSchema(MetaParser):
                     Any(): {  # protocol instance name
                         Optional("global"): {
                             Optional("net"): list,
-                            Optional("level_capability"): str,
-                            Optional("max_ecmp_paths"): int,
-                            Optional("is_type"): str,
-                            Optional("table_id"): int,
-                            Optional("area_address"): list,
-                            Optional("system_id"): str,
+                            Optional("level-capability"): str,
+                            Optional("max-ecmp-paths"): int,
+                            Optional("is-type"): str,
+                            Optional("table-id"): int,
+                            Optional("area-address"): list,
+                            Optional("system-id"): str,
                         }
                     }
                 }
@@ -3472,10 +3769,10 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
                     # Clean up known prefixes
                     level_cap = level_cap.replace("openconfig-isis-types:", "")
                     level_cap = level_cap.replace("oc-isis-types:", "")
-                    global_entry["level_capability"] = level_cap
+                    global_entry["level-capability"] = level_cap
 
                 if "max-ecmp-paths" in state:
-                    global_entry["max_ecmp_paths"] = state["max-ecmp-paths"]
+                    global_entry["max-ecmp-paths"] = state["max-ecmp-paths"]
 
                 # ArcOS augments
                 is_type_key = f"{ARCOS_ISIS_AUGMENTS}:is-type"
@@ -3483,19 +3780,19 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
                     is_type = state[is_type_key]
                     is_type = is_type.replace("arcos-isis-types:", "")
                     is_type = is_type.replace(f"{ARCOS_ISIS_AUGMENTS}:", "")
-                    global_entry["is_type"] = is_type
+                    global_entry["is-type"] = is_type
 
                 table_id_key = f"{ARCOS_ISIS_AUGMENTS}:table-id"
                 if table_id_key in state:
-                    global_entry["table_id"] = state[table_id_key]
+                    global_entry["table-id"] = state[table_id_key]
 
                 area_addr_key = f"{ARCOS_ISIS_AUGMENTS}:area-address"
                 if area_addr_key in state:
-                    global_entry["area_address"] = state[area_addr_key]
+                    global_entry["area-address"] = state[area_addr_key]
 
                 system_id_key = f"{ARCOS_ISIS_AUGMENTS}:system-id"
                 if system_id_key in state:
-                    global_entry["system_id"] = state[system_id_key]
+                    global_entry["system-id"] = state[system_id_key]
 
                 # For now, always use DEFAULT_INSTANCE key
                 ret_dict["network-instance"]["default"]["isis"]["default"]["global"] = (
@@ -3514,7 +3811,7 @@ class ShowIsisFastRerouteSchema(MetaParser):
     """Schema for ArcOS ISIS fast-reroute information per AF and prefix.
 
     Structured like :class:`ShowIsisInterfaceSchema`, with data nested
-    under ``isis[instance]['fast_reroute']``.
+    under ``isis[instance]['fast-reroute']``.
     """
 
     schema = {
@@ -3522,25 +3819,25 @@ class ShowIsisFastRerouteSchema(MetaParser):
             Any(): {  # network instance name
                 "isis": {
                     Any(): {  # protocol instance name
-                        Optional("fast_reroute"): {
+                        Optional("fast-reroute"): {
                             Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
-                                "afi_name": str,
-                                "safi_name": str,
+                                "afi-name": str,
+                                "safi-name": str,
                                 "prefixes": {
                                     Any(): {  # prefix string
                                         "prefix": str,
                                         "levels": {
                                             Any(): {  # level number as string
-                                                "level_number": int,
-                                                "reroute_type": str,
+                                                "level-number": int,
+                                                "reroute-type": str,
                                                 "metric": int,
-                                                "nexthop_address": str,
-                                                "nexthop_interface": str,
+                                                "nexthop-address": str,
+                                                "nexthop-interface": str,
                                                 "flags": list,
-                                                "last_updated_time": str,
-                                                "origin_system_id": str,
-                                                Optional("protection_types"): list,
-                                                Optional("pq_node_system_id"): str,
+                                                "last-updated-time": str,
+                                                "origin-system-id": str,
+                                                Optional("protection-types"): list,
+                                                Optional("pq-node-system-id"): str,
                                             }
                                         },
                                     }
@@ -3583,7 +3880,7 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        # Nest under isis["default"]["fast_reroute"].
+        # Nest under isis["default"]["fast-reroute"].
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
@@ -3600,7 +3897,7 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
             af_list = afi_safi.get("af", [])
 
             ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
-            fast_dict: Dict[str, TypeAny] = ni_isis.setdefault("fast_reroute", {})
+            fast_dict: Dict[str, TypeAny] = ni_isis.setdefault("fast-reroute", {})
 
             for af in af_list:
                 afi_name = af.get("afi-name", "")
@@ -3622,8 +3919,8 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
                     continue
 
                 af_entry: Dict[str, TypeAny] = {
-                    "afi_name": afi_name,
-                    "safi_name": safi_name,
+                    "afi-name": afi_name,
+                    "safi-name": safi_name,
                     "prefixes": {},
                 }
 
@@ -3647,26 +3944,26 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
 
                         state = level.get("state", {})
                         level_entry: Dict[str, TypeAny] = {
-                            "level_number": level_num,
-                            "reroute_type": state.get("reroute-type", ""),
+                            "level-number": level_num,
+                            "reroute-type": state.get("reroute-type", ""),
                             "metric": state.get("metric", 0),
-                            "nexthop_address": state.get("nexthop-address", ""),
-                            "nexthop_interface": state.get("nexthop-interface", ""),
+                            "nexthop-address": state.get("nexthop-address", ""),
+                            "nexthop-interface": state.get("nexthop-interface", ""),
                             "flags": state.get("flags", []),
-                            "last_updated_time": state.get("last-updated-time", ""),
-                            "origin_system_id": state.get("origin-system-id", ""),
+                            "last-updated-time": state.get("last-updated-time", ""),
+                            "origin-system-id": state.get("origin-system-id", ""),
                         }
 
                         prot_types = state.get("protection-types", [])
                         if prot_types:
-                            level_entry["protection_types"] = [
+                            level_entry["protection-types"] = [
                                 p.replace(f"{ARCOS_ISIS_AUGMENTS}:", "")
                                 for p in prot_types
                             ]
 
                         pq_node = level.get("pq-node", {}).get("state", {})
                         if "system-id" in pq_node:
-                            level_entry["pq_node_system_id"] = pq_node["system-id"]
+                            level_entry["pq-node-system-id"] = pq_node["system-id"]
 
                         prefix_entry["levels"][str(level_num)] = level_entry
 
@@ -3686,7 +3983,7 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
 class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
     """Schema for ArcOS ISIS flexible-algorithm fast-reroute per AF, algorithm, and prefix.
 
-    Nested under ``isis[instance]['flex_algo_fast_reroute']``.
+    Nested under ``isis[instance]['flex-algo-fast-reroute']``.
     """
 
     schema = {
@@ -3694,10 +3991,10 @@ class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
             Any(): {  # network instance name
                 "isis": {
                     Any(): {  # protocol instance name
-                        Optional("flex_algo_fast_reroute"): {
+                        Optional("flex-algo-fast-reroute"): {
                             Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
-                                "afi_name": str,
-                                "safi_name": str,
+                                "afi-name": str,
+                                "safi-name": str,
                                 "algorithms": {
                                     Any(): {  # flexible-algorithm id as string
                                         "id": int,
@@ -3706,19 +4003,19 @@ class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
                                                 "prefix": str,
                                                 "levels": {
                                                     Any(): {  # level number as string
-                                                        "level_number": int,
-                                                        "reroute_type": str,
+                                                        "level-number": int,
+                                                        "reroute-type": str,
                                                         "metric": int,
-                                                        "nexthop_address": str,
-                                                        "nexthop_interface": str,
+                                                        "nexthop-address": str,
+                                                        "nexthop-interface": str,
                                                         "flags": list,
-                                                        "last_updated_time": str,
-                                                        "origin_system_id": str,
+                                                        "last-updated-time": str,
+                                                        "origin-system-id": str,
                                                         Optional(
-                                                            "protection_types"
+                                                            "protection-types"
                                                         ): list,
                                                         Optional(
-                                                            "pq_node_system_id"
+                                                            "pq-node-system-id"
                                                         ): str,
                                                     }
                                                 },
@@ -3766,7 +4063,7 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        # Nest under isis["default"]["flex_algo_fast_reroute"].
+        # Nest under isis["default"]["flex-algo-fast-reroute"].
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
@@ -3784,7 +4081,7 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
 
             ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
             flex_frr_dict: Dict[str, TypeAny] = ni_isis.setdefault(
-                "flex_algo_fast_reroute", {}
+                "flex-algo-fast-reroute", {}
             )
 
             for af in af_list:
@@ -3807,8 +4104,8 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
                     continue
 
                 af_entry: Dict[str, TypeAny] = {
-                    "afi_name": afi_name,
-                    "safi_name": safi_name,
+                    "afi-name": afi_name,
+                    "safi-name": safi_name,
                     "algorithms": {},
                 }
 
@@ -3843,26 +4140,26 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
 
                             state = level.get("state", {})
                             level_entry: Dict[str, TypeAny] = {
-                                "level_number": level_num,
-                                "reroute_type": state.get("reroute-type", ""),
+                                "level-number": level_num,
+                                "reroute-type": state.get("reroute-type", ""),
                                 "metric": state.get("metric", 0),
-                                "nexthop_address": state.get("nexthop-address", ""),
-                                "nexthop_interface": state.get("nexthop-interface", ""),
+                                "nexthop-address": state.get("nexthop-address", ""),
+                                "nexthop-interface": state.get("nexthop-interface", ""),
                                 "flags": state.get("flags", []),
-                                "last_updated_time": state.get("last-updated-time", ""),
-                                "origin_system_id": state.get("origin-system-id", ""),
+                                "last-updated-time": state.get("last-updated-time", ""),
+                                "origin-system-id": state.get("origin-system-id", ""),
                             }
 
                             prot_types = state.get("protection-types", [])
                             if prot_types:
-                                level_entry["protection_types"] = [
+                                level_entry["protection-types"] = [
                                     p.replace(f"{ARCOS_ISIS_AUGMENTS}:", "")
                                     for p in prot_types
                                 ]
 
                             pq_node = level.get("pq-node", {}).get("state", {})
                             if "system-id" in pq_node:
-                                level_entry["pq_node_system_id"] = pq_node["system-id"]
+                                level_entry["pq-node-system-id"] = pq_node["system-id"]
 
                             prefix_entry["levels"][str(level_num)] = level_entry
 
@@ -3887,7 +4184,7 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
 class ShowIsisFlexAlgoRouteSchema(MetaParser):
     """Schema for ArcOS ISIS flexible-algorithm routes per AF, algorithm, and prefix.
 
-    Nested under ``isis[instance]['flex_algo_routes']``.
+    Nested under ``isis[instance]['flex-algo-routes']``.
     """
 
     schema = {
@@ -3895,17 +4192,17 @@ class ShowIsisFlexAlgoRouteSchema(MetaParser):
             Any(): {  # network instance name
                 "isis": {
                     Any(): {  # protocol instance name
-                        Optional("flex_algo_routes"): {
+                        Optional("flex-algo-routes"): {
                             Any(): {  # AFI-SAFI key like "IPV6-UNICAST"
-                                "afi_name": str,
-                                "safi_name": str,
+                                "afi-name": str,
+                                "safi-name": str,
                                 "algorithms": {
                                     Any(): {  # flexible-algorithm id as string
                                         "id": int,
                                         "routes": {
                                             Any(): {  # prefix
                                                 "prefix": str,
-                                                "best_level_number": int,
+                                                "best-level-number": int,
                                                 Optional("levels"): dict,
                                             }
                                         },
@@ -3951,7 +4248,7 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
                 cmd += f" {prefix}"
             output = self.device.execute(f"{cmd} | display json | nomore")
 
-        # Nest under isis["default"]["flex_algo_routes"].
+        # Nest under isis["default"]["flex-algo-routes"].
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
@@ -3969,7 +4266,7 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
 
             ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
             flex_routes_dict: Dict[str, TypeAny] = ni_isis.setdefault(
-                "flex_algo_routes", {}
+                "flex-algo-routes", {}
             )
 
             for af in af_list:
@@ -3992,8 +4289,8 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
                     continue
 
                 af_entry: Dict[str, TypeAny] = {
-                    "afi_name": afi_name,
-                    "safi_name": safi_name,
+                    "afi-name": afi_name,
+                    "safi-name": safi_name,
                     "algorithms": {},
                 }
 
@@ -4016,7 +4313,7 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
                         state = route.get("state", {})
                         route_entry: Dict[str, TypeAny] = {
                             "prefix": prefix_val,
-                            "best_level_number": state.get("best-level-number", 0),
+                            "best-level-number": state.get("best-level-number", 0),
                         }
 
                         levels_obj = route.get("levels", {})
@@ -4032,7 +4329,7 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
 
                                 level_state = level.get("state", {})
                                 level_entry: Dict[str, TypeAny] = {
-                                    "level_number": level_num,
+                                    "level-number": level_num,
                                     "metric": level_state.get("metric", 0),
                                 }
 
@@ -4044,17 +4341,17 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
                                     ]
 
                                 if "next-hop-id" in level_state:
-                                    level_entry["next_hop_id"] = str(
+                                    level_entry["next-hop-id"] = str(
                                         level_state["next-hop-id"]
                                     )
                                 if "prefix-origin-count" in level_state:
-                                    level_entry["prefix_origin_count"] = level_state[
+                                    level_entry["prefix-origin-count"] = level_state[
                                         "prefix-origin-count"
                                     ]
                                 if "route-tag" in level_state:
-                                    level_entry["route_tag"] = level_state["route-tag"]
+                                    level_entry["route-tag"] = level_state["route-tag"]
                                 if "last-updated-time" in level_state:
-                                    level_entry["last_updated_time"] = level_state[
+                                    level_entry["last-updated-time"] = level_state[
                                         "last-updated-time"
                                     ]
 
@@ -4062,30 +4359,30 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
                                 next_hop_list = next_hops_obj.get("next-hop", [])
 
                                 if next_hop_list:
-                                    level_entry["next_hops"] = []
+                                    level_entry["next-hops"] = []
                                     for nh in next_hop_list:
                                         nh_entry: Dict[str, TypeAny] = {}
 
                                         if "next-hop-address" in nh:
-                                            nh_entry["next_hop_address"] = nh[
+                                            nh_entry["next-hop-address"] = nh[
                                                 "next-hop-address"
                                             ]
 
                                         if "outgoing-interface" in nh:
-                                            nh_entry["outgoing_interface"] = nh[
+                                            nh_entry["outgoing-interface"] = nh[
                                                 "outgoing-interface"
                                             ]
 
                                         nh_state = nh.get("state", {})
                                         if nh_state:
                                             if "tunnel-id" in nh_state:
-                                                nh_entry["tunnel_id"] = nh_state[
+                                                nh_entry["tunnel-id"] = nh_state[
                                                     "tunnel-id"
                                                 ]
                                             if "backup" in nh_state:
                                                 nh_entry["backup"] = nh_state["backup"]
 
-                                        level_entry["next_hops"].append(nh_entry)
+                                        level_entry["next-hops"].append(nh_entry)
 
                                 route_entry["levels"][str(level_num)] = level_entry
 
@@ -4124,62 +4421,62 @@ class ShowIsisMplsLabelDbSchema(MetaParser):
                 "isis": {
                     Any(): {  # protocol instance name
                         "mpls": {
-                            Optional("igp_ldp_sync_enabled"): bool,
-                            Optional("label_db"): {
+                            Optional("igp-ldp-sync-enabled"): bool,
+                            Optional("label-db"): {
                                 "state": {
-                                    Optional("protocol_identifier"): str,
-                                    Optional("protocol_name"): str,
-                                    Optional("configured_blocks"): int,
-                                    Optional("active_blocks"): int,
-                                    Optional("active_usages"): int,
+                                    Optional("protocol-identifier"): str,
+                                    Optional("protocol-name"): str,
+                                    Optional("configured-blocks"): int,
+                                    Optional("active-blocks"): int,
+                                    Optional("active-usages"): int,
                                 },
                                 Optional("statistics"): {
-                                    Optional("label_space"): int,
+                                    Optional("label-space"): int,
                                     Optional("labels"): int,
                                     Optional("allocs"): str,
                                     Optional("frees"): str,
-                                    Optional("alloc_errors"): str,
-                                    Optional("free_errors"): str,
+                                    Optional("alloc-errors"): str,
+                                    Optional("free-errors"): str,
                                 },
                                 Optional("usages"): {
                                     Any(): {  # usage type (ISIS_SRGB, ISIS_SRLB)
                                         "usage": str,
-                                        Optional("blocks_count"): int,
-                                        Optional("opaque_flags"): str,
+                                        Optional("blocks-count"): int,
+                                        Optional("opaque-flags"): str,
                                         Optional("statistics"): {
-                                            Optional("label_space"): int,
+                                            Optional("label-space"): int,
                                             Optional("labels"): int,
                                             Optional("allocs"): str,
                                             Optional("frees"): str,
-                                            Optional("alloc_errors"): str,
-                                            Optional("free_errors"): str,
+                                            Optional("alloc-errors"): str,
+                                            Optional("free-errors"): str,
                                         },
                                         Optional("blocks"): {
                                             Any(): {  # lower-bound as key
-                                                "lower_bound": int,
-                                                "upper_bound": int,
-                                                Optional("block_name"): str,
-                                                Optional("opaque_flags"): str,
+                                                "lower-bound": int,
+                                                "upper-bound": int,
+                                                Optional("block-name"): str,
+                                                Optional("opaque-flags"): str,
                                                 Optional("statistics"): {
-                                                    Optional("label_space"): int,
+                                                    Optional("label-space"): int,
                                                     Optional("labels"): int,
                                                     Optional("allocs"): str,
                                                     Optional("frees"): str,
-                                                    Optional("alloc_errors"): str,
-                                                    Optional("free_errors"): str,
+                                                    Optional("alloc-errors"): str,
+                                                    Optional("free-errors"): str,
                                                 },
                                             }
                                         },
                                         Optional("labels"): {
                                             Any(): {  # label value as key
                                                 "label": int,
-                                                Optional("block_name"): str,
-                                                Optional("label_key"): {
+                                                Optional("block-name"): str,
+                                                Optional("label-key"): {
                                                     Optional("type"): str,
-                                                    Optional("sub_type"): int,
-                                                    Optional("table_id"): int,
-                                                    Optional("ip_prefix"): str,
-                                                    Optional("nh_address"): str,
+                                                    Optional("sub-type"): int,
+                                                    Optional("table-id"): int,
+                                                    Optional("ip-prefix"): str,
+                                                    Optional("nh-address"): str,
                                                     Optional("ifindex"): str,
                                                 },
                                             }
@@ -4268,38 +4565,38 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
                     igp_ldp_sync = mpls.get("igp-ldp-sync", {})
                     sync_state = igp_ldp_sync.get("state", {})
                     if "enabled" in sync_state:
-                        mpls_entry["igp_ldp_sync_enabled"] = sync_state["enabled"]
+                        mpls_entry["igp-ldp-sync-enabled"] = sync_state["enabled"]
 
                     # Label database
                     label_db = mpls.get("arcos-mpls:label-db", {})
                     if not label_db:
                         continue
 
-                    mpls_entry["label_db"] = {"state": {}}
+                    mpls_entry["label-db"] = {"state": {}}
 
                     # Label DB state
                     db_state = label_db.get("state", {})
-                    state_entry = mpls_entry["label_db"]["state"]
+                    state_entry = mpls_entry["label-db"]["state"]
 
                     proto_id = db_state.get("protocol-identifier", "")
                     if proto_id:
-                        state_entry["protocol_identifier"] = proto_id.replace(
+                        state_entry["protocol-identifier"] = proto_id.replace(
                             "openconfig-policy-types:", ""
                         )
 
                     if "protocol-name" in db_state:
-                        state_entry["protocol_name"] = db_state["protocol-name"]
+                        state_entry["protocol-name"] = db_state["protocol-name"]
                     if "configured-blocks" in db_state:
-                        state_entry["configured_blocks"] = db_state["configured-blocks"]
+                        state_entry["configured-blocks"] = db_state["configured-blocks"]
                     if "active-blocks" in db_state:
-                        state_entry["active_blocks"] = db_state["active-blocks"]
+                        state_entry["active-blocks"] = db_state["active-blocks"]
                     if "active-usages" in db_state:
-                        state_entry["active_usages"] = db_state["active-usages"]
+                        state_entry["active-usages"] = db_state["active-usages"]
 
                     # Label DB statistics
                     db_stats = label_db.get("statistics", {})
                     if db_stats:
-                        mpls_entry["label_db"]["statistics"] = self._parse_statistics(
+                        mpls_entry["label-db"]["statistics"] = self._parse_statistics(
                             db_stats
                         )
 
@@ -4308,7 +4605,7 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
                     usage_list = usages_container.get("usage", [])
 
                     if usage_list:
-                        mpls_entry["label_db"]["usages"] = {}
+                        mpls_entry["label-db"]["usages"] = {}
                         for usage in usage_list:
                             usage_key = usage.get("usage", "")
                             usage_key_clean = usage_key.replace("arcos-mpls:", "")
@@ -4317,9 +4614,9 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
 
                             usage_state = usage.get("state", {})
                             if "blocks" in usage_state:
-                                usage_entry["blocks_count"] = usage_state["blocks"]
+                                usage_entry["blocks-count"] = usage_state["blocks"]
                             if "opaque-flags" in usage_state:
-                                usage_entry["opaque_flags"] = usage_state["opaque-flags"]
+                                usage_entry["opaque-flags"] = usage_state["opaque-flags"]
 
                             # Usage statistics
                             usage_stats = usage.get("statistics", {})
@@ -4340,16 +4637,16 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
 
                                     block_state = block.get("state", {})
                                     block_entry: Dict[str, TypeAny] = {
-                                        "lower_bound": lower,
-                                        "upper_bound": block_state.get("upper-bound", 0),
+                                        "lower-bound": lower,
+                                        "upper-bound": block_state.get("upper-bound", 0),
                                     }
 
                                     if "block-name" in block_state:
-                                        block_entry["block_name"] = block_state[
+                                        block_entry["block-name"] = block_state[
                                             "block-name"
                                         ]
                                     if "opaque-flags" in block_state:
-                                        block_entry["opaque_flags"] = block_state[
+                                        block_entry["opaque-flags"] = block_state[
                                             "opaque-flags"
                                         ]
 
@@ -4377,7 +4674,7 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
                                     }
 
                                     if "block-name" in label_state:
-                                        label_entry["block_name"] = label_state[
+                                        label_entry["block-name"] = label_state[
                                             "block-name"
                                         ]
 
@@ -4393,26 +4690,26 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
                                                 "arcos-mpls:", ""
                                             )
                                         if "sub-type" in key_state:
-                                            key_entry["sub_type"] = key_state["sub-type"]
+                                            key_entry["sub-type"] = key_state["sub-type"]
                                         if "table-id" in key_state:
-                                            key_entry["table_id"] = key_state["table-id"]
+                                            key_entry["table-id"] = key_state["table-id"]
                                         if "ip-prefix" in key_state:
-                                            key_entry["ip_prefix"] = key_state[
+                                            key_entry["ip-prefix"] = key_state[
                                                 "ip-prefix"
                                             ]
                                         if "nh-address" in key_state:
-                                            key_entry["nh_address"] = key_state[
+                                            key_entry["nh-address"] = key_state[
                                                 "nh-address"
                                             ]
                                         if "ifindex" in key_state:
                                             key_entry["ifindex"] = key_state["ifindex"]
 
                                         if key_entry:
-                                            label_entry["label_key"] = key_entry
+                                            label_entry["label-key"] = key_entry
 
                                     usage_entry["labels"][str(label_val)] = label_entry
 
-                            mpls_entry["label_db"]["usages"][usage_key_clean] = (
+                            mpls_entry["label-db"]["usages"][usage_key_clean] = (
                                 usage_entry
                             )
 
@@ -4427,7 +4724,7 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
         """Parse statistics section."""
         result: Dict[str, TypeAny] = {}
         if "label-space" in stats:
-            result["label_space"] = stats["label-space"]
+            result["label-space"] = stats["label-space"]
         if "labels" in stats:
             result["labels"] = stats["labels"]
         if "allocs" in stats:
@@ -4435,9 +4732,9 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
         if "frees" in stats:
             result["frees"] = stats["frees"]
         if "alloc-errors" in stats:
-            result["alloc_errors"] = stats["alloc-errors"]
+            result["alloc-errors"] = stats["alloc-errors"]
         if "free-errors" in stats:
-            result["free_errors"] = stats["free-errors"]
+            result["free-errors"] = stats["free-errors"]
         return result
 
 

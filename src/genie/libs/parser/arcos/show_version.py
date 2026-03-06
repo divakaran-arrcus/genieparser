@@ -26,10 +26,10 @@ class ShowVersionSchema(MetaParser):
             "sw-version": str,
             Optional("software"): str,
             Optional("platform"): str,
-            Optional("form_factor"): str,
-            Optional("num_cpu_cores"): str,
-            Optional("cpu_info"): str,
-            Optional("total_memory"): str,
+            Optional("form-factor"): str,
+            Optional("num-cpu-cores"): str,
+            Optional("cpu-info"): str,
+            Optional("total-memory"): str,
             Optional("uptime"): str,
         }
     }
@@ -73,10 +73,10 @@ class ShowVersion(ShowVersionSchema):
                 # Primary field mapping from JSON keys to output keys
                 field_mapping = {
                     "platform": "platform",
-                    "form-factor": "form_factor",
-                    "num-cpu-cores": "num_cpu_cores",
-                    "cpu-info": "cpu_info",
-                    "total-memory": "total_memory",
+                    "form-factor": "form-factor",
+                    "num-cpu-cores": "num-cpu-cores",
+                    "cpu-info": "cpu-info",
+                    "total-memory": "total-memory",
                     "software": "software",
                     "sw-version": "sw-version",
                     "uptime": "uptime",

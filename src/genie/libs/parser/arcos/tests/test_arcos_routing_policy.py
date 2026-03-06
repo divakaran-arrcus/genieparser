@@ -36,17 +36,17 @@ def test_show_running_config_routing_policy_from_config() -> None:
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
-    rp = result.get("routing_policy", {})
+    rp = result.get("routing-policy", {})
 
     # Defined-sets should be present and contain known prefix-sets
-    defined_sets = rp.get("defined_sets", {})
-    prefix_sets = defined_sets.get("prefix_sets", {})
+    defined_sets = rp.get("defined-sets", {})
+    prefix_sets = defined_sets.get("prefix-sets", {})
     assert "906" in prefix_sets
     assert "__IPV4_MARTIAN_PREFIX_SET__" in prefix_sets
     assert "__IPV6_MARTIAN_PREFIX_SET__" in prefix_sets
 
     # Policy-definitions should be present and contain known policies
-    policy_defs = rp.get("policy_definitions", {})
+    policy_defs = rp.get("policy-definitions", {})
     assert "906" in policy_defs
     assert "set_redis_level" in policy_defs
     assert "v6_L2_to_L1" in policy_defs
@@ -55,7 +55,7 @@ def test_show_running_config_routing_policy_from_config() -> None:
     policy_906 = policy_defs["906"]
     stmt_50 = policy_906["statements"]["50"]
     actions_50 = stmt_50.get("actions", {})
-    assert actions_50.get("reject_route") is True
+    assert actions_50.get("reject-route") is True
 
 
 def test_show_routing_policy_defined_sets_state_sample():
@@ -67,9 +67,9 @@ def test_show_routing_policy_defined_sets_state_sample():
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
-    rp = result.get("routing_policy", {}).get("defined_sets", {})
+    rp = result.get("routing-policy", {}).get("defined-sets", {})
 
-    prefix_sets = rp.get("prefix_sets", {})
+    prefix_sets = rp.get("prefix-sets", {})
 
     # Basic presence checks
     assert "906" in prefix_sets
@@ -82,44 +82,44 @@ def test_show_routing_policy_defined_sets_state_sample():
     ps_906 = prefix_sets["906"]
     assert ps_906["name"] == "906"
     assert any(
-        p["ip_prefix"] == "2400:2020:0:900::/56" and p["masklength_range"] == "exact"
+        p["ip-prefix"] == "2400:2020:0:900::/56" and p["masklength-range"] == "exact"
         for p in ps_906["prefixes"]
     )
 
     # Martian sets should be flagged
     ipv4_martian = prefix_sets["__IPV4_MARTIAN_PREFIX_SET__"]
     assert ipv4_martian["name"] == "__IPV4_MARTIAN_PREFIX_SET__"
-    assert ipv4_martian.get("is_martian") is True
+    assert ipv4_martian.get("is-martian") is True
     assert any(
-        p["ip_prefix"] == "0.0.0.0/8" and p["masklength_range"] == "8..32"
+        p["ip-prefix"] == "0.0.0.0/8" and p["masklength-range"] == "8..32"
         for p in ipv4_martian["prefixes"]
     )
 
     ipv6_martian = prefix_sets["__IPV6_MARTIAN_PREFIX_SET__"]
     assert ipv6_martian["name"] == "__IPV6_MARTIAN_PREFIX_SET__"
-    assert ipv6_martian.get("is_martian") is True
+    assert ipv6_martian.get("is-martian") is True
     assert any(
-        p["ip_prefix"] == "::/128" and p["masklength_range"] == "exact"
+        p["ip-prefix"] == "::/128" and p["masklength-range"] == "exact"
         for p in ipv6_martian["prefixes"]
     )
 
     # String-set
-    string_sets = rp.get("string_sets", {})
+    string_sets = rp.get("string-sets", {})
     assert "abc" in string_sets
     ss = string_sets["abc"]
     assert ss["name"] == "abc"
     assert ss["strings"][0]["value"] == "xyz"
-    assert ss["strings"][0]["match_type"] == "EXACT"
+    assert ss["strings"][0]["match-type"] == "EXACT"
 
     # Tag-set
-    tag_sets = rp.get("tag_sets", {})
+    tag_sets = rp.get("tag-sets", {})
     assert "pqr" in tag_sets
     ts = tag_sets["pqr"]
     assert ts["name"] == "pqr"
     assert ts["tags"] == [55]
 
     # Next-hop-set
-    next_hop_sets = rp.get("next_hop_sets", {})
+    next_hop_sets = rp.get("next-hop-sets", {})
     assert "abc" in next_hop_sets
     nh = next_hop_sets["abc"]
     assert nh["name"] == "abc"
@@ -135,9 +135,9 @@ def test_show_routing_policy_defined_sets_config_sample():
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
-    rp = result.get("routing_policy", {}).get("defined_sets", {})
+    rp = result.get("routing-policy", {}).get("defined-sets", {})
 
-    prefix_sets = rp.get("prefix_sets", {})
+    prefix_sets = rp.get("prefix-sets", {})
 
     # Expect the same key set as in the state variant
     for name in ("906", "__IPV4_MARTIAN_PREFIX_SET__", "__IPV6_MARTIAN_PREFIX_SET__"):
@@ -147,12 +147,12 @@ def test_show_routing_policy_defined_sets_config_sample():
     assert ps_906["name"] == "906"
     # Ensure at least one known prefix was normalized correctly from config.*
     assert any(
-        p["ip_prefix"] == "2400:2020:0:900::/56" and p["masklength_range"] == "exact"
+        p["ip-prefix"] == "2400:2020:0:900::/56" and p["masklength-range"] == "exact"
         for p in ps_906["prefixes"]
     )
 
     # Next-hop-set from running-config
-    next_hop_sets = rp.get("next_hop_sets", {})
+    next_hop_sets = rp.get("next-hop-sets", {})
     assert "abc" in next_hop_sets
     nh = next_hop_sets["abc"]
     assert nh["name"] == "abc"
@@ -166,8 +166,8 @@ def test_show_routing_policy_policy_definition_from_config() -> None:
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
-    rp = result.get("routing_policy", {})
-    policy_defs = rp.get("policy_definitions", {})
+    rp = result.get("routing-policy", {})
+    policy_defs = rp.get("policy-definitions", {})
 
     assert "906" in policy_defs
     assert "set_redis_level" in policy_defs
@@ -179,36 +179,36 @@ def test_show_routing_policy_policy_definition_from_config() -> None:
     stmt_50 = statements_906["50"]
 
     conditions_50 = stmt_50.get("conditions", {})
-    match_prefix_set_50 = conditions_50.get("match_prefix_set", {})
-    assert match_prefix_set_50.get("prefix_set") == "906"
-    assert match_prefix_set_50.get("match_set_options") == "ANY"
+    match_prefix_set_50 = conditions_50.get("match-prefix-set", {})
+    assert match_prefix_set_50.get("prefix-set") == "906"
+    assert match_prefix_set_50.get("match-set-options") == "ANY"
 
     actions_50 = stmt_50.get("actions", {})
-    assert actions_50.get("reject_route") is True
-    assert actions_50.get("accept_route") is not True
+    assert actions_50.get("reject-route") is True
+    assert actions_50.get("accept-route") is not True
 
     policy_set_redis = policy_defs["set_redis_level"]
     statements_set_redis = policy_set_redis["statements"]
     stmt_10 = statements_set_redis["10"]
 
     actions_10 = stmt_10.get("actions", {})
-    assert actions_10.get("accept_route") is True
-    igp_10 = actions_10.get("igp_actions", {})
-    isis_10 = igp_10.get("isis_actions", {})
-    assert isis_10.get("set_level") == 2
+    assert actions_10.get("accept-route") is True
+    igp_10 = actions_10.get("igp-actions", {})
+    isis_10 = igp_10.get("isis-actions", {})
+    assert isis_10.get("set-level") == 2
 
     policy_v6 = policy_defs["v6_L2_to_L1"]
     statements_v6 = policy_v6["statements"]
     stmt_20 = statements_v6["20"]
 
     conditions_20 = stmt_20.get("conditions", {})
-    match_prefix_set_20 = conditions_20.get("match_prefix_set", {})
-    assert match_prefix_set_20.get("prefix_set") == "v6_L2_to_L1"
+    match_prefix_set_20 = conditions_20.get("match-prefix-set", {})
+    assert match_prefix_set_20.get("prefix-set") == "v6_L2_to_L1"
 
     actions_20 = stmt_20.get("actions", {})
-    assert actions_20.get("accept_route") is True
-    igp_20 = actions_20.get("igp_actions", {})
-    assert igp_20.get("set_tag") == 69
+    assert actions_20.get("accept-route") is True
+    igp_20 = actions_20.get("igp-actions", {})
+    assert igp_20.get("set-tag") == 69
 
 
 def test_show_routing_policy_policy_definition_state_match_sets() -> None:
@@ -220,8 +220,8 @@ def test_show_routing_policy_policy_definition_state_match_sets() -> None:
     result = parser.cli(output=output)
 
     assert isinstance(result, dict)
-    rp = result.get("routing_policy", {})
-    policy_defs = rp.get("policy_definitions", {})
+    rp = result.get("routing-policy", {})
+    policy_defs = rp.get("policy-definitions", {})
 
     assert "906" in policy_defs
     policy_906 = policy_defs["906"]
@@ -231,16 +231,16 @@ def test_show_routing_policy_policy_definition_state_match_sets() -> None:
     conditions_50 = stmt_50.get("conditions", {})
 
     # Match-prefix-set
-    mps = conditions_50.get("match_prefix_set", {})
-    assert mps.get("prefix_set") == "906"
-    assert mps.get("match_set_options") == "ANY"
+    mps = conditions_50.get("match-prefix-set", {})
+    assert mps.get("prefix-set") == "906"
+    assert mps.get("match-set-options") == "ANY"
 
     # Match-tag-set
-    mts = conditions_50.get("match_tag_set", {})
-    assert mts.get("match_set_options") == "ANY"
+    mts = conditions_50.get("match-tag-set", {})
+    assert mts.get("match-set-options") == "ANY"
 
     # Match-next-hop-set
-    mnh = conditions_50.get("match_next_hop_set", {})
-    assert mnh.get("match_set_options") == "ANY"
+    mnh = conditions_50.get("match-next-hop-set", {})
+    assert mnh.get("match-set-options") == "ANY"
 
     # State sample focuses on match-*set conditions for policy 906 only
