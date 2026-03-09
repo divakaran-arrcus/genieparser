@@ -504,6 +504,20 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
         return actions
 
 
+def _get_schema_value(schema_dict, target_key):
+    """Look up a value in a schema dict where the key may be wrapped in Optional().
+
+    MetaParser schema dicts use ``Optional("key")`` objects as keys, so a
+    plain ``schema["key"]`` lookup fails with a ``KeyError``.  This helper
+    iterates the dict and matches by the string representation of the key.
+    """
+    for k, v in schema_dict.items():
+        key_str = k.schema if isinstance(k, Optional) else k
+        if key_str == target_key:
+            return v
+    raise KeyError(f"{target_key!r} not found in schema dict")
+
+
 class ShowRoutingPolicyConfigSchema(MetaParser):
     """Schema for ``show running-config routing-policy`` on ArcOS.
 
@@ -516,9 +530,10 @@ class ShowRoutingPolicyConfigSchema(MetaParser):
             Optional("defined-sets"): ShowRoutingPolicyDefinedSetsSchema.schema["routing-policy"][
                 "defined-sets"
             ],
-            Optional("policy-definitions"): ShowRoutingPolicyPolicyDefinitionSchema.schema[
-                "routing-policy"
-            ]["policy-definitions"],
+            Optional("policy-definitions"): _get_schema_value(
+                ShowRoutingPolicyPolicyDefinitionSchema.schema["routing-policy"],
+                "policy-definitions",
+            ),
         }
     }
 
