@@ -1,8 +1,8 @@
 """Unit tests for ArcOS RIB parsers.
 
-Tests four parser classes:
-- ShowRibIpv4Entries / ShowRibIpv6Entries
-- ShowRibIpv4LabelEntries / ShowRibIpv6LabelEntries
+Tests two parser classes with af as a runtime parameter:
+- ShowRibEntries (af="IPV4" / af="IPV6")
+- ShowRibLabelEntries (af="IPV4" / af="IPV6")
 """
 
 from pathlib import Path
@@ -10,10 +10,8 @@ from pathlib import Path
 import pytest
 
 from genie.libs.parser.arcos.show_rib import (
-    ShowRibIpv4Entries,
-    ShowRibIpv6Entries,
-    ShowRibIpv4LabelEntries,
-    ShowRibIpv6LabelEntries,
+    ShowRibEntries,
+    ShowRibLabelEntries,
 )
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
@@ -26,12 +24,12 @@ pytestmark = pytest.mark.skipif(
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv4Entries
+# ShowRibEntries — IPv4
 # -----------------------------------------------------------------------
 
 
-class TestShowRibIpv4EntriesSingle:
-    """Test ShowRibIpv4Entries with a single IPv4 prefix (R2)."""
+class TestShowRibEntriesIpv4Single:
+    """Test ShowRibEntries af=IPV4 with a single IPv4 prefix."""
 
     def test_parse_single_entry(self):
         sample = SAMPLES_DIR / "rib_ipv4_entry_single.json"
@@ -39,8 +37,8 @@ class TestShowRibIpv4EntriesSingle:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv4Entries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV4")
 
         assert isinstance(result, dict)
         assert "network-instance" in result
@@ -84,8 +82,8 @@ class TestShowRibIpv4EntriesSingle:
         assert nh["pushed-mpls-label-stack"] == [3]
 
 
-class TestShowRibIpv4EntriesMulti:
-    """Test ShowRibIpv4Entries with multiple IPv4 entries (R1)."""
+class TestShowRibEntriesIpv4Multi:
+    """Test ShowRibEntries af=IPV4 with multiple IPv4 entries."""
 
     def test_parse_multiple_entries(self):
         sample = SAMPLES_DIR / "rib_ipv4_entries.json"
@@ -93,8 +91,8 @@ class TestShowRibIpv4EntriesMulti:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv4Entries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV4")
 
         ni = result["network-instance"]["default"]
         entries = ni["entries"]
@@ -122,12 +120,12 @@ class TestShowRibIpv4EntriesMulti:
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv6Entries
+# ShowRibEntries — IPv6
 # -----------------------------------------------------------------------
 
 
-class TestShowRibIpv6EntriesSingle:
-    """Test ShowRibIpv6Entries with a single IPv6 prefix (R4)."""
+class TestShowRibEntriesIpv6Single:
+    """Test ShowRibEntries af=IPV6 with a single IPv6 prefix."""
 
     def test_parse_single_entry(self):
         sample = SAMPLES_DIR / "rib_ipv6_entry_single.json"
@@ -135,8 +133,8 @@ class TestShowRibIpv6EntriesSingle:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv6Entries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV6")
 
         ni = result["network-instance"]["default"]
         assert ni["address-family"] == "IPV6"
@@ -159,7 +157,7 @@ class TestShowRibIpv6EntriesSingle:
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv4Entries / ShowRibIpv6Entries — empty / error
+# ShowRibEntries — empty / error
 # -----------------------------------------------------------------------
 
 
@@ -168,15 +166,15 @@ class TestShowRibEntriesEmpty:
 
     def test_ipv4_empty_json_raises(self):
         empty_output = '{"data": {}}'
-        parser = ShowRibIpv4Entries(device="dummy")
+        parser = ShowRibEntries(device="dummy")
         with pytest.raises(SchemaEmptyParserError):
-            parser.cli(output=empty_output, network_instance="default")
+            parser.cli(output=empty_output, network_instance="default", af="IPV4")
 
     def test_ipv6_empty_json_raises(self):
         empty_output = '{"data": {}}'
-        parser = ShowRibIpv6Entries(device="dummy")
+        parser = ShowRibEntries(device="dummy")
         with pytest.raises(SchemaEmptyParserError):
-            parser.cli(output=empty_output, network_instance="default")
+            parser.cli(output=empty_output, network_instance="default", af="IPV6")
 
     def test_ipv4_no_entries_raises(self):
         no_entries = """{
@@ -192,18 +190,18 @@ class TestShowRibEntriesEmpty:
             }
           }
         }"""
-        parser = ShowRibIpv4Entries(device="dummy")
+        parser = ShowRibEntries(device="dummy")
         with pytest.raises(SchemaEmptyParserError):
-            parser.cli(output=no_entries, network_instance="default")
+            parser.cli(output=no_entries, network_instance="default", af="IPV4")
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv4LabelEntries
+# ShowRibLabelEntries — IPv4
 # -----------------------------------------------------------------------
 
 
-class TestShowRibIpv4LabelEntriesSingle:
-    """Test ShowRibIpv4LabelEntries with a single IPv4 label (R6)."""
+class TestShowRibLabelEntriesIpv4Single:
+    """Test ShowRibLabelEntries af=IPV4 with a single IPv4 label."""
 
     def test_parse_single_label(self):
         sample = SAMPLES_DIR / "rib_ipv4_label_entry_single.json"
@@ -211,8 +209,8 @@ class TestShowRibIpv4LabelEntriesSingle:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv4LabelEntries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibLabelEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV4")
 
         ni = result["network-instance"]["default"]
         assert ni["address-family"] == "IPV4"
@@ -230,8 +228,8 @@ class TestShowRibIpv4LabelEntriesSingle:
         assert entry["flags"] == "ECMP_FEC_OPTIMIZE"
 
 
-class TestShowRibIpv4LabelEntriesMulti:
-    """Test ShowRibIpv4LabelEntries with multiple IPv4 labels (R5)."""
+class TestShowRibLabelEntriesIpv4Multi:
+    """Test ShowRibLabelEntries af=IPV4 with multiple IPv4 labels."""
 
     def test_parse_multiple_labels(self):
         sample = SAMPLES_DIR / "rib_ipv4_label_entries.json"
@@ -239,8 +237,8 @@ class TestShowRibIpv4LabelEntriesMulti:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv4LabelEntries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibLabelEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV4")
 
         ni = result["network-instance"]["default"]
         labels = ni["label-entries"]
@@ -269,12 +267,12 @@ class TestShowRibIpv4LabelEntriesMulti:
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv6LabelEntries
+# ShowRibLabelEntries — IPv6
 # -----------------------------------------------------------------------
 
 
-class TestShowRibIpv6LabelEntriesSingle:
-    """Test ShowRibIpv6LabelEntries with a single IPv6 label (R8)."""
+class TestShowRibLabelEntriesIpv6Single:
+    """Test ShowRibLabelEntries af=IPV6 with a single IPv6 label."""
 
     def test_parse_single_label(self):
         sample = SAMPLES_DIR / "rib_ipv6_label_entry_single.json"
@@ -282,8 +280,8 @@ class TestShowRibIpv6LabelEntriesSingle:
             pytest.skip(f"Sample not found: {sample}")
 
         output = sample.read_text()
-        parser = ShowRibIpv6LabelEntries(device="dummy")
-        result = parser.cli(output=output, network_instance="default")
+        parser = ShowRibLabelEntries(device="dummy")
+        result = parser.cli(output=output, network_instance="default", af="IPV6")
 
         ni = result["network-instance"]["default"]
         assert ni["address-family"] == "IPV6"
@@ -299,7 +297,7 @@ class TestShowRibIpv6LabelEntriesSingle:
 
 
 # -----------------------------------------------------------------------
-# ShowRibIpv4LabelEntries / ShowRibIpv6LabelEntries — empty / error
+# ShowRibLabelEntries — empty / error
 # -----------------------------------------------------------------------
 
 
@@ -308,12 +306,12 @@ class TestShowRibLabelEntriesEmpty:
 
     def test_ipv4_empty_json_raises(self):
         empty_output = '{"data": {}}'
-        parser = ShowRibIpv4LabelEntries(device="dummy")
+        parser = ShowRibLabelEntries(device="dummy")
         with pytest.raises(SchemaEmptyParserError):
-            parser.cli(output=empty_output, network_instance="default")
+            parser.cli(output=empty_output, network_instance="default", af="IPV4")
 
     def test_ipv6_empty_json_raises(self):
         empty_output = '{"data": {}}'
-        parser = ShowRibIpv6LabelEntries(device="dummy")
+        parser = ShowRibLabelEntries(device="dummy")
         with pytest.raises(SchemaEmptyParserError):
-            parser.cli(output=empty_output, network_instance="default")
+            parser.cli(output=empty_output, network_instance="default", af="IPV6")

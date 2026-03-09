@@ -1,0 +1,565 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-next-hops": {
+                "ipv4-nexthop-entry": [
+                  {
+                    "index": 2147483650,
+                    "level": 1,
+                    "flags": "LOCAL MIXED_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 2147483649,
+                          "path-type": "DROP",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 6,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 5,
+                          "path-type": "GLEAN_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 8,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 7,
+                          "path-type": "LOCAL_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 24,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 23,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 615,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 614,
+                          "path-type": "GLEAN_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 617,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 616,
+                          "path-type": "LOCAL_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 619,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 618,
+                          "path-type": "GLEAN_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 621,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 620,
+                          "path-type": "LOCAL_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 623,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 622,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 625,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 624,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 630,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 622,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 23,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 631,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 624,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 440,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.2",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 632,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 624,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 622,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 23,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 633,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 622,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 440,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.2",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 23,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 635,
+                    "eos0-nexthop-index": 536871547,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 634,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.2",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 536871547,
+                    "source-nexthop-index": 635,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 536871546,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.2",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 637,
+                    "eos0-nexthop-index": 536871549,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 636,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 536871549,
+                    "source-nexthop-index": 637,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 536871548,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.2.4",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 639,
+                    "eos0-nexthop-index": 536871551,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 638,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 536871551,
+                    "source-nexthop-index": 639,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 536871550,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.14.3.4",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 641,
+                    "eos0-nexthop-index": 536871553,
+                    "level": 2,
+                    "flags": "RECURSIVE IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 640,
+                          "path-type": "RECURSIVE",
+                          "nh-type": "IGP",
+                          "next-hop": 630,
+                          "network-instance": "default",
+                          "num-coll-paths": 2,
+                          "igp-path-id": [
+                            622,
+                            23
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 536871553,
+                    "source-nexthop-index": 641,
+                    "level": 2,
+                    "flags": "RECURSIVE LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 536871552,
+                          "path-type": "RECURSIVE",
+                          "nh-type": "IGP",
+                          "next-hop": 630,
+                          "push-label": [
+                            3
+                          ],
+                          "network-instance": "default",
+                          "num-coll-paths": 1,
+                          "igp-path-id": [
+                            1073742454
+                          ],
+                          "igp-path-type": 2
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 643,
+                    "eos0-nexthop-index": 536871555,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 642,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 536871555,
+                    "source-nexthop-index": 643,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 536871554,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 437,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 436,
+                          "path-type": "GLEAN_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 439,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 438,
+                          "path-type": "LOCAL_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 441,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 440,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.12.1.2",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 230,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 229,
+                          "path-type": "LOCAL_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "1.1.1.1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

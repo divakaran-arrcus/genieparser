@@ -1,0 +1,38 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-next-hops": {
+                "ipv6-nexthop-entry": [
+                  {
+                    "index": 268435890,
+                    "eos0-nexthop-index": 805306802,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435889,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

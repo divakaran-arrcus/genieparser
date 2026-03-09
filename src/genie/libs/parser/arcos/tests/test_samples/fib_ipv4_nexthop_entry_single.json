@@ -1,0 +1,38 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-next-hops": {
+                "ipv4-nexthop-entry": [
+                  {
+                    "index": 643,
+                    "eos0-nexthop-index": 536871555,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv4-path": [
+                        {
+                          "path-id": 642,
+                          "path-type": "CONNECTED_V4",
+                          "nh-type": "IPV4",
+                          "next-hop": "10.15.4.5",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

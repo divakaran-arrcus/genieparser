@@ -10,6 +10,7 @@ ARCOS_SR_AUGMENTS = "arcos-openconfig-segment-routing-augments"
 OPENCONFIG_INTERFACES = "openconfig-interfaces:interfaces"
 OPENCONFIG_NETWORK_INSTANCES = "openconfig-network-instance:network-instances"
 ARCOS_RIB = "arcos-rib:rib"
+ARCOS_FIB = "arcos-fib:fib"
 ARCOS_SRV6 = "arcos-srv6:srv6"
 
 # Common values
