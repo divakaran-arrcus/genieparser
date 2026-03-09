@@ -1,0 +1,27 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-entries": {
+                "ipv4-prefix-entry": [
+                  {
+                    "prefix": "5.5.5.5/32",
+                    "last-updated": "2026-03-08T10:25:58.744205-00:00",
+                    "next-hop-id": 643,
+                    "publish-type": "PATH",
+                    "publish-id": 642
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

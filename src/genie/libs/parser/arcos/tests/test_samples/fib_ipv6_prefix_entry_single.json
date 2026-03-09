@@ -1,0 +1,27 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-entries": {
+                "ipv6-prefix-entry": [
+                  {
+                    "prefix": "2001::5/128",
+                    "last-updated": "2026-03-08T14:23:27.961628-00:00",
+                    "next-hop-id": 268435890,
+                    "publish-type": "PATH",
+                    "publish-id": 268435889
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

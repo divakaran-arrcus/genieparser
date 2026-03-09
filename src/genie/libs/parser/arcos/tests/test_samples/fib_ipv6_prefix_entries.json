@@ -1,0 +1,199 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-entries": {
+                "ipv6-prefix-entry": [
+                  {
+                    "prefix": "::/0",
+                    "last-updated": "1970-01-01T00:00:00-00:00"
+                  },
+                  {
+                    "prefix": "2001::1/128",
+                    "last-updated": "2026-01-27T17:30:52.547585-00:00",
+                    "next-hop-id": 268435736,
+                    "publish-type": "PATH",
+                    "publish-id": 268435735
+                  },
+                  {
+                    "prefix": "2001::2/128",
+                    "last-updated": "2026-03-08T14:23:27.961497-00:00",
+                    "next-hop-id": 268435888,
+                    "publish-type": "PATH",
+                    "publish-id": 268435887
+                  },
+                  {
+                    "prefix": "2001::3/128",
+                    "last-updated": "2026-02-18T06:48:20.618769-00:00",
+                    "next-hop-id": 268435882,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177706
+                  },
+                  {
+                    "prefix": "2001::4/128",
+                    "last-updated": "2026-03-08T14:23:27.963088-00:00",
+                    "next-hop-id": 268435892,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177716
+                  },
+                  {
+                    "prefix": "2001::5/128",
+                    "last-updated": "2026-03-08T14:23:27.961628-00:00",
+                    "next-hop-id": 268435890,
+                    "publish-type": "PATH",
+                    "publish-id": 268435889
+                  },
+                  {
+                    "prefix": "2001::6/128",
+                    "last-updated": "2026-02-18T06:48:20.618986-00:00",
+                    "next-hop-id": 268435882,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177706
+                  },
+                  {
+                    "prefix": "2001:1::2/128",
+                    "last-updated": "2026-02-18T06:48:20.618795-00:00",
+                    "next-hop-id": 268435885,
+                    "publish-type": "PATH",
+                    "publish-id": 268435880
+                  },
+                  {
+                    "prefix": "2001:1::5/128",
+                    "last-updated": "2026-02-18T06:48:20.618505-00:00",
+                    "next-hop-id": 268435884,
+                    "publish-type": "PATH",
+                    "publish-id": 268435881
+                  },
+                  {
+                    "prefix": "2400:12:1::/64",
+                    "last-updated": "2026-02-02T20:58:08.594212-00:00",
+                    "next-hop-id": 268435768,
+                    "publish-type": "PATH",
+                    "publish-id": 268435767
+                  },
+                  {
+                    "prefix": "2400:12:1::1/128",
+                    "last-updated": "2026-02-02T20:58:08.594235-00:00",
+                    "next-hop-id": 268435770,
+                    "publish-type": "PATH",
+                    "publish-id": 268435769
+                  },
+                  {
+                    "prefix": "2400:14:2::/64",
+                    "last-updated": "2026-01-21T12:26:40.109028-00:00",
+                    "next-hop-id": 268435462,
+                    "publish-type": "PATH",
+                    "publish-id": 268435461
+                  },
+                  {
+                    "prefix": "2400:14:2::1/128",
+                    "last-updated": "2026-01-21T12:26:40.10905-00:00",
+                    "next-hop-id": 268435464,
+                    "publish-type": "PATH",
+                    "publish-id": 268435463
+                  },
+                  {
+                    "prefix": "2400:14:3::/64",
+                    "last-updated": "2026-02-06T13:21:27.410579-00:00",
+                    "next-hop-id": 268435860,
+                    "publish-type": "PATH",
+                    "publish-id": 268435859
+                  },
+                  {
+                    "prefix": "2400:14:3::1/128",
+                    "last-updated": "2026-02-06T13:21:27.410588-00:00",
+                    "next-hop-id": 268435862,
+                    "publish-type": "PATH",
+                    "publish-id": 268435861
+                  },
+                  {
+                    "prefix": "2400:15:4::/64",
+                    "last-updated": "2026-02-06T13:21:27.504514-00:00",
+                    "next-hop-id": 268435864,
+                    "publish-type": "PATH",
+                    "publish-id": 268435863
+                  },
+                  {
+                    "prefix": "2400:15:4::1/128",
+                    "last-updated": "2026-02-06T13:21:27.504526-00:00",
+                    "next-hop-id": 268435866,
+                    "publish-type": "PATH",
+                    "publish-id": 268435865
+                  },
+                  {
+                    "prefix": "2400:23:2::/64",
+                    "last-updated": "2026-02-18T06:48:20.6186-00:00",
+                    "next-hop-id": 268435885,
+                    "publish-type": "PATH",
+                    "publish-id": 268435880
+                  },
+                  {
+                    "prefix": "2400:24:4::/64",
+                    "last-updated": "2026-02-18T06:48:20.618665-00:00",
+                    "next-hop-id": 268435886,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177710
+                  },
+                  {
+                    "prefix": "2400:25:5::/64",
+                    "last-updated": "2026-02-18T06:48:20.61828-00:00",
+                    "next-hop-id": 268435882,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177706
+                  },
+                  {
+                    "prefix": "2400:26:3::/64",
+                    "last-updated": "2026-02-18T06:48:20.618694-00:00",
+                    "next-hop-id": 268435885,
+                    "publish-type": "PATH",
+                    "publish-id": 268435880
+                  },
+                  {
+                    "prefix": "2400:35:3::/64",
+                    "last-updated": "2026-02-18T06:48:20.618523-00:00",
+                    "next-hop-id": 268435884,
+                    "publish-type": "PATH",
+                    "publish-id": 268435881
+                  },
+                  {
+                    "prefix": "2400:36:1::/64",
+                    "last-updated": "2026-02-18T06:48:20.618816-00:00",
+                    "next-hop-id": 268435882,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177706
+                  },
+                  {
+                    "prefix": "2400:36:4::/64",
+                    "last-updated": "2026-02-18T06:48:20.618837-00:00",
+                    "next-hop-id": 268435882,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177706
+                  },
+                  {
+                    "prefix": "2400:45:1::/64",
+                    "last-updated": "2026-02-18T06:48:20.618368-00:00",
+                    "next-hop-id": 268435883,
+                    "publish-type": "ECMP",
+                    "publish-id": 1342177707
+                  },
+                  {
+                    "prefix": "2400:56:2::/64",
+                    "last-updated": "2026-02-18T06:48:20.618547-00:00",
+                    "next-hop-id": 268435884,
+                    "publish-type": "PATH",
+                    "publish-id": 268435881
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-label-entries": {
+                "ipv4-label-entry": [
+                  {
+                    "local-label": 10005,
+                    "vpn-table-id": 1,
+                    "next-hop-id": 643,
+                    "publish-id": 536871554
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

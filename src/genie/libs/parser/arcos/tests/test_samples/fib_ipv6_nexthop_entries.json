@@ -1,0 +1,521 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-next-hops": {
+                "ipv6-nexthop-entry": [
+                  {
+                    "index": 2147484674,
+                    "level": 1,
+                    "flags": "LOCAL MIXED_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 2147484673,
+                          "path-type": "DROP",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435462,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435461,
+                          "path-type": "GLEAN_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:14:2::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 2147484678,
+                    "level": 1,
+                    "flags": "LOCAL IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 2147484677,
+                          "path-type": "ADJ_RNH_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::d822:b1ff:fefe:5539",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435464,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435463,
+                          "path-type": "LOCAL_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:14:2::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435736,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435735,
+                          "path-type": "LOCAL_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2001::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435768,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435767,
+                          "path-type": "GLEAN_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:12:1::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 2147484728,
+                    "level": 1,
+                    "flags": "LOCAL IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 2147484727,
+                          "path-type": "ADJ_RNH_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435770,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435769,
+                          "path-type": "LOCAL_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:12:1::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 2147484742,
+                    "level": 1,
+                    "flags": "LOCAL IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 2147484741,
+                          "path-type": "ADJ_RNH_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::2cca:22ff:fe9e:4f8",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 2147484744,
+                    "level": 1,
+                    "flags": "LOCAL IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 2147484743,
+                          "path-type": "ADJ_RNH_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435860,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435859,
+                          "path-type": "GLEAN_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:14:3::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435862,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435861,
+                          "path-type": "LOCAL_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:14:3::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435864,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435863,
+                          "path-type": "GLEAN_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:15:4::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435866,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435865,
+                          "path-type": "LOCAL_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "2400:15:4::1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435879,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435878,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::2cca:22ff:fe9e:4f8",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435877,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::d822:b1ff:fefe:5539",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435882,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435881,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435880,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435883,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435881,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435878,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::2cca:22ff:fe9e:4f8",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435877,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::d822:b1ff:fefe:5539",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435884,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435881,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435885,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435880,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435886,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435880,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435878,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::2cca:22ff:fe9e:4f8",
+                          "interface": "swp3",
+                          "network-instance": "default"
+                        },
+                        {
+                          "path-id": 268435877,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::d822:b1ff:fefe:5539",
+                          "interface": "swp2",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435888,
+                    "eos0-nexthop-index": 805306800,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435887,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 805306800,
+                    "source-nexthop-index": 268435888,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 805306799,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::e857:1fff:fea2:e3c",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp1",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435890,
+                    "eos0-nexthop-index": 805306802,
+                    "level": 1,
+                    "flags": "IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435889,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 805306802,
+                    "source-nexthop-index": 268435890,
+                    "level": 1,
+                    "flags": "LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 805306801,
+                          "path-type": "CONNECTED_V6",
+                          "nh-type": "IPV6",
+                          "next-hop": "fe80::b8d0:10ff:feb5:8ced",
+                          "push-label": [
+                            3
+                          ],
+                          "interface": "swp4",
+                          "network-instance": "default"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 268435892,
+                    "eos0-nexthop-index": 805306804,
+                    "level": 2,
+                    "flags": "RECURSIVE IP_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 268435891,
+                          "path-type": "RECURSIVE",
+                          "nh-type": "IGP",
+                          "next-hop": 268435879,
+                          "network-instance": "default",
+                          "num-coll-paths": 2,
+                          "igp-path-id": [
+                            268435878,
+                            268435877
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "index": 805306804,
+                    "source-nexthop-index": 268435892,
+                    "level": 2,
+                    "flags": "RECURSIVE LOCAL MPLS_REACH",
+                    "paths": {
+                      "ipv6-path": [
+                        {
+                          "path-id": 805306803,
+                          "path-type": "RECURSIVE",
+                          "nh-type": "IGP",
+                          "next-hop": 268435879,
+                          "push-label": [
+                            3
+                          ],
+                          "network-instance": "default",
+                          "num-coll-paths": 1,
+                          "igp-path-id": [
+                            1342177703
+                          ],
+                          "igp-path-type": 2
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
