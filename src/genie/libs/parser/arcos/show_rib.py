@@ -2,12 +2,10 @@
 
 Parsers for Arrcus ArcOS RIB OpenConfig-based JSON commands.
 
-Provides four parser classes (one per address-family per entry type):
+Provides two parser classes with ``af`` as a runtime parameter:
 
-- ``ShowRibIpv4Entries``      — IPv4 route entries     (R1, R2)
-- ``ShowRibIpv6Entries``      — IPv6 route entries     (R3, R4)
-- ``ShowRibIpv4LabelEntries`` — IPv4 MPLS label entries (R5, R6)
-- ``ShowRibIpv6LabelEntries`` — IPv6 MPLS label entries (R7, R8)
+- ``ShowRibEntries``      — IPv4/IPv6 route entries
+- ``ShowRibLabelEntries`` — IPv4/IPv6 MPLS label entries
 
 All output is JSON-only via ``| display json | nomore``.
 """
@@ -162,27 +160,27 @@ class _RibLabelEntriesSchema(MetaParser):
 
 
 class _RibEntriesMixin:
-    """Parsing logic shared by ShowRibIpv4Entries and ShowRibIpv6Entries."""
-
-    # Subclass sets these
-    _AF = ""           # "ipv4" or "ipv6"
-    _AF_TOKEN = ""     # "IPV4" or "IPV6"
-    _ENTRIES_KEY = ""  # "ipv4-entries" or "ipv6-entries"
+    """Parsing logic shared by route-entry parsers across address families."""
 
     def _do_parse(
         self,
         network_instance: str,
+        af: str,
         prefix: TypeOptional[str],
         output: TypeOptional[str],
     ) -> Dict:
         """Core parse logic for RIB route entries."""
+        af_upper = af.upper()
+        af_lower = af.lower()
+        entries_key = f"{af_lower}-entries"
+
         if output is None:
             validate_input(network_instance, "network_instance")
             if prefix:
                 validate_input(prefix, "prefix")
             exec_cmd = (
                 f"show network-instance {network_instance} rib "
-                f"{self._AF_TOKEN} {self._ENTRIES_KEY}"
+                f"{af_upper} {entries_key}"
             )
             if prefix:
                 exec_cmd += f" entry {prefix}"
@@ -191,17 +189,17 @@ class _RibEntriesMixin:
 
         parsed_json = load_json_robust(output)
 
-        ribs = _get_rib_data(parsed_json, network_instance, self._AF)
+        ribs = _get_rib_data(parsed_json, network_instance, af_lower)
         if not ribs:
             raise SchemaEmptyParserError(
-                f"No RIB data found for NI={network_instance}, AF={self._AF}"
+                f"No RIB data found for NI={network_instance}, AF={af_lower}"
             )
 
-        result = self._parse_entries(ribs, network_instance)
+        result = self._parse_entries(ribs, network_instance, entries_key)
 
         if not result.get("network-instance"):
             raise SchemaEmptyParserError(
-                f"No RIB entries found for NI={network_instance}, AF={self._AF}"
+                f"No RIB entries found for NI={network_instance}, AF={af_lower}"
             )
 
         return result
@@ -210,12 +208,13 @@ class _RibEntriesMixin:
         self,
         ribs: List[Dict],
         network_instance: str,
+        entries_key: str,
     ) -> Dict:
         """Transform raw RIB JSON into the schema structure."""
         result: Dict[str, TypeAny] = {"network-instance": {}}
 
         for rib in ribs:
-            entries_container = rib.get(self._ENTRIES_KEY, {})
+            entries_container = rib.get(entries_key, {})
             entry_list = entries_container.get("entry", [])
 
             if not entry_list:
@@ -309,27 +308,27 @@ class _RibEntriesMixin:
 
 
 class _RibLabelEntriesMixin:
-    """Parsing logic shared by ShowRibIpv4LabelEntries and ShowRibIpv6LabelEntries."""
-
-    # Subclass sets these
-    _AF = ""              # "ipv4" or "ipv6"
-    _AF_TOKEN = ""        # "IPV4" or "IPV6"
-    _LABEL_KEY = ""       # "ipv4-label-entries" or "ipv6-label-entries"
+    """Parsing logic shared by label-entry parsers across address families."""
 
     def _do_parse(
         self,
         network_instance: str,
+        af: str,
         label: TypeOptional[str],
         output: TypeOptional[str],
     ) -> Dict:
         """Core parse logic for RIB label entries."""
+        af_upper = af.upper()
+        af_lower = af.lower()
+        label_key = f"{af_lower}-label-entries"
+
         if output is None:
             validate_input(network_instance, "network_instance")
             if label:
                 validate_input(label, "label")
             exec_cmd = (
                 f"show network-instance {network_instance} rib "
-                f"{self._AF_TOKEN} {self._LABEL_KEY}"
+                f"{af_upper} {label_key}"
             )
             if label:
                 exec_cmd += f" entry {label}"
@@ -338,17 +337,17 @@ class _RibLabelEntriesMixin:
 
         parsed_json = load_json_robust(output)
 
-        ribs = _get_rib_data(parsed_json, network_instance, self._AF)
+        ribs = _get_rib_data(parsed_json, network_instance, af_lower)
         if not ribs:
             raise SchemaEmptyParserError(
-                f"No RIB data found for NI={network_instance}, AF={self._AF}"
+                f"No RIB data found for NI={network_instance}, AF={af_lower}"
             )
 
-        result = self._parse_label_entries(ribs, network_instance)
+        result = self._parse_label_entries(ribs, network_instance, label_key)
 
         if not result.get("network-instance"):
             raise SchemaEmptyParserError(
-                f"No RIB label entries found for NI={network_instance}, AF={self._AF}"
+                f"No RIB label entries found for NI={network_instance}, AF={af_lower}"
             )
 
         return result
@@ -357,6 +356,7 @@ class _RibLabelEntriesMixin:
         self,
         ribs: List[Dict],
         network_instance: str,
+        label_key: str,
     ) -> Dict:
         """Transform raw RIB label JSON into the schema structure."""
         result: Dict[str, TypeAny] = {"network-instance": {}}
@@ -368,7 +368,7 @@ class _RibLabelEntriesMixin:
         )
 
         for rib in ribs:
-            label_container = rib.get(self._LABEL_KEY, {})
+            label_container = rib.get(label_key, {})
             entry_list = label_container.get("entry", [])
 
             if not entry_list:
@@ -384,7 +384,7 @@ class _RibLabelEntriesMixin:
                 if label_val is None:
                     continue
 
-                label_key = str(label_val)
+                label_key_str = str(label_val)
                 entry_out: Dict[str, TypeAny] = {}
 
                 for field in label_fields:
@@ -396,44 +396,47 @@ class _RibLabelEntriesMixin:
                 if proto is not None:
                     entry_out["protocol"] = _strip_ns(proto)
 
-                label_entries_dict[label_key] = entry_out
+                label_entries_dict[label_key_str] = entry_out
 
         return result
 
 
 # ===================================================================
-# Parser 1: ShowRibIpv4Entries (R1, R2)
+# ShowRibEntries — IPv4/IPv6 route entries (af as parameter)
 # ===================================================================
 
 
-class ShowRibIpv4Entries(_RibEntriesMixin, _RibEntriesSchema):
-    """Parser for ArcOS RIB IPv4 route entries (JSON format).
+class ShowRibEntries(_RibEntriesMixin, _RibEntriesSchema):
+    """Parser for ArcOS RIB route entries (JSON format).
+
+    Supports both IPv4 and IPv6 via the ``af`` parameter,
+    following the same pattern as ``ShowIsisRoute`` with ``{afi}``.
 
     Commands (before ``| display json | nomore``)::
 
-        show network-instance {ni} rib IPV4 ipv4-entries                  # R1
-        show network-instance {ni} rib IPV4 ipv4-entries entry {prefix}   # R2
+        show network-instance {ni} rib {af} {af_entries}                  # all entries
+        show network-instance {ni} rib {af} {af_entries} entry {prefix}   # single entry
     """
 
-    _AF = "ipv4"
-    _AF_TOKEN = "IPV4"
-    _ENTRIES_KEY = "ipv4-entries"
-
     cli_command = [
-        "show network-instance {network_instance} rib IPV4 ipv4-entries",
-        "show network-instance {network_instance} rib IPV4 ipv4-entries entry {prefix}",
+        "show network-instance {network_instance} rib {af} ipv4-entries",
+        "show network-instance {network_instance} rib {af} ipv4-entries entry {prefix}",
+        "show network-instance {network_instance} rib {af} ipv6-entries",
+        "show network-instance {network_instance} rib {af} ipv6-entries entry {prefix}",
     ]
 
     def cli(
         self,
         network_instance: str = "default",
+        af: str = "IPV4",
         prefix: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
-        """Parse IPv4 RIB route entries.
+        """Parse RIB route entries for any address family.
 
         Args:
             network_instance: Network instance name (default ``"default"``).
+            af: Address family — ``"IPV4"`` or ``"IPV6"`` (default ``"IPV4"``).
             prefix: Optional specific prefix to filter (e.g. ``"5.5.5.5/32"``).
             output: Pre-captured command output (for unit tests).
 
@@ -443,87 +446,46 @@ class ShowRibIpv4Entries(_RibEntriesMixin, _RibEntriesSchema):
         Raises:
             SchemaEmptyParserError: If no RIB entries are found.
         """
-        return self._do_parse(network_instance, prefix, output)
+        return self._do_parse(network_instance, af, prefix, output)
 
 
 # ===================================================================
-# Parser 2: ShowRibIpv6Entries (R3, R4)
+# ShowRibLabelEntries — IPv4/IPv6 MPLS label entries (af as parameter)
 # ===================================================================
 
 
-class ShowRibIpv6Entries(_RibEntriesMixin, _RibEntriesSchema):
-    """Parser for ArcOS RIB IPv6 route entries (JSON format).
+class ShowRibLabelEntries(_RibLabelEntriesMixin, _RibLabelEntriesSchema):
+    """Parser for ArcOS RIB MPLS label entries (JSON format).
+
+    Supports both IPv4 and IPv6 via the ``af`` parameter.
 
     Commands (before ``| display json | nomore``)::
 
-        show network-instance {ni} rib IPV6 ipv6-entries                  # R3
-        show network-instance {ni} rib IPV6 ipv6-entries entry {prefix}   # R4
+        show network-instance {ni} rib {af} {af_label_entries}                  # all labels
+        show network-instance {ni} rib {af} {af_label_entries} entry {label}    # single label
     """
 
-    _AF = "ipv6"
-    _AF_TOKEN = "IPV6"
-    _ENTRIES_KEY = "ipv6-entries"
-
     cli_command = [
-        "show network-instance {network_instance} rib IPV6 ipv6-entries",
-        "show network-instance {network_instance} rib IPV6 ipv6-entries entry {prefix}",
+        "show network-instance {network_instance} rib {af} ipv4-label-entries",
+        "show network-instance {network_instance} rib {af} ipv4-label-entries entry {label}",
+        "show network-instance {network_instance} rib {af} ipv6-label-entries",
+        "show network-instance {network_instance} rib {af} ipv6-label-entries entry {label}",
     ]
 
     def cli(
         self,
         network_instance: str = "default",
+        af: str = "IPV4",
         prefix: TypeOptional[str] = None,
-        output: TypeOptional[str] = None,
-    ) -> TypeAny:
-        """Parse IPv6 RIB route entries.
-
-        Args:
-            network_instance: Network instance name (default ``"default"``).
-            prefix: Optional specific prefix to filter (e.g. ``"2001::5/128"``).
-            output: Pre-captured command output (for unit tests).
-
-        Returns:
-            dict: Parsed output matching ``_RibEntriesSchema``.
-
-        Raises:
-            SchemaEmptyParserError: If no RIB entries are found.
-        """
-        return self._do_parse(network_instance, prefix, output)
-
-
-# ===================================================================
-# Parser 3: ShowRibIpv4LabelEntries (R5, R6)
-# ===================================================================
-
-
-class ShowRibIpv4LabelEntries(_RibLabelEntriesMixin, _RibLabelEntriesSchema):
-    """Parser for ArcOS RIB IPv4 MPLS label entries (JSON format).
-
-    Commands (before ``| display json | nomore``)::
-
-        show network-instance {ni} rib IPV4 ipv4-label-entries                  # R5
-        show network-instance {ni} rib IPV4 ipv4-label-entries entry {label}    # R6
-    """
-
-    _AF = "ipv4"
-    _AF_TOKEN = "IPV4"
-    _LABEL_KEY = "ipv4-label-entries"
-
-    cli_command = [
-        "show network-instance {network_instance} rib IPV4 ipv4-label-entries",
-        "show network-instance {network_instance} rib IPV4 ipv4-label-entries entry {label}",
-    ]
-
-    def cli(
-        self,
-        network_instance: str = "default",
         label: TypeOptional[str] = None,
         output: TypeOptional[str] = None,
     ) -> TypeAny:
-        """Parse IPv4 RIB MPLS label entries.
+        """Parse RIB MPLS label entries for any address family.
 
         Args:
             network_instance: Network instance name (default ``"default"``).
+            af: Address family — ``"IPV4"`` or ``"IPV6"`` (default ``"IPV4"``).
+            prefix: Deprecated alias for ``label`` (backward compatibility).
             label: Optional specific label to filter (e.g. ``"10005"``).
             output: Pre-captured command output (for unit tests).
 
@@ -533,57 +495,16 @@ class ShowRibIpv4LabelEntries(_RibLabelEntriesMixin, _RibLabelEntriesSchema):
         Raises:
             SchemaEmptyParserError: If no label entries are found.
         """
-        return self._do_parse(network_instance, label, output)
+        if label is None and prefix is not None:
+            label = prefix
+        return self._do_parse(network_instance, af, label, output)
 
 
 # ===================================================================
-# Parser 4: ShowRibIpv6LabelEntries (R7, R8)
+# Backward-compatible aliases
 # ===================================================================
 
-
-class ShowRibIpv6LabelEntries(_RibLabelEntriesMixin, _RibLabelEntriesSchema):
-    """Parser for ArcOS RIB IPv6 MPLS label entries (JSON format).
-
-    Commands (before ``| display json | nomore``)::
-
-        show network-instance {ni} rib IPV6 ipv6-label-entries                  # R7
-        show network-instance {ni} rib IPV6 ipv6-label-entries entry {label}    # R8
-    """
-
-    _AF = "ipv6"
-    _AF_TOKEN = "IPV6"
-    _LABEL_KEY = "ipv6-label-entries"
-
-    cli_command = [
-        "show network-instance {network_instance} rib IPV6 ipv6-label-entries",
-        "show network-instance {network_instance} rib IPV6 ipv6-label-entries entry {label}",
-    ]
-
-    def cli(
-        self,
-        network_instance: str = "default",
-        label: TypeOptional[str] = None,
-        output: TypeOptional[str] = None,
-    ) -> TypeAny:
-        """Parse IPv6 RIB MPLS label entries.
-
-        Args:
-            network_instance: Network instance name (default ``"default"``).
-            label: Optional specific label to filter (e.g. ``"10105"``).
-            output: Pre-captured command output (for unit tests).
-
-        Returns:
-            dict: Parsed output matching ``_RibLabelEntriesSchema``.
-
-        Raises:
-            SchemaEmptyParserError: If no label entries are found.
-        """
-        return self._do_parse(network_instance, label, output)
-
-
-# ===================================================================
-# Backward-compatible aliases (old names → new names)
-# ===================================================================
-
-ShowRibEntries = ShowRibIpv4Entries
-ShowRibLabelEntries = ShowRibIpv4LabelEntries
+ShowRibIpv4Entries = ShowRibEntries
+ShowRibIpv6Entries = ShowRibEntries
+ShowRibIpv4LabelEntries = ShowRibLabelEntries
+ShowRibIpv6LabelEntries = ShowRibLabelEntries
