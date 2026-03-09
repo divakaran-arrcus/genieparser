@@ -1,0 +1,96 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-rib:rib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-label-entries": {
+                "entry": [
+                  {
+                    "label": 10001,
+                    "label-type": "DEAGG",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "1.1.1.1/32",
+                    "nhid": "0",
+                    "last-updated": "2026-03-08T10:25:58.308835-00:00",
+                    "time-since-creation": "0d 04:32:38",
+                    "control-word": false,
+                    "flow-label": false,
+                    "flags": ""
+                  },
+                  {
+                    "label": 10002,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "2.2.2.2/32",
+                    "nhid": "635",
+                    "last-updated": "2026-03-08T10:25:58.742669-00:00",
+                    "time-since-creation": "0d 04:32:37",
+                    "flags": "ECMP_FEC_OPTIMIZE"
+                  },
+                  {
+                    "label": 10004,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "4.4.4.4/32",
+                    "nhid": "641",
+                    "last-updated": "2026-03-08T10:25:58.742429-00:00",
+                    "time-since-creation": "0d 04:32:37",
+                    "flags": "ECMP_FEC_OPTIMIZE"
+                  },
+                  {
+                    "label": 10005,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "fec": "5.5.5.5/32",
+                    "nhid": "643",
+                    "last-updated": "2026-03-08T10:25:58.742922-00:00",
+                    "time-since-creation": "0d 04:32:37",
+                    "flags": "ECMP_FEC_OPTIMIZE"
+                  },
+                  {
+                    "label": 20121,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "nhid": "635",
+                    "last-updated": "2026-03-08T10:25:58.310563-00:00",
+                    "time-since-creation": "0d 04:32:38",
+                    "flags": ""
+                  },
+                  {
+                    "label": 20141,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "nhid": "637",
+                    "last-updated": "2026-03-08T10:25:58.310693-00:00",
+                    "time-since-creation": "0d 04:32:38",
+                    "flags": ""
+                  },
+                  {
+                    "label": 21441,
+                    "label-type": "NONE",
+                    "vpn-table-id": 1,
+                    "protocol": "openconfig-policy-types:ISIS",
+                    "nhid": "639",
+                    "last-updated": "2026-03-08T10:25:58.31089-00:00",
+                    "time-since-creation": "0d 04:32:38",
+                    "flags": ""
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
