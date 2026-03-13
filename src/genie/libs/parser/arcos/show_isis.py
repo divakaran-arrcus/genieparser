@@ -5307,3 +5307,122 @@ class ShowIsisSpfLog(ShowIsisSpfLogSchema):
             logger.warning("Error parsing ISIS SPF log: %s", exc)
 
         return ret_dict
+
+
+class ShowIsisGlobalTimersSchema(MetaParser):
+    """Schema for ArcOS ISIS global timer state JSON output.
+
+    Covers::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global timers
+    """
+
+    schema = {
+        "network-instance": {
+            Any(): {  # network instance name
+                "isis": {
+                    Any(): {  # protocol instance name
+                        Optional("timers"): {
+                            # LSP timers (from timers.state — flattened)
+                            Optional("lsp-lifetime-interval"): Or(str, int),
+                            Optional("lsp-refresh-interval"): Or(str, int),
+                            Optional("lsp-flood-delay-adj-up"): Or(str, int),
+                            # SPF timers (from timers.spf.state — flattened into "spf")
+                            Optional("spf"): {
+                                Optional("spf-hold-interval"): Or(str, int),
+                                Optional("spf-first-interval"): Or(str, int),
+                                Optional("spf-second-interval"): Or(str, int),
+                                Optional("spf-mla-interval"): Or(str, int),
+                            },
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisGlobalTimers(ShowIsisGlobalTimersSchema):
+    """Parser for ArcOS ISIS global timers command (JSON format).
+
+    Supports::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global timers | display json | nomore
+    """
+
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global timers",
+    ]
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = (
+                f"show network-instance {network_instance} protocol ISIS "
+                f"{protocol_instance} global timers"
+            )
+            logger.debug("Executing command: %s", cmd)
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        logger.debug("Parsing output: %s", output)
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
+
+        try:
+            parsed_json = load_json_robust(output)
+
+            isis = get_isis_data(parsed_json)
+            if not isis:
+                return ret_dict
+
+            timers_data = isis.get("global", {}).get("timers", {})
+            if not timers_data:
+                return ret_dict
+
+            timers_entry: Dict[str, TypeAny] = {}
+            aug_prefix = f"{ARCOS_ISIS_AUGMENTS}:"
+
+            # LSP timers — from timers.state (flatten)
+            lsp_state = timers_data.get("state", {})
+            if "lsp-lifetime-interval" in lsp_state:
+                timers_entry["lsp-lifetime-interval"] = lsp_state["lsp-lifetime-interval"]
+            if "lsp-refresh-interval" in lsp_state:
+                timers_entry["lsp-refresh-interval"] = lsp_state["lsp-refresh-interval"]
+            flood_delay_key = f"{aug_prefix}lsp-flood-delay-adj-up"
+            if flood_delay_key in lsp_state:
+                timers_entry["lsp-flood-delay-adj-up"] = lsp_state[flood_delay_key]
+
+            # SPF timers — from timers.spf.state (flatten into "spf" sub-dict)
+            spf_state = timers_data.get("spf", {}).get("state", {})
+            if spf_state:
+                spf_entry: Dict[str, TypeAny] = {}
+                if "spf-hold-interval" in spf_state:
+                    spf_entry["spf-hold-interval"] = spf_state["spf-hold-interval"]
+                if "spf-first-interval" in spf_state:
+                    spf_entry["spf-first-interval"] = spf_state["spf-first-interval"]
+                if "spf-second-interval" in spf_state:
+                    spf_entry["spf-second-interval"] = spf_state["spf-second-interval"]
+                mla_key = f"{aug_prefix}spf-mla-interval"
+                if mla_key in spf_state:
+                    spf_entry["spf-mla-interval"] = spf_state[mla_key]
+                if spf_entry:
+                    timers_entry["spf"] = spf_entry
+
+            if timers_entry:
+                ret_dict["network-instance"]["default"]["isis"]["default"][
+                    "timers"
+                ] = timers_entry
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS global timers: %s", exc)
+
+        return ret_dict
