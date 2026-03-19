@@ -1,0 +1,227 @@
+{
+  "data": {
+    "openconfig-bfd:bfd": {
+      "interfaces": {
+        "interface": [
+          {
+            "id": "GLOBAL",
+            "state": {
+              "id": "GLOBAL",
+              "enabled": true,
+              "desired-minimum-tx-interval": 100,
+              "required-minimum-receive": 100,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            }
+          },
+          {
+            "id": "GLOBAL-1000m",
+            "state": {
+              "id": "GLOBAL-1000m",
+              "enabled": true,
+              "desired-minimum-tx-interval": 1000,
+              "required-minimum-receive": 1000,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            }
+          },
+          {
+            "id": "GLOBAL-100m",
+            "state": {
+              "id": "GLOBAL-100m",
+              "enabled": true,
+              "desired-minimum-tx-interval": 100,
+              "required-minimum-receive": 100,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            }
+          },
+          {
+            "id": "GLOBAL-150m",
+            "state": {
+              "id": "GLOBAL-150m",
+              "enabled": true,
+              "desired-minimum-tx-interval": 150,
+              "required-minimum-receive": 150,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            },
+            "peers": {
+              "peer": [
+                {
+                  "local-discriminator": "20",
+                  "state": {
+                    "local-address": "191.168.7.1",
+                    "remote-address": "191.168.7.0",
+                    "subscribed-protocols": [
+                      "openconfig-policy-types:ISIS"
+                    ],
+                    "session-state": "UP",
+                    "remote-session-state": "UP",
+                    "local-discriminator": "20",
+                    "remote-discriminator": "24",
+                    "remote-minimum-receive-interval": 150,
+                    "async": {
+                      "transmitted-packets": "51086",
+                      "received-packets": "51091"
+                    },
+                    "arcos-openconfig-bfd-augments:hw-offload-status": true,
+                    "arcos-openconfig-bfd-augments:interface": "swp19",
+                    "arcos-openconfig-bfd-augments:hw-endpoint-id": 20,
+                    "arcos-openconfig-bfd-augments:network-instance": "default",
+                    "arcos-openconfig-bfd-augments:local-desired-minimum-tx-interval": 150,
+                    "arcos-openconfig-bfd-augments:local-required-minimum-receive": 150,
+                    "arcos-openconfig-bfd-augments:local-detection-multiplier": 3,
+                    "arcos-openconfig-bfd-augments:negotiated-tx-interval": 150,
+                    "arcos-openconfig-bfd-augments:negotiated-rx-interval": 450,
+                    "arcos-openconfig-bfd-augments:session-type": "arcos-openconfig-bfd-augments:BFD_SESSION_TYPE_UDP_IPV4",
+                    "arcos-openconfig-bfd-augments:session-up-time": "0d 02:07:58"
+                  }
+                },
+                {
+                  "local-discriminator": "24",
+                  "state": {
+                    "local-address": "191.168.8.1",
+                    "remote-address": "191.168.8.0",
+                    "subscribed-protocols": [
+                      "openconfig-policy-types:ISIS"
+                    ],
+                    "session-state": "UP",
+                    "remote-session-state": "UP",
+                    "local-discriminator": "24",
+                    "remote-discriminator": "32",
+                    "remote-minimum-receive-interval": 150,
+                    "async": {
+                      "transmitted-packets": "51038",
+                      "received-packets": "51041"
+                    },
+                    "arcos-openconfig-bfd-augments:hw-offload-status": true,
+                    "arcos-openconfig-bfd-augments:interface": "bond121",
+                    "arcos-openconfig-bfd-augments:hw-endpoint-id": 24,
+                    "arcos-openconfig-bfd-augments:network-instance": "default",
+                    "arcos-openconfig-bfd-augments:local-desired-minimum-tx-interval": 150,
+                    "arcos-openconfig-bfd-augments:local-required-minimum-receive": 150,
+                    "arcos-openconfig-bfd-augments:local-detection-multiplier": 3,
+                    "arcos-openconfig-bfd-augments:negotiated-tx-interval": 150,
+                    "arcos-openconfig-bfd-augments:negotiated-rx-interval": 450,
+                    "arcos-openconfig-bfd-augments:session-type": "arcos-openconfig-bfd-augments:BFD_SESSION_TYPE_UDP_IPV4",
+                    "arcos-openconfig-bfd-augments:session-up-time": "0d 02:07:51"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "GLOBAL-200m",
+            "state": {
+              "id": "GLOBAL-200m",
+              "enabled": true,
+              "desired-minimum-tx-interval": 200,
+              "required-minimum-receive": 200,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            },
+            "peers": {
+              "peer": [
+                {
+                  "local-discriminator": "12",
+                  "state": {
+                    "local-address": "1.0.0.0",
+                    "remote-address": "5.0.0.0",
+                    "subscribed-protocols": [
+                      "openconfig-policy-types:BGP"
+                    ],
+                    "session-state": "UP",
+                    "remote-session-state": "UP",
+                    "local-discriminator": "12",
+                    "remote-discriminator": "16",
+                    "remote-minimum-receive-interval": 200,
+                    "async": {
+                      "transmitted-packets": "38223",
+                      "received-packets": "38228"
+                    },
+                    "arcos-openconfig-bfd-augments:hw-offload-status": true,
+                    "arcos-openconfig-bfd-augments:hw-endpoint-id": 12,
+                    "arcos-openconfig-bfd-augments:network-instance": "default",
+                    "arcos-openconfig-bfd-augments:local-desired-minimum-tx-interval": 200,
+                    "arcos-openconfig-bfd-augments:local-required-minimum-receive": 200,
+                    "arcos-openconfig-bfd-augments:local-detection-multiplier": 3,
+                    "arcos-openconfig-bfd-augments:negotiated-tx-interval": 200,
+                    "arcos-openconfig-bfd-augments:negotiated-rx-interval": 600,
+                    "arcos-openconfig-bfd-augments:session-type": "arcos-openconfig-bfd-augments:BFD_SESSION_TYPE_MULTI_HOP_UDP_IPV4",
+                    "arcos-openconfig-bfd-augments:session-up-time": "0d 02:07:40"
+                  }
+                },
+                {
+                  "local-discriminator": "16",
+                  "state": {
+                    "local-address": "1.0.0.0",
+                    "remote-address": "4.0.0.0",
+                    "subscribed-protocols": [
+                      "openconfig-policy-types:BGP"
+                    ],
+                    "session-state": "UP",
+                    "remote-session-state": "UP",
+                    "local-discriminator": "16",
+                    "remote-discriminator": "16",
+                    "remote-minimum-receive-interval": 200,
+                    "async": {
+                      "transmitted-packets": "38244",
+                      "received-packets": "38248"
+                    },
+                    "arcos-openconfig-bfd-augments:hw-offload-status": true,
+                    "arcos-openconfig-bfd-augments:hw-endpoint-id": 16,
+                    "arcos-openconfig-bfd-augments:network-instance": "default",
+                    "arcos-openconfig-bfd-augments:local-desired-minimum-tx-interval": 200,
+                    "arcos-openconfig-bfd-augments:local-required-minimum-receive": 200,
+                    "arcos-openconfig-bfd-augments:local-detection-multiplier": 3,
+                    "arcos-openconfig-bfd-augments:negotiated-tx-interval": 200,
+                    "arcos-openconfig-bfd-augments:negotiated-rx-interval": 600,
+                    "arcos-openconfig-bfd-augments:session-type": "arcos-openconfig-bfd-augments:BFD_SESSION_TYPE_MULTI_HOP_UDP_IPV4",
+                    "arcos-openconfig-bfd-augments:session-up-time": "0d 02:07:44"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "GLOBAL-250m",
+            "state": {
+              "id": "GLOBAL-250m",
+              "enabled": true,
+              "desired-minimum-tx-interval": 250,
+              "required-minimum-receive": 250,
+              "detection-multiplier": 3,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            }
+          },
+          {
+            "id": "GLOBAL-500m-5x",
+            "state": {
+              "id": "GLOBAL-500m-5x",
+              "enabled": true,
+              "desired-minimum-tx-interval": 500,
+              "required-minimum-receive": 500,
+              "detection-multiplier": 5,
+              "arcos-openconfig-bfd-augments:v4-hw-offload": true,
+              "arcos-openconfig-bfd-augments:v6-hw-offload": true,
+              "arcos-openconfig-bfd-augments:dscp-value": 48
+            }
+          }
+        ]
+      }
+    }
+  }
+}
