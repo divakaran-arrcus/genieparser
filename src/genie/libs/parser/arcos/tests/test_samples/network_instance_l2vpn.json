@@ -1,0 +1,172 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "Leaf1-Leaf2-EPLAN(M2M)-1",
+          "fdb": {
+            "arcos-openconfig-network-instance-augments:mac-table-state": {
+              "entries": {
+                "entry": [
+                  {
+                    "mac-address": "5c:07:58:74:62:03",
+                    "state": {
+                      "mac-address": "5c:07:58:74:62:03",
+                      "vlan": 6001,
+                      "entry-type": "DYNAMIC"
+                    }
+                  },
+                  {
+                    "mac-address": "48:0f:cf:af:67:37",
+                    "state": {
+                      "mac-address": "48:0f:cf:af:67:37",
+                      "vlan": 6001,
+                      "entry-type": "DYNAMIC"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "interfaces": {
+            "interface": [
+              {
+                "id": "swp5.6001",
+                "state": {
+                  "id": "swp5.6001",
+                  "interface": "swp5",
+                  "subinterface": 6001
+                }
+              },
+              {
+                "id": "swp6.6001",
+                "state": {
+                  "id": "swp6.6001",
+                  "interface": "swp6",
+                  "subinterface": 6001
+                }
+              }
+            ]
+          },
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "Leaf1-Leaf2-EPLAN(M2M)-1",
+                "bgp": {
+                  "global": {
+                    "state": {
+                      "as": 65002,
+                      "router-id": "1.0.0.0",
+                      "total-paths": 0,
+                      "total-prefixes": 0,
+                      "arcos-openconfig-bgp-augments:route-distinguisher": "1.0.0.0:2001",
+                      "arcos-openconfig-bgp-augments:label-allocation-mode": "openconfig-network-instance-types:INSTANCE_LABEL",
+                      "arcos-openconfig-bgp-augments:control-word": true,
+                      "arcos-openconfig-bgp-augments:flow-label": true,
+                      "arcos-openconfig-bgp-augments:vni-evi": 2001,
+                      "arcos-openconfig-bgp-augments:tunnel-type": "MPLS"
+                    },
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                          "state": {
+                            "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                            "enabled": true
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "arcos-openconfig-bgp-augments:route-targets": {
+                  "route-target": [
+                    {
+                      "route-target": "2001:2001",
+                      "route-target-type": "both",
+                      "state": {
+                        "route-target": "2001:2001",
+                        "route-target-type": "both"
+                      }
+                    },
+                    {
+                      "route-target": "3001:3001",
+                      "route-target-type": "import",
+                      "state": {
+                        "route-target": "3001:3001",
+                        "route-target-type": "import"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "arcos-l2rib:l2rib": {
+            "l2ni-state": {
+              "id": 2001,
+              "name": "Leaf1-Leaf2-EPLAN(M2M)-1",
+              "type": "arcos-l2rib:TABLE_TYPE_VLAN",
+              "vni": 2001,
+              "advertise-mac-routes": true,
+              "maximum-mac-entries": 2048,
+              "pkt-action": "arcos-openconfig-network-instance-augments:FLOOD_ACTION",
+              "local-label": 2001,
+              "is-irb": false
+            },
+            "mac-entries": {
+              "entry": [
+                {
+                  "mac-address": "5c:07:58:74:62:03",
+                  "paths": {
+                    "path": [
+                      {
+                        "next-hop": "swp5.6001",
+                        "encap-type": "arcos-l2rib:L2RIB_ENCAP_NONE",
+                        "l2-label": 0,
+                        "l3-label": 0
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "mac-ipv4-entries": {
+              "entry": [
+                {
+                  "ipv4-address": "10.1.1.1",
+                  "mac-address": "5c:07:58:74:62:03",
+                  "paths": {
+                    "path": [
+                      {
+                        "next-hop": "swp5.6001"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "ipv4-address": "10.1.1.2",
+                  "mac-address": "48:0f:cf:af:67:37",
+                  "paths": {
+                    "path": [
+                      {
+                        "next-hop": "swp6.6001"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "stats-entries": {
+              "current-total": {
+                "num-macs": 1,
+                "num-macs-valid": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
