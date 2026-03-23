@@ -1,0 +1,59 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "default",
+                "bgp": {
+                  "global": {
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                          "state": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                            "enabled": true,
+                            "total-paths": 3000006,
+                            "total-prefixes": 3000004,
+                            "arcos-openconfig-bgp-augments:paths-received": 3000006,
+                            "arcos-openconfig-bgp-augments:paths-sent": 0,
+                            "arcos-openconfig-bgp-augments:total-paths-received": 6000012,
+                            "arcos-openconfig-bgp-augments:total-paths-sent": 0,
+                            "arcos-openconfig-bgp-augments:total-paths-withdrawn": 0,
+                            "arcos-openconfig-bgp-augments:rib-install-prefixes": 3000004,
+                            "arcos-openconfig-bgp-augments:total-next-hops": 2
+                          }
+                        },
+                        {
+                          "afi-safi-name": "arcos-openconfig-bgp-types:L2VPN_EVPN",
+                          "state": {
+                            "afi-safi-name": "arcos-openconfig-bgp-types:L2VPN_EVPN",
+                            "enabled": true,
+                            "total-paths": 301,
+                            "total-prefixes": 267,
+                            "arcos-openconfig-bgp-augments:paths-received": 301,
+                            "arcos-openconfig-bgp-augments:paths-sent": 200,
+                            "arcos-openconfig-bgp-augments:total-paths-received": 602,
+                            "arcos-openconfig-bgp-augments:total-paths-sent": 400,
+                            "arcos-openconfig-bgp-augments:total-paths-withdrawn": 0,
+                            "arcos-openconfig-bgp-augments:rib-install-prefixes": 267,
+                            "arcos-openconfig-bgp-augments:total-next-hops": 3
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

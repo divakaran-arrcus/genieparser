@@ -1,0 +1,113 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "default",
+                "bgp": {
+                  "rib": {
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                          "ipv4-unicast": {
+                            "loc-rib": {
+                              "routes": {
+                                "route": [
+                                  {
+                                    "prefix": "121.121.121.121/32",
+                                    "origin": "4.0.0.0",
+                                    "path-id": "23",
+                                    "state": {
+                                      "prefix": "121.121.121.121/32",
+                                      "origin": "4.0.0.0",
+                                      "path-id": "23",
+                                      "valid-route": false,
+                                      "invalid-reason": "arcos-openconfig-rib-bgp-augments:NEXT_HOP_UNREACHABLE",
+                                      "arcos-openconfig-rib-bgp-augments:next-hop": "91.1.1.1",
+                                      "arcos-openconfig-rib-bgp-augments:not-best-path-reason": "Not Valid for Best-Path Selection",
+                                      "arcos-openconfig-rib-bgp-augments:path-types": [],
+                                      "arcos-openconfig-rib-bgp-augments:stale-route": false
+                                    },
+                                    "arcos-openconfig-rib-bgp-augments:attributes": {
+                                      "state": {
+                                        "origin": "IGP",
+                                        "local-pref": 100,
+                                        "originator-id": "121.121.121.121",
+                                        "cluster-list": ["4.0.0.0"],
+                                        "weight": 0,
+                                        "as-path-string": "123456"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "prefix": "121.121.121.121/32",
+                                    "origin": "5.0.0.0",
+                                    "path-id": "527",
+                                    "state": {
+                                      "prefix": "121.121.121.121/32",
+                                      "origin": "5.0.0.0",
+                                      "path-id": "527",
+                                      "valid-route": true,
+                                      "arcos-openconfig-rib-bgp-augments:next-hop": "4.0.0.0",
+                                      "arcos-openconfig-rib-bgp-augments:path-types": ["arcos-openconfig-rib-bgp-augments:BEST_PATH"],
+                                      "arcos-openconfig-rib-bgp-augments:stale-route": false
+                                    },
+                                    "arcos-openconfig-rib-bgp-augments:attributes": {
+                                      "state": {
+                                        "origin": "IGP",
+                                        "local-pref": 100,
+                                        "originator-id": "121.121.121.121",
+                                        "cluster-list": ["5.0.0.0", "3.0.0.0", "4.0.0.0"],
+                                        "weight": 0,
+                                        "as-path-string": "123456"
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "prefix": "121.121.121.121/32",
+                                    "origin": "5.0.0.0",
+                                    "path-id": "1",
+                                    "state": {
+                                      "prefix": "121.121.121.121/32",
+                                      "origin": "5.0.0.0",
+                                      "path-id": "1",
+                                      "valid-route": false,
+                                      "invalid-reason": "arcos-openconfig-rib-bgp-augments:NEXT_HOP_UNREACHABLE",
+                                      "arcos-openconfig-rib-bgp-augments:next-hop": "90.1.1.1",
+                                      "arcos-openconfig-rib-bgp-augments:not-best-path-reason": "Not Valid for Best-Path Selection",
+                                      "arcos-openconfig-rib-bgp-augments:stale-route": false
+                                    },
+                                    "arcos-openconfig-rib-bgp-augments:attributes": {
+                                      "state": {
+                                        "origin": "IGP",
+                                        "local-pref": 100,
+                                        "originator-id": "121.121.121.121",
+                                        "cluster-list": ["5.0.0.0"],
+                                        "weight": 0,
+                                        "as-path-string": "123456"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "default",
+                "bgp": {
+                  "global": {
+                    "state": {
+                      "as": 65002,
+                      "router-id": "1.0.0.0",
+                      "total-paths": 3001342,
+                      "total-prefixes": 3000643,
+                      "arcos-openconfig-bgp-augments:cluster-id": "0.0.0.0",
+                      "arcos-openconfig-bgp-augments:shutdown-all-sessions": false,
+                      "arcos-openconfig-bgp-augments:total-configured-neighbors": 7,
+                      "arcos-openconfig-bgp-augments:total-established-neighbors": 6,
+                      "arcos-openconfig-bgp-augments:established-configured-neighbors": 6,
+                      "arcos-openconfig-bgp-augments:shutdown-configured-neighbors": 1,
+                      "arcos-openconfig-bgp-augments:route-distinguisher": "1.0.0.0:50001",
+                      "arcos-openconfig-bgp-augments:network-instances-present": 109,
+                      "arcos-openconfig-bgp-augments:segment-routing": {
+                        "enabled": false
+                      },
+                      "arcos-openconfig-bgp-augments:shutdown-protocol": false
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -13,6 +13,7 @@ ARCOS_RIB = "arcos-rib:rib"
 ARCOS_FIB = "arcos-fib:fib"
 ARCOS_SRV6 = "arcos-srv6:srv6"
 ARCOS_BFD_AUGMENTS = "arcos-openconfig-bfd-augments"
+ARCOS_BGP_AUGMENTS = "arcos-openconfig-bgp-augments"
 ARCOS_EVPN = "arcos-evpn:evpn"
 OPENCONFIG_VLANS = "openconfig-vlan:vlans"
 
