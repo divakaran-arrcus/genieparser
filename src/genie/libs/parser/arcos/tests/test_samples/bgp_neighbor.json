@@ -1,0 +1,196 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "default",
+                "bgp": {
+                  "neighbors": {
+                    "neighbor": [
+                      {
+                        "neighbor-address": "3.0.0.0",
+                        "config": {
+                          "neighbor-address": "3.0.0.0",
+                          "enabled": false,
+                          "peer-as": 65000,
+                          "local-as": 65000,
+                          "arcos-openconfig-bgp-augments:shutdown": true,
+                          "arcos-openconfig-bgp-augments:shutdown-reason": "admin"
+                        },
+                        "state": {
+                          "neighbor-address": "3.0.0.0",
+                          "enabled": false,
+                          "peer-as": 65000,
+                          "local-as": 65000,
+                          "peer-type": "INTERNAL",
+                          "arcos-openconfig-bgp-augments:session-state": "SHUTDOWN",
+                          "arcos-openconfig-bgp-augments:established-transitions": "0",
+                          "arcos-openconfig-bgp-augments:shutdown": true,
+                          "arcos-openconfig-bgp-augments:shutdown-reason": "admin",
+                          "messages": {
+                            "sent": {
+                              "UPDATE": "0",
+                              "NOTIFICATION": "0",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "0",
+                              "arcos-openconfig-bgp-augments:total": "0"
+                            },
+                            "received": {
+                              "UPDATE": "0",
+                              "NOTIFICATION": "0",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "0",
+                              "arcos-openconfig-bgp-augments:total": "0"
+                            }
+                          }
+                        },
+                        "transport": {
+                          "state": {
+                            "local-address": "0.0.0.0",
+                            "arcos-openconfig-bgp-augments:local-port": 0,
+                            "remote-address": "3.0.0.0",
+                            "arcos-openconfig-bgp-augments:remote-port": 0
+                          }
+                        },
+                        "afi-safis": {
+                          "afi-safi": [
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                              "state": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                                "enabled": true,
+                                "prefixes": {
+                                  "arcos-openconfig-bgp-augments:received": 0,
+                                  "arcos-openconfig-bgp-augments:sent": 0,
+                                  "installed": 0
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                              "state": {
+                                "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                                "enabled": true,
+                                "prefixes": {
+                                  "arcos-openconfig-bgp-augments:received": 0,
+                                  "arcos-openconfig-bgp-augments:sent": 0,
+                                  "installed": 0
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "neighbor-address": "4.0.0.0",
+                        "config": {
+                          "neighbor-address": "4.0.0.0",
+                          "peer-group": "IBGP-PEERS",
+                          "enabled": true,
+                          "peer-as": 65000,
+                          "local-as": 65000,
+                          "description": "spine-4"
+                        },
+                        "state": {
+                          "neighbor-address": "4.0.0.0",
+                          "peer-group": "IBGP-PEERS",
+                          "enabled": true,
+                          "peer-as": 65000,
+                          "local-as": 65000,
+                          "peer-type": "INTERNAL",
+                          "description": "spine-4",
+                          "arcos-openconfig-bgp-augments:session-state": "ESTABLISHED",
+                          "arcos-openconfig-bgp-augments:established-transitions": "1",
+                          "arcos-openconfig-bgp-augments:remote-router-id": "4.0.0.0",
+                          "arcos-openconfig-bgp-augments:last-established": "1710000000",
+                          "arcos-openconfig-bgp-augments:session-elapsed-time": "2d 05:30:12",
+                          "messages": {
+                            "sent": {
+                              "UPDATE": "120",
+                              "NOTIFICATION": "0",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "5400",
+                              "arcos-openconfig-bgp-augments:total": "5520"
+                            },
+                            "received": {
+                              "UPDATE": "85",
+                              "NOTIFICATION": "0",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "5400",
+                              "arcos-openconfig-bgp-augments:total": "5485"
+                            }
+                          }
+                        },
+                        "transport": {
+                          "state": {
+                            "local-address": "1.0.0.0",
+                            "arcos-openconfig-bgp-augments:local-port": 179,
+                            "remote-address": "4.0.0.0",
+                            "arcos-openconfig-bgp-augments:remote-port": 43250
+                          }
+                        },
+                        "arcos-openconfig-bgp-augments:bfd": {
+                          "state": {
+                            "enabled": true,
+                            "profile": "GLOBAL-150m"
+                          }
+                        }
+                      },
+                      {
+                        "neighbor-address": "181.1.1.2",
+                        "config": {
+                          "neighbor-address": "181.1.1.2",
+                          "peer-group": "EBGP-PEERS",
+                          "enabled": true,
+                          "peer-as": 10000,
+                          "local-as": 65000
+                        },
+                        "state": {
+                          "neighbor-address": "181.1.1.2",
+                          "peer-group": "EBGP-PEERS",
+                          "enabled": true,
+                          "peer-as": 10000,
+                          "local-as": 65000,
+                          "peer-type": "EXTERNAL",
+                          "arcos-openconfig-bgp-augments:session-state": "ESTABLISHED",
+                          "arcos-openconfig-bgp-augments:established-transitions": "3",
+                          "arcos-openconfig-bgp-augments:remote-router-id": "181.1.1.2",
+                          "arcos-openconfig-bgp-augments:last-established": "1710001000",
+                          "arcos-openconfig-bgp-augments:session-elapsed-time": "1d 12:00:05",
+                          "arcos-openconfig-bgp-augments:last-reset-reason": "Hold timer expired",
+                          "messages": {
+                            "sent": {
+                              "UPDATE": "45",
+                              "NOTIFICATION": "2",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "2700",
+                              "arcos-openconfig-bgp-augments:total": "2747"
+                            },
+                            "received": {
+                              "UPDATE": "30",
+                              "NOTIFICATION": "1",
+                              "arcos-openconfig-bgp-augments:KEEPALIVE": "2700",
+                              "arcos-openconfig-bgp-augments:total": "2731"
+                            }
+                          }
+                        },
+                        "transport": {
+                          "state": {
+                            "local-address": "181.1.1.1",
+                            "arcos-openconfig-bgp-augments:local-port": 35000,
+                            "remote-address": "181.1.1.2",
+                            "arcos-openconfig-bgp-augments:remote-port": 179
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
