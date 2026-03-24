@@ -16,6 +16,7 @@ ARCOS_BFD_AUGMENTS = "arcos-openconfig-bfd-augments"
 ARCOS_BGP_AUGMENTS = "arcos-openconfig-bgp-augments"
 ARCOS_EVPN = "arcos-evpn:evpn"
 OPENCONFIG_VLANS = "openconfig-vlan:vlans"
+ARCOS_TE = "arcos-te:te"
 
 # Common values
 DEFAULT_INSTANCE = "default"

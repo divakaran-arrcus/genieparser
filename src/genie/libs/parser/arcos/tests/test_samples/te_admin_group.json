@@ -1,0 +1,45 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-te:te": {
+            "admin-groups": {
+              "admin-group": [
+                {
+                  "name": "INTRA-COUNTRY",
+                  "state": {
+                    "name": "INTRA-COUNTRY",
+                    "bit-position": 1
+                  }
+                },
+                {
+                  "name": "green",
+                  "state": {
+                    "name": "green",
+                    "bit-position": 2
+                  }
+                },
+                {
+                  "name": "red",
+                  "state": {
+                    "name": "red",
+                    "bit-position": 11
+                  }
+                },
+                {
+                  "name": "yellow",
+                  "state": {
+                    "name": "yellow",
+                    "bit-position": 3
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
