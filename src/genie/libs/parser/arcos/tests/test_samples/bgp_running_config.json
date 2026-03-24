@@ -1,0 +1,514 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "default",
+                "config": {
+                  "identifier": "openconfig-policy-types:BGP",
+                  "name": "default"
+                },
+                "bgp": {
+                  "global": {
+                    "config": {
+                      "as": 65002,
+                      "router-id": "1.0.0.0",
+                      "arcos-openconfig-bgp-augments:drop-upon-invalid-sr-policy": false,
+                      "arcos-openconfig-bgp-augments:adj-rib-out-post": true,
+                      "arcos-openconfig-bgp-augments:label-allocation-mode": "openconfig-network-instance-types:INSTANCE_LABEL"
+                    },
+                    "route-selection-options": {
+                      "config": {
+                        "ignore-next-hop-igp-metric": true
+                      }
+                    },
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST",
+                            "arcos-openconfig-bgp-augments:null-label": "openconfig-mpls-types:EXPLICIT"
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST"
+                          },
+                          "ipv4-unicast": {
+                            "arcos-openconfig-bgp-augments:networks": {
+                              "network": [
+                                {
+                                  "prefix": "144.144.144.144/32",
+                                  "config": {
+                                    "prefix": "144.144.144.144/32"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:aggregate-addresses": {
+                            "aggregate-address": [
+                              {
+                                "prefix": "201.0.0.0/8",
+                                "config": {
+                                  "prefix": "201.0.0.0/8",
+                                  "summary-only": true
+                                }
+                              }
+                            ]
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST"
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST"
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST"
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:aggregate-addresses": {
+                            "aggregate-address": [
+                              {
+                                "prefix": "201::/16",
+                                "config": {
+                                  "prefix": "201::/16",
+                                  "summary-only": true
+                                }
+                              }
+                            ]
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN"
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST",
+                          "config": {
+                            "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST"
+                          },
+                          "arcos-openconfig-bgp-augments:use-maximum-paths": {
+                            "config": {
+                              "ibgp": {
+                                "maximum-paths": 8
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:rtfilter": {
+                            "config": {
+                              "rtfilter": {
+                                "enabled": true
+                              }
+                            }
+                          },
+                          "arcos-openconfig-bgp-augments:add-paths": {
+                            "config": {
+                              "calculate": "arcos-openconfig-bgp-types:MULTIPATHS"
+                            }
+                          }
+                        },
+                        {
+                          "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER",
+                          "config": {
+                            "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER"
+                          }
+                        }
+                      ]
+                    },
+                    "arcos-openconfig-bgp-augments:compatibility": {
+                      "config": {
+                        "l2-attr-local": true
+                      }
+                    }
+                  },
+                  "neighbors": {
+                    "neighbor": [
+                      {
+                        "neighbor-address": "3.0.0.0",
+                        "config": {
+                          "neighbor-address": "3.0.0.0",
+                          "peer-as": 65002,
+                          "description": "Enable only to bypass RR (S1,S2) to test TILFA",
+                          "arcos-openconfig-bgp-augments:shutdown": true
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "1.0.0.0"
+                          }
+                        },
+                        "afi-safis": {
+                          "afi-safi": [
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST"
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:BACKUP",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST"
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:BACKUP",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:ALL",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER",
+                              "config": {
+                                "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER"
+                              }
+                            }
+                          ]
+                        },
+                        "arcos-openconfig-bgp-augments:bfd": {
+                          "config": {
+                            "enable": false
+                          }
+                        }
+                      },
+                      {
+                        "neighbor-address": "4.0.0.0",
+                        "config": {
+                          "peer-group": "RR-Peer-Group",
+                          "neighbor-address": "4.0.0.0"
+                        }
+                      },
+                      {
+                        "neighbor-address": "5.0.0.0",
+                        "config": {
+                          "peer-group": "RR-Peer-Group",
+                          "neighbor-address": "5.0.0.0"
+                        }
+                      },
+                      {
+                        "neighbor-address": "181.1.1.2",
+                        "config": {
+                          "peer-group": "access_v4_peer_grp",
+                          "neighbor-address": "181.1.1.2",
+                          "peer-as": 10000
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "181.1.1.1"
+                          }
+                        }
+                      },
+                      {
+                        "neighbor-address": "181.1.5.2",
+                        "config": {
+                          "peer-group": "access_v4_peer_grp",
+                          "neighbor-address": "181.1.5.2",
+                          "peer-as": 10001
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "181.1.5.1"
+                          }
+                        }
+                      },
+                      {
+                        "neighbor-address": "181:1:1::2",
+                        "config": {
+                          "peer-group": "access_v6_peer_grp",
+                          "neighbor-address": "181:1:1::2",
+                          "peer-as": 10000
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "181:1:1::1"
+                          }
+                        }
+                      },
+                      {
+                        "neighbor-address": "181:1:5::2",
+                        "config": {
+                          "peer-group": "access_v6_peer_grp",
+                          "neighbor-address": "181:1:5::2",
+                          "peer-as": 10001
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "181:1:5::1"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "peer-groups": {
+                    "peer-group": [
+                      {
+                        "peer-group-name": "RR-Peer-Group",
+                        "config": {
+                          "peer-group-name": "RR-Peer-Group",
+                          "peer-as": 65002,
+                          "arcos-openconfig-bgp-augments:shutdown": false
+                        },
+                        "transport": {
+                          "config": {
+                            "local-address": "1.0.0.0"
+                          }
+                        },
+                        "afi-safis": {
+                          "afi-safi": [
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV6_LABELED_UNICAST"
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:BACKUP",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV6_UNICAST"
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L2VPN_EVPN"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:BACKUP",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:ALL",
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER",
+                              "config": {
+                                "afi-safi-name": "arcos-openconfig-bgp-types:RTFILTER"
+                              }
+                            }
+                          ]
+                        },
+                        "arcos-openconfig-bgp-augments:bfd": {
+                          "config": {
+                            "enable": true,
+                            "profile": "GLOBAL-200m"
+                          }
+                        }
+                      },
+                      {
+                        "peer-group-name": "access_v4_peer_grp",
+                        "config": {
+                          "peer-group-name": "access_v4_peer_grp"
+                        },
+                        "afi-safis": {
+                          "afi-safi": [
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST"
+                              },
+                              "apply-policy": {
+                                "config": {
+                                  "import-policy": ["accept_all"]
+                                }
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "receive": true
+                                }
+                              }
+                            },
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV4_LABELED_UNICAST"
+                              },
+                              "arcos-openconfig-bgp-augments:add-paths": {
+                                "config": {
+                                  "send": "arcos-openconfig-bgp-types:BACKUP",
+                                  "receive": true
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "peer-group-name": "access_v6_peer_grp",
+                        "config": {
+                          "peer-group-name": "access_v6_peer_grp"
+                        },
+                        "afi-safis": {
+                          "afi-safi": [
+                            {
+                              "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST",
+                              "config": {
+                                "afi-safi-name": "openconfig-bgp-types:IPV6_UNICAST"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
