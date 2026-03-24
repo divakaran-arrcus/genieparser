@@ -311,3 +311,250 @@ def test_bgp_afi_safi_evpn():
     assert evpn["total-paths-sent"] == 400
     assert evpn["rib-install-prefixes"] == 267
     assert evpn["total-next-hops"] == 3
+
+
+# ---------------------------------------------------------------------------
+# ShowBgpConfig tests (BGP running-config parser)
+# ---------------------------------------------------------------------------
+
+from genie.libs.parser.arcos.show_bgp import ShowBgpConfig
+
+
+def _parse_bgp_config_sample():
+    """Helper: parse the bgp_running_config.json sample and return result."""
+    sample_file = SAMPLES_DIR / "bgp_running_config.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+    output = sample_file.read_text()
+    parser = ShowBgpConfig(device="dummy")
+    return parser.cli(output=output)
+
+
+def test_bgp_config_top_level_structure():
+    """Validate the top-level NI → BGP → instance structure."""
+    result = _parse_bgp_config_sample()
+
+    assert "network-instance" in result
+    assert "default" in result["network-instance"]
+    assert "bgp" in result["network-instance"]["default"]
+    assert "default" in result["network-instance"]["default"]["bgp"]
+
+
+def test_bgp_config_global_scalars():
+    """Validate global config scalars (AS, router-id, augmented fields)."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    assert cfg["as"] == 65002
+    assert cfg["router-id"] == "1.0.0.0"
+    assert cfg["adj-rib-out-post"] is True
+    assert cfg["label-allocation-mode"] == "INSTANCE_LABEL"
+    assert cfg["drop-upon-invalid-sr-policy"] is False
+    assert cfg["ignore-next-hop-igp-metric"] is True
+
+
+def test_bgp_config_compatibility():
+    """Validate compatibility block."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    assert cfg["compatibility"]["l2-attr-local"] is True
+
+
+def test_bgp_config_afi_safi_count():
+    """Validate that all 8 global AFI-SAFIs are parsed."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    assert "afi-safis" in cfg
+    afis = cfg["afi-safis"]
+    assert len(afis) == 8
+    expected = {
+        "IPV4_UNICAST",
+        "IPV6_UNICAST",
+        "IPV4_LABELED_UNICAST",
+        "IPV6_LABELED_UNICAST",
+        "L2VPN_EVPN",
+        "L3VPN_IPV4_UNICAST",
+        "L3VPN_IPV6_UNICAST",
+        "RTFILTER",
+    }
+    assert set(afis.keys()) == expected
+
+
+def test_bgp_config_ipv4_unicast():
+    """Validate IPV4_UNICAST AFI-SAFI details."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    ipv4 = cfg["afi-safis"]["IPV4_UNICAST"]
+    assert ipv4["ibgp-maximum-paths"] == 8
+    assert ipv4["networks"] == ["144.144.144.144/32"]
+    assert ipv4["add-paths-calculate"] == "MULTIPATHS"
+    assert "201.0.0.0/8" in ipv4["aggregate-addresses"]
+    assert ipv4["aggregate-addresses"]["201.0.0.0/8"]["summary-only"] is True
+
+
+def test_bgp_config_ipv6_unicast():
+    """Validate IPV6_UNICAST AFI-SAFI with aggregate-address."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    ipv6 = cfg["afi-safis"]["IPV6_UNICAST"]
+    assert ipv6["ibgp-maximum-paths"] == 8
+    assert ipv6["add-paths-calculate"] == "MULTIPATHS"
+    assert "201::/16" in ipv6["aggregate-addresses"]
+    assert ipv6["aggregate-addresses"]["201::/16"]["summary-only"] is True
+
+
+def test_bgp_config_ipv6_labeled_unicast():
+    """Validate IPV6_LABELED_UNICAST null-label."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    ipv6_lu = cfg["afi-safis"]["IPV6_LABELED_UNICAST"]
+    assert ipv6_lu["null-label"] == "EXPLICIT"
+
+
+def test_bgp_config_l3vpn_ipv4_rtfilter():
+    """Validate L3VPN_IPV4_UNICAST has rtfilter enabled."""
+    result = _parse_bgp_config_sample()
+
+    cfg = result["network-instance"]["default"]["bgp"]["default"]["config"]
+    l3v4 = cfg["afi-safis"]["L3VPN_IPV4_UNICAST"]
+    assert l3v4["rtfilter-enabled"] is True
+    assert l3v4["ibgp-maximum-paths"] == 8
+    assert l3v4["add-paths-calculate"] == "MULTIPATHS"
+
+
+def test_bgp_config_neighbor_count():
+    """Validate that all 7 neighbors are parsed."""
+    result = _parse_bgp_config_sample()
+
+    inst = result["network-instance"]["default"]["bgp"]["default"]
+    assert "neighbors" in inst
+    nbrs = inst["neighbors"]
+    assert len(nbrs) == 7
+    expected = {
+        "3.0.0.0", "4.0.0.0", "5.0.0.0",
+        "181.1.1.2", "181.1.5.2",
+        "181:1:1::2", "181:1:5::2",
+    }
+    assert set(nbrs.keys()) == expected
+
+
+def test_bgp_config_neighbor_shutdown():
+    """Validate neighbor 3.0.0.0 shutdown and BFD."""
+    result = _parse_bgp_config_sample()
+
+    nbrs = result["network-instance"]["default"]["bgp"]["default"]["neighbors"]
+    nbr = nbrs["3.0.0.0"]
+    assert nbr["shutdown"] is True
+    assert nbr["peer-as"] == 65002
+    assert nbr["description"] == "Enable only to bypass RR (S1,S2) to test TILFA"
+    assert nbr["transport-local-address"] == "1.0.0.0"
+    assert nbr["bfd-enable"] is False
+
+
+def test_bgp_config_neighbor_afi_safis():
+    """Validate per-neighbor AFI-SAFI with add-paths on neighbor 3.0.0.0."""
+    result = _parse_bgp_config_sample()
+
+    nbrs = result["network-instance"]["default"]["bgp"]["default"]["neighbors"]
+    nbr = nbrs["3.0.0.0"]
+    assert "afi-safis" in nbr
+    afis = nbr["afi-safis"]
+    assert len(afis) == 7
+    assert "IPV4_UNICAST" in afis
+    assert "L2VPN_EVPN" in afis
+    assert "L3VPN_IPV4_UNICAST" in afis
+
+    # IPV4_UNICAST: receive only
+    ipv4 = afis["IPV4_UNICAST"]
+    assert ipv4["add-paths-receive"] is True
+    assert "add-paths-send" not in ipv4
+
+    # IPV4_LABELED_UNICAST: send BACKUP + receive
+    ipv4_lu = afis["IPV4_LABELED_UNICAST"]
+    assert ipv4_lu["add-paths-send"] == "BACKUP"
+    assert ipv4_lu["add-paths-receive"] is True
+
+    # L3VPN_IPV4_UNICAST: send ALL + receive
+    l3v4 = afis["L3VPN_IPV4_UNICAST"]
+    assert l3v4["add-paths-send"] == "ALL"
+    assert l3v4["add-paths-receive"] is True
+
+
+def test_bgp_config_neighbor_peer_group_ref():
+    """Validate neighbors 4.0.0.0 and 5.0.0.0 use RR-Peer-Group."""
+    result = _parse_bgp_config_sample()
+
+    nbrs = result["network-instance"]["default"]["bgp"]["default"]["neighbors"]
+    assert nbrs["4.0.0.0"]["peer-group"] == "RR-Peer-Group"
+    assert nbrs["5.0.0.0"]["peer-group"] == "RR-Peer-Group"
+
+
+def test_bgp_config_ipv6_neighbor():
+    """Validate IPv6 neighbor 181:1:1::2."""
+    result = _parse_bgp_config_sample()
+
+    nbrs = result["network-instance"]["default"]["bgp"]["default"]["neighbors"]
+    nbr = nbrs["181:1:1::2"]
+    assert nbr["peer-as"] == 10000
+    assert nbr["peer-group"] == "access_v6_peer_grp"
+    assert nbr["transport-local-address"] == "181:1:1::1"
+
+
+def test_bgp_config_peer_group_count():
+    """Validate that all 3 peer-groups are parsed."""
+    result = _parse_bgp_config_sample()
+
+    inst = result["network-instance"]["default"]["bgp"]["default"]
+    assert "peer-groups" in inst
+    pgs = inst["peer-groups"]
+    assert len(pgs) == 3
+    assert set(pgs.keys()) == {
+        "RR-Peer-Group", "access_v4_peer_grp", "access_v6_peer_grp",
+    }
+
+
+def test_bgp_config_peer_group_bfd():
+    """Validate RR-Peer-Group BFD and AFI-SAFI details."""
+    result = _parse_bgp_config_sample()
+
+    pgs = result["network-instance"]["default"]["bgp"]["default"]["peer-groups"]
+    pg = pgs["RR-Peer-Group"]
+    assert pg["peer-as"] == 65002
+    assert pg["shutdown"] is False
+    assert pg["transport-local-address"] == "1.0.0.0"
+    assert pg["bfd-enable"] is True
+    assert pg["bfd-profile"] == "GLOBAL-200m"
+
+    afis = pg["afi-safis"]
+    assert len(afis) == 7
+    assert "IPV4_UNICAST" in afis
+    assert "L2VPN_EVPN" in afis
+
+    # IPV4_UNICAST: receive only (no send, no policy)
+    ipv4 = afis["IPV4_UNICAST"]
+    assert ipv4["add-paths-receive"] is True
+    assert "add-paths-send" not in ipv4
+
+    # L3VPN_IPV4_UNICAST: send ALL + receive
+    l3v4 = afis["L3VPN_IPV4_UNICAST"]
+    assert l3v4["add-paths-send"] == "ALL"
+    assert l3v4["add-paths-receive"] is True
+
+
+def test_bgp_config_peer_group_access_v4():
+    """Validate access_v4_peer_grp with import-policy."""
+    result = _parse_bgp_config_sample()
+
+    pgs = result["network-instance"]["default"]["bgp"]["default"]["peer-groups"]
+    pg = pgs["access_v4_peer_grp"]
+    afis = pg["afi-safis"]
+    assert "IPV4_UNICAST" in afis
+
+    ipv4 = afis["IPV4_UNICAST"]
+    assert ipv4["add-paths-receive"] is True
+    assert ipv4["import-policy"] == ["accept_all"]
