@@ -54,20 +54,8 @@ class ShowSrmsMappingsConfigSchema(MetaParser):
                     Optional("mappings"): {
                         Any(): {  # mapping local-id
                             "local-id": str,
-                            Optional("ipv4-prefixes"): [
-                                {
-                                    "prefix": str,
-                                    Optional("sid"): int,
-                                    Optional("range"): int,
-                                }
-                            ],
-                            Optional("ipv6-prefixes"): [
-                                {
-                                    "prefix": str,
-                                    Optional("sid"): int,
-                                    Optional("range"): int,
-                                }
-                            ],
+                            Optional("ipv4-prefixes"): list,
+                            Optional("ipv6-prefixes"): list,
                         }
                     }
                 }
