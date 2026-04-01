@@ -36,11 +36,21 @@ class ShowAclSetSchema(MetaParser):
                         Optional("priority"): int,
                         Optional("ipv4-source-address"): str,
                         Optional("ipv4-destination-address"): str,
+                        Optional("ipv4-source-address-prefix-set"): str,
+                        Optional("ipv4-destination-address-prefix-set"): str,
                         Optional("ipv4-protocol"): str,
+                        Optional("ipv4-dscp"): str,
                         Optional("ipv6-source-address"): str,
                         Optional("ipv6-destination-address"): str,
+                        Optional("ipv6-source-address-prefix-set"): str,
+                        Optional("ipv6-destination-address-prefix-set"): str,
                         Optional("ipv6-protocol"): str,
+                        Optional("ipv6-dscp"): str,
                         Optional("l2-source-mac"): str,
+                        Optional("l2-source-mac-mask"): str,
+                        Optional("l2-destination-mac"): str,
+                        Optional("l2-destination-mac-mask"): str,
+                        Optional("l2-ethertype"): str,
                         Optional("transport-source-port"): str,
                         Optional("transport-destination-port"): str,
                         Optional("forwarding-action"): str,
@@ -144,6 +154,10 @@ class ShowAclSet(ShowAclSetSchema):
                         if aug_key in ace_state:
                             ace_entry[counter_key] = ace_state[aug_key]
 
+                    # Helper to strip OC prefix
+                    def _strip(val):
+                        return val.split(":")[-1] if ":" in val else val
+
                     # IPv4 match
                     ipv4 = ace.get("ipv4", {})
                     ipv4_state = ipv4.get("state", {})
@@ -151,8 +165,21 @@ class ShowAclSet(ShowAclSetSchema):
                         ace_entry["ipv4-source-address"] = ipv4_state["source-address"]
                     if "destination-address" in ipv4_state:
                         ace_entry["ipv4-destination-address"] = ipv4_state["destination-address"]
+                    # Prefix-set references (augment)
+                    src_pfx_set = ipv4_state.get(
+                        "arcos-openconfig-packet-match-augments:source-address-prefix-set"
+                    )
+                    if src_pfx_set:
+                        ace_entry["ipv4-source-address-prefix-set"] = src_pfx_set
+                    dst_pfx_set = ipv4_state.get(
+                        "arcos-openconfig-packet-match-augments:destination-address-prefix-set"
+                    )
+                    if dst_pfx_set:
+                        ace_entry["ipv4-destination-address-prefix-set"] = dst_pfx_set
                     if "protocol" in ipv4_state:
-                        ace_entry["ipv4-protocol"] = ipv4_state["protocol"]
+                        ace_entry["ipv4-protocol"] = _strip(ipv4_state["protocol"])
+                    if "dscp" in ipv4_state:
+                        ace_entry["ipv4-dscp"] = ipv4_state["dscp"]
 
                     # IPv6 match
                     ipv6 = ace.get("ipv6", {})
@@ -161,14 +188,34 @@ class ShowAclSet(ShowAclSetSchema):
                         ace_entry["ipv6-source-address"] = ipv6_state["source-address"]
                     if "destination-address" in ipv6_state:
                         ace_entry["ipv6-destination-address"] = ipv6_state["destination-address"]
+                    src_pfx_set6 = ipv6_state.get(
+                        "arcos-openconfig-packet-match-augments:source-address-prefix-set"
+                    )
+                    if src_pfx_set6:
+                        ace_entry["ipv6-source-address-prefix-set"] = src_pfx_set6
+                    dst_pfx_set6 = ipv6_state.get(
+                        "arcos-openconfig-packet-match-augments:destination-address-prefix-set"
+                    )
+                    if dst_pfx_set6:
+                        ace_entry["ipv6-destination-address-prefix-set"] = dst_pfx_set6
                     if "protocol" in ipv6_state:
-                        ace_entry["ipv6-protocol"] = ipv6_state["protocol"]
+                        ace_entry["ipv6-protocol"] = _strip(ipv6_state["protocol"])
+                    if "dscp" in ipv6_state:
+                        ace_entry["ipv6-dscp"] = ipv6_state["dscp"]
 
                     # L2 match
                     l2 = ace.get("l2", {})
                     l2_state = l2.get("state", {})
                     if "source-mac" in l2_state:
                         ace_entry["l2-source-mac"] = l2_state["source-mac"]
+                    if "source-mac-mask" in l2_state:
+                        ace_entry["l2-source-mac-mask"] = l2_state["source-mac-mask"]
+                    if "destination-mac" in l2_state:
+                        ace_entry["l2-destination-mac"] = l2_state["destination-mac"]
+                    if "destination-mac-mask" in l2_state:
+                        ace_entry["l2-destination-mac-mask"] = l2_state["destination-mac-mask"]
+                    if "ethertype" in l2_state:
+                        ace_entry["l2-ethertype"] = _strip(l2_state["ethertype"])
 
                     # Transport match
                     transport = ace.get("transport", {})

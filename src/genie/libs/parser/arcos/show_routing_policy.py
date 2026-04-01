@@ -110,6 +110,24 @@ class ShowRoutingPolicyDefinedSetsSchema(MetaParser):
                         "addresses": list,
                     }
                 },
+                Optional("ext-community-sets"): {
+                    Any(): {
+                        "name": str,
+                        "members": list,
+                    }
+                },
+                Optional("community-sets"): {
+                    Any(): {
+                        "name": str,
+                        "members": list,
+                    }
+                },
+                Optional("as-path-sets"): {
+                    Any(): {
+                        "name": str,
+                        "members": list,
+                    }
+                },
             }
         }
     }
@@ -273,6 +291,70 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
 
         if next_hop_sets:
             defined_sets_out["next-hop-sets"] = next_hop_sets
+
+        # --------------------------------------------------------------
+        # BGP Defined-Sets (ext-community, community, as-path)
+        # --------------------------------------------------------------
+        bgp_ds = defined_sets_raw.get(
+            "openconfig-bgp-policy:bgp-defined-sets", {}
+        ) or {}
+
+        # Ext-community-sets
+        ecs_container = bgp_ds.get("ext-community-sets", {}) or {}
+        ecs_list = ecs_container.get("ext-community-set", []) or []
+        ext_community_sets = {}
+        for ecs in ecs_list:
+            name = ecs.get("ext-community-set-name")
+            if not name:
+                continue
+            node = ecs.get("config") or ecs.get("state") or ecs
+            members = node.get("ext-community-member", [])
+            if not isinstance(members, list):
+                members = [members]
+            ext_community_sets[name] = {
+                "name": name,
+                "members": members,
+            }
+        if ext_community_sets:
+            defined_sets_out["ext-community-sets"] = ext_community_sets
+
+        # Community-sets
+        cs_container = bgp_ds.get("community-sets", {}) or {}
+        cs_list = cs_container.get("community-set", []) or []
+        community_sets = {}
+        for cs in cs_list:
+            name = cs.get("community-set-name")
+            if not name:
+                continue
+            node = cs.get("config") or cs.get("state") or cs
+            members = node.get("community-member", [])
+            if not isinstance(members, list):
+                members = [members]
+            community_sets[name] = {
+                "name": name,
+                "members": members,
+            }
+        if community_sets:
+            defined_sets_out["community-sets"] = community_sets
+
+        # AS-path-sets
+        as_container = bgp_ds.get("as-path-sets", {}) or {}
+        as_list = as_container.get("as-path-set", []) or []
+        as_path_sets = {}
+        for aps in as_list:
+            name = aps.get("as-path-set-name")
+            if not name:
+                continue
+            node = aps.get("config") or aps.get("state") or aps
+            members = node.get("as-path-set-member", [])
+            if not isinstance(members, list):
+                members = [members]
+            as_path_sets[name] = {
+                "name": name,
+                "members": members,
+            }
+        if as_path_sets:
+            defined_sets_out["as-path-sets"] = as_path_sets
 
         return ret
 
