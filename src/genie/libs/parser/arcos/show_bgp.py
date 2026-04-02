@@ -1321,3 +1321,111 @@ class ShowBgpConfig(ShowBgpConfigSchema):
             result[name] = entry
 
         return result
+
+
+# =====================================================================
+# ShowBgpLabelDb — BGP MPLS label database (for 6PE)
+# =====================================================================
+
+class ShowBgpLabelDbSchema(MetaParser):
+    """Schema for ``show ... global mpls label-db``."""
+
+    schema = {
+        Optional("labels"): {
+            Any(): {  # label value as key
+                "label": int,
+                Optional("prefix"): str,
+                Optional("afi-safi"): str,
+                Optional("neighbor"): str,
+            }
+        }
+    }
+
+
+class ShowBgpLabelDb(ShowBgpLabelDbSchema):
+    """Parser for BGP MPLS label database.
+
+    Parses output of::
+
+        show network-instance {ni} protocol BGP {instance} global mpls label-db
+    """
+
+    cli_command = (
+        "show network-instance {ni} protocol BGP {instance} "
+        "global mpls label-db"
+    )
+
+    def cli(self, ni="default", instance="default",
+            output: TypeOptional[str] = None) -> Dict[str, TypeAny]:
+        if output is None:
+            cmd = (
+                f"show network-instance {ni} protocol BGP {instance} "
+                f"global mpls label-db | display json | nomore"
+            )
+            output = self.device.execute(cmd)
+
+        parsed = load_json_robust(output)
+
+        data = parsed.get("data", {})
+        ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
+        ni_list = ni_container.get("network-instance", [])
+        if not ni_list:
+            raise SchemaEmptyParserError("No BGP label-db data found")
+
+        ni_entry = ni_list[0]
+        protocols = ni_entry.get("protocols", {}).get("protocol", [])
+
+        bgp_proto = None
+        for proto in protocols:
+            ident = proto.get("identifier", "")
+            if "BGP" in ident:
+                bgp_proto = proto
+                break
+
+        if not bgp_proto:
+            raise SchemaEmptyParserError("No BGP protocol found")
+
+        bgp = bgp_proto.get("bgp", {})
+        global_data = bgp.get("global", {})
+
+        # Navigate to mpls label-db
+        mpls = global_data.get(f"{_BGP_AUG_PREFIX}mpls",
+                               global_data.get("mpls", {}))
+        label_db = mpls.get("label-db", mpls.get("label-database", {}))
+        label_entries = label_db.get("label-entry",
+                                     label_db.get("entry", []))
+
+        if not label_entries:
+            raise SchemaEmptyParserError("No BGP label-db entries found")
+
+        if isinstance(label_entries, dict):
+            label_entries = [label_entries]
+
+        result = {"labels": {}}
+
+        for le in label_entries:
+            state = le.get("state", le.get("config", le))
+            label_val = state.get("label", le.get("label"))
+            if label_val is None:
+                continue
+
+            entry = {"label": int(label_val)}
+
+            prefix = state.get("prefix", state.get("ip-prefix"))
+            if prefix:
+                entry["prefix"] = prefix
+
+            afi = state.get("afi-safi-name", state.get("afi-safi"))
+            if afi:
+                entry["afi-safi"] = _strip_all_prefixes(str(afi))
+
+            nbr = state.get("neighbor", state.get("neighbor-address"))
+            if nbr:
+                entry["neighbor"] = nbr
+
+            result["labels"][str(label_val)] = entry
+
+        if not result["labels"]:
+            raise SchemaEmptyParserError("No BGP label-db entries found")
+
+        return result
