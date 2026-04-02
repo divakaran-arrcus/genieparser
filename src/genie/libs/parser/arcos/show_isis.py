@@ -3368,6 +3368,7 @@ class ShowIsisRoute(ShowIsisRouteSchema):
 
     cli_command = [
         "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route",
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route {prefix}",
     ]
 
     def cli(
