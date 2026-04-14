@@ -1,0 +1,51 @@
+{
+  "data": {
+    "openconfig-interfaces:interfaces": {
+      "interface": [
+        {
+          "name": "swp1",
+          "subinterfaces": {
+            "subinterface": [
+              {
+                "index": 0,
+                "openconfig-if-ip:ipv4": {
+                  "addresses": {
+                    "address": [
+                      {
+                        "ip": "10.12.1.1",
+                        "vrrp": {
+                          "vrrp-group": [
+                            {
+                              "virtual-router-id": 10,
+                              "state": {
+                                "virtual-router-id": 10,
+                                "virtual-address": ["10.12.1.100"],
+                                "priority": 200,
+                                "preempt": true,
+                                "preempt-delay": 0,
+                                "accept-mode": true,
+                                "advertisement-interval": 300,
+                                "current-priority": 200,
+                                "arcos-openconfig-if-ip-augments:vrrp-version": "VRRP_V3",
+                                "arcos-openconfig-if-ip-augments:virtual-router-mode": "MASTER",
+                                "arcos-openconfig-if-ip-augments:advertisement-sent": "12",
+                                "arcos-openconfig-if-ip-augments:advertisement-received": "0",
+                                "arcos-openconfig-if-ip-augments:advertisement-dropped": "0",
+                                "arcos-openconfig-if-ip-augments:virtual-mac-address": "00:00:5e:00:01:0a"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+root@localhost#

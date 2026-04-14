@@ -1,0 +1,54 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-sr-policy:sr-policy": {
+            "segment-lists": {
+              "segment-list": [
+                {
+                  "name": "sl1",
+                  "state": {
+                    "name": "sl1",
+                    "index": 2
+                  },
+                  "segments": {
+                    "segment": [
+                      {
+                        "index": 1,
+                        "state": {
+                          "index": 1,
+                          "validate": false,
+                          "type": "MPLS_LABEL"
+                        },
+                        "segment-mpls-label": {
+                          "state": {
+                            "mpls-label": 100000
+                          }
+                        }
+                      },
+                      {
+                        "index": 2,
+                        "state": {
+                          "index": 2,
+                          "validate": false,
+                          "type": "MPLS_LABEL"
+                        },
+                        "segment-mpls-label": {
+                          "state": {
+                            "mpls-label": 100001
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

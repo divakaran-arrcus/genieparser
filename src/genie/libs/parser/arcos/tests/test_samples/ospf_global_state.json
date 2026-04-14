@@ -1,0 +1,39 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF",
+                "name": "default",
+                "arcos-ospf:ospfv2": {
+                  "global": {
+                    "state": {
+                      "router-id": "2.2.2.2",
+                      "log-adjacency-changes": "LOG_ADJ_ENABLE_LIMITED",
+                      "max-ecmp-paths": 128,
+                      "vrf-id": 1,
+                      "abr-router": true,
+                      "asbr-router": false,
+                      "area-count": 2,
+                      "stub-area-count": 1,
+                      "configured-interface-count": 4,
+                      "up-interface-count": 4,
+                      "neighbor-count": 2,
+                      "exchange-neighbor-count": 0,
+                      "loading-neighbor-count": 0,
+                      "full-neighbor-count": 2
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
