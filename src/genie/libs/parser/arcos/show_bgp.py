@@ -45,22 +45,19 @@ class ShowBgpNeighborSchema(MetaParser):
                 Optional("session-elapsed-time"): str,
                 Optional("last-established"): str,
                 Optional("messages-sent"): {
-                    Optional("UPDATE"): Or(str, int),
-                    Optional("NOTIFICATION"): Or(str, int),
-                    Optional("KEEPALIVE"): Or(str, int),
-                    Optional("total"): Or(str, int),
+                    Any(): Or(str, int),
                 },
                 Optional("messages-received"): {
-                    Optional("UPDATE"): Or(str, int),
-                    Optional("NOTIFICATION"): Or(str, int),
-                    Optional("KEEPALIVE"): Or(str, int),
-                    Optional("total"): Or(str, int),
+                    Any(): Or(str, int),
                 },
                 Optional("transport"): {
                     Optional("local-address"): str,
                     Optional("local-port"): Or(str, int),
                     Optional("remote-address"): str,
                     Optional("remote-port"): Or(str, int),
+                    Optional("passive-mode"): Or(str, bool),
+                    Optional("negotiated-tcp-mss"): Or(str, int),
+                    Optional("mtu-discovery"): Or(str, bool),
                 },
                 Optional("afi-safis"): list,  # list of AFI names (stripped)
             }

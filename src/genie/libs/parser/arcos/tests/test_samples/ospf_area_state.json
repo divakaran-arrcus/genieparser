@@ -1,0 +1,55 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF",
+                "name": "default",
+                "arcos-ospf:ospfv2": {
+                  "areas": {
+                    "area": [
+                      {
+                        "identifier": 0,
+                        "state": {
+                          "identifier": 0,
+                          "area-type": "AREA_TYPE_NORMAL",
+                          "advertise-summary-lsas": true,
+                          "stub-default-cost": 1,
+                          "configured-interface-count": 2,
+                          "up-interface-count": 2,
+                          "neighbor-count": 1,
+                          "exchange-neighbor-count": 0,
+                          "loading-neighbor-count": 0,
+                          "full-neighbor-count": 1
+                        }
+                      },
+                      {
+                        "identifier": 1,
+                        "state": {
+                          "identifier": 1,
+                          "area-type": "AREA_TYPE_STUB",
+                          "advertise-summary-lsas": true,
+                          "stub-default-cost": 10,
+                          "configured-interface-count": 2,
+                          "up-interface-count": 2,
+                          "neighbor-count": 1,
+                          "exchange-neighbor-count": 0,
+                          "loading-neighbor-count": 0,
+                          "full-neighbor-count": 1
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

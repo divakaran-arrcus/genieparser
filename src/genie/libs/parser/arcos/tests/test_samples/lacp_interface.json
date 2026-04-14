@@ -1,0 +1,32 @@
+{
+  "data": {
+    "openconfig-lacp:lacp": {
+      "interfaces": {
+        "interface": [
+          {
+            "name": "bond111",
+            "state": {
+              "name": "bond111",
+              "interval": "FAST"
+            },
+            "members": {
+              "member": [
+                {
+                  "interface": "swp30",
+                  "state": {
+                    "interface": "swp30",
+                    "timeout": "LONG",
+                    "synchronization": "OUT_SYNC",
+                    "aggregatable": false,
+                    "collecting": false,
+                    "distributing": false
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

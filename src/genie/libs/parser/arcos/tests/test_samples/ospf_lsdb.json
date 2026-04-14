@@ -1,0 +1,411 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF",
+                "name": "default",
+                "arcos-ospf:ospfv2": {
+                  "areas": {
+                    "area": [
+                      {
+                        "identifier": 0,
+                        "arcos-ospfv2:lsdb": {
+                          "lsa-types": {
+                            "lsa-type": [
+                              {
+                                "type": "arcos-ospf-types:ROUTER_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:ROUTER_LSA"
+                                },
+                                "lsas": {
+                                  "lsa": [
+                                    {
+                                      "link-state-id": "1.1.1.1",
+                                      "advertising-router": "1.1.1.1",
+                                      "state": {
+                                        "link-state-id": "1.1.1.1",
+                                        "advertising-router": "1.1.1.1",
+                                        "sequence-number": "80:00:00:03",
+                                        "checksum": 58494,
+                                        "age": 77,
+                                        "options": {
+                                          "e-bit": true,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "router-lsa": {
+                                        "state": {
+                                          "v-bit": false,
+                                          "e-bit": false,
+                                          "b-bit": false,
+                                          "number-links": 3,
+                                          "links": {
+                                            "link": [
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_P2P",
+                                                "link-id": "2.2.2.2",
+                                                "link-data": "10.12.1.1",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "10.12.1.0",
+                                                "link-data": "255.255.255.0",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "1.1.1.1",
+                                                "link-data": "255.255.255.255",
+                                                "metric": 10,
+                                                "number-tos-metrics": 0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "link-state-id": "2.2.2.2",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "2.2.2.2",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:04",
+                                        "checksum": 2128,
+                                        "age": 76,
+                                        "last-origination-delay": 50,
+                                        "options": {
+                                          "e-bit": true,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "router-lsa": {
+                                        "state": {
+                                          "v-bit": false,
+                                          "e-bit": false,
+                                          "b-bit": true,
+                                          "number-links": 3,
+                                          "links": {
+                                            "link": [
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_P2P",
+                                                "link-id": "1.1.1.1",
+                                                "link-data": "10.12.1.2",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "10.12.1.0",
+                                                "link-data": "255.255.255.0",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "2.2.2.2",
+                                                "link-data": "255.255.255.255",
+                                                "metric": 10,
+                                                "number-tos-metrics": 0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:NETWORK_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:NETWORK_LSA"
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:SUMMARY_IP_NETWORK_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:SUMMARY_IP_NETWORK_LSA"
+                                },
+                                "lsas": {
+                                  "lsa": [
+                                    {
+                                      "link-state-id": "10.23.2.0",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "10.23.2.0",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:01",
+                                        "checksum": 3555,
+                                        "age": 118,
+                                        "last-origination-delay": 0,
+                                        "options": {
+                                          "e-bit": true,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "summary-lsa": {
+                                        "state": {
+                                          "network-mask": 24,
+                                          "metric": 320
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "link-state-id": "22.22.22.22",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "22.22.22.22",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:01",
+                                        "checksum": 39767,
+                                        "age": 122,
+                                        "last-origination-delay": 0,
+                                        "options": {
+                                          "e-bit": true,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "summary-lsa": {
+                                        "state": {
+                                          "network-mask": 32,
+                                          "metric": 10
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:SUMMARY_ASBR_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:SUMMARY_ASBR_LSA"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "identifier": 1,
+                        "arcos-ospfv2:lsdb": {
+                          "lsa-types": {
+                            "lsa-type": [
+                              {
+                                "type": "arcos-ospf-types:ROUTER_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:ROUTER_LSA"
+                                },
+                                "lsas": {
+                                  "lsa": [
+                                    {
+                                      "link-state-id": "2.2.2.2",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "2.2.2.2",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:04",
+                                        "checksum": 8393,
+                                        "age": 52,
+                                        "last-origination-delay": 50,
+                                        "options": {
+                                          "e-bit": false,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "router-lsa": {
+                                        "state": {
+                                          "v-bit": false,
+                                          "e-bit": false,
+                                          "b-bit": true,
+                                          "number-links": 3,
+                                          "links": {
+                                            "link": [
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_P2P",
+                                                "link-id": "3.3.3.3",
+                                                "link-data": "10.23.2.2",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "10.23.2.0",
+                                                "link-data": "255.255.255.0",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "22.22.22.22",
+                                                "link-data": "255.255.255.255",
+                                                "metric": 10,
+                                                "number-tos-metrics": 0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "link-state-id": "3.3.3.3",
+                                      "advertising-router": "3.3.3.3",
+                                      "state": {
+                                        "link-state-id": "3.3.3.3",
+                                        "advertising-router": "3.3.3.3",
+                                        "sequence-number": "80:00:00:03",
+                                        "checksum": 3876,
+                                        "age": 53,
+                                        "options": {
+                                          "e-bit": false,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "router-lsa": {
+                                        "state": {
+                                          "v-bit": false,
+                                          "e-bit": false,
+                                          "b-bit": false,
+                                          "number-links": 3,
+                                          "links": {
+                                            "link": [
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_P2P",
+                                                "link-id": "2.2.2.2",
+                                                "link-data": "10.23.2.3",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "10.23.2.0",
+                                                "link-data": "255.255.255.0",
+                                                "metric": 320,
+                                                "number-tos-metrics": 0
+                                              },
+                                              {
+                                                "type": "arcos-ospf-types:ROUTER_LSA_STUB_NETWORK",
+                                                "link-id": "3.3.3.3",
+                                                "link-data": "255.255.255.255",
+                                                "metric": 10,
+                                                "number-tos-metrics": 0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:NETWORK_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:NETWORK_LSA"
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:SUMMARY_IP_NETWORK_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:SUMMARY_IP_NETWORK_LSA"
+                                },
+                                "lsas": {
+                                  "lsa": [
+                                    {
+                                      "link-state-id": "0.0.0.0",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "0.0.0.0",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:02",
+                                        "checksum": 44956,
+                                        "age": 125,
+                                        "last-origination-delay": 0,
+                                        "options": {
+                                          "e-bit": false,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "summary-lsa": {
+                                        "state": {
+                                          "network-mask": 0,
+                                          "metric": 10
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "link-state-id": "2.2.2.2",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "2.2.2.2",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:01",
+                                        "checksum": 21999,
+                                        "age": 124,
+                                        "last-origination-delay": 0,
+                                        "options": {
+                                          "e-bit": false,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "summary-lsa": {
+                                        "state": {
+                                          "network-mask": 32,
+                                          "metric": 10
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "link-state-id": "10.12.1.0",
+                                      "advertising-router": "2.2.2.2",
+                                      "state": {
+                                        "link-state-id": "10.12.1.0",
+                                        "advertising-router": "2.2.2.2",
+                                        "sequence-number": "80:00:00:01",
+                                        "checksum": 47684,
+                                        "age": 124,
+                                        "last-origination-delay": 0,
+                                        "options": {
+                                          "e-bit": false,
+                                          "np-bit": false
+                                        }
+                                      },
+                                      "summary-lsa": {
+                                        "state": {
+                                          "network-mask": 24,
+                                          "metric": 320
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "type": "arcos-ospf-types:SUMMARY_ASBR_LSA",
+                                "state": {
+                                  "type": "arcos-ospf-types:SUMMARY_ASBR_LSA"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
