@@ -4,6 +4,7 @@ Parsers:
 
 1. ShowOspfv3Global — ``show network-instance default protocol OSPF3 default global state``
 2. ShowOspfv3Neighbor — ``show network-instance default protocol OSPF3 default area <area> interface * neighbor``
+3. ShowOspfv3RunningConfig — ``show running-config network-instance {ni} protocol OSPF3 {instance}``
 """
 
 import logging
@@ -180,5 +181,172 @@ class ShowOspfv3Neighbor(ShowOspfv3NeighborSchema):
 
         if not result["neighbors"]:
             raise SchemaEmptyParserError("No OSPFv3 neighbors found")
+
+        return result
+
+
+# =====================================================================
+# Prefix stripping for OSPF types
+# =====================================================================
+
+_OSPFV3_VALUE_PREFIXES = [
+    "arcos-ospf-types:",
+    "openconfig-policy-types:",
+]
+
+
+def _strip_ospfv3_value(value: str) -> str:
+    """Strip known OSPF namespace prefixes from a value string."""
+    if not isinstance(value, str):
+        return value
+    for prefix in _OSPFV3_VALUE_PREFIXES:
+        if value.startswith(prefix):
+            return value[len(prefix):]
+    return value
+
+
+# =====================================================================
+# ShowOspfv3RunningConfig
+# =====================================================================
+
+class ShowOspfv3RunningConfigSchema(MetaParser):
+    """Schema for OSPFv3 running configuration."""
+
+    schema = {
+        Optional("global"): {
+            Optional("router-id"): str,
+        },
+        Optional("areas"): {
+            Any(): {  # area ID as str
+                Optional("identifier"): int,
+                Optional("area-type"): str,
+                Optional("stub-default-cost"): int,
+                Optional("interfaces"): {
+                    Any(): {  # interface name
+                        Optional("id"): str,
+                        Optional("network-type"): str,
+                        Optional("hello-interval"): int,
+                        Optional("dead-interval"): int,
+                    }
+                },
+            }
+        },
+    }
+
+
+class ShowOspfv3RunningConfig(ShowOspfv3RunningConfigSchema):
+    """Parser for OSPFv3 running configuration.
+
+    Command::
+
+        show running-config network-instance {ni} protocol OSPF3 {instance}
+    """
+
+    cli_command = (
+        "show running-config network-instance {ni} protocol OSPF3 {instance}"
+    )
+
+    def cli(self, ni="default", instance="default",
+            output: TypeOptional[str] = None) -> Dict[str, TypeAny]:
+        if output is None:
+            cmd = (
+                f"show running-config network-instance {ni} "
+                f"protocol OSPF3 {instance} | display json | nomore"
+            )
+            output = self.device.execute(cmd)
+
+        parsed = load_json_robust(output)
+        ospfv3 = _navigate_to_ospfv3(parsed)
+
+        if not ospfv3:
+            raise SchemaEmptyParserError(
+                "No OSPFv3 running configuration found"
+            )
+
+        result: Dict[str, TypeAny] = {}
+
+        # Global config (flatten config{})
+        global_data = ospfv3.get("global", {})
+        if global_data:
+            global_entry: Dict[str, TypeAny] = {}
+
+            cfg = global_data.get("config", {})
+            rid = cfg.get("router-id")
+            if rid:
+                global_entry["router-id"] = rid
+
+            if global_entry:
+                result["global"] = global_entry
+
+        # Areas (flatten config{} at area and interface levels)
+        areas_container = ospfv3.get("areas", {})
+        area_list = areas_container.get("area", [])
+
+        if area_list:
+            areas_dict: Dict[str, TypeAny] = {}
+
+            for area_entry in area_list:
+                area_id = area_entry.get("identifier", 0)
+                area_cfg = area_entry.get("config", {})
+
+                entry: Dict[str, TypeAny] = {}
+
+                if "identifier" in area_cfg:
+                    entry["identifier"] = area_cfg["identifier"]
+
+                area_type = area_cfg.get("area-type")
+                if area_type:
+                    entry["area-type"] = area_type
+
+                stub_cost = area_cfg.get("stub-default-cost")
+                if stub_cost is not None:
+                    entry["stub-default-cost"] = stub_cost
+
+                # Interfaces
+                intfs = area_entry.get("interfaces", {}).get(
+                    "interface", []
+                )
+                if intfs:
+                    intfs_dict: Dict[str, TypeAny] = {}
+                    for intf in intfs:
+                        intf_id = intf.get("id")
+                        if not intf_id:
+                            continue
+
+                        intf_entry: Dict[str, TypeAny] = {}
+                        intf_cfg = intf.get("config", {})
+
+                        if "id" in intf_cfg:
+                            intf_entry["id"] = intf_cfg["id"]
+
+                        net_type = intf_cfg.get("network-type")
+                        if net_type:
+                            intf_entry["network-type"] = (
+                                _strip_ospfv3_value(net_type)
+                            )
+
+                        timers_cfg = intf.get("timers", {}).get(
+                            "config", {}
+                        )
+                        for tk in ("hello-interval", "dead-interval"):
+                            if tk in timers_cfg:
+                                intf_entry[tk] = timers_cfg[tk]
+
+                        if intf_entry:
+                            intfs_dict[intf_id] = intf_entry
+
+                    if intfs_dict:
+                        entry["interfaces"] = intfs_dict
+
+                if entry:
+                    areas_dict[str(area_id)] = entry
+
+            if areas_dict:
+                result["areas"] = areas_dict
+
+        if not result:
+            raise SchemaEmptyParserError(
+                "No OSPFv3 running configuration found"
+            )
 
         return result

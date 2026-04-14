@@ -163,7 +163,7 @@ class TestShowStaticRoutingConfig(unittest.TestCase):
             output=output
         )
         
-        self.assertEqual(result, {"network_instances": {}})
+        self.assertEqual(result, {"network-instances": {}})
 
     def test_invalid_json(self):
         """Test parser with invalid JSON output."""
@@ -175,7 +175,7 @@ class TestShowStaticRoutingConfig(unittest.TestCase):
         )
         
         # Should return empty dict on JSON parse error
-        self.assertEqual(result, {"network_instances": {}})
+        self.assertEqual(result, {"network-instances": {}})
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ Parsers:
 4. ShowOspfInterface — ``show network-instance {ni} protocol OSPF {instance} area {area} interface state``
 5. ShowOspfSpfThrottle — ``show network-instance {ni} protocol OSPF {instance} global spf throttle``
 6. ShowOspfLsdb — ``show network-instance {ni} protocol OSPF {instance} area {area} lsdb``
+7. ShowOspfRunningConfig — ``show running-config network-instance {ni} protocol OSPF {instance}``
 """
 
 import logging
@@ -682,5 +683,166 @@ class ShowOspfLsdb(ShowOspfLsdbSchema):
 
         if not result["areas"]:
             raise SchemaEmptyParserError("No OSPF LSDB data found")
+
+        return result
+
+
+# =====================================================================
+# ShowOspfRunningConfig
+# =====================================================================
+
+class ShowOspfRunningConfigSchema(MetaParser):
+    """Schema for OSPF running configuration."""
+
+    schema = {
+        Optional("global"): {
+            Optional("router-id"): str,
+            Optional("route-preference"): {
+                Optional("intra-area"): int,
+                Optional("inter-area"): int,
+                Optional("external"): int,
+            },
+        },
+        Optional("areas"): {
+            Any(): {  # area ID as str
+                Optional("identifier"): int,
+                Optional("area-type"): str,
+                Optional("stub-default-cost"): int,
+                Optional("interfaces"): {
+                    Any(): {  # interface name
+                        Optional("id"): str,
+                        Optional("network-type"): str,
+                        Optional("hello-interval"): int,
+                        Optional("dead-interval"): int,
+                    }
+                },
+            }
+        },
+    }
+
+
+class ShowOspfRunningConfig(ShowOspfRunningConfigSchema):
+    """Parser for OSPF running configuration.
+
+    Command::
+
+        show running-config network-instance {ni} protocol OSPF {instance}
+    """
+
+    cli_command = (
+        "show running-config network-instance {ni} protocol OSPF {instance}"
+    )
+
+    def cli(self, ni="default", instance="default",
+            output: TypeOptional[str] = None) -> Dict[str, TypeAny]:
+        if output is None:
+            cmd = (
+                f"show running-config network-instance {ni} "
+                f"protocol OSPF {instance} | display json | nomore"
+            )
+            output = self.device.execute(cmd)
+
+        parsed = load_json_robust(output)
+        ospf = _navigate_to_ospf(parsed)
+
+        if not ospf:
+            raise SchemaEmptyParserError(
+                "No OSPF running configuration found"
+            )
+
+        result: Dict[str, TypeAny] = {}
+
+        # Global config (flatten config{})
+        global_data = ospf.get("global", {})
+        if global_data:
+            global_entry: Dict[str, TypeAny] = {}
+
+            cfg = global_data.get("config", {})
+            rid = cfg.get("router-id")
+            if rid:
+                global_entry["router-id"] = rid
+
+            rp = global_data.get("route-preference", {}).get("config", {})
+            if rp:
+                rp_entry: Dict[str, TypeAny] = {}
+                for k in ("intra-area", "inter-area", "external"):
+                    if k in rp:
+                        rp_entry[k] = rp[k]
+                if rp_entry:
+                    global_entry["route-preference"] = rp_entry
+
+            if global_entry:
+                result["global"] = global_entry
+
+        # Areas (flatten config{} at area and interface levels)
+        areas_container = ospf.get("areas", {})
+        area_list = areas_container.get("area", [])
+
+        if area_list:
+            areas_dict: Dict[str, TypeAny] = {}
+
+            for area_entry in area_list:
+                area_id = area_entry.get("identifier", 0)
+                area_cfg = area_entry.get("config", {})
+
+                entry: Dict[str, TypeAny] = {}
+
+                if "identifier" in area_cfg:
+                    entry["identifier"] = area_cfg["identifier"]
+
+                area_type = area_cfg.get("area-type")
+                if area_type:
+                    entry["area-type"] = area_type
+
+                stub_cost = area_cfg.get("stub-default-cost")
+                if stub_cost is not None:
+                    entry["stub-default-cost"] = stub_cost
+
+                # Interfaces (flatten config{} + timers.config{})
+                intfs = area_entry.get("interfaces", {}).get(
+                    "interface", []
+                )
+                if intfs:
+                    intfs_dict: Dict[str, TypeAny] = {}
+                    for intf in intfs:
+                        intf_id = intf.get("id")
+                        if not intf_id:
+                            continue
+
+                        intf_entry: Dict[str, TypeAny] = {}
+                        intf_cfg = intf.get("config", {})
+
+                        if "id" in intf_cfg:
+                            intf_entry["id"] = intf_cfg["id"]
+
+                        net_type = intf_cfg.get("network-type")
+                        if net_type:
+                            intf_entry["network-type"] = (
+                                _strip_ospf_value(net_type)
+                            )
+
+                        timers_cfg = intf.get("timers", {}).get(
+                            "config", {}
+                        )
+                        for tk in ("hello-interval", "dead-interval"):
+                            if tk in timers_cfg:
+                                intf_entry[tk] = timers_cfg[tk]
+
+                        if intf_entry:
+                            intfs_dict[intf_id] = intf_entry
+
+                    if intfs_dict:
+                        entry["interfaces"] = intfs_dict
+
+                if entry:
+                    areas_dict[str(area_id)] = entry
+
+            if areas_dict:
+                result["areas"] = areas_dict
+
+        if not result:
+            raise SchemaEmptyParserError(
+                "No OSPF running configuration found"
+            )
 
         return result

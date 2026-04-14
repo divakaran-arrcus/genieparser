@@ -11,6 +11,7 @@ from genie.libs.parser.arcos.show_ospf import (
     ShowOspfInterface,
     ShowOspfSpfThrottle,
     ShowOspfLsdb,
+    ShowOspfRunningConfig,
 )
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
@@ -287,5 +288,57 @@ def test_show_ospf_lsdb_basic():
 def test_show_ospf_lsdb_empty():
     """Empty data should raise SchemaEmptyParserError."""
     parser = ShowOspfLsdb(device="dummy")
+    with pytest.raises(SchemaEmptyParserError):
+        parser.cli(output='{"data": {}}')
+
+
+# =====================================================================
+# ShowOspfRunningConfig tests
+# =====================================================================
+
+def test_show_ospf_running_config_basic():
+    """Validate OSPF running config from rtr2."""
+    sample_file = SAMPLES_DIR / "ospf_running_config.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    parser = ShowOspfRunningConfig(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+
+    # Global
+    g = result["global"]
+    assert g["router-id"] == "2.2.2.2"
+    rp = g["route-preference"]
+    assert rp["intra-area"] == 110
+    assert rp["inter-area"] == 115
+    assert rp["external"] == 120
+
+    # Areas
+    areas = result["areas"]
+    assert "0" in areas
+    assert "1" in areas
+
+    # Area 0 — normal, 2 interfaces
+    a0 = areas["0"]
+    intfs = a0["interfaces"]
+    assert "loopback0" in intfs
+    assert "swp1" in intfs
+    swp1 = intfs["swp1"]
+    assert swp1["network-type"] == "POINT_TO_POINT_NETWORK"
+    assert swp1["hello-interval"] == 10
+    assert swp1["dead-interval"] == 40
+
+    # Area 1 — stub
+    a1 = areas["1"]
+    assert a1["area-type"] == "AREA_TYPE_STUB"
+    assert a1["stub-default-cost"] == 10
+
+
+def test_show_ospf_running_config_empty():
+    """Empty data should raise SchemaEmptyParserError."""
+    parser = ShowOspfRunningConfig(device="dummy")
     with pytest.raises(SchemaEmptyParserError):
         parser.cli(output='{"data": {}}')
