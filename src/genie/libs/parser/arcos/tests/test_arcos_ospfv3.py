@@ -4,7 +4,15 @@ import json
 
 import pytest
 
-from genie.libs.parser.arcos.show_ospfv3 import ShowOspfv3Global, ShowOspfv3Neighbor
+from pathlib import Path
+
+from genie.libs.parser.arcos.show_ospfv3 import (
+    ShowOspfv3Global,
+    ShowOspfv3Neighbor,
+    ShowOspfv3RunningConfig,
+)
+
+SAMPLES_DIR = Path(__file__).parent / "test_samples"
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 
@@ -171,5 +179,45 @@ def test_show_ospfv3_neighbor_basic():
 def test_show_ospfv3_neighbor_empty():
     """Empty areas should raise SchemaEmptyParserError."""
     parser = ShowOspfv3Neighbor(device="dummy")
+    with pytest.raises(SchemaEmptyParserError):
+        parser.cli(output='{"data": {}}')
+
+
+# =====================================================================
+# ShowOspfv3RunningConfig tests
+# =====================================================================
+
+def test_show_ospfv3_running_config_basic():
+    """Validate OSPFv3 running config from rtr2."""
+    sample_file = SAMPLES_DIR / "ospfv3_running_config.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+    parser = ShowOspfv3RunningConfig(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+
+    # Global
+    assert result["global"]["router-id"] == "2.2.2.2"
+
+    # Areas
+    areas = result["areas"]
+    assert "0" in areas
+
+    intfs = areas["0"]["interfaces"]
+    assert "loopback0" in intfs
+    assert "swp1" in intfs
+
+    swp1 = intfs["swp1"]
+    assert swp1["network-type"] == "POINT_TO_POINT_NETWORK"
+    assert swp1["hello-interval"] == 10
+    assert swp1["dead-interval"] == 40
+
+
+def test_show_ospfv3_running_config_empty():
+    """Empty data should raise SchemaEmptyParserError."""
+    parser = ShowOspfv3RunningConfig(device="dummy")
     with pytest.raises(SchemaEmptyParserError):
         parser.cli(output='{"data": {}}')
