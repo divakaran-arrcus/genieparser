@@ -60,3 +60,8 @@ uni.log
 # .vscode
 .vscode
 .history
+
+#arcos
+*.whl
+*.tar.gz
+**/github*.json
