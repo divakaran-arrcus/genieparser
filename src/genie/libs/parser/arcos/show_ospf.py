@@ -9,6 +9,7 @@ Parsers:
 5. ShowOspfSpfThrottle — ``show network-instance {ni} protocol OSPF {instance} global spf throttle``
 6. ShowOspfLsdb — ``show network-instance {ni} protocol OSPF {instance} area {area} lsdb``
 7. ShowOspfRunningConfig — ``show running-config network-instance {ni} protocol OSPF {instance}``
+8. ShowOspfGlobalRib — ``show network-instance {ni} protocol OSPF {instance} global rib prefix``
 """
 
 import logging
@@ -846,3 +847,185 @@ class ShowOspfRunningConfig(ShowOspfRunningConfigSchema):
             )
 
         return result
+
+
+# =====================================================================
+# ShowOspfGlobalRib
+# =====================================================================
+
+# Map raw arcos-ospf-types path-type values to friendly route-type strings.
+# Keys are the un-prefixed values (after _strip_ospf_value), values are
+# the canonical route-type strings consumed by ``get_ospf_route``.
+_OSPF_PATH_TYPE_MAP = {
+    "OSPF_INTRA_AREA_CONNECTED_ROUTE": "intra-area-connected",
+    "OSPF_INTRA_AREA_ROUTE": "intra-area",
+    "OSPF_INTER_AREA_ROUTE": "inter-area",
+    "OSPF_EXTERNAL_TYPE1_REDIST_ROUTE": "external-type-1",
+    "OSPF_EXTERNAL_TYPE2_REDIST_ROUTE": "external-type-2",
+    "OSPF_EXTERNAL_TYPE1_ROUTE": "external-type-1",
+    "OSPF_EXTERNAL_TYPE2_ROUTE": "external-type-2",
+}
+
+
+class ShowOspfGlobalRibSchema(MetaParser):
+    """Schema for OSPF Global RIB prefix output."""
+
+    schema = {
+        "routes": {
+            Any(): {  # prefix string, e.g. "4.4.4.4/32"
+                "prefix": str,
+                Optional("path-count"): int,
+                Optional("route-flags"): list,
+                Optional("path-type"): str,         # canonical route-type
+                Optional("raw-path-type"): str,     # full enum from device
+                Optional("area"): str,
+                Optional("metric"): int,
+                Optional("path-flags"): list,
+                Optional("received-lsa"): {
+                    Optional("lsa-type"): str,
+                    Optional("link-state-id"): str,
+                    Optional("advertising-router"): str,
+                },
+                Optional("self-originated-lsa"): {
+                    Optional("lsa-type"): str,
+                    Optional("link-state-id"): str,
+                    Optional("advertising-router"): str,
+                },
+                Optional("nexthop-set"): {
+                    Optional("nexthop-set-id"): int,
+                    Optional("nexthop-count"): int,
+                    Optional("reference-count"): int,
+                },
+                # next-hops is a list of {interface: str, address: str};
+                # declared as plain ``list`` because the metaparser
+                # schemaengine does not directly support per-element dict
+                # schemas inside lists.
+                Optional("next-hops"): list,
+            }
+        }
+    }
+
+
+class ShowOspfGlobalRib(ShowOspfGlobalRibSchema):
+    """Parser for OSPF Global RIB prefix output.
+
+    Command::
+
+        show network-instance {ni} protocol OSPF {instance} global rib prefix
+    """
+
+    cli_command = (
+        "show network-instance {ni} protocol OSPF {instance} global rib prefix"
+    )
+
+    def cli(self, ni: str = "default", instance: str = "default",
+            output: TypeOptional[str] = None) -> Dict[str, TypeAny]:
+        if output is None:
+            cmd = (
+                f"show network-instance {ni} protocol OSPF {instance} "
+                f"global rib prefix | display json | nomore"
+            )
+            output = self.device.execute(cmd)
+
+        parsed = load_json_robust(output)
+        ospf = _navigate_to_ospf(parsed)
+
+        rib = ospf.get("global", {}).get("rib", {})
+        prefixes_container = rib.get("prefixes", {})
+        prefix_list = prefixes_container.get("prefix", [])
+
+        if not prefix_list:
+            raise SchemaEmptyParserError("No OSPF RIB prefixes found")
+
+        routes: Dict[str, Dict[str, TypeAny]] = {}
+
+        for entry in prefix_list:
+            key = entry.get("prefix-key") or \
+                entry.get("prefix-identifier", {}).get("prefix-key")
+            if not key:
+                continue
+
+            route: Dict[str, TypeAny] = {"prefix": key}
+
+            state = entry.get("state", {}) or {}
+            if "path-count" in state:
+                route["path-count"] = state["path-count"]
+            if "route-flags" in state:
+                route["route-flags"] = [
+                    _strip_ospf_value(rf) for rf in state["route-flags"]
+                ]
+
+            bestpath = entry.get("bestpath", {}) or {}
+
+            raw_pt = bestpath.get("path-type")
+            if raw_pt:
+                stripped = _strip_ospf_value(raw_pt)
+                route["raw-path-type"] = stripped
+                route["path-type"] = _OSPF_PATH_TYPE_MAP.get(
+                    stripped, stripped.lower()
+                )
+
+            if "area-id" in bestpath:
+                route["area"] = str(bestpath["area-id"])
+            if "metric" in bestpath:
+                route["metric"] = bestpath["metric"]
+            if "path-flags" in bestpath:
+                route["path-flags"] = [
+                    _strip_ospf_value(pf) for pf in bestpath["path-flags"]
+                ]
+
+            for lsa_key in ("received-lsa", "self-originated-lsa"):
+                lsa = bestpath.get(lsa_key)
+                if lsa:
+                    lsa_entry: Dict[str, TypeAny] = {}
+                    if "lsa-type" in lsa:
+                        lsa_entry["lsa-type"] = _strip_ospf_value(
+                            lsa["lsa-type"]
+                        )
+                    if "link-state-id" in lsa:
+                        lsa_entry["link-state-id"] = lsa["link-state-id"]
+                    if "advertising-router" in lsa:
+                        lsa_entry["advertising-router"] = (
+                            lsa["advertising-router"]
+                        )
+                    if lsa_entry:
+                        route[lsa_key] = lsa_entry
+
+            nh_set = bestpath.get("nexthop-set", {}) or {}
+            nh_state = nh_set.get("state", {}) or {}
+            nh_set_entry: Dict[str, TypeAny] = {}
+            for k in ("nexthop-set-id", "nexthop-count", "reference-count"):
+                if k in nh_state:
+                    nh_set_entry[k] = nh_state[k]
+            if nh_set_entry:
+                route["nexthop-set"] = nh_set_entry
+
+            nh_container = nh_set.get("nexthops", {}) or {}
+            nh_list = nh_container.get("nexthop", []) or []
+            next_hops = []
+            for nh in nh_list:
+                nh_state = nh.get("state", {}) or {}
+                interface = (
+                    nh_state.get("outgoing-interface")
+                    or nh.get("outgoing-interface")
+                )
+                address = (
+                    nh_state.get("nexthop-address")
+                    or nh.get("nexthop-address")
+                )
+                nh_entry: Dict[str, TypeAny] = {}
+                if interface:
+                    nh_entry["interface"] = interface
+                if address:
+                    nh_entry["address"] = address
+                if nh_entry:
+                    next_hops.append(nh_entry)
+            if next_hops:
+                route["next-hops"] = next_hops
+
+            routes[key] = route
+
+        if not routes:
+            raise SchemaEmptyParserError("No OSPF RIB prefix entries parsed")
+
+        return {"routes": routes}
