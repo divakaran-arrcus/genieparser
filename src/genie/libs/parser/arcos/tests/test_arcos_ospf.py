@@ -342,3 +342,144 @@ def test_show_ospf_running_config_empty():
     parser = ShowOspfRunningConfig(device="dummy")
     with pytest.raises(SchemaEmptyParserError):
         parser.cli(output='{"data": {}}')
+
+
+# =====================================================================
+# ShowOspfGlobal — route-preference / max-lsa / maintenance-mode
+# (synthetic JSON exercising both nested and flat layouts)
+# =====================================================================
+
+def _ospf_global_json(global_body: dict) -> str:
+    """Wrap an OSPF global body in the full OpenConfig envelope."""
+    import json as _json
+    return _json.dumps({
+        "data": {
+            "openconfig-network-instance:network-instances": {
+                "network-instance": [{
+                    "name": "default",
+                    "protocols": {"protocol": [{
+                        "identifier": "openconfig-policy-types:OSPF",
+                        "name": "default",
+                        "arcos-ospf:ospfv2": {"global": global_body},
+                    }]},
+                }]
+            }
+        }
+    })
+
+
+def test_show_ospf_global_route_preference_nested():
+    """route-preference exposed under global.route-preference.state."""
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "route-preference": {"state": {
+            "intra-area": 100, "inter-area": 115, "external": 120,
+        }},
+    }
+    parser = ShowOspfGlobal(device="dummy")
+    result = parser.cli(output=_ospf_global_json(body))
+    assert result["route-preference"] == {
+        "intra-area": 100, "inter-area": 115, "external": 120,
+    }
+
+
+def test_show_ospf_global_route_preference_flat():
+    """route-preference exposed flat under global.state.route-preference."""
+    body = {"state": {
+        "router-id": "1.1.1.1",
+        "route-preference": {"intra-area": 110, "inter-area": 120},
+    }}
+    parser = ShowOspfGlobal(device="dummy")
+    result = parser.cli(output=_ospf_global_json(body))
+    assert result["route-preference"] == {
+        "intra-area": 110, "inter-area": 120,
+    }
+
+
+def test_show_ospf_global_max_lsa_nested():
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "max-lsa": {"state": {
+            "lsa-limit": 5000, "warning-threshold": 75, "state": "NORMAL",
+        }},
+    }
+    parser = ShowOspfGlobal(device="dummy")
+    result = parser.cli(output=_ospf_global_json(body))
+    assert result["max-lsa"] == {
+        "lsa-limit": 5000, "warning-threshold": 75, "state": "NORMAL",
+    }
+
+
+def test_show_ospf_global_maintenance_mode():
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "maintenance-mode": {"state": {"state": "ACTIVE"}},
+    }
+    parser = ShowOspfGlobal(device="dummy")
+    result = parser.cli(output=_ospf_global_json(body))
+    assert result["maintenance-mode"] == {"state": "ACTIVE"}
+
+
+# =====================================================================
+# ShowOspfInterface — authentication.auth-type
+# =====================================================================
+
+def _ospf_interface_json(intf_id: str, state: dict, area_id: int = 0,
+                         authentication: dict = None) -> str:
+    """Build a single-interface area state envelope."""
+    import json as _json
+    intf_obj = {"id": intf_id, "state": state}
+    if authentication is not None:
+        intf_obj["authentication"] = authentication
+    return _json.dumps({
+        "data": {
+            "openconfig-network-instance:network-instances": {
+                "network-instance": [{
+                    "name": "default",
+                    "protocols": {"protocol": [{
+                        "identifier": "openconfig-policy-types:OSPF",
+                        "name": "default",
+                        "arcos-ospf:ospfv2": {
+                            "areas": {"area": [{
+                                "identifier": area_id,
+                                "interfaces": {"interface": [intf_obj]},
+                            }]},
+                        },
+                    }]},
+                }]
+            }
+        }
+    })
+
+
+def test_show_ospf_interface_auth_type_nested():
+    """auth-type exposed under interface.authentication.state.auth-type."""
+    state = {"id": "swp1", "interface-up": True}
+    auth = {"state": {"auth-type": "OSPF_AUTH_NULL"}}
+    parser = ShowOspfInterface(device="dummy")
+    result = parser.cli(output=_ospf_interface_json(
+        "swp1", state, area_id=1, authentication=auth,
+    ))
+    swp1 = result["areas"]["1"]["interfaces"]["swp1"]
+    assert swp1["authentication"] == {"auth-type": "OSPF_AUTH_NULL"}
+
+
+def test_show_ospf_interface_auth_type_flat():
+    """auth-type exposed flat in state.authentication."""
+    state = {
+        "id": "swp1", "interface-up": True,
+        "authentication": {"auth-type": "OSPF_AUTH_CRYPTO_KEY"},
+    }
+    parser = ShowOspfInterface(device="dummy")
+    result = parser.cli(output=_ospf_interface_json("swp1", state, area_id=1))
+    swp1 = result["areas"]["1"]["interfaces"]["swp1"]
+    assert swp1["authentication"] == {"auth-type": "OSPF_AUTH_CRYPTO_KEY"}
+
+
+def test_show_ospf_interface_auth_type_absent():
+    """When authentication is absent, the field should not be set."""
+    state = {"id": "swp1", "interface-up": True}
+    parser = ShowOspfInterface(device="dummy")
+    result = parser.cli(output=_ospf_interface_json("swp1", state, area_id=1))
+    swp1 = result["areas"]["1"]["interfaces"]["swp1"]
+    assert "authentication" not in swp1
