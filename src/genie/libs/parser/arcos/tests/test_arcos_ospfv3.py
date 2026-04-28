@@ -221,3 +221,77 @@ def test_show_ospfv3_running_config_empty():
     parser = ShowOspfv3RunningConfig(device="dummy")
     with pytest.raises(SchemaEmptyParserError):
         parser.cli(output='{"data": {}}')
+
+
+# =====================================================================
+# ShowOspfv3Global — route-preference / max-lsa / maintenance-mode
+# (synthetic JSON exercising both nested and flat layouts)
+# =====================================================================
+
+def _ospfv3_global_json(global_body: dict) -> str:
+    """Wrap an OSPFv3 global body in the full OpenConfig envelope."""
+    import json as _json
+    return _json.dumps({
+        "data": {
+            "openconfig-network-instance:network-instances": {
+                "network-instance": [{
+                    "name": "default",
+                    "protocols": {"protocol": [{
+                        "identifier": "openconfig-policy-types:OSPF3",
+                        "name": "default",
+                        "arcos-ospf:ospfv3": {"global": global_body},
+                    }]},
+                }]
+            }
+        }
+    })
+
+
+def test_show_ospfv3_global_route_preference_nested():
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "route-preference": {"state": {
+            "intra-area": 100, "inter-area": 115, "external": 120,
+        }},
+    }
+    parser = ShowOspfv3Global(device="dummy")
+    result = parser.cli(output=_ospfv3_global_json(body))
+    assert result["route-preference"] == {
+        "intra-area": 100, "inter-area": 115, "external": 120,
+    }
+
+
+def test_show_ospfv3_global_route_preference_flat():
+    body = {"state": {
+        "router-id": "1.1.1.1",
+        "route-preference": {"intra-area": 110, "inter-area": 120},
+    }}
+    parser = ShowOspfv3Global(device="dummy")
+    result = parser.cli(output=_ospfv3_global_json(body))
+    assert result["route-preference"] == {
+        "intra-area": 110, "inter-area": 120,
+    }
+
+
+def test_show_ospfv3_global_max_lsa_nested():
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "max-lsa": {"state": {
+            "lsa-limit": 5000, "warning-threshold": 75, "state": "NORMAL",
+        }},
+    }
+    parser = ShowOspfv3Global(device="dummy")
+    result = parser.cli(output=_ospfv3_global_json(body))
+    assert result["max-lsa"] == {
+        "lsa-limit": 5000, "warning-threshold": 75, "state": "NORMAL",
+    }
+
+
+def test_show_ospfv3_global_maintenance_mode():
+    body = {
+        "state": {"router-id": "1.1.1.1"},
+        "maintenance-mode": {"state": {"state": "ACTIVE"}},
+    }
+    parser = ShowOspfv3Global(device="dummy")
+    result = parser.cli(output=_ospfv3_global_json(body))
+    assert result["maintenance-mode"] == {"state": "ACTIVE"}

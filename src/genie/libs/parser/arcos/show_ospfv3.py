@@ -60,6 +60,20 @@ class ShowOspfv3GlobalSchema(MetaParser):
         Optional("neighbor-count"): int,
         Optional("full-neighbor-count"): int,
         Optional("up-interface-count"): int,
+        Optional("route-preference"): {
+            Optional("intra-area"): int,
+            Optional("inter-area"): int,
+            Optional("external"): int,
+        },
+        Optional("max-lsa"): {
+            Optional("lsa-limit"): int,
+            Optional("warning-threshold"): int,
+            Optional("state"): str,
+        },
+        Optional("maintenance-mode"): {
+            Optional("state"): str,
+            Optional("trigger"): str,
+        },
     }
 
 
@@ -81,7 +95,8 @@ class ShowOspfv3Global(ShowOspfv3GlobalSchema):
 
         parsed = load_json_robust(output)
         ospfv3 = _navigate_to_ospfv3(parsed)
-        state = ospfv3.get("global", {}).get("state", {})
+        global_data = ospfv3.get("global", {})
+        state = global_data.get("state", {})
 
         if not state:
             raise SchemaEmptyParserError("No OSPFv3 global state found")
@@ -96,6 +111,20 @@ class ShowOspfv3Global(ShowOspfv3GlobalSchema):
                    "up-interface-count"):
             if k in state:
                 result[k] = state[k]
+
+        # Optional sub-dicts. Try both layouts:
+        #   global.{field}.state.* (nested OpenConfig)
+        #   state.{field}.*        (flat under top-level state)
+        for field, keys in (
+            ("route-preference", ("intra-area", "inter-area", "external")),
+            ("max-lsa", ("lsa-limit", "warning-threshold", "state")),
+            ("maintenance-mode", ("state", "trigger")),
+        ):
+            src = (global_data.get(field, {}) or {}).get("state", {}) \
+                or state.get(field, {}) or {}
+            sub = {k: src[k] for k in keys if k in src}
+            if sub:
+                result[field] = sub
 
         return result
 

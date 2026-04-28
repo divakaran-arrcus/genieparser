@@ -54,6 +54,20 @@ class ShowOspfGlobalSchema(MetaParser):
         Optional("neighbor-count"): int,
         Optional("full-neighbor-count"): int,
         Optional("up-interface-count"): int,
+        Optional("route-preference"): {
+            Optional("intra-area"): int,
+            Optional("inter-area"): int,
+            Optional("external"): int,
+        },
+        Optional("max-lsa"): {
+            Optional("lsa-limit"): int,
+            Optional("warning-threshold"): int,
+            Optional("state"): str,
+        },
+        Optional("maintenance-mode"): {
+            Optional("state"): str,
+            Optional("trigger"): str,
+        },
     }
 
 
@@ -75,7 +89,8 @@ class ShowOspfGlobal(ShowOspfGlobalSchema):
 
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
-        state = ospf.get("global", {}).get("state", {})
+        global_data = ospf.get("global", {})
+        state = global_data.get("state", {})
 
         if not state:
             raise SchemaEmptyParserError("No OSPF global state found")
@@ -90,6 +105,20 @@ class ShowOspfGlobal(ShowOspfGlobalSchema):
                    "up-interface-count"):
             if k in state:
                 result[k] = state[k]
+
+        # Optional sub-dicts. Try both layouts:
+        #   global.{field}.state.* (nested OpenConfig)
+        #   state.{field}.*        (flat under top-level state)
+        for field, keys in (
+            ("route-preference", ("intra-area", "inter-area", "external")),
+            ("max-lsa", ("lsa-limit", "warning-threshold", "state")),
+            ("maintenance-mode", ("state", "trigger")),
+        ):
+            src = (global_data.get(field, {}) or {}).get("state", {}) \
+                or state.get(field, {}) or {}
+            sub = {k: src[k] for k in keys if k in src}
+            if sub:
+                result[field] = sub
 
         return result
 
@@ -335,6 +364,9 @@ class ShowOspfInterfaceSchema(MetaParser):
                         Optional("exchange-neighbor-count"): int,
                         Optional("loading-neighbor-count"): int,
                         Optional("full-neighbor-count"): int,
+                        Optional("authentication"): {
+                            Optional("auth-type"): str,
+                        },
                     }
                 }
             }
@@ -412,6 +444,18 @@ class ShowOspfInterface(ShowOspfInterfaceSchema):
                            "full-neighbor-count"):
                     if k in state:
                         entry[k] = state[k]
+
+                # Authentication. arcOS may expose this either nested
+                # (intf.authentication.state.auth-type) or flat
+                # (state.authentication.auth-type).
+                auth_src = (intf.get("authentication", {}) or {}).get(
+                    "state", {}
+                ) or state.get("authentication", {}) or {}
+                auth_type = auth_src.get("auth-type")
+                if auth_type:
+                    entry["authentication"] = {
+                        "auth-type": _strip_ospf_value(auth_type),
+                    }
 
                 if entry:
                     interfaces_dict[intf_id] = entry
