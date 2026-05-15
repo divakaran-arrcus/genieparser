@@ -14,6 +14,7 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisLevelState,
     ShowIsisLsp,
     ShowIsisMplsLabelDb,
+    ShowIsisProtectionTracker,
     ShowIsisRedistributeRoute,
     ShowIsisRoute,
     ShowIsisSpfLog,
@@ -1654,3 +1655,99 @@ def test_show_isis_spf_log_enhanced():
     assert trigger_lsps[0]["sequence"] == 25
     assert trigger_lsps[1]["lsp-id"] == "rtr1.00-01"
     assert trigger_lsps[2]["lsp-id"] == "rtr3.00-00"
+
+
+# ============================================================================
+# ShowIsisProtectionTracker tests
+# ============================================================================
+
+def test_show_isis_protection_tracker_single():
+    """Validate parsing of a single-entry protection-tracker."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_single.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    trackers = isis["global"]["protection-trackers"]["protection-tracker"]
+
+    # Exactly one tracker — id is implementation-assigned at runtime,
+    # so assert properties rather than a specific id value.
+    assert len(trackers) == 1
+    (tracker_id, entry), = trackers.items()
+    assert entry["id"] == tracker_id
+    assert isinstance(entry["reference-count"], int)
+    assert entry["reference-count"] >= 1
+    assert entry["interface"] == "swp1"
+    assert entry["system-id"] == "rtr2.00"
+    assert "last-updated-time" in entry
+    assert "T" in entry["last-updated-time"]   # RFC 3339 shape sanity
+
+
+def test_show_isis_protection_tracker_multi():
+    """Validate parsing of a multi-entry protection-tracker (TI-LFA on
+    multiple interfaces of the same device)."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_multi.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    trackers = isis["global"]["protection-trackers"]["protection-tracker"]
+
+    # Two trackers: id 268435459 (swp1 → rtr6.00) and 268435460 (swp2 → rtr2.00)
+    assert len(trackers) == 2
+    assert "268435459" in trackers
+    assert "268435460" in trackers
+
+    swp1 = trackers["268435459"]
+    assert swp1["interface"] == "swp1"
+    assert swp1["system-id"] == "rtr6.00"
+    assert swp1["reference-count"] == 1
+
+    swp2 = trackers["268435460"]
+    assert swp2["interface"] == "swp2"
+    assert swp2["system-id"] == "rtr2.00"
+    assert swp2["reference-count"] == 1
+
+
+def test_show_isis_protection_tracker_empty():
+    """Validate the empty case — no TI-LFA enabled, device returns
+    `{"data": {}}` and the parser returns an empty dict."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_empty.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert result == {}
+
+
+def test_show_isis_protection_tracker_convention_compliance():
+    """Spot-check Convention 1: all schema keys hyphenated, none with underscores."""
+    import re
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    schema_str = repr(parser.schema)
+    # Find Optional("foo_bar") style violations (lowercase with underscore inside Optional)
+    violations = re.findall(
+        r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
+    )
+    assert violations == [], f"Schema has underscore-keys: {violations}"
