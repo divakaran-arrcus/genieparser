@@ -14577,6 +14577,38 @@
       }
     }
   },
+  "show acl acl-set": {
+    "folders": {
+      "arcos": {
+        "class": "ShowAclSet",
+        "doc": "Parser for ArcOS ``show acl acl-set`` (JSON format).\n\nSupports specific ACL: ``show acl acl-set <name> <type>``\nor all ACLs: ``show acl acl-set``\n",
+        "module_name": "arcos.show_acl",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'acl-sets': {\n        Any('*'): {\n            'name': str,\n            'type': str,\n            Optional('description'): str,\n            Optional('acl-entries'): {\n                Any('*'): {\n                    'sequence-id': str,\n                    Optional('description'): str,\n                    Optional('priority'): int,\n                    Optional('ipv4-source-address'): str,\n                    Optional('ipv4-destination-address'): str,\n                    Optional('ipv4-source-address-prefix-set'): str,\n                    Optional('ipv4-destination-address-prefix-set'): str,\n                    Optional('ipv4-protocol'): str,\n                    Optional('ipv4-dscp'): str,\n                    Optional('ipv6-source-address'): str,\n                    Optional('ipv6-destination-address'): str,\n                    Optional('ipv6-source-address-prefix-set'): str,\n                    Optional('ipv6-destination-address-prefix-set'): str,\n                    Optional('ipv6-protocol'): str,\n                    Optional('ipv6-dscp'): str,\n                    Optional('l2-source-mac'): str,\n                    Optional('l2-source-mac-mask'): str,\n                    Optional('l2-destination-mac'): str,\n                    Optional('l2-destination-mac-mask'): str,\n                    Optional('l2-ethertype'): str,\n                    Optional('transport-source-port'): str,\n                    Optional('transport-destination-port'): str,\n                    Optional('forwarding-action'): str,\n                    Optional('log-action'): str,\n                    Optional('matched-ingress-packets'): str,\n                    Optional('matched-egress-packets'): str,\n                    Optional('matched-ingress-octets'): str,\n                    Optional('matched-egress-octets'): str,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_acl_acl-set",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_acl.py#L69"
+      }
+    }
+  },
+  "show acl acl-set {name} {acl_type}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowAclSet",
+        "doc": "Parser for ArcOS ``show acl acl-set`` (JSON format).\n\nSupports specific ACL: ``show acl acl-set <name> <type>``\nor all ACLs: ``show acl acl-set``\n",
+        "module_name": "arcos.show_acl",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'acl-sets': {\n        Any('*'): {\n            'name': str,\n            'type': str,\n            Optional('description'): str,\n            Optional('acl-entries'): {\n                Any('*'): {\n                    'sequence-id': str,\n                    Optional('description'): str,\n                    Optional('priority'): int,\n                    Optional('ipv4-source-address'): str,\n                    Optional('ipv4-destination-address'): str,\n                    Optional('ipv4-source-address-prefix-set'): str,\n                    Optional('ipv4-destination-address-prefix-set'): str,\n                    Optional('ipv4-protocol'): str,\n                    Optional('ipv4-dscp'): str,\n                    Optional('ipv6-source-address'): str,\n                    Optional('ipv6-destination-address'): str,\n                    Optional('ipv6-source-address-prefix-set'): str,\n                    Optional('ipv6-destination-address-prefix-set'): str,\n                    Optional('ipv6-protocol'): str,\n                    Optional('ipv6-dscp'): str,\n                    Optional('l2-source-mac'): str,\n                    Optional('l2-source-mac-mask'): str,\n                    Optional('l2-destination-mac'): str,\n                    Optional('l2-destination-mac-mask'): str,\n                    Optional('l2-ethertype'): str,\n                    Optional('transport-source-port'): str,\n                    Optional('transport-destination-port'): str,\n                    Optional('forwarding-action'): str,\n                    Optional('log-action'): str,\n                    Optional('matched-ingress-packets'): str,\n                    Optional('matched-egress-packets'): str,\n                    Optional('matched-ingress-octets'): str,\n                    Optional('matched-egress-octets'): str,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_acl_acl-set_name_acl_type",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_acl.py#L69"
+      }
+    }
+  },
   "show acm rules": {
     "folders": {
       "iosxe": {
@@ -22540,6 +22572,22 @@
       }
     }
   },
+  "show copp policy {name}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowCoppPolicy",
+        "doc": "Parser for CoPP policy state.",
+        "module_name": "arcos.show_copp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'policies': {\n        Any('*'): {\n            'name': str,\n            Optional('classifiers'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('actions'): {\n                        Any('*'): str,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_copp_policy_name",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_copp.py#L37"
+      }
+    }
+  },
   "show cores": {
     "folders": {
       "nxos": {
@@ -28903,6 +28951,22 @@
       }
     }
   },
+  "show evpn esi-info esi": {
+    "folders": {
+      "arcos": {
+        "class": "ShowEvpnEsiInfo",
+        "doc": "Parser for EVPN ESI information.",
+        "module_name": "arcos.show_evpn_mpls",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('esi-entries'): {\n        Any('*'): {\n            'esi': str,\n            Optional('designated-forwarder'): bool,\n            Optional('local'): bool,\n            Optional('interface'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_evpn_esi-info_esi",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_evpn_mpls.py#L77"
+      }
+    }
+  },
   "show evpn ethernet-segment": {
     "folders": {
       "iosxr": {
@@ -29300,6 +29364,22 @@
         },
         "uid": "show_evpn_internal-label_detail_location_location",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxr/show_evpn.py#L238"
+      }
+    }
+  },
+  "show evpn state router-ip-selected": {
+    "folders": {
+      "arcos": {
+        "class": "ShowEvpnState",
+        "doc": "Parser for EVPN router-IP state.",
+        "module_name": "arcos.show_evpn_mpls",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('router-ip-selected'): str,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_evpn_state_router-ip-selected",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_evpn_mpls.py#L31"
       }
     }
   },
@@ -33592,6 +33672,22 @@
       }
     }
   },
+  "show interface {interface} bridge-isolation": {
+    "folders": {
+      "arcos": {
+        "class": "ShowBridgeIsolation",
+        "doc": "Parser for bridge isolation state on an interface.",
+        "module_name": "arcos.show_bridge_isolation",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('isolation-enabled'): bool,\n    Optional('isolation-drop-packets'): int,\n    Optional('isolation-drop-octets'): int,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_interface_interface_bridge-isolation",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bridge_isolation.py#L27"
+      }
+    }
+  },
   "show interface {interface} brief": {
     "folders": {
       "nxos": {
@@ -33672,6 +33768,22 @@
       }
     }
   },
+  "show interface {interface} damping": {
+    "folders": {
+      "arcos": {
+        "class": "ShowDamping",
+        "doc": "Parser for interface damping state.",
+        "module_name": "arcos.show_damping",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('enabled'): bool,\n    Optional('max-suppress-time'): int,\n    Optional('decay-half-life'): int,\n    Optional('suppress-threshold'): int,\n    Optional('reuse-threshold'): int,\n    Optional('flap-penalty'): int,\n    Optional('penalty-count'): int,\n    Optional('suppress-state'): bool,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_interface_interface_damping",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_damping.py#L32"
+      }
+    }
+  },
   "show interface {interface} description": {
     "folders": {
       "nxos": {
@@ -33749,6 +33861,38 @@
         },
         "uid": "show_interface_interface_status",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/nxos/show_interface.py#L3763"
+      }
+    }
+  },
+  "show interface {interface} storm-control": {
+    "folders": {
+      "arcos": {
+        "class": "ShowStormControl",
+        "doc": "Parser for storm control state on an interface.",
+        "module_name": "arcos.show_storm_control",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('broadcast-kbps'): int,\n    Optional('multicast-kbps'): int,\n    Optional('unknown-unicast-kbps'): int,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_interface_interface_storm-control",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_storm_control.py#L27"
+      }
+    }
+  },
+  "show interface {interface} subinterface {sub_id} {af} address {address} vrrp": {
+    "folders": {
+      "arcos": {
+        "class": "ShowVrrp",
+        "doc": "Parser for ArcOS VRRP show command (JSON format).\n\nCommand: show interface <intf> subinterface <sub> <af> address <ip> vrrp\n",
+        "module_name": "arcos.show_vrrp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'vrrp-groups': {\n        Any('*'): {\n            'interface': str,\n            'sub-id': int,\n            'af': str,\n            'address': str,\n            'virtual-router-id': int,\n            Optional('virtual-address'): list,\n            Optional('priority'): int,\n            Optional('current-priority'): int,\n            Optional('preempt'): bool,\n            Optional('accept-mode'): bool,\n            Optional('advertisement-interval'): int,\n            Optional('vrrp-version'): str,\n            Optional('virtual-router-mode'): str,\n            Optional('virtual-mac-address'): str,\n            Optional('advertisement-sent'): str,\n            Optional('advertisement-received'): str,\n            Optional('advertisement-dropped'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_interface_interface_subinterface_sub_id_af_address_address_vrrp",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_vrrp.py#L52"
       }
     }
   },
@@ -45510,6 +45654,38 @@
       }
     }
   },
+  "show ipfix": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIpfix",
+        "doc": "Parser for IPFIX state.",
+        "module_name": "arcos.show_ipfix",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('observation-points'): {\n        Any('*'): {\n            'name': str,\n            Optional('observation-domain-id'): int,\n        },\n    },\n    Optional('exporting-processes'): {\n        Any('*'): {\n            'name': str,\n            Optional('destinations'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('destination-address'): str,\n                    Optional('destination-port'): int,\n                    Optional('packets-sent'): int,\n                    Optional('packets-dropped'): int,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_ipfix",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ipfix.py#L44"
+      }
+    }
+  },
+  "show ipsec-ike conn-entry {name}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIpsecConnEntry",
+        "doc": "Parser for IPsec IKE connection entry.",
+        "module_name": "arcos.show_ipsec",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'connections': {\n        Any('*'): {\n            'name': str,\n            Optional('version'): str,\n            Optional('autostartup'): str,\n            Optional('authalg'): str,\n            Optional('encalg'): str,\n            Optional('dh-group'): int,\n            Optional('rekey-time'): int,\n            Optional('spd-entries'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('local-subnets'): list,\n                    Optional('remote-subnets'): list,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_ipsec-ike_conn-entry_name",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ipsec.py#L42"
+      }
+    }
+  },
   "show ipv mld vrf {vrf} groups {group}": {
     "folders": {
       "iosxe": {
@@ -51538,6 +51714,38 @@
         },
         "uid": "show_key_chain_key_detail",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/nxos/show_key_chain.py#L50"
+      }
+    }
+  },
+  "show keychain {name} | display json | nomore": {
+    "folders": {
+      "arcos": {
+        "class": "ShowKeychain",
+        "doc": "Parser for ArcOS keychain operational state (JSON format).\n\nCommands::\n\n    show keychain | display json | nomore\n    show keychain {name} | display json | nomore\n",
+        "module_name": "arcos.show_keychain",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'keychains': {\n        Any('*'): {\n            'name': str,\n            Optional('tolerance'): int,\n            Optional('keys'): {\n                Any('*'): {\n                    'key-id': str,\n                    Optional('secret-key'): str,\n                    Optional('crypto-algorithm'): str,\n                    Optional('send-active'): bool,\n                    Optional('receive-active'): bool,\n                    Optional('send-lifetime'): {\n                        Optional('always'): bool,\n                        Optional('start-time'): str,\n                        Optional('end-time'): str,\n                        Optional('send-and-receive'): bool,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_keychain_name___display_json___nomore",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_keychain.py#L235"
+      }
+    }
+  },
+  "show keychain | display json | nomore": {
+    "folders": {
+      "arcos": {
+        "class": "ShowKeychain",
+        "doc": "Parser for ArcOS keychain operational state (JSON format).\n\nCommands::\n\n    show keychain | display json | nomore\n    show keychain {name} | display json | nomore\n",
+        "module_name": "arcos.show_keychain",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'keychains': {\n        Any('*'): {\n            'name': str,\n            Optional('tolerance'): int,\n            Optional('keys'): {\n                Any('*'): {\n                    'key-id': str,\n                    Optional('secret-key'): str,\n                    Optional('crypto-algorithm'): str,\n                    Optional('send-active'): bool,\n                    Optional('receive-active'): bool,\n                    Optional('send-lifetime'): {\n                        Optional('always'): bool,\n                        Optional('start-time'): str,\n                        Optional('end-time'): str,\n                        Optional('send-and-receive'): bool,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_keychain___display_json___nomore",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_keychain.py#L235"
       }
     }
   },
@@ -58808,6 +59016,38 @@
         },
         "uid": "show_lacp_counters",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/nxos/show_lag.py#L97"
+      }
+    }
+  },
+  "show lacp interface": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLacpInterface",
+        "doc": "Parser for ArcOS ``show lacp interface`` (JSON format).\n\nParses OpenConfig JSON::\n\n    data[\"openconfig-lacp:lacp\"][\"interfaces\"][\"interface\"]\n\nSupports specific bond (``bond1``) or wildcard (``*``).\n",
+        "module_name": "arcos.show_lacp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'interfaces': {\n        Any('*'): {\n            'name': str,\n            Optional('interval'): str,\n            Optional('members'): {\n                Any('*'): {\n                    'interface': str,\n                    Optional('timeout'): str,\n                    Optional('synchronization'): str,\n                    Optional('aggregatable'): bool,\n                    Optional('collecting'): bool,\n                    Optional('distributing'): bool,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_lacp_interface",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_lacp.py#L47"
+      }
+    }
+  },
+  "show lacp interface {bond}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLacpInterface",
+        "doc": "Parser for ArcOS ``show lacp interface`` (JSON format).\n\nParses OpenConfig JSON::\n\n    data[\"openconfig-lacp:lacp\"][\"interfaces\"][\"interface\"]\n\nSupports specific bond (``bond1``) or wildcard (``*``).\n",
+        "module_name": "arcos.show_lacp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'interfaces': {\n        Any('*'): {\n            'name': str,\n            Optional('interval'): str,\n            Optional('members'): {\n                Any('*'): {\n                    'interface': str,\n                    Optional('timeout'): str,\n                    Optional('synchronization'): str,\n                    Optional('aggregatable'): bool,\n                    Optional('collecting'): bool,\n                    Optional('distributing'): bool,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_lacp_interface_bond",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_lacp.py#L47"
       }
     }
   },
@@ -69481,6 +69721,18 @@
   },
   "show lldp interface": {
     "folders": {
+      "arcos": {
+        "class": "ShowLldpInterface",
+        "doc": "Parser for ArcOS ``show lldp interface`` (JSON format).\n\nParses OpenConfig JSON::\n\n    data[\"openconfig-lldp:lldp\"][\"interfaces\"][\"interface\"]\n\nSupports wildcard (``*``) or specific interface name.\n",
+        "module_name": "arcos.show_lldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'interfaces': {\n        Any('*'): {\n            'name': str,\n            Optional('enabled'): bool,\n            Optional('mode'): str,\n            Optional('counters'): {\n                Optional('frame-in'): str,\n                Optional('frame-out'): str,\n                Optional('frame-error-in'): str,\n                Optional('frame-discard'): str,\n                Optional('tlv-discard'): str,\n                Optional('tlv-unknown'): str,\n                Optional('frame-error-out'): str,\n            },\n            Optional('neighbors'): {\n                Any('*'): {\n                    'id': str,\n                    Optional('system-name'): str,\n                    Optional('system-description'): str,\n                    Optional('chassis-id'): str,\n                    Optional('chassis-id-type'): str,\n                    Optional('age'): str,\n                    Optional('port-id'): str,\n                    Optional('port-id-type'): str,\n                    Optional('port-description'): str,\n                    Optional('management-address'): str,\n                    Optional('management-address-type'): str,\n                    Optional('management-address-ipv6'): str,\n                    Optional('management-address-ipv6-type'): str,\n                    Optional('capabilities'): {\n                        Any('*'): {\n                            'name': str,\n                            'enabled': bool,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_lldp_interface",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_lldp.py#L141"
+      },
       "ios": {
         "class": "ShowLldpInterface",
         "doc": "Parser for show lldp interface [<WORD>]",
@@ -69521,6 +69773,18 @@
   },
   "show lldp interface {interface}": {
     "folders": {
+      "arcos": {
+        "class": "ShowLldpInterface",
+        "doc": "Parser for ArcOS ``show lldp interface`` (JSON format).\n\nParses OpenConfig JSON::\n\n    data[\"openconfig-lldp:lldp\"][\"interfaces\"][\"interface\"]\n\nSupports wildcard (``*``) or specific interface name.\n",
+        "module_name": "arcos.show_lldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'interfaces': {\n        Any('*'): {\n            'name': str,\n            Optional('enabled'): bool,\n            Optional('mode'): str,\n            Optional('counters'): {\n                Optional('frame-in'): str,\n                Optional('frame-out'): str,\n                Optional('frame-error-in'): str,\n                Optional('frame-discard'): str,\n                Optional('tlv-discard'): str,\n                Optional('tlv-unknown'): str,\n                Optional('frame-error-out'): str,\n            },\n            Optional('neighbors'): {\n                Any('*'): {\n                    'id': str,\n                    Optional('system-name'): str,\n                    Optional('system-description'): str,\n                    Optional('chassis-id'): str,\n                    Optional('chassis-id-type'): str,\n                    Optional('age'): str,\n                    Optional('port-id'): str,\n                    Optional('port-id-type'): str,\n                    Optional('port-description'): str,\n                    Optional('management-address'): str,\n                    Optional('management-address-type'): str,\n                    Optional('management-address-ipv6'): str,\n                    Optional('management-address-ipv6-type'): str,\n                    Optional('capabilities'): {\n                        Any('*'): {\n                            'name': str,\n                            'enabled': bool,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_lldp_interface_interface",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_lldp.py#L141"
+      },
       "ios": {
         "class": "ShowLldpInterface",
         "doc": "Parser for show lldp interface [<WORD>]",
@@ -69656,6 +69920,22 @@
         },
         "uid": "show_lldp_neighbors_interface_detail",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxe/show_lldp.py#L954"
+      }
+    }
+  },
+  "show lldp state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLldpState",
+        "doc": "Parser for ArcOS ``show lldp state`` (JSON format).\n\nParses OpenConfig JSON::\n\n    data[\"openconfig-lldp:lldp\"][\"state\"]\n",
+        "module_name": "arcos.show_lldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'hello-timer': str,\n    'system-name': str,\n    'system-description': str,\n    Optional('counters'): {\n        Optional('frame-in'): str,\n        Optional('frame-out'): str,\n        Optional('frame-error-in'): str,\n        Optional('frame-discard'): str,\n        Optional('tlv-discard'): str,\n        Optional('tlv-unknown'): str,\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_lldp_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_lldp.py#L49"
       }
     }
   },
@@ -73435,6 +73715,22 @@
       }
     }
   },
+  "show monitor-session": {
+    "folders": {
+      "arcos": {
+        "class": "ShowMonitorSession",
+        "doc": "Parser for monitor session (SPAN) state.",
+        "module_name": "arcos.show_monitor_session",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'sessions': {\n        Any('*'): {\n            'name': str,\n            Optional('enabled'): bool,\n            Optional('source-interfaces'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('direction'): str,\n                },\n            },\n            Optional('destination'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_monitor-session",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_monitor_session.py#L37"
+      }
+    }
+  },
   "show mpls forwarding": {
     "folders": {
       "iosxr": {
@@ -75927,6 +76223,22 @@
       }
     }
   },
+  "show nat instance {instance_id}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowNatInstance",
+        "doc": "Parser for NAT instance state.",
+        "module_name": "arcos.show_nat",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'instances': {\n        Any('*'): {\n            'id': int,\n            Optional('name'): str,\n            Optional('enabled'): bool,\n            Optional('type'): str,\n            Optional('mapping-entries'): {\n                Any('*'): {\n                    'id': int,\n                    Optional('internal-src-address'): str,\n                    Optional('total-packets'): int,\n                    Optional('total-bytes'): int,\n                },\n            },\n            Optional('policies'): {\n                Any('*'): {\n                    'id': int,\n                    Optional('external-interface'): str,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_nat_instance_instance_id",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_nat.py#L46"
+      }
+    }
+  },
   "show nat64 map-t": {
     "folders": {
       "iosxe": {
@@ -76871,6 +77183,166 @@
       }
     }
   },
+  "show network-instance * protocol BGP * global afi-safi * state deaggregation-label": {
+    "folders": {
+      "arcos": {
+        "class": "ShowBgpDeaggregationLabel",
+        "doc": "Parser for BGP deaggregation label state.\n\nCommand::\n\n    show network-instance * protocol BGP * global afi-safi * state deaggregation-label\n",
+        "module_name": "arcos.show_bgp_l3vpn",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('entries'): {\n        Any('*'): {\n            'network-instance': str,\n            'afi-safi': str,\n            Optional('deaggregation-label'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_*_protocol_BGP_*_global_afi-safi_*_state_deaggregation-label",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp_l3vpn.py#L52"
+      }
+    }
+  },
+  "show network-instance default mpls signaling-protocols ldp hello-adjacencies ipv4 hello-adjacency": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLdpHelloAdjacency",
+        "doc": "Parser for ArcOS LDP hello adjacencies (JSON format).",
+        "module_name": "arcos.show_ldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'hello-adjacencies': {\n        Any('*'): {\n            'peer-address': str,\n            Optional('version'): int,\n            Optional('lsr-id'): str,\n            Optional('label-space-id'): int,\n            Optional('transport-address'): str,\n            Optional('source-address'): str,\n            Optional('holdtime'): int,\n            Optional('interface'): str,\n            Optional('uptime'): str,\n            Optional('reset-count'): int,\n            Optional('adjacency-type'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_mpls_signaling-protocols_ldp_hello-adjacencies_ipv4_hello-adjacency",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ldp.py#L256"
+      }
+    }
+  },
+  "show network-instance default mpls signaling-protocols ldp interface-attributes interface": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLdpInterface",
+        "doc": "Parser for ArcOS LDP interface-attributes (JSON format).",
+        "module_name": "arcos.show_ldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'interfaces': {\n        Any('*'): {\n            'interface-id': str,\n            Optional('hello-holdtime'): int,\n            Optional('hello-interval'): int,\n            Optional('link-hello'): bool,\n            Optional('address-families'): {\n                Any('*'): {\n                    'afi-name': str,\n                    'enabled': bool,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_mpls_signaling-protocols_ldp_interface-attributes_interface",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ldp.py#L77"
+      }
+    }
+  },
+  "show network-instance default mpls signaling-protocols ldp neighbor": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLdpNeighbor",
+        "doc": "Parser for ArcOS LDP neighbors (JSON format).",
+        "module_name": "arcos.show_ldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'neighbors': {\n        Any('*'): {\n            'lsr-id': str,\n            'label-space-id': int,\n            Optional('auth-enable'): bool,\n            Optional('maximum-remote-binding'): int,\n            Optional('targeted-hello-holdtime'): int,\n            Optional('targeted-hello-interval'): int,\n            Optional('targeted-address-families'): {\n                Any('*'): {\n                    'afi-name': str,\n                    Optional('enabled'): bool,\n                    Optional('destination-address'): str,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_mpls_signaling-protocols_ldp_neighbor",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ldp.py#L343"
+      }
+    }
+  },
+  "show network-instance default mpls signaling-protocols ldp sessions ipv4 session": {
+    "folders": {
+      "arcos": {
+        "class": "ShowLdpSession",
+        "doc": "Parser for ArcOS LDP sessions (JSON format).",
+        "module_name": "arcos.show_ldp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'sessions': {\n        Any('*'): {\n            'peer-address': str,\n            Optional('local-address'): str,\n            Optional('session-state'): str,\n            Optional('session-role'): str,\n            Optional('keepalive-timeout'): int,\n            Optional('keepalive-interval'): int,\n            Optional('local-lsr-id'): str,\n            Optional('local-label-space-id'): int,\n            Optional('remote-lsr-id'): str,\n            Optional('remote-label-space-id'): int,\n            Optional('graceful-restart'): str,\n            Optional('graceful-restart-state'): str,\n            Optional('reconnect-time'): int,\n            Optional('recovery-time'): int,\n            Optional('forwarding-holdtime'): int,\n            Optional('last-update-timestamp'): str,\n            Optional('last-established-time'): str,\n            Optional('uptime'): str,\n            Optional('reset-count'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_mpls_signaling-protocols_ldp_sessions_ipv4_session",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ldp.py#L171"
+      }
+    }
+  },
+  "show network-instance default protocol BGP default global afi-safi L2VPN_EVPN vpws": {
+    "folders": {
+      "arcos": {
+        "class": "ShowEvpnVpws",
+        "doc": "Parser for EVPN VPWS services summary.",
+        "module_name": "arcos.show_evpn_vpws",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('vpws-services'): {\n        Any('*'): {\n            'network-instance': str,\n            Optional('evi'): int,\n            Optional('local-service-id'): int,\n            Optional('remote-service-id'): int,\n            Optional('control-word'): bool,\n            Optional('link-loss-forwarding'): bool,\n            Optional('oper-status'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_protocol_BGP_default_global_afi-safi_L2VPN_EVPN_vpws",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_evpn_vpws.py#L37"
+      }
+    }
+  },
+  "show network-instance default protocol BGP default rib afi-safi {afi_safi} network-instance {vrf_name} exported-rib route": {
+    "folders": {
+      "arcos": {
+        "class": "ShowBgpVpnExportedRoutes",
+        "doc": "Parser for BGP VPN exported routes.\n\nCommand::\n\n    show network-instance default protocol BGP default rib\n        afi-safi {afi_safi} network-instance {vrf} exported-rib route\n",
+        "module_name": "arcos.show_bgp_l3vpn",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('routes'): {\n        Any('*'): {\n            'prefix': str,\n            Optional('network-instance'): str,\n            Optional('path-id'): int,\n            Optional('next-hop'): str,\n            Optional('local-label'): int,\n            Optional('remote-label'): int,\n            Optional('path-types'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_protocol_BGP_default_rib_afi-safi_afi_safi_network-instance_vrf_name_exported-rib_route",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp_l3vpn.py#L134"
+      }
+    }
+  },
+  "show network-instance default sr-policy database policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrPolicyDatabasePolicy",
+        "doc": "Parser for ``show network-instance default sr-policy database policy``.",
+        "module_name": "arcos.show_sr_policy",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'policies': {\n        Any('*'): {\n            'endpoint': str,\n            'color': int,\n            Optional('oper-state'): str,\n            Optional('transition-count'): int,\n            Optional('up-time'): str,\n            Optional('down-time'): str,\n            Optional('candidate-paths'): {\n                Any('*'): {\n                    'protocol-origin': str,\n                    'originator': str,\n                    'discriminator': int,\n                    Optional('preference'): int,\n                    Optional('type'): str,\n                    Optional('best-candidate-path'): bool,\n                    Optional('valid'): bool,\n                    Optional('segment-lists'): list,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_sr-policy_database_policy",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_sr_policy.py#L288"
+      }
+    }
+  },
+  "show network-instance default sr-policy policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrPolicyPolicy",
+        "doc": "Parser for ``show network-instance default sr-policy policy``.",
+        "module_name": "arcos.show_sr_policy",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'policies': {\n        Any('*'): {\n            'endpoint': str,\n            'color': int,\n            Optional('name'): str,\n            Optional('description'): str,\n            Optional('enabled'): bool,\n            Optional('priority'): int,\n            Optional('candidate-paths'): {\n                Any('*'): {\n                    'discriminator': int,\n                    Optional('preference'): int,\n                    Optional('type'): str,\n                    Optional('originator-as'): int,\n                    Optional('originator-address'): str,\n                    Optional('explicit-segment-lists'): list,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_sr-policy_policy",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_sr_policy.py#L169"
+      }
+    }
+  },
+  "show network-instance default sr-policy segment-list": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSrPolicySegmentList",
+        "doc": "Parser for ``show network-instance default sr-policy segment-list``.",
+        "module_name": "arcos.show_sr_policy",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'segment-lists': {\n        Any('*'): {\n            'name': str,\n            Optional('index'): int,\n            Optional('segments'): {\n                Any('*'): {\n                    'index': int,\n                    Optional('type'): str,\n                    Optional('validate'): bool,\n                    Optional('mpls-label'): int,\n                    Optional('srv6-sid'): str,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_default_sr-policy_segment-list",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_sr_policy.py#L64"
+      }
+    }
+  },
   "show network-instance {instance} srv6 locator": {
     "folders": {
       "arcos": {
@@ -77139,7 +77611,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_global_afi-safi",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L454"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L451"
       }
     }
   },
@@ -77155,7 +77627,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_global_state",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L309"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L306"
       }
     }
   },
@@ -77166,12 +77638,12 @@
         "doc": "Parser for ArcOS ``show bgp neighbor`` (JSON format).\n\nThe parser expects OpenConfig JSON of the form::\n\n    data[\"openconfig-network-instance:network-instances\"]\n        [\"network-instance\"][0][\"protocols\"][\"protocol\"][BGP]\n        [\"bgp\"][\"neighbors\"][\"neighbor\"][]\n\nEach neighbor entry contains state, transport, and optional afi-safis.\nNamespace prefixes (``arcos-openconfig-bgp-augments:``,\n``openconfig-bgp-types:``, ``openconfig-policy-types:``) are stripped\nfrom keys and values.\n\nWhen no explicit output is provided, the parser runs::\n\n    show network-instance {network_instance} protocol BGP\n        {protocol_instance} neighbor [<neighbor>] | display json | nomore\n",
         "module_name": "arcos.show_bgp",
         "package": "genie.libs.parser",
-        "schema": "{\n    Optional('neighbors'): {\n        Any('*'): {\n            Optional('neighbor-address'): str,\n            Optional('peer-group'): str,\n            Optional('enabled'): bool,\n            Optional('peer-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('local-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('peer-type'): str,\n            Optional('session-state'): str,\n            Optional('description'): str,\n            Optional('established-transitions'): Or (<class 'str'>, <class 'int'>),\n            Optional('remote-router-id'): str,\n            Optional('shutdown'): bool,\n            Optional('shutdown-reason'): str,\n            Optional('last-reset-reason'): str,\n            Optional('session-elapsed-time'): str,\n            Optional('last-established'): str,\n            Optional('messages-sent'): {\n                Optional('UPDATE'): Or (<class 'str'>, <class 'int'>),\n                Optional('NOTIFICATION'): Or (<class 'str'>, <class 'int'>),\n                Optional('KEEPALIVE'): Or (<class 'str'>, <class 'int'>),\n                Optional('total'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('messages-received'): {\n                Optional('UPDATE'): Or (<class 'str'>, <class 'int'>),\n                Optional('NOTIFICATION'): Or (<class 'str'>, <class 'int'>),\n                Optional('KEEPALIVE'): Or (<class 'str'>, <class 'int'>),\n                Optional('total'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('transport'): {\n                Optional('local-address'): str,\n                Optional('local-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('remote-address'): str,\n                Optional('remote-port'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('afi-safis'): list,\n        },\n    },\n}",
+        "schema": "{\n    Optional('neighbors'): {\n        Any('*'): {\n            Optional('neighbor-address'): str,\n            Optional('peer-group'): str,\n            Optional('enabled'): bool,\n            Optional('peer-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('local-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('peer-type'): str,\n            Optional('session-state'): str,\n            Optional('description'): str,\n            Optional('established-transitions'): Or (<class 'str'>, <class 'int'>),\n            Optional('remote-router-id'): str,\n            Optional('shutdown'): bool,\n            Optional('shutdown-reason'): str,\n            Optional('last-reset-reason'): str,\n            Optional('session-elapsed-time'): str,\n            Optional('last-established'): str,\n            Optional('messages-sent'): {\n                Any('*'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('messages-received'): {\n                Any('*'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('transport'): {\n                Optional('local-address'): str,\n                Optional('local-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('remote-address'): str,\n                Optional('remote-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('passive-mode'): Or (<class 'str'>, <class 'bool'>),\n                Optional('negotiated-tcp-mss'): Or (<class 'str'>, <class 'int'>),\n                Optional('mtu-discovery'): Or (<class 'str'>, <class 'bool'>),\n            },\n            Optional('afi-safis'): list,\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_neighbor",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L71"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L68"
       }
     }
   },
@@ -77182,12 +77654,12 @@
         "doc": "Parser for ArcOS ``show bgp neighbor`` (JSON format).\n\nThe parser expects OpenConfig JSON of the form::\n\n    data[\"openconfig-network-instance:network-instances\"]\n        [\"network-instance\"][0][\"protocols\"][\"protocol\"][BGP]\n        [\"bgp\"][\"neighbors\"][\"neighbor\"][]\n\nEach neighbor entry contains state, transport, and optional afi-safis.\nNamespace prefixes (``arcos-openconfig-bgp-augments:``,\n``openconfig-bgp-types:``, ``openconfig-policy-types:``) are stripped\nfrom keys and values.\n\nWhen no explicit output is provided, the parser runs::\n\n    show network-instance {network_instance} protocol BGP\n        {protocol_instance} neighbor [<neighbor>] | display json | nomore\n",
         "module_name": "arcos.show_bgp",
         "package": "genie.libs.parser",
-        "schema": "{\n    Optional('neighbors'): {\n        Any('*'): {\n            Optional('neighbor-address'): str,\n            Optional('peer-group'): str,\n            Optional('enabled'): bool,\n            Optional('peer-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('local-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('peer-type'): str,\n            Optional('session-state'): str,\n            Optional('description'): str,\n            Optional('established-transitions'): Or (<class 'str'>, <class 'int'>),\n            Optional('remote-router-id'): str,\n            Optional('shutdown'): bool,\n            Optional('shutdown-reason'): str,\n            Optional('last-reset-reason'): str,\n            Optional('session-elapsed-time'): str,\n            Optional('last-established'): str,\n            Optional('messages-sent'): {\n                Optional('UPDATE'): Or (<class 'str'>, <class 'int'>),\n                Optional('NOTIFICATION'): Or (<class 'str'>, <class 'int'>),\n                Optional('KEEPALIVE'): Or (<class 'str'>, <class 'int'>),\n                Optional('total'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('messages-received'): {\n                Optional('UPDATE'): Or (<class 'str'>, <class 'int'>),\n                Optional('NOTIFICATION'): Or (<class 'str'>, <class 'int'>),\n                Optional('KEEPALIVE'): Or (<class 'str'>, <class 'int'>),\n                Optional('total'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('transport'): {\n                Optional('local-address'): str,\n                Optional('local-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('remote-address'): str,\n                Optional('remote-port'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('afi-safis'): list,\n        },\n    },\n}",
+        "schema": "{\n    Optional('neighbors'): {\n        Any('*'): {\n            Optional('neighbor-address'): str,\n            Optional('peer-group'): str,\n            Optional('enabled'): bool,\n            Optional('peer-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('local-as'): Or (<class 'str'>, <class 'int'>),\n            Optional('peer-type'): str,\n            Optional('session-state'): str,\n            Optional('description'): str,\n            Optional('established-transitions'): Or (<class 'str'>, <class 'int'>),\n            Optional('remote-router-id'): str,\n            Optional('shutdown'): bool,\n            Optional('shutdown-reason'): str,\n            Optional('last-reset-reason'): str,\n            Optional('session-elapsed-time'): str,\n            Optional('last-established'): str,\n            Optional('messages-sent'): {\n                Any('*'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('messages-received'): {\n                Any('*'): Or (<class 'str'>, <class 'int'>),\n            },\n            Optional('transport'): {\n                Optional('local-address'): str,\n                Optional('local-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('remote-address'): str,\n                Optional('remote-port'): Or (<class 'str'>, <class 'int'>),\n                Optional('passive-mode'): Or (<class 'str'>, <class 'bool'>),\n                Optional('negotiated-tcp-mss'): Or (<class 'str'>, <class 'int'>),\n                Optional('mtu-discovery'): Or (<class 'str'>, <class 'bool'>),\n            },\n            Optional('afi-safis'): list,\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_neighbor_neighbor",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L71"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L68"
       }
     }
   },
@@ -77203,7 +77675,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_rib_afi-safi_afi_safi_loc-rib_route",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L608"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L605"
       }
     }
   },
@@ -77219,7 +77691,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_BGP_protocol_instance_rib_afi-safi_afi_safi_loc-rib_route_prefix",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L608"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L605"
       }
     }
   },
@@ -77235,7 +77707,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_fast-reroute",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3854"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3874"
       }
     }
   },
@@ -77251,7 +77723,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_flexible-algorithm_algo_fast-reroute",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4035"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4055"
       }
     }
   },
@@ -77267,7 +77739,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_flexible-algorithm_algo_route",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4220"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4240"
       }
     }
   },
@@ -77283,7 +77755,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_redistribute-route",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3559"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3579"
       }
     }
   },
@@ -77299,7 +77771,23 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_route",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3361"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3380"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route {prefix}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisRoute",
+        "doc": "Parser for ArcOS ISIS routes command (JSON format).\n\nCommand pattern (before JSON pipe)::\n\n    show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route [<prefix>]\n",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'network-instance': {\n        Any('*'): {\n            'isis': {\n                Any('*'): {\n                    Optional('routes'): {\n                        Any('*'): {\n                            'afi-name': str,\n                            'safi-name': str,\n                            'routes': {\n                                Any('*'): {\n                                    'prefix': str,\n                                    'best-level-number': int,\n                                    Optional('levels'): dict,\n                                },\n                            },\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_af_afi_UNICAST_route_prefix",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3380"
       }
     }
   },
@@ -77315,7 +77803,23 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_mpls",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4495"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4515"
+      }
+    }
+  },
+  "show network-instance {network_instance} protocol ISIS {protocol_instance} global protection-tracker": {
+    "folders": {
+      "arcos": {
+        "class": "ShowIsisProtectionTracker",
+        "doc": "Parser for ArcOS ISIS global protection-tracker command (JSON format).\n\nCommand pattern (before JSON pipe)::\n\n    show network-instance {network_instance} protocol ISIS {protocol_instance} global protection-tracker\n\nThe parser flattens the OpenConfig ``state`` wrapper, strips the\n``arcos-openconfig-isis-augments:`` augment prefix from container keys,\nand keys the protection-tracker list by ``id`` for deterministic lookup.\nEmpty data (``{\"data\": {}}``) is normalized to an empty result dict.\n",
+        "module_name": "arcos.show_isis",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'network-instance': {\n        Any('*'): {\n            'isis': {\n                Any('*'): {\n                    Optional('global'): {\n                        Optional('protection-trackers'): {\n                            Optional('protection-tracker'): {\n                                Any('*'): {\n                                    Optional('id'): Or (<class 'str'>, <class 'int'>),\n                                    Optional('reference-count'): int,\n                                    Optional('interface'): str,\n                                    Optional('system-id'): str,\n                                    Optional('last-updated-time'): str,\n                                    Optional('bfd-source'): str,\n                                    Optional('bfd-destination'): str,\n                                    Optional('bfd-session-id'): Or (<class 'str'>, <class 'int'>),\n                                },\n                            },\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_protection-tracker",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L5494"
       }
     }
   },
@@ -77331,7 +77835,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_spf-log",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L5129"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L5149"
       }
     }
   },
@@ -77347,7 +77851,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_state",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3717"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L3737"
       }
     }
   },
@@ -77363,7 +77867,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_global_timers",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L5345"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L5365"
       }
     }
   },
@@ -77374,7 +77878,7 @@
         "doc": "Parser for ArcOS ISIS interface command (JSON format).\n\nConvention-compliant rewrite: underscored keys, flattened state/config,\nall fields Optional, all prefixes stripped.\n\nCommand pattern (before JSON pipe)::\n\n    show network-instance {network_instance} protocol ISIS\n        {protocol_instance} interface [<interface>]\n",
         "module_name": "arcos.show_isis",
         "package": "genie.libs.parser",
-        "schema": "{\n    'network-instance': {\n        Any('*'): {\n            Optional('isis'): {\n                Any('*'): {\n                    Optional('interfaces'): {\n                        Any('*'): {\n                            Optional('enabled'): bool,\n                            Optional('interface-id'): str,\n                            Optional('passive'): bool,\n                            Optional('hello-padding'): str,\n                            Optional('circuit-type'): str,\n                            Optional('network-type'): str,\n                            Optional('protocol-up'): bool,\n                            Optional('snpa'): str,\n                            Optional('mtu'): int,\n                            Optional('ifindex'): int,\n                            Optional('update-index'): int,\n                            Optional('speed'): int,\n                            Optional('circuit-counters'): {\n                                Optional('adj-changes'): int,\n                                Optional('init-fails'): int,\n                                Optional('rejected-adj'): int,\n                                Optional('id-field-len-mismatches'): int,\n                                Optional('max-area-address-mismatches'): int,\n                                Optional('auth-type-fails'): int,\n                                Optional('auth-fails'): int,\n                                Optional('lan-dis-changes'): int,\n                                Optional('adj-number'): int,\n                                Optional('subnet-mismatches'): int,\n                                Optional('duplicate-addresses'): int,\n                                Optional('martian-addresses'): int,\n                                Optional('missing-addresses'): int,\n                            },\n                            Optional('authentication'): {\n                                Optional('hello-authentication'): bool,\n                                Optional('auth-type'): str,\n                                Optional('crypto-algorithm'): str,\n                            },\n                            Optional('afi-safi'): {\n                                Any('*'): {\n                                    Optional('afi-name'): str,\n                                    Optional('safi-name'): str,\n                                    Optional('enabled'): bool,\n                                    Optional('ipv4-unnumbered'): bool,\n                                    Optional('fast-reroute'): {\n                                        Optional('ip-enabled'): bool,\n                                        Optional('ti-lfa-srv6-enabled'): bool,\n                                        Optional('ti-lfa-sr-mpls-enabled'): bool,\n                                    },\n                                },\n                            },\n                            Optional('timers'): {\n                                Optional('csnp-interval'): int,\n                                Optional('lsp-pacing-interval'): int,\n                                Optional('hello-interval'): int,\n                                Optional('hello-multiplier'): int,\n                            },\n                            Optional('bfd'): {\n                                Optional('bfd-tlv'): bool,\n                                Optional('profile'): str,\n                            },\n                            Optional('fast-reroute'): {\n                                Optional('srv6-enabled'): bool,\n                                Optional('tiebreakers'): {\n                                    Optional('srlg-disjoint'): {\n                                        Optional('priority'): int,\n                                    },\n                                    Optional('node-protecting'): {\n                                        Optional('priority'): int,\n                                    },\n                                },\n                            },\n                            Optional('flexible-algorithm'): {\n                                Optional('admin-groups'): list,\n                            },\n                            Optional('csnp-enabled'): bool,\n                            Optional('mpls-ldp-sync-enabled'): bool,\n                            Optional('levels'): {\n                                Any('*'): {\n                                    Optional('enabled'): bool,\n                                    Optional('priority'): int,\n                                    Optional('metric'): int,\n                                    Optional('flexible-algorithm'): {\n                                        Optional('te-metric'): int,\n                                        Optional('delay-metric'): int,\n                                    },\n                                    Optional('packet-counters'): {\n                                        Any('*'): {\n                                            Optional('received'): int,\n                                            Optional('processed'): int,\n                                            Optional('dropped'): int,\n                                            Optional('sent'): int,\n                                            Optional('retransmit'): int,\n                                            Optional('no-memory'): int,\n                                        },\n                                    },\n                                    Optional('hello-authentication'): {\n                                        Optional('hello-authentication'): bool,\n                                        Optional('auth-type'): str,\n                                        Optional('crypto-algorithm'): str,\n                                    },\n                                    Optional('adjacencies'): {\n                                        Any('*'): {\n                                            Optional('system-id'): str,\n                                            Optional('neighbor-ipv4-address'): str,\n                                            Optional('neighbor-ipv6-address'): str,\n                                            Optional('local-extended-circuit-id'): int,\n                                            Optional('neighbor-extended-circuit-id'): int,\n                                            Optional('neighbor-circuit-type'): str,\n                                            Optional('adjacency-type'): str,\n                                            Optional('adjacency-state'): str,\n                                            Optional('remaining-hold-time'): int,\n                                            Optional('up-time'): int,\n                                            Optional('adjacency-up-time'): str,\n                                            Optional('num-state-changes'): int,\n                                            Optional('last-state-change-timestamp'): str,\n                                            Optional('last-down-reason'): str,\n                                            Optional('restart-support'): bool,\n                                            Optional('restart-suppress'): bool,\n                                            Optional('restart-status'): bool,\n                                            Optional('nlpid'): list,\n                                            Optional('usable'): bool,\n                                            Optional('restart-ack'): bool,\n                                            Optional('restart-request'): bool,\n                                            Optional('received-multi-topology-ids'): list,\n                                            Optional('active-multi-topology-ids'): list,\n                                            Optional('bfd'): {\n                                                Optional('bfd-required'): bool,\n                                                Optional('topologies'): {\n                                                    Any('*'): {\n                                                        Optional('mt-id'): int,\n                                                        Optional('ipv4-bfd-required'): bool,\n                                                        Optional('ipv6-bfd-required'): bool,\n                                                        Optional('bfd-required'): bool,\n                                                        Optional('ipv4-bfd-up'): bool,\n                                                        Optional('ipv6-bfd-up'): bool,\n                                                        Optional('ipv4-up'): bool,\n                                                        Optional('ipv6-up'): bool,\n                                                        Optional('usable'): bool,\n                                                    },\n                                                },\n                                            },\n                                            Optional('dynamic-delay-measurement'): {\n                                                Optional('enabled'): bool,\n                                                Optional('num-advertisements-sent'): int,\n                                                Optional('last-sampled-avg-delay-value'): int,\n                                                Optional('last-advertised-min-delay-value'): int,\n                                                Optional('last-advertised-max-delay-value'): int,\n                                                Optional('last-advertised-timestamp'): str,\n                                                Optional('last-advertisement-reason'): str,\n                                            },\n                                        },\n                                    },\n                                },\n                            },\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "schema": "{\n    'network-instance': {\n        Any('*'): {\n            Optional('isis'): {\n                Any('*'): {\n                    Optional('interfaces'): {\n                        Any('*'): {\n                            Optional('enabled'): bool,\n                            Optional('interface_id'): str,\n                            Optional('passive'): bool,\n                            Optional('hello_padding'): str,\n                            Optional('circuit_type'): str,\n                            Optional('network_type'): str,\n                            Optional('protocol_up'): bool,\n                            Optional('snpa'): str,\n                            Optional('mtu'): int,\n                            Optional('ifindex'): int,\n                            Optional('update_index'): int,\n                            Optional('speed'): int,\n                            Optional('circuit_counters'): {\n                                Optional('adj_changes'): int,\n                                Optional('init_fails'): int,\n                                Optional('rejected_adj'): int,\n                                Optional('id_field_len_mismatches'): int,\n                                Optional('max_area_address_mismatches'): int,\n                                Optional('auth_type_fails'): int,\n                                Optional('auth_fails'): int,\n                                Optional('lan_dis_changes'): int,\n                                Optional('adj_number'): int,\n                                Optional('subnet_mismatches'): int,\n                                Optional('duplicate_addresses'): int,\n                                Optional('martian_addresses'): int,\n                                Optional('missing_addresses'): int,\n                            },\n                            Optional('authentication'): {\n                                Optional('hello_authentication'): bool,\n                                Optional('auth_type'): str,\n                                Optional('crypto_algorithm'): str,\n                            },\n                            Optional('afi_safi'): {\n                                Any('*'): {\n                                    Optional('afi_name'): str,\n                                    Optional('safi_name'): str,\n                                    Optional('enabled'): bool,\n                                    Optional('ipv4_unnumbered'): bool,\n                                    Optional('fast_reroute'): {\n                                        Optional('ip_enabled'): bool,\n                                        Optional('ti_lfa_srv6_enabled'): bool,\n                                        Optional('ti_lfa_sr_mpls_enabled'): bool,\n                                    },\n                                },\n                            },\n                            Optional('timers'): {\n                                Optional('csnp_interval'): int,\n                                Optional('lsp_pacing_interval'): int,\n                                Optional('hello_interval'): int,\n                                Optional('hello_multiplier'): int,\n                            },\n                            Optional('bfd'): {\n                                Optional('bfd_tlv'): bool,\n                                Optional('profile'): str,\n                            },\n                            Optional('fast_reroute'): {\n                                Optional('srv6_enabled'): bool,\n                                Optional('tiebreakers'): {\n                                    Optional('srlg_disjoint'): {\n                                        Optional('priority'): int,\n                                    },\n                                    Optional('node_protecting'): {\n                                        Optional('priority'): int,\n                                    },\n                                },\n                            },\n                            Optional('flexible_algorithm'): {\n                                Optional('admin_groups'): list,\n                            },\n                            Optional('csnp_enabled'): bool,\n                            Optional('mpls_ldp_sync_enabled'): bool,\n                            Optional('levels'): {\n                                Any('*'): {\n                                    Optional('enabled'): bool,\n                                    Optional('priority'): int,\n                                    Optional('metric'): int,\n                                    Optional('flexible_algorithm'): {\n                                        Optional('te_metric'): int,\n                                        Optional('delay_metric'): int,\n                                    },\n                                    Optional('packet_counters'): {\n                                        Any('*'): {\n                                            Optional('received'): int,\n                                            Optional('processed'): int,\n                                            Optional('dropped'): int,\n                                            Optional('sent'): int,\n                                            Optional('retransmit'): int,\n                                            Optional('no_memory'): int,\n                                        },\n                                    },\n                                    Optional('hello_authentication'): {\n                                        Optional('hello_authentication'): bool,\n                                        Optional('auth_type'): str,\n                                        Optional('crypto_algorithm'): str,\n                                    },\n                                    Optional('adjacencies'): {\n                                        Any('*'): {\n                                            Optional('system_id'): str,\n                                            Optional('neighbor_ipv4_address'): str,\n                                            Optional('neighbor_ipv6_address'): str,\n                                            Optional('local_extended_circuit_id'): int,\n                                            Optional('neighbor_extended_circuit_id'): int,\n                                            Optional('neighbor_circuit_type'): str,\n                                            Optional('adjacency_type'): str,\n                                            Optional('adjacency_state'): str,\n                                            Optional('remaining_hold_time'): int,\n                                            Optional('up_time'): int,\n                                            Optional('adjacency_up_time'): str,\n                                            Optional('num_state_changes'): int,\n                                            Optional('last_state_change_timestamp'): str,\n                                            Optional('last_down_reason'): str,\n                                            Optional('restart_support'): bool,\n                                            Optional('restart_suppress'): bool,\n                                            Optional('restart_status'): bool,\n                                            Optional('nlpid'): list,\n                                            Optional('usable'): bool,\n                                            Optional('restart_ack'): bool,\n                                            Optional('restart_request'): bool,\n                                            Optional('received_multi_topology_ids'): list,\n                                            Optional('active_multi_topology_ids'): list,\n                                            Optional('bfd'): {\n                                                Optional('bfd_required'): bool,\n                                                Optional('topologies'): {\n                                                    Any('*'): {\n                                                        Optional('mt_id'): int,\n                                                        Optional('ipv4_bfd_required'): bool,\n                                                        Optional('ipv6_bfd_required'): bool,\n                                                        Optional('bfd_required'): bool,\n                                                        Optional('ipv4_bfd_up'): bool,\n                                                        Optional('ipv6_bfd_up'): bool,\n                                                        Optional('ipv4_up'): bool,\n                                                        Optional('ipv6_up'): bool,\n                                                        Optional('usable'): bool,\n                                                    },\n                                                },\n                                            },\n                                            Optional('dynamic_delay_measurement'): {\n                                                Optional('enabled'): bool,\n                                                Optional('num_advertisements_sent'): int,\n                                                Optional('last_sampled_avg_delay_value'): int,\n                                                Optional('last_advertised_min_delay_value'): int,\n                                                Optional('last_advertised_max_delay_value'): int,\n                                                Optional('last_advertised_timestamp'): str,\n                                                Optional('last_advertisement_reason'): str,\n                                            },\n                                        },\n                                    },\n                                },\n                            },\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
@@ -77427,7 +77931,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_level_level_state",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4772"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4792"
       }
     }
   },
@@ -77443,7 +77947,7 @@
           "os": "arcos"
         },
         "uid": "show_network-instance_network_instance_protocol_ISIS_protocol_instance_level_level_system-level-counters",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4952"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L4972"
       }
     }
   },
@@ -77572,6 +78076,326 @@
         },
         "uid": "show_network-instance_network_instance_rib_af_ipv6-label-entries_entry_label",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_rib.py#L457"
+      }
+    }
+  },
+  "show network-instance {network_instance} te admin-group": {
+    "folders": {
+      "arcos": {
+        "class": "ShowTeAdminGroup",
+        "doc": "Parser for ArcOS ``show te admin-group`` (JSON format).\n\nThe parser expects OpenConfig JSON of the form::\n\n    data[\"openconfig-network-instance:network-instances\"]\n        [\"network-instance\"][0][\"arcos-te:te\"]\n        [\"admin-groups\"][\"admin-group\"][]\n\nEach admin-group entry's ``state`` fields are flattened.\nThe ``arcos-te:`` namespace prefix is stripped during parsing.\n\nWhen no explicit output is provided, the parser runs::\n\n    show network-instance {network_instance} te admin-group\n        | display json | nomore\n",
+        "module_name": "arcos.show_te",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('network-instance'): {\n        Any('*'): {\n            Optional('admin-groups'): {\n                Any('*'): {\n                    Optional('name'): str,\n                    Optional('bit-position'): Or (<class 'str'>, <class 'int'>),\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_network_instance_te_admin-group",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_te.py#L40"
+      }
+    }
+  },
+  "show network-instance {ni} l2rib mac-entries": {
+    "folders": {
+      "arcos": {
+        "class": "ShowL2ribMacEntries",
+        "doc": "Parser for L2RIB MAC entries.",
+        "module_name": "arcos.show_evpn_mpls",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('mac-entries'): {\n        Any('*'): {\n            'mac-address': str,\n            Optional('origin'): str,\n            Optional('esi'): str,\n            Optional('next-hop'): str,\n            Optional('label'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_l2rib_mac-entries",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_evpn_mpls.py#L142"
+      }
+    }
+  },
+  "show network-instance {ni} l2rib vpws-evi-entries": {
+    "folders": {
+      "arcos": {
+        "class": "ShowL2ribVpwsEviEntries",
+        "doc": "Parser for L2RIB VPWS EVI entries.",
+        "module_name": "arcos.show_evpn_vpws",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('vpws-evi-entries'): {\n        Any('*'): {\n            Optional('evi'): int,\n            Optional('ingress-label'): int,\n            Optional('esi'): str,\n            Optional('control-word'): bool,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_l2rib_vpws-evi-entries",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_evpn_vpws.py#L116"
+      }
+    }
+  },
+  "show network-instance {ni} protocol BGP {instance} global mpls label-db": {
+    "folders": {
+      "arcos": {
+        "class": "ShowBgpLabelDb",
+        "doc": "Parser for BGP MPLS label database.\n\nParses output of::\n\n    show network-instance {ni} protocol BGP {instance} global mpls label-db\n",
+        "module_name": "arcos.show_bgp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('labels'): {\n        Any('*'): {\n            'label': int,\n            Optional('prefix'): str,\n            Optional('afi-safi'): str,\n            Optional('neighbor'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_BGP_instance_global_mpls_label-db",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L1342"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} area state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfArea",
+        "doc": "Parser for OSPF area state.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF {instance} area state\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            Optional('identifier'): int,\n            Optional('area-type'): str,\n            Optional('advertise-summary-lsas'): bool,\n            Optional('stub-default-cost'): int,\n            Optional('configured-interface-count'): int,\n            Optional('up-interface-count'): int,\n            Optional('neighbor-count'): int,\n            Optional('exchange-neighbor-count'): int,\n            Optional('loading-neighbor-count'): int,\n            Optional('full-neighbor-count'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_area_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L276"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} area {area} interface * neighbor": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfNeighbor",
+        "doc": "Parser for OSPF neighbors (per-area).",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'neighbors': {\n        Any('*'): {\n            'area': int,\n            'interface': str,\n            'neighbor-router-id': str,\n            Optional('neighbor-ip-address'): str,\n            Optional('adjacency-state'): str,\n            Optional('priority'): int,\n            Optional('optional-capabilities'): str,\n            Optional('database-exchange-mtu'): int,\n            Optional('last-established-exstart-timestamp'): str,\n            Optional('last-established-full-timestamp'): str,\n            Optional('next-dead-timer-expiry-timestamp'): str,\n            Optional('next-dead-timer-expiry-remaining-time'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_area_area_interface_*_neighbor",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L151"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} area {area} interface state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfInterface",
+        "doc": "Parser for OSPF interface state.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF {instance}\n        area {area} interface state\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            'interfaces': {\n                Any('*'): {\n                    Optional('id'): str,\n                    Optional('network-type'): str,\n                    Optional('priority'): int,\n                    Optional('metric'): int,\n                    Optional('passive'): bool,\n                    Optional('ignore-mtu'): bool,\n                    Optional('interface-up'): bool,\n                    Optional('interface-state'): str,\n                    Optional('local-ip-address'): str,\n                    Optional('mtu'): int,\n                    Optional('speed'): Or (<class 'str'>, <class 'int'>),\n                    Optional('neighbor-count'): int,\n                    Optional('exchange-neighbor-count'): int,\n                    Optional('loading-neighbor-count'): int,\n                    Optional('full-neighbor-count'): int,\n                    Optional('authentication'): {\n                        Optional('auth-type'): str,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_area_area_interface_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L377"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} area {area} lsdb": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfLsdb",
+        "doc": "Parser for OSPF LSDB.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF {instance}\n        area {area} lsdb\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            Optional('lsa-types'): {\n                Any('*'): {\n                    Optional('type'): str,\n                    Optional('lsas'): {\n                        Any('*'): {\n                            Optional('link-state-id'): str,\n                            Optional('advertising-router'): str,\n                            Optional('sequence-number'): str,\n                            Optional('checksum'): int,\n                            Optional('age'): int,\n                            Optional('router-lsa'): {\n                                Optional('flags'): str,\n                                Optional('num-links'): int,\n                                Optional('links'): {\n                                    Any('*'): {\n                                        Optional('type'): str,\n                                        Optional('link-id'): str,\n                                        Optional('link-data'): str,\n                                        Optional('metric'): int,\n                                    },\n                                },\n                            },\n                            Optional('summary-lsa'): {\n                                Optional('network-mask'): int,\n                                Optional('metric'): int,\n                            },\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_area_area_lsdb",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L587"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} global rib prefix": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfGlobalRib",
+        "doc": "Parser for OSPF Global RIB prefix output.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF {instance} global rib prefix\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'routes': {\n        Any('*'): {\n            'prefix': str,\n            Optional('path-count'): int,\n            Optional('route-flags'): list,\n            Optional('path-type'): str,\n            Optional('raw-path-type'): str,\n            Optional('area'): str,\n            Optional('metric'): int,\n            Optional('path-flags'): list,\n            Optional('received-lsa'): {\n                Optional('lsa-type'): str,\n                Optional('link-state-id'): str,\n                Optional('advertising-router'): str,\n            },\n            Optional('self-originated-lsa'): {\n                Optional('lsa-type'): str,\n                Optional('link-state-id'): str,\n                Optional('advertising-router'): str,\n            },\n            Optional('nexthop-set'): {\n                Optional('nexthop-set-id'): int,\n                Optional('nexthop-count'): int,\n                Optional('reference-count'): int,\n            },\n            Optional('next-hops'): list,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_global_rib_prefix",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L953"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} global spf throttle": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfSpfThrottle",
+        "doc": "Parser for OSPF SPF throttle timers.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF {instance}\n        global spf throttle\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('spf-initial-delay'): int,\n    Optional('spf-short-delay'): int,\n    Optional('spf-long-delay'): int,\n    Optional('time-to-learn-interval'): int,\n    Optional('holddown-interval'): int,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_global_spf_throttle",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L490"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF {instance} global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfGlobal",
+        "doc": "Parser for OSPF global state.",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'router-id': str,\n    Optional('log-adjacency-changes'): str,\n    Optional('max-ecmp-paths'): int,\n    Optional('abr-router'): bool,\n    Optional('asbr-router'): bool,\n    Optional('area-count'): int,\n    Optional('neighbor-count'): int,\n    Optional('full-neighbor-count'): int,\n    Optional('up-interface-count'): int,\n    Optional('route-preference'): {\n        Optional('intra-area'): int,\n        Optional('inter-area'): int,\n        Optional('external'): int,\n    },\n    Optional('max-lsa'): {\n        Optional('lsa-limit'): int,\n        Optional('warning-threshold'): int,\n        Optional('state'): str,\n    },\n    Optional('maintenance-mode'): {\n        Optional('state'): str,\n        Optional('trigger'): str,\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF_instance_global_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L74"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} area {area} interface * neighbor": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3Neighbor",
+        "doc": "Parser for OSPFv3 neighbors (per-area).",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'neighbors': {\n        Any('*'): {\n            'area': int,\n            'interface': str,\n            'neighbor-router-id': str,\n            Optional('neighbor-ip-address'): str,\n            Optional('adjacency-state'): str,\n            Optional('priority'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_area_area_interface_*_neighbor",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L151"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} area {area} interface state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3Interface",
+        "doc": "Parser for OSPFv3 interface state.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF3 {instance}\n        area {area} interface state\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            'interfaces': {\n                Any('*'): {\n                    Optional('id'): str,\n                    Optional('network-type'): str,\n                    Optional('priority'): int,\n                    Optional('metric'): int,\n                    Optional('passive'): bool,\n                    Optional('ignore-mtu'): bool,\n                    Optional('interface-up'): bool,\n                    Optional('interface-state'): str,\n                    Optional('local-ip-address'): str,\n                    Optional('mtu'): int,\n                    Optional('speed'): Or (<class 'str'>, <class 'int'>),\n                    Optional('neighbor-count'): int,\n                    Optional('exchange-neighbor-count'): int,\n                    Optional('loading-neighbor-count'): int,\n                    Optional('full-neighbor-count'): int,\n                    Optional('interface-id'): int,\n                    Optional('instance-id'): int,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_area_area_interface_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L511"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} area {area} lsdb": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3Lsdb",
+        "doc": "Parser for OSPFv3 area LSDB.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF3 {instance}\n        area {area} lsdb\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            'lsa-types': {\n                Any('*'): {\n                    Optional('lsa-type'): str,\n                    'lsas': {\n                        Any('*'): {\n                            Optional('link-state-id'): str,\n                            Optional('advertising-router'): str,\n                            Optional('ls-sequence-number'): str,\n                            Optional('ls-age'): int,\n                            Optional('ls-checksum'): str,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_area_area_lsdb",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L685"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} area {area} state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3Area",
+        "doc": "Parser for OSPFv3 area state.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF3 {instance} area {area} state\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'areas': {\n        Any('*'): {\n            Optional('identifier'): int,\n            Optional('area-type'): str,\n            Optional('advertise-summary-lsas'): bool,\n            Optional('stub-default-cost'): int,\n            Optional('configured-interface-count'): int,\n            Optional('up-interface-count'): int,\n            Optional('neighbor-count'): int,\n            Optional('exchange-neighbor-count'): int,\n            Optional('loading-neighbor-count'): int,\n            Optional('full-neighbor-count'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_area_area_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L414"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} global rib prefix": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3GlobalRib",
+        "doc": "Parser for OSPFv3 Global RIB prefix output (IPv6).\n\nCommand::\n\n    show network-instance {ni} protocol OSPF3 {instance} global rib prefix\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'routes': {\n        Any('*'): {\n            'prefix': str,\n            Optional('path-count'): int,\n            Optional('route-flags'): list,\n            Optional('path-type'): str,\n            Optional('raw-path-type'): str,\n            Optional('area'): str,\n            Optional('metric'): int,\n            Optional('path-flags'): list,\n            Optional('received-lsa'): {\n                Optional('lsa-type'): str,\n                Optional('link-state-id'): str,\n                Optional('advertising-router'): str,\n            },\n            Optional('self-originated-lsa'): {\n                Optional('lsa-type'): str,\n                Optional('link-state-id'): str,\n                Optional('advertising-router'): str,\n            },\n            Optional('nexthop-set'): {\n                Optional('nexthop-set-id'): int,\n                Optional('nexthop-count'): int,\n                Optional('reference-count'): int,\n            },\n            Optional('next-hops'): list,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_global_rib_prefix",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L832"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} global spf throttle": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3SpfThrottle",
+        "doc": "Parser for OSPFv3 SPF throttle timers.\n\nCommand::\n\n    show network-instance {ni} protocol OSPF3 {instance}\n        global spf throttle\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('spf-initial-delay'): int,\n    Optional('spf-short-delay'): int,\n    Optional('spf-long-delay'): int,\n    Optional('time-to-learn-interval'): int,\n    Optional('holddown-interval'): int,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_global_spf_throttle",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L610"
+      }
+    }
+  },
+  "show network-instance {ni} protocol OSPF3 {instance} global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3Global",
+        "doc": "Parser for OSPFv3 global state.",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'router-id': str,\n    Optional('log-adjacency-changes'): str,\n    Optional('max-ecmp-paths'): int,\n    Optional('abr-router'): bool,\n    Optional('asbr-router'): bool,\n    Optional('area-count'): int,\n    Optional('neighbor-count'): int,\n    Optional('full-neighbor-count'): int,\n    Optional('up-interface-count'): int,\n    Optional('route-preference'): {\n        Optional('intra-area'): int,\n        Optional('inter-area'): int,\n        Optional('external'): int,\n    },\n    Optional('max-lsa'): {\n        Optional('lsa-limit'): int,\n        Optional('warning-threshold'): int,\n        Optional('state'): str,\n    },\n    Optional('maintenance-mode'): {\n        Optional('state'): str,\n        Optional('trigger'): str,\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_OSPF3_instance_global_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L80"
+      }
+    }
+  },
+  "show network-instance {ni} protocol RSVP {instance} global state": {
+    "folders": {
+      "arcos": {
+        "class": "ShowRsvpGlobal",
+        "doc": "Parser for RSVP-TE global state.",
+        "module_name": "arcos.show_rsvp_te",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('hello-supported'): bool,\n    Optional('hello-interval'): int,\n    Optional('refresh-reduction'): bool,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_protocol_RSVP_instance_global_state",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_rsvp_te.py#L43"
+      }
+    }
+  },
+  "show network-instance {ni} sla icmp": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSlaIcmp",
+        "doc": "Parser for SLA ICMP state.",
+        "module_name": "arcos.show_sla",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('admin-state'): bool,\n    Optional('sessions'): {\n        Any('*'): {\n            'name': str,\n            Optional('admin-state'): bool,\n            Optional('target-address'): str,\n            Optional('source-address'): str,\n            Optional('session-interval'): int,\n            Optional('probe-count'): int,\n            Optional('probe-interval'): int,\n            Optional('payload-size'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_network-instance_ni_sla_icmp",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_sla.py#L37"
       }
     }
   },
@@ -78429,6 +79253,22 @@
         },
         "uid": "show_omp_tlocs",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/viptela/show_omp.py#L296"
+      }
+    }
+  },
+  "show operational-state sync-e": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSynce",
+        "doc": "Parser for SyncE state.",
+        "module_name": "arcos.show_synce",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('enabled'): bool,\n    Optional('holdover'): int,\n    Optional('quality-level-enabled'): bool,\n    Optional('revertive-enabled'): bool,\n    Optional('clock-state'): str,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_operational-state_sync-e",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_synce.py#L29"
       }
     }
   },
@@ -80685,6 +81525,22 @@
         },
         "uid": "show_ospfv3_process_vrf_vrf_neighbor",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxr/show_ospfv3.py#L46"
+      }
+    }
+  },
+  "show overlay static-vxlan-tunnels": {
+    "folders": {
+      "arcos": {
+        "class": "ShowStaticVxlanTunnels",
+        "doc": "Parser for static VXLAN tunnels.",
+        "module_name": "arcos.show_static_vxlan",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('tunnels'): {\n        Any('*'): {\n            'remote-vtep': str,\n            Optional('local-vtep'): str,\n            Optional('state'): str,\n            Optional('vnis'): list,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_overlay_static-vxlan-tunnels",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_static_vxlan.py#L32"
       }
     }
   },
@@ -99681,6 +100537,18 @@
   },
   "show port-security": {
     "folders": {
+      "arcos": {
+        "class": "ShowPortSecurity",
+        "doc": "Parser for port-security state.",
+        "module_name": "arcos.show_port_security",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('profiles'): {\n        Any('*'): {\n            'name': str,\n            Optional('limit'): int,\n            Optional('sticky'): bool,\n            Optional('violation-policy'): str,\n        },\n    },\n    Optional('interfaces'): {\n        Any('*'): {\n            'name': str,\n            Optional('enabled'): bool,\n            Optional('profile'): str,\n            Optional('violation-count'): int,\n            Optional('learned-mac-count'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_port-security",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_port_security.py#L41"
+      },
       "iosxe": {
         "class": "ShowPortSecurity",
         "doc": "Parser for 'show port-security'\n    ",
@@ -101312,6 +102180,22 @@
       }
     }
   },
+  "show ptp instance-list {instance_id} clock-info": {
+    "folders": {
+      "arcos": {
+        "class": "ShowPtpInstance",
+        "doc": "Parser for PTP instance info.",
+        "module_name": "arcos.show_ptp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'instances': {\n        Any('*'): {\n            'instance-number': int,\n            Optional('clock-profile'): str,\n            Optional('clock-role'): str,\n            Optional('domain-number'): int,\n            Optional('priority2'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_ptp_instance-list_instance_id_clock-info",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ptp.py#L33"
+      }
+    }
+  },
   "show ptp parent": {
     "folders": {
       "iosxe": {
@@ -101389,6 +102273,38 @@
         },
         "uid": "show_qfp_drops_thresholds",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxe/show_qfp.py#L31"
+      }
+    }
+  },
+  "show qos policy": {
+    "folders": {
+      "arcos": {
+        "class": "ShowQosPolicy",
+        "doc": "Parser for ArcOS ``show qos policy`` (JSON format).",
+        "module_name": "arcos.show_qos",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'policies': {\n        Any('*'): {\n            'name': str,\n            Optional('classifiers'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('description'): str,\n                    Optional('actions'): list,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_qos_policy",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_qos.py#L43"
+      }
+    }
+  },
+  "show qos policy {name}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowQosPolicy",
+        "doc": "Parser for ArcOS ``show qos policy`` (JSON format).",
+        "module_name": "arcos.show_qos",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'policies': {\n        Any('*'): {\n            'name': str,\n            Optional('classifiers'): {\n                Any('*'): {\n                    'name': str,\n                    Optional('description'): str,\n                    Optional('actions'): list,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_qos_policy_name",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_qos.py#L43"
       }
     }
   },
@@ -102019,6 +102935,22 @@
         },
         "uid": "show_redundancy_switchover_history",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxe/show_redundancy.py#L39"
+      }
+    }
+  },
+  "show relay-agent dhcp": {
+    "folders": {
+      "arcos": {
+        "class": "ShowDhcpRelay",
+        "doc": "Parser for DHCP relay state.",
+        "module_name": "arcos.show_dhcp_relay",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('helper-addresses'): list,\n    Optional('use-interface-vrf'): bool,\n    Optional('agent-information-option'): bool,\n    Optional('counters'): {\n        Optional('received-requests'): int,\n        Optional('received-responses'): int,\n        Optional('relayed-requests'): int,\n        Optional('relayed-responses'): int,\n        Optional('total-drops'): int,\n    },\n    Optional('interfaces'): {\n        Any('*'): {\n            'name': str,\n            Optional('enabled'): bool,\n            Optional('helper-addresses'): list,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_relay-agent_dhcp",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_dhcp_relay.py#L41"
       }
     }
   },
@@ -103437,12 +104369,12 @@
         "doc": "Parser for ArcOS ``show routing-policy defined-sets`` (JSON format).\n\nThe parser expects JSON output of the form::\n\n    data[OPENCONFIG_ROUTING_POLICY][\"defined-sets\"]\n\nWhen no explicit output is provided, the parser runs::\n\n    show routing-policy defined-sets | display json | nomore\n",
         "module_name": "arcos.show_routing_policy",
         "package": "genie.libs.parser",
-        "schema": "{\n    'routing-policy': {\n        'defined-sets': {\n            Optional('prefix-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'prefixes': list,\n                    Optional('is-martian'): bool,\n                },\n            },\n            Optional('string-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'strings': list,\n                },\n            },\n            Optional('tag-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'tags': list,\n                },\n            },\n            Optional('next-hop-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'addresses': list,\n                },\n            },\n        },\n    },\n}",
+        "schema": "{\n    'routing-policy': {\n        'defined-sets': {\n            Optional('prefix-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'prefixes': list,\n                    Optional('is-martian'): bool,\n                },\n            },\n            Optional('string-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'strings': list,\n                },\n            },\n            Optional('tag-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'tags': list,\n                },\n            },\n            Optional('next-hop-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'addresses': list,\n                },\n            },\n            Optional('ext-community-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n            Optional('community-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n            Optional('as-path-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
         "uid": "show_routing-policy_defined-sets",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L118"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L136"
       }
     }
   },
@@ -103458,7 +104390,7 @@
           "os": "arcos"
         },
         "uid": "show_routing-policy_policy-definition",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L328"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L410"
       }
     }
   },
@@ -104058,6 +104990,38 @@
       }
     }
   },
+  "show running-config keychain {name} | display json | nomore": {
+    "folders": {
+      "arcos": {
+        "class": "ShowKeychainConfig",
+        "doc": "Parser for ArcOS keychain running configuration (JSON format).\n\nCommands::\n\n    show running-config keychain | display json | nomore\n    show running-config keychain {name} | display json | nomore\n",
+        "module_name": "arcos.show_keychain",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'keychains': {\n        Any('*'): {\n            'name': str,\n            Optional('tolerance'): int,\n            Optional('keys'): {\n                Any('*'): {\n                    'key-id': str,\n                    Optional('secret-key'): str,\n                    Optional('crypto-algorithm'): str,\n                    Optional('send-lifetime'): {\n                        Optional('always'): bool,\n                        Optional('start-time'): str,\n                        Optional('end-time'): str,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running-config_keychain_name___display_json___nomore",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_keychain.py#L88"
+      }
+    }
+  },
+  "show running-config keychain | display json | nomore": {
+    "folders": {
+      "arcos": {
+        "class": "ShowKeychainConfig",
+        "doc": "Parser for ArcOS keychain running configuration (JSON format).\n\nCommands::\n\n    show running-config keychain | display json | nomore\n    show running-config keychain {name} | display json | nomore\n",
+        "module_name": "arcos.show_keychain",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'keychains': {\n        Any('*'): {\n            'name': str,\n            Optional('tolerance'): int,\n            Optional('keys'): {\n                Any('*'): {\n                    'key-id': str,\n                    Optional('secret-key'): str,\n                    Optional('crypto-algorithm'): str,\n                    Optional('send-lifetime'): {\n                        Optional('always'): bool,\n                        Optional('start-time'): str,\n                        Optional('end-time'): str,\n                    },\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running-config_keychain___display_json___nomore",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_keychain.py#L88"
+      }
+    }
+  },
   "show running-config mdns-sd": {
     "folders": {
       "iosxe": {
@@ -104097,12 +105061,12 @@
         "doc": "Parser for ArcOS SRMS mappings running configuration (JSON).",
         "module_name": "arcos.show_segment_routing",
         "package": "genie.libs.parser",
-        "schema": "{\n    'network-instances': {\n        Any('*'): {\n            Optional('srms'): {\n                Optional('mappings'): {\n                    Any('*'): {\n                        'local-id': str,\n                        Optional('ipv4-prefixes'): [{'prefix': <class 'str'>, Optional  (str) sid: <class 'int'>, Optional  (str) range: <class 'int'>}],\n                        Optional('ipv6-prefixes'): [{'prefix': <class 'str'>, Optional  (str) sid: <class 'int'>, Optional  (str) range: <class 'int'>}],\n                    },\n                },\n            },\n        },\n    },\n}",
+        "schema": "{\n    'network-instances': {\n        Any('*'): {\n            Optional('srms'): {\n                Optional('mappings'): {\n                    Any('*'): {\n                        'local-id': str,\n                        Optional('ipv4-prefixes'): list,\n                        Optional('ipv6-prefixes'): list,\n                    },\n                },\n            },\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
         "uid": "show_running-config_network-instance_instance_segment-routing",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_segment_routing.py#L79"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_segment_routing.py#L67"
       }
     }
   },
@@ -104150,7 +105114,7 @@
           "os": "arcos"
         },
         "uid": "show_running-config_network-instance_network_instance_protocol_BGP",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L907"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_bgp.py#L904"
       }
     }
   },
@@ -104166,7 +105130,7 @@
           "os": "arcos"
         },
         "uid": "show_running-config_network-instance_network_instance_protocol_ISIS_protocol_instance",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L2603"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_isis.py#L2622"
       }
     }
   },
@@ -104183,6 +105147,38 @@
         },
         "uid": "show_running-config_network-instance_network_instance_protocol_STATIC_protocol_instance",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_static_routing.py#L107"
+      }
+    }
+  },
+  "show running-config network-instance {ni} protocol OSPF {instance}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfRunningConfig",
+        "doc": "Parser for OSPF running configuration.\n\nCommand::\n\n    show running-config network-instance {ni} protocol OSPF {instance}\n",
+        "module_name": "arcos.show_ospf",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('global'): {\n        Optional('router-id'): str,\n        Optional('route-preference'): {\n            Optional('intra-area'): int,\n            Optional('inter-area'): int,\n            Optional('external'): int,\n        },\n    },\n    Optional('areas'): {\n        Any('*'): {\n            Optional('identifier'): int,\n            Optional('area-type'): str,\n            Optional('stub-default-cost'): int,\n            Optional('interfaces'): {\n                Any('*'): {\n                    Optional('id'): str,\n                    Optional('network-type'): str,\n                    Optional('hello-interval'): int,\n                    Optional('dead-interval'): int,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running-config_network-instance_ni_protocol_OSPF_instance",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospf.py#L769"
+      }
+    }
+  },
+  "show running-config network-instance {ni} protocol OSPF3 {instance}": {
+    "folders": {
+      "arcos": {
+        "class": "ShowOspfv3RunningConfig",
+        "doc": "Parser for OSPFv3 running configuration.\n\nCommand::\n\n    show running-config network-instance {ni} protocol OSPF3 {instance}\n",
+        "module_name": "arcos.show_ospfv3",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('global'): {\n        Optional('router-id'): str,\n    },\n    Optional('areas'): {\n        Any('*'): {\n            Optional('identifier'): int,\n            Optional('area-type'): str,\n            Optional('stub-default-cost'): int,\n            Optional('interfaces'): {\n                Any('*'): {\n                    Optional('id'): str,\n                    Optional('network-type'): str,\n                    Optional('hello-interval'): int,\n                    Optional('dead-interval'): int,\n                },\n            },\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_running-config_network-instance_ni_protocol_OSPF3_instance",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ospfv3.py#L271"
       }
     }
   },
@@ -104241,12 +105237,12 @@
         "doc": null,
         "module_name": "arcos.show_routing_policy",
         "package": "genie.libs.parser",
-        "schema": "{\n    'routing-policy': {\n        Optional('defined-sets'): {\n            Optional('prefix-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'prefixes': list,\n                    Optional('is-martian'): bool,\n                },\n            },\n            Optional('string-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'strings': list,\n                },\n            },\n            Optional('tag-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'tags': list,\n                },\n            },\n            Optional('next-hop-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'addresses': list,\n                },\n            },\n        },\n        Optional('policy-definitions'): {\n            Any('*'): {\n                'name': str,\n                'statements': {\n                    Any('*'): {\n                        'name': str,\n                        Optional('auto-seq-num'): int,\n                        Optional('conditions'): {\n                            Optional('match-prefix-set'): {\n                                Optional('prefix-set'): str,\n                                'match-set-options': str,\n                            },\n                            Optional('match-next-hop-set'): dict,\n                            Optional('match-tag-set'): dict,\n                            Optional('match-interface'): dict,\n                            Optional('install-protocol-eq'): str,\n                            Optional('call-policy'): dict,\n                            Optional('call-policy-expression'): str,\n                            Optional('bgp-conditions'): dict,\n                            Optional('igp-conditions'): dict,\n                        },\n                        Optional('actions'): {\n                            Optional('accept-route'): bool,\n                            Optional('reject-route'): bool,\n                            Optional('next-policy'): bool,\n                            Optional('igp-actions'): {\n                                Optional('set-tag'): int,\n                                Optional('isis-actions'): {\n                                    Optional('set-level'): int,\n                                },\n                            },\n                            Optional('bgp-actions'): dict,\n                            Optional('ospf-actions'): {\n                                Optional('set-metric'): int,\n                            },\n                            Optional('srv6-oam-actions'): dict,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
+        "schema": "{\n    'routing-policy': {\n        Optional('defined-sets'): {\n            Optional('prefix-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'prefixes': list,\n                    Optional('is-martian'): bool,\n                },\n            },\n            Optional('string-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'strings': list,\n                },\n            },\n            Optional('tag-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'tags': list,\n                },\n            },\n            Optional('next-hop-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'addresses': list,\n                },\n            },\n            Optional('ext-community-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n            Optional('community-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n            Optional('as-path-sets'): {\n                Any('*'): {\n                    'name': str,\n                    'members': list,\n                },\n            },\n        },\n        Optional('policy-definitions'): {\n            Any('*'): {\n                'name': str,\n                'statements': {\n                    Any('*'): {\n                        'name': str,\n                        Optional('auto-seq-num'): int,\n                        Optional('conditions'): {\n                            Optional('match-prefix-set'): {\n                                Optional('prefix-set'): str,\n                                'match-set-options': str,\n                            },\n                            Optional('match-next-hop-set'): dict,\n                            Optional('match-tag-set'): dict,\n                            Optional('match-interface'): dict,\n                            Optional('install-protocol-eq'): str,\n                            Optional('call-policy'): dict,\n                            Optional('call-policy-expression'): str,\n                            Optional('bgp-conditions'): dict,\n                            Optional('igp-conditions'): dict,\n                        },\n                        Optional('actions'): {\n                            Optional('accept-route'): bool,\n                            Optional('reject-route'): bool,\n                            Optional('next-policy'): bool,\n                            Optional('igp-actions'): {\n                                Optional('set-tag'): int,\n                                Optional('isis-actions'): {\n                                    Optional('set-level'): int,\n                                },\n                            },\n                            Optional('bgp-actions'): dict,\n                            Optional('ospf-actions'): {\n                                Optional('set-metric'): int,\n                            },\n                            Optional('srv6-oam-actions'): dict,\n                        },\n                    },\n                },\n            },\n        },\n    },\n}",
         "tokens": {
           "os": "arcos"
         },
         "uid": "show_running-config_routing-policy",
-        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L541"
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_routing_policy.py#L623"
       }
     }
   },
@@ -106720,6 +107716,22 @@
       }
     }
   },
+  "show sflow": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSflow",
+        "doc": "Parser for sFlow state.",
+        "module_name": "arcos.show_sflow",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('counter-sampling-interval'): int,\n    Optional('packet-sampling-rate'): int,\n    Optional('network-instance'): str,\n    Optional('counter-samples'): int,\n    Optional('packet-samples'): int,\n    Optional('collectors'): {\n        Any('*'): {\n            'address': str,\n            Optional('port'): int,\n        },\n    },\n    Optional('interfaces'): {\n        Any('*'): {\n            'name': str,\n            Optional('direction'): str,\n            Optional('packet-sampling-rate'): int,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_sflow",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_sflow.py#L42"
+      }
+    }
+  },
   "show shmwin summary": {
     "folders": {
       "iosxr": {
@@ -108024,6 +109036,22 @@
       }
     }
   },
+  "show stp global": {
+    "folders": {
+      "arcos": {
+        "class": "ShowStpGlobal",
+        "doc": "Parser for STP global state.",
+        "module_name": "arcos.show_stp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('bridge-assurance'): bool,\n    Optional('bpdu-guard'): bool,\n    Optional('enabled-protocol'): str,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_stp_global",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_stp.py#L27"
+      }
+    }
+  },
   "show subscriber lite-session": {
     "folders": {
       "iosxe": {
@@ -108443,6 +109471,38 @@
       }
     }
   },
+  "show system grpc-server": {
+    "folders": {
+      "arcos": {
+        "class": "ShowGnmiServer",
+        "doc": "Parser for gNMI gRPC server state.",
+        "module_name": "arcos.show_gnmi",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('enabled'): bool,\n    Optional('transport-security'): bool,\n    Optional('port'): int,\n    Optional('listen-addresses'): list,\n    Optional('clients-connected'): int,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_system_grpc-server",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_gnmi.py#L29"
+      }
+    }
+  },
+  "show system hostname": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSystemHostname",
+        "doc": "Parser for system hostname.",
+        "module_name": "arcos.show_system",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('hostname'): str,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_system_hostname",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_system.py#L25"
+      }
+    }
+  },
   "show system information": {
     "folders": {
       "junos": {
@@ -108702,6 +109762,22 @@
       }
     }
   },
+  "show system ntp": {
+    "folders": {
+      "arcos": {
+        "class": "ShowNtp",
+        "doc": "Parser for ArcOS ``show system ntp`` (JSON format).\n\nParses NTP state including server associations with stratum,\ndelay, offset, poll, and association status.\n\nCommand::\n\n    show system ntp | display json | nomore\n",
+        "module_name": "arcos.show_ntp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('network-instance'): str,\n    Optional('associations'): {\n        Any('*'): {\n            'address': str,\n            Optional('stratum'): int,\n            Optional('root-delay'): Or (<class 'str'>, <class 'int'>),\n            Optional('root-dispersion'): Or (<class 'str'>, <class 'int'>),\n            Optional('offset'): Or (<class 'str'>, <class 'int'>),\n            Optional('poll-interval'): int,\n            Optional('reach'): Or (<class 'str'>, <class 'int'>),\n            Optional('time-since-last-response'): Or (<class 'str'>, <class 'int'>),\n            Optional('association-status'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_system_ntp",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_ntp.py#L40"
+      }
+    }
+  },
   "show system ntp all": {
     "folders": {
       "sros": {
@@ -108763,6 +109839,22 @@
         },
         "uid": "show_system_resources",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/nxos/show_system.py#L529"
+      }
+    }
+  },
+  "show system snmp-server enable": {
+    "folders": {
+      "arcos": {
+        "class": "ShowSnmpServer",
+        "doc": "Parser for SNMP server enable state.",
+        "module_name": "arcos.show_snmp",
+        "package": "genie.libs.parser",
+        "schema": "{\n    'enabled': bool,\n    Optional('active'): bool,\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_system_snmp-server_enable",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_snmp.py#L26"
       }
     }
   },
@@ -109623,6 +110715,22 @@
         },
         "uid": "show_telemetry_receiver_name_name",
         "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/iosxe/show_telemetry.py#L1128"
+      }
+    }
+  },
+  "show telemetry-system": {
+    "folders": {
+      "arcos": {
+        "class": "ShowTelemetry",
+        "doc": "Parser for telemetry system state.",
+        "module_name": "arcos.show_telemetry",
+        "package": "genie.libs.parser",
+        "schema": "{\n    Optional('status'): str,\n    Optional('cuid'): str,\n    Optional('destination-groups'): {\n        Any('*'): {\n            'name': str,\n            Optional('destinations'): list,\n        },\n    },\n    Optional('subscriptions'): {\n        Any('*'): {\n            'name': str,\n            Optional('sensors'): list,\n            Optional('destination-group'): str,\n        },\n    },\n}",
+        "tokens": {
+          "os": "arcos"
+        },
+        "uid": "show_telemetry-system",
+        "url": "https://github.com/CiscoTestAutomation/genieparser/tree/master/src//Users/divakaran/arrcus_workspace/arcos_pyats_workspace/genieparser/src/genie/libs/parser/arcos/show_telemetry.py#L39"
       }
     }
   },

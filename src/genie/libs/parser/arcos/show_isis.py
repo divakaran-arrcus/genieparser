@@ -5446,3 +5446,162 @@ class ShowIsisGlobalTimers(ShowIsisGlobalTimersSchema):
             logger.warning("Error parsing ISIS global timers: %s", exc)
 
         return ret_dict
+
+
+# ============================================================================
+#                       Show ISIS Protection-Tracker Parser
+# ============================================================================
+class ShowIsisProtectionTrackerSchema(MetaParser):
+    """Schema for ArcOS ISIS global protection-tracker JSON output.
+
+    The protection-tracker is a per-protected-interface object created by
+    TI-LFA. Each entry tracks a protected interface, the adjacent system-id
+    being protected, and (when BFD is enabled) the BFD session linked to
+    fast-failure detection. Multiple entries can coexist on a device that
+    has TI-LFA enabled on multiple interfaces. When TI-LFA is not enabled
+    anywhere, the device returns ``{"data": {}}`` and the parser returns
+    an empty dict.
+    """
+
+    schema = {
+        "network-instance": {
+            Any(): {  # network instance name (e.g., "default")
+                "isis": {
+                    Any(): {  # protocol instance name (e.g., "default")
+                        Optional("global"): {
+                            Optional("protection-trackers"): {
+                                Optional("protection-tracker"): {
+                                    Any(): {  # keyed by tracker id (str)
+                                        Optional("id"): Or(str, int),
+                                        Optional("reference-count"): int,
+                                        Optional("interface"): str,
+                                        Optional("system-id"): str,
+                                        Optional("last-updated-time"): str,
+                                        Optional("bfd-source"): str,
+                                        Optional("bfd-destination"): str,
+                                        Optional("bfd-session-id"): Or(str, int),
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisProtectionTracker(ShowIsisProtectionTrackerSchema):
+    """Parser for ArcOS ISIS global protection-tracker command (JSON format).
+
+    Command pattern (before JSON pipe)::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global protection-tracker
+
+    The parser flattens the OpenConfig ``state`` wrapper, strips the
+    ``arcos-openconfig-isis-augments:`` augment prefix from container keys,
+    and keys the protection-tracker list by ``id`` for deterministic lookup.
+    Empty data (``{"data": {}}``) is normalized to an empty result dict.
+    """
+
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global protection-tracker",
+    ]
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = (
+                f"show network-instance {network_instance} protocol ISIS "
+                f"{protocol_instance} global protection-tracker"
+            )
+            logger.debug("Executing command: %s", cmd)
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        logger.debug("Parsing protection-tracker output")
+        ret_dict: Dict[str, TypeAny] = {}
+
+        try:
+            parsed_json = load_json_robust(output)
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+            return ret_dict
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error loading JSON: %s", exc)
+            return ret_dict
+
+        try:
+            data = parsed_json.get("data", {})
+            ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
+            if not ni_container:
+                # Empty case — no network-instances container at all
+                return ret_dict
+
+            trackers_key = f"{ARCOS_ISIS_AUGMENTS}:protection-trackers"
+
+            for ni in ni_container.get("network-instance", []) or []:
+                ni_name = ni.get("name")
+                if not ni_name:
+                    continue
+                for protocol in ni.get("protocols", {}).get("protocol", []) or []:
+                    # Only process ISIS protocol entries
+                    identifier = protocol.get("identifier", "")
+                    if "ISIS" not in identifier:
+                        continue
+                    pi_name = protocol.get("name")
+                    if not pi_name:
+                        continue
+                    isis_data = protocol.get("isis", {})
+                    global_data = isis_data.get("global", {})
+                    trackers_container = global_data.get(trackers_key, {})
+                    tracker_list = trackers_container.get(
+                        "protection-tracker", []
+                    ) or []
+                    if not tracker_list:
+                        continue
+
+                    tracker_dict: Dict[str, TypeAny] = {}
+                    for entry in tracker_list:
+                        entry_id = entry.get("id")
+                        if entry_id is None:
+                            continue
+                        state = entry.get("state", {}) or {}
+
+                        # Flatten state into the entry — keep hyphenated keys.
+                        flat: Dict[str, TypeAny] = {"id": entry_id}
+                        for field in (
+                            "reference-count",
+                            "interface",
+                            "system-id",
+                            "last-updated-time",
+                            "bfd-source",
+                            "bfd-destination",
+                            "bfd-session-id",
+                        ):
+                            if field in state:
+                                flat[field] = state[field]
+
+                        # Key by id (stringified for consistency with other parsers)
+                        tracker_dict[str(entry_id)] = flat
+
+                    if tracker_dict:
+                        ret_dict.setdefault("network-instance", {}).setdefault(
+                            ni_name, {}
+                        ).setdefault("isis", {}).setdefault(pi_name, {}).setdefault(
+                            "global", {}
+                        ).setdefault("protection-trackers", {})[
+                            "protection-tracker"
+                        ] = tracker_dict
+
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning(
+                "Error parsing ISIS protection-tracker: %s", exc
+            )
+
+        return ret_dict
