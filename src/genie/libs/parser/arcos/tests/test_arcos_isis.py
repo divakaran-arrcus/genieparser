@@ -9,6 +9,7 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisFlexAlgoFastReroute,
     ShowIsisFlexAlgoRoute,
     ShowIsisFastReroute,
+    ShowIsisGlobalTunnel,
     ShowIsisInterface,
     ShowIsisLevelCounters,
     ShowIsisLevelState,
@@ -1747,6 +1748,122 @@ def test_show_isis_protection_tracker_convention_compliance():
     parser = ShowIsisProtectionTracker(device="dummy")
     schema_str = repr(parser.schema)
     # Find Optional("foo_bar") style violations (lowercase with underscore inside Optional)
+    violations = re.findall(
+        r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
+    )
+    assert violations == [], f"Schema has underscore-keys: {violations}"
+
+
+# ============================================================================
+# ShowIsisGlobalTunnel
+# ============================================================================
+#
+# Captures SRv6 TI-LFA + Microloop-Avoidance tunnel state from
+# `show network-instance default protocol ISIS default global tunnel`.
+#
+# All three captured live JSON samples (P_AND_Q_ARE_ADJACENT with adjacent P,
+# PQ_IS_REMOTE, and P_AND_Q_ARE_ADJACENT with remote P) land at num-sids=1
+# due to arcOS's PSP optimization — the schema's `list` typing for `sids`
+# stays forward-compatible with multi-SID stacks.
+
+
+def _isis_global_tunnel_only_tunnel(result, ni="default", inst="default"):
+    """Return the (id, entry) pair when exactly one tunnel is parsed."""
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    isis = result["network-instance"][ni]["isis"][inst]
+    tunnels = isis["tunnels"]
+    assert len(tunnels) == 1, f"Expected 1 tunnel, got {len(tunnels)}: {tunnels}"
+    (tunnel_id, entry), = tunnels.items()
+    return tunnel_id, entry
+
+
+def test_show_isis_global_tunnel_p_and_q_adj_p_adj():
+    """Validate parse of P_AND_Q_ARE_ADJACENT scenario where P is adjacent.
+
+    Tunnel SID destination is rtr4's End.X SID toward rtr5
+    (``fcbb:bb00:94:8002::``).
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_p_and_q_adj_p_adj.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    tunnel_id, entry = _isis_global_tunnel_only_tunnel(result)
+
+    assert entry["id"] == tunnel_id == "268435472"
+    assert entry["nexthop-interface"] == "swp2"
+    assert entry["tunnel-type"] == "SRV6_TUNNEL"
+    assert entry["users"] == ["TI_LFA_TUNNEL"]
+    assert entry["reference-count"] == 4
+
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:94:8002::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:94:8002::"]
+
+
+def test_show_isis_global_tunnel_pq_is_remote():
+    """Validate parse of PQ_IS_REMOTE scenario.
+
+    Tunnel SID is rtr5's End SID (``fcbb:bb00:95:1::``).
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_pq_is_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    _tid, entry = _isis_global_tunnel_only_tunnel(result)
+    assert entry["users"] == ["TI_LFA_TUNNEL"]
+    assert entry["tunnel-type"] == "SRV6_TUNNEL"
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:95:1::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:95:1::"]
+
+
+def test_show_isis_global_tunnel_p_and_q_adj_p_remote():
+    """Validate parse of P_AND_Q_ARE_ADJACENT scenario where P is remote.
+
+    Tunnel SID destination is rtr5's End.X SID toward rtr6
+    (``fcbb:bb00:95:8003::``) — even though P=rtr5 is two hops from rtr1,
+    arcOS uses PSP optimization and emits a single SID.
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_p_and_q_adj_p_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    _tid, entry = _isis_global_tunnel_only_tunnel(result)
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:95:8003::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:95:8003::"]
+
+
+def test_show_isis_global_tunnel_empty():
+    """Empty data `{"data": {}}` returns an empty dict (no tunnels)."""
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_empty.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    assert result == {}
+
+
+def test_show_isis_global_tunnel_schema_keys_hyphenated():
+    """Convention 1: all schema keys hyphenated, none with underscores."""
+    import re
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    schema_str = repr(parser.schema)
     violations = re.findall(
         r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
     )
