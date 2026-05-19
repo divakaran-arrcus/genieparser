@@ -5605,3 +5605,210 @@ class ShowIsisProtectionTracker(ShowIsisProtectionTrackerSchema):
             )
 
         return ret_dict
+
+
+
+class ShowIsisGlobalTunnelSchema(MetaParser):
+    """Schema for ArcOS ISIS global tunnel command (JSON format).
+
+    Captures SRv6 TI-LFA and Microloop-Avoidance tunnel state. Each tunnel
+    has an integer ID and an SRv6 sub-block with the SID list used as the
+    repair-path encapsulation header.
+
+    Schema design notes:
+      * ``users`` and ``sids`` are kept as ``list`` so the parser is
+        forward-compatible with multi-SID stacks and the
+        ``MICRO_LOOP_AVOID_TUNNEL`` user type observed in the docs example
+        (``Command_Line_Interface/ISIS_TILFA_Microloop.adoc:487``).
+      * ``id`` is ``Or(str, int)`` defensively — JSON samples return string
+        IDs but tunnel IDs are integer-typed values; future builds may
+        return native ints.
+      * The ``state`` wrapper is flattened per project Convention 2.
+      * The ``arcos-openconfig-isis-augments:`` prefix is stripped from the
+        ``tunnels`` container key per Convention 4.
+    """
+
+    schema = {
+        "network-instance": {
+            Any(): {                                       # network instance name
+                "isis": {
+                    Any(): {                               # protocol instance name
+                        Optional("tunnels"): {
+                            Any(): {                       # tunnel id (str/int)
+                                Optional("id"): Or(str, int),
+                                Optional("nexthop-address"): str,
+                                Optional("nexthop-interface"): str,
+                                Optional("users"): list,
+                                Optional("tunnel-type"): str,
+                                Optional("reference-count"): int,
+                                Optional("srv6-tunnel"): {
+                                    Optional("source"): str,
+                                    Optional("destination"): str,
+                                    Optional("num-sids"): int,
+                                    Optional("sids"): list,
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisGlobalTunnel(ShowIsisGlobalTunnelSchema):
+    """Parser for ArcOS ISIS global tunnel command (JSON format).
+
+    Command patterns (before JSON pipe)::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel {tunnel_id}
+
+    Used by the TI-LFA + MLA test suites to confirm SRv6 backup-path
+    encapsulation is programmed (``SRV6_TUNNEL`` with ``TI_LFA_TUNNEL`` or
+    ``MICRO_LOOP_AVOID_TUNNEL`` user) and to inspect the SID list. arcOS
+    only emits ``global tunnel`` content for SRv6 — SR-MPLS uses inline
+    label pushes (no tunnel object).
+
+    The parser flattens the ``state`` wrapper, strips the
+    ``arcos-openconfig-isis-augments:`` prefix from the tunnels container
+    key and from any prefixed user/type value strings, and keys the tunnel
+    list by ``id`` for deterministic lookup. Empty data (``{"data": {}}``)
+    returns an empty result dict.
+    """
+
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel",
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel {tunnel_id}",
+    ]
+
+    # Value-prefix strip set (per Convention 4)
+    _USER_VALUE_PREFIXES = (
+        f"{ARCOS_ISIS_AUGMENTS}:",
+        "openconfig-isis-types:",
+        "oc-isis-types:",
+    )
+
+    def cli(
+        self,
+        network_instance: str = "*",
+        protocol_instance: str = "*",
+        tunnel_id: TypeOptional[str] = None,
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd_parts = [
+                "show network-instance", network_instance,
+                "protocol ISIS", protocol_instance,
+                "global tunnel",
+            ]
+            if tunnel_id is not None:
+                validate_input(str(tunnel_id), "tunnel_id")
+                cmd_parts.append(str(tunnel_id))
+            cmd = " ".join(cmd_parts)
+            logger.debug("Executing command: %s", cmd)
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        logger.debug("Parsing global tunnel output")
+        ret_dict: Dict[str, TypeAny] = {}
+
+        try:
+            parsed_json = load_json_robust(output)
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+            return ret_dict
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error loading JSON: %s", exc)
+            return ret_dict
+
+        try:
+            data = parsed_json.get("data", {})
+            ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
+            if not ni_container:
+                # Empty case — no network-instances container at all
+                return ret_dict
+
+            tunnels_key = f"{ARCOS_ISIS_AUGMENTS}:tunnels"
+
+            for ni in ni_container.get("network-instance", []) or []:
+                ni_name = ni.get("name")
+                if not ni_name:
+                    continue
+                for protocol in ni.get("protocols", {}).get("protocol", []) or []:
+                    identifier = protocol.get("identifier", "")
+                    if "ISIS" not in identifier:
+                        continue
+                    pi_name = protocol.get("name")
+                    if not pi_name:
+                        continue
+                    isis_data = protocol.get("isis", {})
+                    global_data = isis_data.get("global", {})
+                    tunnels_container = global_data.get(tunnels_key, {})
+                    tunnel_list = tunnels_container.get("tunnel", []) or []
+                    if not tunnel_list:
+                        continue
+
+                    parsed_tunnels: Dict[str, TypeAny] = {}
+                    for entry in tunnel_list:
+                        entry_id = entry.get("id")
+                        if entry_id is None:
+                            continue
+                        state = entry.get("state", {}) or {}
+
+                        # Flatten state into the entry — keep hyphenated keys.
+                        flat: Dict[str, TypeAny] = {"id": entry_id}
+
+                        for scalar in (
+                            "nexthop-address",
+                            "nexthop-interface",
+                            "tunnel-type",
+                            "reference-count",
+                        ):
+                            if scalar in state:
+                                val = state[scalar]
+                                # Strip arcos-/openconfig- prefix from tunnel-type value
+                                if scalar == "tunnel-type" and isinstance(val, str):
+                                    for pfx in self._USER_VALUE_PREFIXES:
+                                        if val.startswith(pfx):
+                                            val = val[len(pfx):]
+                                            break
+                                flat[scalar] = val
+
+                        # users — list of prefixed strings; strip prefix on each.
+                        users = state.get("users")
+                        if isinstance(users, list):
+                            cleaned_users = []
+                            for user in users:
+                                if isinstance(user, str):
+                                    for pfx in self._USER_VALUE_PREFIXES:
+                                        if user.startswith(pfx):
+                                            user = user[len(pfx):]
+                                            break
+                                cleaned_users.append(user)
+                            flat["users"] = cleaned_users
+
+                        # srv6-tunnel sub-block — flatten in place (already inline JSON)
+                        srv6 = state.get("srv6-tunnel")
+                        if isinstance(srv6, dict):
+                            srv6_flat: Dict[str, TypeAny] = {}
+                            for field in ("source", "destination", "num-sids", "sids"):
+                                if field in srv6:
+                                    srv6_flat[field] = srv6[field]
+                            if srv6_flat:
+                                flat["srv6-tunnel"] = srv6_flat
+
+                        parsed_tunnels[str(entry_id)] = flat
+
+                    if parsed_tunnels:
+                        ret_dict.setdefault("network-instance", {}).setdefault(
+                            ni_name, {}
+                        ).setdefault("isis", {}).setdefault(pi_name, {})[
+                            "tunnels"
+                        ] = parsed_tunnels
+
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS global tunnel: %s", exc)
+
+        return ret_dict
