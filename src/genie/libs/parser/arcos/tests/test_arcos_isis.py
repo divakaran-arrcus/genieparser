@@ -9,11 +9,13 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisFlexAlgoFastReroute,
     ShowIsisFlexAlgoRoute,
     ShowIsisFastReroute,
+    ShowIsisGlobalTunnel,
     ShowIsisInterface,
     ShowIsisLevelCounters,
     ShowIsisLevelState,
     ShowIsisLsp,
     ShowIsisMplsLabelDb,
+    ShowIsisProtectionTracker,
     ShowIsisRedistributeRoute,
     ShowIsisRoute,
     ShowIsisSpfLog,
@@ -1654,3 +1656,303 @@ def test_show_isis_spf_log_enhanced():
     assert trigger_lsps[0]["sequence"] == 25
     assert trigger_lsps[1]["lsp-id"] == "rtr1.00-01"
     assert trigger_lsps[2]["lsp-id"] == "rtr3.00-00"
+
+
+# ============================================================================
+# ShowIsisProtectionTracker tests
+# ============================================================================
+
+def test_show_isis_protection_tracker_single():
+    """Validate parsing of a single-entry protection-tracker."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_single.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    trackers = isis["global"]["protection-trackers"]["protection-tracker"]
+
+    # Exactly one tracker — id is implementation-assigned at runtime,
+    # so assert properties rather than a specific id value.
+    assert len(trackers) == 1
+    (tracker_id, entry), = trackers.items()
+    assert entry["id"] == tracker_id
+    assert isinstance(entry["reference-count"], int)
+    assert entry["reference-count"] >= 1
+    assert entry["interface"] == "swp1"
+    assert entry["system-id"] == "rtr2.00"
+    assert "last-updated-time" in entry
+    assert "T" in entry["last-updated-time"]   # RFC 3339 shape sanity
+
+
+def test_show_isis_protection_tracker_multi():
+    """Validate parsing of a multi-entry protection-tracker (TI-LFA on
+    multiple interfaces of the same device)."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_multi.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert isinstance(result, dict)
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    trackers = isis["global"]["protection-trackers"]["protection-tracker"]
+
+    # Two trackers: id 268435459 (swp1 → rtr6.00) and 268435460 (swp2 → rtr2.00)
+    assert len(trackers) == 2
+    assert "268435459" in trackers
+    assert "268435460" in trackers
+
+    swp1 = trackers["268435459"]
+    assert swp1["interface"] == "swp1"
+    assert swp1["system-id"] == "rtr6.00"
+    assert swp1["reference-count"] == 1
+
+    swp2 = trackers["268435460"]
+    assert swp2["interface"] == "swp2"
+    assert swp2["system-id"] == "rtr2.00"
+    assert swp2["reference-count"] == 1
+
+
+def test_show_isis_protection_tracker_empty():
+    """Validate the empty case — no TI-LFA enabled, device returns
+    `{"data": {}}` and the parser returns an empty dict."""
+
+    sample_file = SAMPLES_DIR / "isis_protection_tracker_empty.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    result = parser.cli(output=output)
+
+    assert result == {}
+
+
+def test_show_isis_protection_tracker_convention_compliance():
+    """Spot-check Convention 1: all schema keys hyphenated, none with underscores."""
+    import re
+
+    parser = ShowIsisProtectionTracker(device="dummy")
+    schema_str = repr(parser.schema)
+    # Find Optional("foo_bar") style violations (lowercase with underscore inside Optional)
+    violations = re.findall(
+        r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
+    )
+    assert violations == [], f"Schema has underscore-keys: {violations}"
+
+
+# ============================================================================
+# ShowIsisGlobalTunnel
+# ============================================================================
+#
+# Captures SRv6 TI-LFA + Microloop-Avoidance tunnel state from
+# `show network-instance default protocol ISIS default global tunnel`.
+#
+# All three captured live JSON samples (P_AND_Q_ARE_ADJACENT with adjacent P,
+# PQ_IS_REMOTE, and P_AND_Q_ARE_ADJACENT with remote P) land at num-sids=1
+# due to arcOS's PSP optimization — the schema's `list` typing for `sids`
+# stays forward-compatible with multi-SID stacks.
+
+
+def _isis_global_tunnel_only_tunnel(result, ni="default", inst="default"):
+    """Return the (id, entry) pair when exactly one tunnel is parsed."""
+    assert isinstance(result, dict)
+    assert "network-instance" in result
+    isis = result["network-instance"][ni]["isis"][inst]
+    tunnels = isis["tunnels"]
+    assert len(tunnels) == 1, f"Expected 1 tunnel, got {len(tunnels)}: {tunnels}"
+    (tunnel_id, entry), = tunnels.items()
+    return tunnel_id, entry
+
+
+def test_show_isis_global_tunnel_p_and_q_adj_p_adj():
+    """Validate parse of P_AND_Q_ARE_ADJACENT scenario where P is adjacent.
+
+    Tunnel SID destination is rtr4's End.X SID toward rtr5
+    (``fcbb:bb00:94:8002::``).
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_p_and_q_adj_p_adj.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    tunnel_id, entry = _isis_global_tunnel_only_tunnel(result)
+
+    assert entry["id"] == tunnel_id == "268435472"
+    assert entry["nexthop-interface"] == "swp2"
+    assert entry["tunnel-type"] == "SRV6_TUNNEL"
+    assert entry["users"] == ["TI_LFA_TUNNEL"]
+    assert entry["reference-count"] == 4
+
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:94:8002::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:94:8002::"]
+
+
+def test_show_isis_global_tunnel_pq_is_remote():
+    """Validate parse of PQ_IS_REMOTE scenario.
+
+    Tunnel SID is rtr5's End SID (``fcbb:bb00:95:1::``).
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_pq_is_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    _tid, entry = _isis_global_tunnel_only_tunnel(result)
+    assert entry["users"] == ["TI_LFA_TUNNEL"]
+    assert entry["tunnel-type"] == "SRV6_TUNNEL"
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:95:1::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:95:1::"]
+
+
+def test_show_isis_global_tunnel_p_and_q_adj_p_remote():
+    """Validate parse of P_AND_Q_ARE_ADJACENT scenario where P is remote.
+
+    Tunnel SID destination is rtr5's End.X SID toward rtr6
+    (``fcbb:bb00:95:8003::``) — even though P=rtr5 is two hops from rtr1,
+    arcOS uses PSP optimization and emits a single SID.
+    """
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_p_and_q_adj_p_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+
+    _tid, entry = _isis_global_tunnel_only_tunnel(result)
+    srv6 = entry["srv6-tunnel"]
+    assert srv6["destination"] == "fcbb:bb00:95:8003::"
+    assert srv6["num-sids"] == 1
+    assert srv6["sids"] == ["fcbb:bb00:95:8003::"]
+
+
+def test_show_isis_global_tunnel_empty():
+    """Empty data `{"data": {}}` returns an empty dict (no tunnels)."""
+    sample_file = SAMPLES_DIR / "isis_global_tunnel_empty.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    assert result == {}
+
+
+def test_show_isis_global_tunnel_schema_keys_hyphenated():
+    """Convention 1: all schema keys hyphenated, none with underscores."""
+    import re
+
+    parser = ShowIsisGlobalTunnel(device="dummy")
+    schema_str = repr(parser.schema)
+    violations = re.findall(
+        r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
+    )
+    assert violations == [], f"Schema has underscore-keys: {violations}"
+
+
+# ============================================================================
+# ShowIsisFastReroute — p-node/q-node schema extension
+# ============================================================================
+#
+# arcOS emits two distinct JSON node shapes depending on the FR flag:
+#   PQ_IS_ADJACENT / PQ_IS_REMOTE  → pq-node.state.system-id (collapsed)
+#   P_AND_Q_ARE_ADJACENT           → p-node + q-node (separate)
+# The parser extracts whichever fields are present; tests below cover both.
+
+
+def _isis_fast_reroute_first_level(result, prefix):
+    """Return the first level entry from a single-prefix FR result."""
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    fr = isis["fast-reroute"]["IPV6-UNICAST"]["prefixes"][prefix]
+    levels = fr["levels"]
+    assert len(levels) >= 1
+    _level_num, level_entry = next(iter(levels.items()))
+    return level_entry
+
+
+def test_show_isis_fast_reroute_pq_is_remote():
+    """PQ_IS_REMOTE → pq-node-system-id present, p/q-node fields absent."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_pq_is_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert level["reroute-type"] == "TI_LFA"
+    assert any("PQ_IS_REMOTE" in f for f in level["flags"])
+    assert level["pq-node-system-id"] == "rtr5.00"
+    assert "p-node-system-id" not in level
+    assert "q-node-system-id" not in level
+
+
+def test_show_isis_fast_reroute_p_and_q_adjacent_p_adj():
+    """P_AND_Q_ARE_ADJACENT (P adj) → p-node + q-node populated, pq-node absent."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_p_and_q_adj_p_adj.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert any("P_AND_Q_ARE_ADJACENT" in f for f in level["flags"])
+    assert level["p-node-system-id"] == "rtr4.00"
+    assert level["q-node-system-id"] == "rtr5.00"
+    assert "pq-node-system-id" not in level
+
+
+def test_show_isis_fast_reroute_p_and_q_adjacent_p_remote():
+    """P_AND_Q_ARE_ADJACENT (P remote) — same shape, different system-ids."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_p_and_q_adj_p_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert level["p-node-system-id"] == "rtr5.00"
+    assert level["q-node-system-id"] == "rtr6.00"
+
+
+def test_show_isis_fast_reroute_q_null_docker_quirk():
+    """Docker quirk: engine couldn't resolve Q → q-node.state.system-id is
+    "0000.0000.0000.00". Parser must pass it through, not choke."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_q_null_docker_quirk.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    # This is the loopback target 2001::6/128 — the older capture used the
+    # loopback prefix, not the locator prefix.
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    prefixes = isis["fast-reroute"]["IPV6-UNICAST"]["prefixes"]
+    # Take the first prefix in the dict
+    prefix_key = next(iter(prefixes))
+    level = _isis_fast_reroute_first_level(result, prefix_key)
+
+    assert level["p-node-system-id"] == "rtr4.00"
+    assert level["q-node-system-id"] == "0000.0000.0000.00"
