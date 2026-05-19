@@ -1868,3 +1868,91 @@ def test_show_isis_global_tunnel_schema_keys_hyphenated():
         r"Optional\(['\"]([a-z][a-z0-9]*(?:_[a-z0-9]+)+)['\"]\)", schema_str
     )
     assert violations == [], f"Schema has underscore-keys: {violations}"
+
+
+# ============================================================================
+# ShowIsisFastReroute — p-node/q-node schema extension
+# ============================================================================
+#
+# arcOS emits two distinct JSON node shapes depending on the FR flag:
+#   PQ_IS_ADJACENT / PQ_IS_REMOTE  → pq-node.state.system-id (collapsed)
+#   P_AND_Q_ARE_ADJACENT           → p-node + q-node (separate)
+# The parser extracts whichever fields are present; tests below cover both.
+
+
+def _isis_fast_reroute_first_level(result, prefix):
+    """Return the first level entry from a single-prefix FR result."""
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    fr = isis["fast-reroute"]["IPV6-UNICAST"]["prefixes"][prefix]
+    levels = fr["levels"]
+    assert len(levels) >= 1
+    _level_num, level_entry = next(iter(levels.items()))
+    return level_entry
+
+
+def test_show_isis_fast_reroute_pq_is_remote():
+    """PQ_IS_REMOTE → pq-node-system-id present, p/q-node fields absent."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_pq_is_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert level["reroute-type"] == "TI_LFA"
+    assert any("PQ_IS_REMOTE" in f for f in level["flags"])
+    assert level["pq-node-system-id"] == "rtr5.00"
+    assert "p-node-system-id" not in level
+    assert "q-node-system-id" not in level
+
+
+def test_show_isis_fast_reroute_p_and_q_adjacent_p_adj():
+    """P_AND_Q_ARE_ADJACENT (P adj) → p-node + q-node populated, pq-node absent."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_p_and_q_adj_p_adj.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert any("P_AND_Q_ARE_ADJACENT" in f for f in level["flags"])
+    assert level["p-node-system-id"] == "rtr4.00"
+    assert level["q-node-system-id"] == "rtr5.00"
+    assert "pq-node-system-id" not in level
+
+
+def test_show_isis_fast_reroute_p_and_q_adjacent_p_remote():
+    """P_AND_Q_ARE_ADJACENT (P remote) — same shape, different system-ids."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_p_and_q_adj_p_remote.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    level = _isis_fast_reroute_first_level(result, "fcbb:bb00:96::/48")
+
+    assert level["p-node-system-id"] == "rtr5.00"
+    assert level["q-node-system-id"] == "rtr6.00"
+
+
+def test_show_isis_fast_reroute_q_null_docker_quirk():
+    """Docker quirk: engine couldn't resolve Q → q-node.state.system-id is
+    "0000.0000.0000.00". Parser must pass it through, not choke."""
+    sample_file = SAMPLES_DIR / "isis_fast_reroute_q_null_docker_quirk.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    parser = ShowIsisFastReroute(device="dummy")
+    result = parser.cli(output=sample_file.read_text())
+    # This is the loopback target 2001::6/128 — the older capture used the
+    # loopback prefix, not the locator prefix.
+    isis = result["network-instance"]["default"]["isis"]["default"]
+    prefixes = isis["fast-reroute"]["IPV6-UNICAST"]["prefixes"]
+    # Take the first prefix in the dict
+    prefix_key = next(iter(prefixes))
+    level = _isis_fast_reroute_first_level(result, prefix_key)
+
+    assert level["p-node-system-id"] == "rtr4.00"
+    assert level["q-node-system-id"] == "0000.0000.0000.00"
