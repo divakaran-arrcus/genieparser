@@ -3857,7 +3857,17 @@ class ShowIsisFastRerouteSchema(MetaParser):
                                                 "last-updated-time": str,
                                                 "origin-system-id": str,
                                                 Optional("protection-types"): list,
+                                                # arcOS emits one of two node-field shapes
+                                                # depending on the flag value:
+                                                #   PQ_IS_ADJACENT / PQ_IS_REMOTE  → pq-node only
+                                                #   P_AND_Q_ARE_ADJACENT            → p-node + q-node
+                                                # All three fields are Optional; the parser
+                                                # extracts whichever the device populates. On
+                                                # docker, an unresolved Q renders as
+                                                # "0000.0000.0000.00" — parser passes it through.
                                                 Optional("pq-node-system-id"): str,
+                                                Optional("p-node-system-id"): str,
+                                                Optional("q-node-system-id"): str,
                                             }
                                         },
                                     }
@@ -3981,9 +3991,21 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
                                 for p in prot_types
                             ]
 
+                        # JSON shape depends on the level's flag:
+                        #   PQ_IS_ADJACENT / PQ_IS_REMOTE → pq-node.state.system-id
+                        #   P_AND_Q_ARE_ADJACENT          → p-node + q-node (separate)
+                        # All three keys are Optional; we extract whichever are present.
                         pq_node = level.get("pq-node", {}).get("state", {})
                         if "system-id" in pq_node:
                             level_entry["pq-node-system-id"] = pq_node["system-id"]
+
+                        p_node = level.get("p-node", {}).get("state", {})
+                        if "system-id" in p_node:
+                            level_entry["p-node-system-id"] = p_node["system-id"]
+
+                        q_node = level.get("q-node", {}).get("state", {})
+                        if "system-id" in q_node:
+                            level_entry["q-node-system-id"] = q_node["system-id"]
 
                         prefix_entry["levels"][str(level_num)] = level_entry
 
@@ -4034,8 +4056,17 @@ class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
                                                         Optional(
                                                             "protection-types"
                                                         ): list,
+                                                        # Same flag-driven shape as the
+                                                        # regular FastReroute parser — see
+                                                        # comments there.
                                                         Optional(
                                                             "pq-node-system-id"
+                                                        ): str,
+                                                        Optional(
+                                                            "p-node-system-id"
+                                                        ): str,
+                                                        Optional(
+                                                            "q-node-system-id"
                                                         ): str,
                                                     }
                                                 },
@@ -4177,9 +4208,18 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
                                     for p in prot_types
                                 ]
 
+                            # Flag-driven shape — see ShowIsisFastReroute for details.
                             pq_node = level.get("pq-node", {}).get("state", {})
                             if "system-id" in pq_node:
                                 level_entry["pq-node-system-id"] = pq_node["system-id"]
+
+                            p_node = level.get("p-node", {}).get("state", {})
+                            if "system-id" in p_node:
+                                level_entry["p-node-system-id"] = p_node["system-id"]
+
+                            q_node = level.get("q-node", {}).get("state", {})
+                            if "system-id" in q_node:
+                                level_entry["q-node-system-id"] = q_node["system-id"]
 
                             prefix_entry["levels"][str(level_num)] = level_entry
 
@@ -5605,7 +5645,6 @@ class ShowIsisProtectionTracker(ShowIsisProtectionTrackerSchema):
             )
 
         return ret_dict
-
 
 
 class ShowIsisGlobalTunnelSchema(MetaParser):
