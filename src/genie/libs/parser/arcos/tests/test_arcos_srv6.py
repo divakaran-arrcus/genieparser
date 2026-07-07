@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from genie.libs.parser.arcos.show_srv6 import ShowSrv6Config, ShowSrv6Locator
+from genie.libs.parser.arcos.show_srv6 import (
+    ShowSrv6Config,
+    ShowSrv6Locator,
+    ShowSrv6LocalSids,
+)
 
 
 SAMPLES_DIR = Path(
@@ -146,6 +150,79 @@ def test_show_srv6_locator_instance_validation():
     """Validate instance parameter is validated for invalid characters."""
 
     parser = ShowSrv6Locator(device="dummy")
+
+    with pytest.raises(ValueError, match="Invalid characters"):
+        parser.cli(instance="default; rm -rf /")
+
+
+def test_show_srv6_local_sids_golden():
+    """Validate parsing of the golden SRv6 local-sids sample (live capture)."""
+
+    sample_file = SAMPLES_DIR / "srv6_local_sids.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowSrv6LocalSids(device="dummy")
+    result = parser.cli(output=output)
+
+    assert "network_instance" in result
+    assert "default" in result["network_instance"]
+
+    ni = result["network_instance"]["default"]
+    local_sids = ni.get("local_sids", {})
+
+    # Golden sample has 15 local-SIDs: 3 plain End (one per locator/algo)
+    # and 12 End.X (4 adjacency SIDs per locator/algo).
+    assert len(local_sids) == 15
+
+    # Plain End SID (sidmgr-owned) — no sid_paths key.
+    end_sid = local_sids["fcbb:bb00:1:1::/64"]
+    assert end_sid["behavior"] == "END_PSP_USD"
+    assert end_sid["locator_name"] == "LOC_R1_ALG128"
+    assert end_sid["client_name"] == "sidmgr"
+    assert "sid_paths" not in end_sid
+
+    # End.X SID (isis-owned) — behavior prefix stripped, sid_paths present.
+    endx_sid = local_sids["fcbb:bb00:1:8012::/64"]
+    assert endx_sid["behavior"] == "END_X_PSP_USD"
+    assert endx_sid["locator_name"] == "LOC_R1_ALG128"
+    assert endx_sid["client_name"] == "isis-default@defaul"
+    assert endx_sid["sid_paths"] == [
+        {
+            "next_hop_address": "fe80::b436:c5ff:fe66:85ed",
+            "interface": "swp1",
+        }
+    ]
+
+    # All 15 SIDs have module-prefix-stripped, bare-token behaviors.
+    for sid, entry in local_sids.items():
+        assert ":" not in entry["behavior"], (
+            f"behavior for {sid} still has a module prefix: {entry['behavior']}"
+        )
+
+
+def test_show_srv6_local_sids_with_instance_parameter():
+    """Validate ShowSrv6LocalSids accepts instance parameter."""
+
+    sample_file = SAMPLES_DIR / "srv6_local_sids.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowSrv6LocalSids(device="dummy")
+    result = parser.cli(instance="default", output=output)
+
+    assert "network_instance" in result
+    assert "default" in result["network_instance"]
+
+
+def test_show_srv6_local_sids_instance_validation():
+    """Validate instance parameter is validated for invalid characters."""
+
+    parser = ShowSrv6LocalSids(device="dummy")
 
     with pytest.raises(ValueError, match="Invalid characters"):
         parser.cli(instance="default; rm -rf /")

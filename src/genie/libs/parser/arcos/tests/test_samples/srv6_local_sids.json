@@ -1,0 +1,203 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-srv6:srv6": {
+            "local-sids": {
+              "local-sid": [
+                {
+                  "sid": "fcbb:bb00:1:1::/64",
+                  "behavior": "arcos-srv6-types:END_PSP_USD",
+                  "locator-name": "LOC_R1_ALG128",
+                  "client-name": "sidmgr"
+                },
+                {
+                  "sid": "fcbb:bb00:1:8012::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG128",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::b436:c5ff:fe66:85ed",
+                        "interface": "swp1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:1:8013::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG128",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::84e7:62ff:fe65:4498",
+                        "interface": "swp2"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:1:8014::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG128",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::7074:61ff:fee2:5407",
+                        "interface": "swp3"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:1:8015::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG128",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::75:b6ff:fe8d:ec0e",
+                        "interface": "swp4"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:11:1::/64",
+                  "behavior": "arcos-srv6-types:END_PSP_USD",
+                  "locator-name": "LOC_R1_ALG129",
+                  "client-name": "sidmgr"
+                },
+                {
+                  "sid": "fcbb:bb00:11:8012::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG129",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::b436:c5ff:fe66:85ed",
+                        "interface": "swp1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:11:8013::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG129",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::84e7:62ff:fe65:4498",
+                        "interface": "swp2"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:11:8014::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG129",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::7074:61ff:fee2:5407",
+                        "interface": "swp3"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:11:8015::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG129",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::75:b6ff:fe8d:ec0e",
+                        "interface": "swp4"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:21:1::/64",
+                  "behavior": "arcos-srv6-types:END_PSP_USD",
+                  "locator-name": "LOC_R1_ALG130",
+                  "client-name": "sidmgr"
+                },
+                {
+                  "sid": "fcbb:bb00:21:8015::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG130",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::b436:c5ff:fe66:85ed",
+                        "interface": "swp1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:21:8016::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG130",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::84e7:62ff:fe65:4498",
+                        "interface": "swp2"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:21:8017::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG130",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::7074:61ff:fee2:5407",
+                        "interface": "swp3"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "sid": "fcbb:bb00:21:8018::/64",
+                  "behavior": "arcos-srv6-types:END_X_PSP_USD",
+                  "locator-name": "LOC_R1_ALG130",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::75:b6ff:fe8d:ec0e",
+                        "interface": "swp4"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

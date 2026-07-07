@@ -288,3 +288,137 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
                 ni_dict["srv6"] = ni_entry
 
         return ret_dict
+
+
+class ShowSrv6LocalSidsSchema(MetaParser):
+    """Schema for the SRv6 local-SID table operational state.
+
+    Represents per-SID SRv6 local-SID state per network-instance as
+    returned by::
+
+        show network-instance * srv6 local-sids | display json | nomore
+    """
+
+    schema = {
+        "network_instance": {
+            Any(): {  # network-instance name
+                Optional("local_sids"): {
+                    Any(): {  # SID, e.g. "fcbb:bb00:1:1::/64"
+                        Optional("behavior"): str,
+                        Optional("locator_name"): str,
+                        Optional("client_name"): str,
+                        Optional("sid_paths"): list,
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowSrv6LocalSids(ShowSrv6LocalSidsSchema):
+    """Parser for ArcOS SRv6 local-SID table operational state (JSON)."""
+
+    cli_command = [
+        "show network-instance {instance} srv6 local-sids",
+    ]
+
+    def cli(
+        self,
+        instance: str = "*",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(instance, "instance")
+            cmd = f"show network-instance {instance} srv6 local-sids"
+            log.debug("Executing command: %s", cmd)
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        log.debug("Parsing output: %s", output)
+        ret_dict: Dict[str, TypeAny] = {"network_instance": {}}
+
+        try:
+            parsed_json = load_json_robust(output)
+        except json.JSONDecodeError as exc:
+            log.warning("Failed to parse SRv6 local-sids JSON output: %s", exc)
+            return ret_dict
+        except Exception as exc:  # pragma: no cover - defensive
+            log.warning("Unexpected error parsing SRv6 local-sids JSON: %s", exc)
+            return ret_dict
+
+        instances_to_parse = []
+        data = parsed_json.get("data", {})
+        ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
+        for ni in ni_container.get("network-instance", []):
+            ni_name = ni.get("name")
+            if not ni_name:
+                continue
+            instances_to_parse.append(ni_name)
+
+        if not instances_to_parse:
+            instances_to_parse = [DEFAULT_INSTANCE]
+
+        for inst_name in instances_to_parse:
+            srv6 = _get_srv6_data(parsed_json, instance=inst_name)
+            if not srv6:
+                continue
+
+            local_sids_container = srv6.get("local-sids", {}) or {}
+            sid_list = local_sids_container.get("local-sid", []) or []
+            if not sid_list:
+                continue
+
+            sids_dict: Dict[str, TypeAny] = {}
+            for entry in sid_list:
+                sid = entry.get("sid")
+                if not sid:
+                    continue
+
+                sid_entry: Dict[str, TypeAny] = {}
+
+                behavior = entry.get("behavior")
+                if behavior:
+                    # Strip the module prefix, e.g.
+                    # "arcos-srv6-types:END_PSP_USD" -> "END_PSP_USD"
+                    # Generic strip (not hardcoded to a single prefix) so
+                    # future behaviors (e.g. uSID flavors) are handled the
+                    # same way without special-casing.
+                    if ":" in behavior:
+                        behavior = behavior.split(":", 1)[1]
+                    sid_entry["behavior"] = behavior
+
+                if "locator-name" in entry:
+                    sid_entry["locator_name"] = entry["locator-name"]
+
+                if "client-name" in entry:
+                    sid_entry["client_name"] = entry["client-name"]
+
+                sid_paths_container = entry.get("sid-paths", {}) or {}
+                sid_path_list = sid_paths_container.get("sid-path", []) or []
+                # ArcOS may emit a single sid-path as a dict rather than a
+                # single-element list.
+                if isinstance(sid_path_list, dict):
+                    sid_path_list = [sid_path_list]
+
+                if sid_path_list:
+                    paths = []
+                    for path in sid_path_list:
+                        path_entry: Dict[str, TypeAny] = {}
+                        if "next-hop-address" in path:
+                            path_entry["next_hop_address"] = path[
+                                "next-hop-address"
+                            ]
+                        if "interface" in path:
+                            path_entry["interface"] = path["interface"]
+                        if path_entry:
+                            paths.append(path_entry)
+                    if paths:
+                        sid_entry["sid_paths"] = paths
+
+                if sid_entry:
+                    sids_dict[sid] = sid_entry
+
+            if sids_dict:
+                ni_dict = ret_dict["network_instance"].setdefault(inst_name, {})
+                ni_dict["local_sids"] = sids_dict
+
+        return ret_dict
