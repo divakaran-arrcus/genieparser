@@ -364,6 +364,11 @@ class ShowSrv6LocalSids(ShowSrv6LocalSidsSchema):
 
             local_sids_container = srv6.get("local-sids", {}) or {}
             sid_list = local_sids_container.get("local-sid", []) or []
+            # ArcOS may emit a single local-sid as a dict rather than a
+            # single-element list when the network-instance has exactly
+            # one SID.
+            if isinstance(sid_list, dict):
+                sid_list = [sid_list]
             if not sid_list:
                 continue
 

@@ -1,0 +1,21 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-srv6:srv6": {
+            "local-sids": {
+              "local-sid": {
+                "sid": "fc00:0:1:1::/48",
+                "behavior": "arcos-srv6-types:UN_SL_END_PSP_USD",
+                "locator-name": "LOC_USID_ALG128",
+                "client-name": "sidmgr"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
