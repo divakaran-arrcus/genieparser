@@ -1,0 +1,41 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "global": {
+                    "arcos-openconfig-isis-augments:micro-loop-avoidance": {
+                      "state": {
+                        "srv6-enabled": false,
+                        "rib-update-delay": 60000
+                      },
+                      "status": [
+                        {
+                          "algo": 0,
+                          "level": 2,
+                          "topology-id": "arcos-openconfig-isis-augments:ISIS_MT_ID0_STANDARD",
+                          "mla-state": "ACTIVE",
+                          "last-event": "METRIC-INCREASE",
+                          "near-node": "rtr1",
+                          "far-node": "rtr2",
+                          "spf-start-timestamp": "2026-07-09T19:04:07.924903+00:00"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

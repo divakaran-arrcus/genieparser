@@ -4022,6 +4022,143 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
         return ret_dict
 
 
+class ShowIsisMicroLoopAvoidanceSchema(MetaParser):
+    """Schema for ArcOS ISIS global micro-loop-avoidance operational state.
+
+    Captures the global MLA state (srv6-enabled, rib-update-delay) plus the
+    per-topology status rows that durably record the last MLA event
+    (mla-state, last-event, near/far-node). Status rows are keyed by index;
+    each carries ``algo`` (0 = SPF/base, 128+ = flex-algo) and ``level`` /
+    ``topology-id`` (MT-0 = standard IPv4, MT-2 = IPv6) so callers can filter.
+    """
+
+    schema = {
+        "network-instance": {
+            Any(): {
+                "isis": {
+                    Any(): {
+                        Optional("global"): {
+                            Optional("micro-loop-avoidance"): {
+                                Optional("srv6-enabled"): bool,
+                                Optional("rib-update-delay"): int,
+                                Optional("status"): {
+                                    Any(): {
+                                        Optional("algo"): int,
+                                        Optional("level"): int,
+                                        Optional("topology-id"): str,
+                                        Optional("mla-state"): str,
+                                        Optional("last-event"): str,
+                                        Optional("near-node"): str,
+                                        Optional("far-node"): str,
+                                        Optional("spf-start-timestamp"): str,
+                                    }
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+class ShowIsisMicroLoopAvoidance(ShowIsisMicroLoopAvoidanceSchema):
+    """Parser for ArcOS ISIS global micro-loop-avoidance (JSON format).
+
+    Command pattern (before JSON pipe)::
+
+        show network-instance {network_instance} protocol ISIS {protocol_instance} global micro-loop-avoidance
+    """
+
+    cli_command = [
+        "show network-instance {network_instance} protocol ISIS {protocol_instance} global micro-loop-avoidance",
+    ]
+
+    def cli(
+        self,
+        network_instance: str = "default",
+        protocol_instance: str = "default",
+        output: TypeOptional[str] = None,
+    ) -> TypeAny:
+        if output is None:
+            validate_input(network_instance, "network_instance")
+            validate_input(protocol_instance, "protocol_instance")
+            cmd = (
+                f"show network-instance {network_instance} protocol ISIS "
+                f"{protocol_instance} global micro-loop-avoidance"
+            )
+            output = self.device.execute(f"{cmd} | display json | nomore")
+
+        ret_dict: Dict[str, TypeAny] = {
+            "network-instance": {"default": {"isis": {"default": {}}}}
+        }
+
+        try:
+            parsed_json = load_json_robust(output)
+
+            isis = get_isis_data(parsed_json)
+            if not isis:
+                return ret_dict
+
+            global_config = isis.get("global", {})
+            mla_root = global_config.get(
+                f"{ARCOS_ISIS_AUGMENTS}:micro-loop-avoidance", {}
+            )
+            if not mla_root:
+                return ret_dict
+
+            mla_dict: Dict[str, TypeAny] = {}
+
+            # Flatten the global state wrapper.
+            state = mla_root.get("state", {})
+            if "srv6-enabled" in state:
+                mla_dict["srv6-enabled"] = state["srv6-enabled"]
+            if "rib-update-delay" in state:
+                mla_dict["rib-update-delay"] = state["rib-update-delay"]
+
+            # Per-topology status rows (list -> dict keyed by index).
+            status_list = mla_root.get("status", [])
+            if isinstance(status_list, dict):  # single-item-as-dict guard
+                status_list = [status_list]
+
+            status_dict: Dict[str, TypeAny] = {}
+            for idx, row in enumerate(status_list):
+                if not isinstance(row, dict):
+                    continue
+                entry: Dict[str, TypeAny] = {}
+                if "algo" in row:
+                    entry["algo"] = row["algo"]
+                if "level" in row:
+                    entry["level"] = row["level"]
+                topo = row.get("topology-id")
+                if topo is not None:
+                    entry["topology-id"] = _strip_value(str(topo))
+                for field in (
+                    "mla-state",
+                    "last-event",
+                    "near-node",
+                    "far-node",
+                    "spf-start-timestamp",
+                ):
+                    if field in row:
+                        entry[field] = row[field]
+                status_dict[str(idx)] = entry
+
+            if status_dict:
+                mla_dict["status"] = status_dict
+
+            if mla_dict:
+                ni_isis = ret_dict["network-instance"]["default"]["isis"]["default"]
+                ni_isis.setdefault("global", {})["micro-loop-avoidance"] = mla_dict
+
+        except json.JSONDecodeError as exc:
+            logger.warning("Failed to parse JSON output: %s", exc)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.warning("Error parsing ISIS micro-loop-avoidance data: %s", exc)
+
+        return ret_dict
+
+
 class ShowIsisFlexAlgoFastRerouteSchema(MetaParser):
     """Schema for ArcOS ISIS flexible-algorithm fast-reroute per AF, algorithm, and prefix.
 

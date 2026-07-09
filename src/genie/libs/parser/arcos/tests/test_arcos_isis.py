@@ -14,6 +14,7 @@ from genie.libs.parser.arcos.show_isis import (
     ShowIsisLevelCounters,
     ShowIsisLevelState,
     ShowIsisLsp,
+    ShowIsisMicroLoopAvoidance,
     ShowIsisMplsLabelDb,
     ShowIsisProtectionTracker,
     ShowIsisRedistributeRoute,
@@ -1956,3 +1957,36 @@ def test_show_isis_fast_reroute_q_null_docker_quirk():
 
     assert level["p-node-system-id"] == "rtr4.00"
     assert level["q-node-system-id"] == "0000.0000.0000.00"
+
+
+def test_show_isis_micro_loop_avoidance_sample():
+    """Validate parsing of ISIS global micro-loop-avoidance status."""
+
+    sample_file = SAMPLES_DIR / "isis_micro_loop_avoidance.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisMicroLoopAvoidance(device="dummy")
+    result = parser.cli(output=output)
+
+    mla = result["network-instance"]["default"]["isis"]["default"]["global"][
+        "micro-loop-avoidance"
+    ]
+    # Flattened global state
+    assert mla["srv6-enabled"] is False
+    assert mla["rib-update-delay"] == 60000
+
+    # Per-topology status row (keyed by index; value prefix stripped)
+    status = mla["status"]
+    assert len(status) >= 1
+    row = status["0"]
+    assert row["algo"] == 0
+    assert row["level"] == 2
+    assert row["topology-id"] == "ISIS_MT_ID0_STANDARD"  # arcos augment prefix stripped
+    assert row["mla-state"] in ("ACTIVE", "EXPIRED")
+    assert row["last-event"] == "METRIC-INCREASE"
+    assert row["near-node"] == "rtr1"
+    assert row["far-node"] == "rtr2"
+    assert "spf-start-timestamp" in row
