@@ -4076,8 +4076,8 @@ class ShowIsisMicroLoopAvoidance(ShowIsisMicroLoopAvoidanceSchema):
 
     def cli(
         self,
-        network_instance: str = "default",
-        protocol_instance: str = "default",
+        network_instance: str = "*",
+        protocol_instance: str = "*",
         output: TypeOptional[str] = None,
     ) -> TypeAny:
         if output is None:
@@ -4142,7 +4142,21 @@ class ShowIsisMicroLoopAvoidance(ShowIsisMicroLoopAvoidanceSchema):
                 ):
                     if field in row:
                         entry[field] = row[field]
-                status_dict[str(idx)] = entry
+                # Key by the YANG composite key (algo + level + topology-id) so
+                # rows are directly addressable and stable across polls; the
+                # underlying list is not ordered-by-user, so position-based
+                # keys would churn. Fall back to the list index only if the
+                # composite key can't be formed (a row missing those leaves).
+                algo, level, topo_id = (
+                    entry.get("algo"),
+                    entry.get("level"),
+                    entry.get("topology-id"),
+                )
+                if algo is not None and level is not None and topo_id is not None:
+                    key = f"{algo}-{level}-{topo_id}"
+                else:
+                    key = str(idx)
+                status_dict[key] = entry
 
             if status_dict:
                 mla_dict["status"] = status_dict

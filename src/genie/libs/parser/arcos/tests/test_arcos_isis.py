@@ -1978,15 +1978,53 @@ def test_show_isis_micro_loop_avoidance_sample():
     assert mla["srv6-enabled"] is False
     assert mla["rib-update-delay"] == 60000
 
-    # Per-topology status row (keyed by index; value prefix stripped)
+    # Per-topology status row, keyed by the YANG composite key
+    # "algo-level-topology-id" (value prefix stripped).
     status = mla["status"]
-    assert len(status) >= 1
-    row = status["0"]
+    assert len(status) == 1
+    assert set(status.keys()) == {"0-2-ISIS_MT_ID0_STANDARD"}
+    row = status["0-2-ISIS_MT_ID0_STANDARD"]
     assert row["algo"] == 0
     assert row["level"] == 2
     assert row["topology-id"] == "ISIS_MT_ID0_STANDARD"  # arcos augment prefix stripped
-    assert row["mla-state"] in ("ACTIVE", "EXPIRED")
+    assert row["mla-state"] == "ACTIVE"
     assert row["last-event"] == "METRIC-INCREASE"
     assert row["near-node"] == "rtr1"
     assert row["far-node"] == "rtr2"
-    assert "spf-start-timestamp" in row
+    assert row["spf-start-timestamp"] == "2026-07-09T19:04:07.924903+00:00"
+
+
+def test_show_isis_micro_loop_avoidance_multi_row():
+    """Validate multi-row micro-loop-avoidance parsing + composite keying.
+
+    Exercises the >1 status-row path (base algo-0 + flex-algo-128, same
+    topology): each row must be addressable by its distinct composite key
+    "algo-level-topology-id" with no collision or dropped row."""
+
+    sample_file = SAMPLES_DIR / "isis_micro_loop_avoidance_multi.json"
+    if not sample_file.exists():
+        pytest.skip(f"Sample file not found: {sample_file}")
+
+    output = sample_file.read_text()
+
+    parser = ShowIsisMicroLoopAvoidance(device="dummy")
+    result = parser.cli(output=output)
+
+    mla = result["network-instance"]["default"]["isis"]["default"]["global"][
+        "micro-loop-avoidance"
+    ]
+    status = mla["status"]
+    # Two distinct rows, keyed by composite key — no collision, none dropped.
+    assert len(status) == 2
+    assert set(status.keys()) == {
+        "0-2-ISIS_MT_ID0_STANDARD",
+        "128-2-ISIS_MT_ID0_STANDARD",
+    }
+    algo0 = status["0-2-ISIS_MT_ID0_STANDARD"]
+    algo128 = status["128-2-ISIS_MT_ID0_STANDARD"]
+    assert algo0["algo"] == 0
+    assert algo0["mla-state"] == "ACTIVE"
+    assert algo0["last-event"] == "LINK-DOWN"
+    assert algo128["algo"] == 128
+    assert algo128["mla-state"] == "EXPIRED"
+    assert algo128["last-event"] == "OVERLOAD-SET"
