@@ -1,0 +1,13 @@
+expected_output = {'network-instance': {'default': {'isis': {'default': {'levels': {'2': {'corrupted-lsps': 0,
+                                                                        'database-overloads': 0,
+                                                                        'manual-address-drop-from-areas': 0,
+                                                                        'exceed-max-seq-nums': 0,
+                                                                        'seq-num-skips': 0,
+                                                                        'own-lsp-purges': 0,
+                                                                        'id-len-mismatch': 0,
+                                                                        'part-changes': 0,
+                                                                        'max-area-address-mismatches': 0,
+                                                                        'auth-fails': 0,
+                                                                        'auth-type-fails': 0,
+                                                                        'spf-runs': 35,
+                                                                        'lsp-errors': 0}}}}}}}

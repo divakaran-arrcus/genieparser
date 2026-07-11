@@ -1,0 +1,10 @@
+expected_output = {'network-instance': {'default': {'isis': {'default': {'global': {'protection-trackers': {'protection-tracker': {'268435459': {'id': '268435459',
+                                                                                                                               'reference-count': 1,
+                                                                                                                               'interface': 'swp1',
+                                                                                                                               'system-id': 'rtr6.00',
+                                                                                                                               'last-updated-time': '2026-05-12T18:15:54.892731+00:00'},
+                                                                                                                 '268435460': {'id': '268435460',
+                                                                                                                               'reference-count': 1,
+                                                                                                                               'interface': 'swp2',
+                                                                                                                               'system-id': 'rtr2.00',
+                                                                                                                               'last-updated-time': '2026-05-12T18:15:58.72906+00:00'}}}}}}}}}

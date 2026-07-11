@@ -1,0 +1,16 @@
+expected_output = {'network-instance': {'default': {'isis': {'default': {'interface': {'swp1': {'level': {2: {'adjacency': {'rtr1': {'state': 'UP',
+                                                                                                                   'holdtime': 28,
+                                                                                                                   'adjacency-type': 'LEVEL_2',
+                                                                                                                   'neighbor-ipv4-address': '10.20.0.10',
+                                                                                                                   'up-time': '4d '
+                                                                                                                              '23:18:45',
+                                                                                                                   'num-state-changes': 3,
+                                                                                                                   'last-state-change-timestamp': '2025-12-02T22:31:07.311688+00:00',
+                                                                                                                   'last-down-reason': 'NONE',
+                                                                                                                   'local-extended-circuit-id': 757,
+                                                                                                                   'neighbor-extended-circuit-id': 758,
+                                                                                                                   'neighbor-circuit-type': 'LEVEL_2',
+                                                                                                                   'restart-support': False,
+                                                                                                                   'restart-status': False,
+                                                                                                                   'nlpid': ['IPV4'],
+                                                                                                                   'usable': True}}}}}}}}}}}

@@ -1,0 +1,483 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "oc-pol-types:ISIS",
+                "name": "default",
+                "isis": {
+                  "global": {
+                    "afi-safi": {
+                      "af": [
+                        {
+                          "afi-name": "oc-isis-types:IPV6",
+                          "safi-name": "oc-isis-types:UNICAST",
+                          "arcos-openconfig-isis-augments:redistribute-routes": {
+                            "redistribute-route": [
+                              {
+                                "prefix": "2400:2020:0:100::/56",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 2,
+                                      "state": {
+                                        "metric": 110,
+                                        "route-tag": 0,
+                                        "flags": ["arcos-openconfig-isis-augments:summary"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:102::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 2,
+                                      "state": {
+                                        "metric": 110,
+                                        "route-tag": 0,
+                                        "srv6-locator-metric": 110,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 1
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:102::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 2,
+                                      "state": {
+                                        "metric": 110,
+                                        "route-tag": 0,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 1
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:201::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1005010,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 1005010,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:201::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1005010,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:900::/56",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 10,
+                                        "route-tag": 100,
+                                        "flags": ["arcos-openconfig-isis-augments:summary"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+
+                              },
+                              {
+                                "prefix": "2400:2020:0:901::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1002810,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 1002810,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:901::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1002810,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:902::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1000010,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 1000010,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:902::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1001500,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:903::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1005310,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 1005310,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:903::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1005310,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:905::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 10,
+                                        "route-tag": 0,
+                                        "flags": ["arcos-openconfig-isis-augments:redistribute"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "arcos-openconfig-policy-types:SIDMGR"
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "level-number": 2,
+                                      "state": {
+                                        "metric": 10,
+                                        "route-tag": 0,
+                                        "flags": ["arcos-openconfig-isis-augments:redistribute"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "arcos-openconfig-policy-types:SIDMGR"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:905::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 10,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:connected"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default"
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "level-number": 2,
+                                      "state": {
+                                        "metric": 10,
+                                        "route-tag": 0,
+                                        "flags": ["arcos-openconfig-isis-augments:connected"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default"
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:906::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 11010,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:908::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 6000010,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 6000010,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:908::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 6000010,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:909::/64",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1002510,
+                                        "route-tag": 69,
+                                        "srv6-locator-metric": 1002510,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "prefix": "2400:2020:0:909::1/128",
+                                "levels": {
+                                  "level": [
+                                    {
+                                      "level-number": 1,
+                                      "state": {
+                                        "metric": 1002510,
+                                        "route-tag": 69,
+                                        "flags": ["arcos-openconfig-isis-augments:distribute", "arcos-openconfig-isis-augments:down"]
+                                      },
+                                      "source": {
+                                        "state": {
+                                          "identifier": "openconfig-policy-types:ISIS",
+                                          "name": "default@default",
+                                          "level-number": 2
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
