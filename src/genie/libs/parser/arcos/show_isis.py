@@ -12,6 +12,7 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional, Or
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import (
     ARCOS_ISIS_AUGMENTS,
@@ -22,6 +23,17 @@ from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 
 
 logger = logging.getLogger(__name__)
+
+
+def _is_empty(data):
+    """True if data holds no leaf values (only empty/nested-empty containers)."""
+    if data is None:
+        return True
+    if isinstance(data, dict):
+        return all(_is_empty(v) for v in data.values())
+    if isinstance(data, (list, tuple, set, str)):
+        return len(data) == 0
+    return False
 
 
 def get_isis_data(json_output: Dict, instance: str = DEFAULT_INSTANCE) -> Dict:
@@ -492,6 +504,8 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
             logger.error("Error parsing ISIS adjacency data: %s", exc)
             logger.error("Traceback: %s", traceback.format_exc())
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisAdjacency: empty output")
         return ret_dict
 
 
@@ -1283,6 +1297,8 @@ class ShowIsisLsp(ShowIsisLspSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS LSP data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisLsp: empty output")
         return ret_dict
 
     def _parse_is_neighbor_subtlvs(
@@ -1839,6 +1855,8 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
                         "interfaces": interfaces_dict
                     }
 
+        if _is_empty(result):
+            raise SchemaEmptyParserError("ShowIsisInterface: empty output")
         return result
 
     # ------------------------------------------------------------------
@@ -3341,6 +3359,8 @@ class ShowIsisConfig(ShowIsisConfigSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS config data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisConfig: empty output")
         return ret_dict
 
 
@@ -3541,6 +3561,8 @@ class ShowIsisRoute(ShowIsisRouteSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS routes data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisRoute: empty output")
         return ret_dict
 
 
@@ -3707,6 +3729,8 @@ class ShowIsisRedistributeRoute(ShowIsisRedistributeRouteSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS redistribute routes data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisRedistributeRoute: empty output")
         return ret_dict
 
 
@@ -3824,6 +3848,8 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS global data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisGlobal: empty output")
         return ret_dict
 
 
@@ -4019,6 +4045,8 @@ class ShowIsisFastReroute(ShowIsisFastRerouteSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS fast-reroute data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisFastReroute: empty output")
         return ret_dict
 
 
@@ -4170,6 +4198,8 @@ class ShowIsisMicroLoopAvoidance(ShowIsisMicroLoopAvoidanceSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS micro-loop-avoidance data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisMicroLoopAvoidance: empty output")
         return ret_dict
 
 
@@ -4389,6 +4419,8 @@ class ShowIsisFlexAlgoFastReroute(ShowIsisFlexAlgoFastRerouteSchema):
                 "Error parsing ISIS flexible-algorithm fast-reroute data: %s", exc
             )
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisFlexAlgoFastReroute: empty output")
         return ret_dict
 
 
@@ -4610,6 +4642,8 @@ class ShowIsisFlexAlgoRoute(ShowIsisFlexAlgoRouteSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS flexible-algorithm routes data: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisFlexAlgoRoute: empty output")
         return ret_dict
 
 
@@ -4929,6 +4963,8 @@ class ShowIsisMplsLabelDb(ShowIsisMplsLabelDbSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS MPLS label database: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisMplsLabelDb: empty output")
         return ret_dict
 
     def _parse_statistics(self, stats: Dict) -> Dict[str, TypeAny]:
@@ -5120,6 +5156,8 @@ class ShowIsisLevelState(ShowIsisLevelStateSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS level state: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisLevelState: empty output")
         return ret_dict
 
 
@@ -5296,6 +5334,8 @@ class ShowIsisLevelCounters(ShowIsisLevelCountersSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS level counters: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisLevelCounters: empty output")
         return ret_dict
 
 
@@ -5517,6 +5557,8 @@ class ShowIsisSpfLog(ShowIsisSpfLogSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS SPF log: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisSpfLog: empty output")
         return ret_dict
 
 
@@ -5636,6 +5678,8 @@ class ShowIsisGlobalTimers(ShowIsisGlobalTimersSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS global timers: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisGlobalTimers: empty output")
         return ret_dict
 
 
@@ -5795,6 +5839,8 @@ class ShowIsisProtectionTracker(ShowIsisProtectionTrackerSchema):
                 "Error parsing ISIS protection-tracker: %s", exc
             )
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisProtectionTracker: empty output")
         return ret_dict
 
 
@@ -6001,4 +6047,6 @@ class ShowIsisGlobalTunnel(ShowIsisGlobalTunnelSchema):
         except Exception as exc:  # pragma: no cover - defensive
             logger.warning("Error parsing ISIS global tunnel: %s", exc)
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowIsisGlobalTunnel: empty output")
         return ret_dict
