@@ -10,12 +10,24 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional, Or
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import (
     DEFAULT_INSTANCE,
     OPENCONFIG_NETWORK_INSTANCES,
 )
 from genie.libs.parser.arcos.utils import load_json_robust, validate_input
+
+
+def _is_empty(data):
+    """True if data holds no leaf values (only empty/nested-empty containers)."""
+    if data is None:
+        return True
+    if isinstance(data, dict):
+        return all(_is_empty(v) for v in data.values())
+    if isinstance(data, (list, tuple, set, str)):
+        return len(data) == 0
+    return False
 
 
 log = logging.getLogger(__name__)
@@ -136,9 +148,13 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
             parsed_json = load_json_robust(output)
         except json.JSONDecodeError as exc:
             log.warning("Failed to parse Static Routing config JSON output: %s", exc)
+            if _is_empty(ret_dict):
+                raise SchemaEmptyParserError("ShowStaticRoutingConfig: empty output")
             return ret_dict
         except Exception as exc:
             log.warning("Unexpected error parsing Static Routing config JSON: %s", exc)
+            if _is_empty(ret_dict):
+                raise SchemaEmptyParserError("ShowStaticRoutingConfig: empty output")
             return ret_dict
 
         # Parse all network instances
@@ -312,4 +328,6 @@ class ShowStaticRoutingConfig(ShowStaticRoutingConfigSchema):
                     if static_routes_dict:
                         protocol_dict["static-routes"] = static_routes_dict
 
+        if _is_empty(ret_dict):
+            raise SchemaEmptyParserError("ShowStaticRoutingConfig: empty output")
         return ret_dict
