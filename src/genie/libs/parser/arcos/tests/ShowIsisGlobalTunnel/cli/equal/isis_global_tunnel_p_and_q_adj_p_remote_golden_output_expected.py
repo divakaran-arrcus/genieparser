@@ -1,0 +1,10 @@
+expected_output = {'network-instance': {'default': {'isis': {'default': {'tunnels': {'268435475': {'id': '268435475',
+                                                                                 'nexthop-address': 'fe80::f425:65ff:fea5:f639',
+                                                                                 'nexthop-interface': 'swp2',
+                                                                                 'tunnel-type': 'SRV6_TUNNEL',
+                                                                                 'reference-count': 3,
+                                                                                 'users': ['TI_LFA_TUNNEL'],
+                                                                                 'srv6-tunnel': {'source': '::',
+                                                                                                 'destination': 'fcbb:bb00:95:8003::',
+                                                                                                 'num-sids': 1,
+                                                                                                 'sids': ['fcbb:bb00:95:8003::']}}}}}}}}
