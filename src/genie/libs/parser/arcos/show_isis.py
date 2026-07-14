@@ -1811,6 +1811,9 @@ class ShowIsisInterface(ShowIsisInterfaceSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowIsisInterface: empty output")
+
         parsed_json = load_json_robust(output)
 
         # Navigate to network-instance list
