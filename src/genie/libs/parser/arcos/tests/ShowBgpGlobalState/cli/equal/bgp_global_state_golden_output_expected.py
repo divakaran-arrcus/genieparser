@@ -1,0 +1,13 @@
+expected_output = {'as': 65002,
+ 'router-id': '1.0.0.0',
+ 'total-paths': 3001342,
+ 'total-prefixes': 3000643,
+ 'route-distinguisher': '1.0.0.0:50001',
+ 'total-configured-neighbors': 7,
+ 'total-established-neighbors': 6,
+ 'established-configured-neighbors': 6,
+ 'shutdown-configured-neighbors': 1,
+ 'network-instances-present': 109,
+ 'cluster-id': '0.0.0.0',
+ 'shutdown-protocol': False,
+ 'segment-routing-enabled': False}

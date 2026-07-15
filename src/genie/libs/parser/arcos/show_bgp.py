@@ -115,6 +115,8 @@ class ShowBgpNeighbor(ShowBgpNeighborSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed_json = load_json_robust(output)
 
         result = self._parse_neighbors(parsed_json)
@@ -332,6 +334,8 @@ class ShowBgpGlobalState(ShowBgpGlobalStateSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed_json = load_json_robust(output)
         result = self._parse_global_state(parsed_json)
 
@@ -482,6 +486,8 @@ class ShowBgpGlobalAfiSafi(ShowBgpGlobalAfiSafiSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed_json = load_json_robust(output)
         result = self._parse_afi_safis(parsed_json)
 
@@ -650,6 +656,8 @@ class ShowBgpRibRoute(ShowBgpRibRouteSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed_json = load_json_robust(output)
 
         result = self._parse_rib_routes(parsed_json, afi_safi)
@@ -927,6 +935,8 @@ class ShowBgpConfig(ShowBgpConfigSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed_json = load_json_robust(output)
         result = self._parse_bgp_config(parsed_json)
 
@@ -1361,6 +1371,8 @@ class ShowBgpLabelDb(ShowBgpLabelDbSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos BGP: empty output")
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})
