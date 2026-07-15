@@ -87,6 +87,8 @@ class ShowOspfGlobal(ShowOspfGlobalSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
         global_data = ospf.get("global", {})
@@ -165,6 +167,8 @@ class ShowOspfNeighbor(ShowOspfNeighborSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -294,6 +298,8 @@ class ShowOspfArea(ShowOspfAreaSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -397,6 +403,8 @@ class ShowOspfInterface(ShowOspfInterfaceSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -510,6 +518,8 @@ class ShowOspfSpfThrottle(ShowOspfSpfThrottleSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -607,6 +617,8 @@ class ShowOspfLsdb(ShowOspfLsdbSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -787,6 +799,8 @@ class ShowOspfRunningConfig(ShowOspfRunningConfigSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
@@ -971,6 +985,8 @@ class ShowOspfGlobalRib(ShowOspfGlobalRibSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("arcos OSPF: empty output")
         parsed = load_json_robust(output)
         ospf = _navigate_to_ospf(parsed)
 
