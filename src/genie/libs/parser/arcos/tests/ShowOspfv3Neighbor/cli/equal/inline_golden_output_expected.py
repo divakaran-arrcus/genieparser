@@ -1,0 +1,12 @@
+expected_output = {'neighbors': {'0:swp1:1.1.1.1': {'area': 0,
+                                  'interface': 'swp1',
+                                  'neighbor-router-id': '1.1.1.1',
+                                  'neighbor-ip-address': 'fe80::1',
+                                  'adjacency-state': 'NEIGHBOR_FULL',
+                                  'priority': 1},
+               '0:swp2:4.4.4.4': {'area': 0,
+                                  'interface': 'swp2',
+                                  'neighbor-router-id': '4.4.4.4',
+                                  'neighbor-ip-address': 'fe80::4',
+                                  'adjacency-state': 'NEIGHBOR_2WAY',
+                                  'priority': 0}}}
