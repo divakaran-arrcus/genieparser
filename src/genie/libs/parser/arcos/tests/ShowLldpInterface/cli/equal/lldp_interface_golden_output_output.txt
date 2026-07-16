@@ -1,0 +1,138 @@
+{
+  "data": {
+    "openconfig-lldp:lldp": {
+      "interfaces": {
+        "interface": [
+          {
+            "name": "ma1",
+            "state": {
+              "name": "ma1",
+              "enabled": true,
+              "counters": {
+                "frame-in": "22891",
+                "frame-out": "22890",
+                "frame-error-in": "0",
+                "frame-discard": "0",
+                "tlv-discard": "0",
+                "tlv-unknown": "0",
+                "frame-error-out": "0"
+              }
+            },
+            "neighbors": {
+              "neighbor": [
+                {
+                  "id": "1-swp11",
+                  "state": {
+                    "system-name": "eq-mgmt-sw-rack203",
+                    "system-description": "Arrcus Operating System (ArcOS)",
+                    "chassis-id": "e0:01:a6:dc:d4:03",
+                    "chassis-id-type": "MAC_ADDRESS",
+                    "id": "1-swp11",
+                    "age": "7 days, 22:46:05",
+                    "port-id": "swp11",
+                    "port-id-type": "INTERFACE_NAME",
+                    "port-description": "swp11",
+                    "management-address": "10.50.1.203",
+                    "management-address-type": "IP Address",
+                    "arcos-openconfig-lldp-augments:management-address": "fe80::84f7:69ff:fedc:fa1c",
+                    "arcos-openconfig-lldp-augments:management-address-type": "IPv6 Address"
+                  },
+                  "capabilities": {
+                    "capability": [
+                      {
+                        "name": "openconfig-lldp-types:MAC_BRIDGE",
+                        "state": {
+                          "name": "openconfig-lldp-types:MAC_BRIDGE",
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "name": "openconfig-lldp-types:ROUTER",
+                        "state": {
+                          "name": "openconfig-lldp-types:ROUTER",
+                          "enabled": true
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "swp3",
+            "state": {
+              "name": "swp3",
+              "enabled": true,
+              "counters": {
+                "frame-in": "22868",
+                "frame-out": "22872",
+                "frame-error-in": "0",
+                "frame-discard": "0",
+                "tlv-discard": "0",
+                "tlv-unknown": "0",
+                "frame-error-out": "0"
+              }
+            },
+            "neighbors": {
+              "neighbor": [
+                {
+                  "id": "6-swp3",
+                  "state": {
+                    "system-name": "Metro2-S2-46Dx-203-13",
+                    "system-description": "Arrcus Operating System (ArcOS)",
+                    "chassis-id": "5c:07:58:ab:42:02",
+                    "chassis-id-type": "MAC_ADDRESS",
+                    "id": "6-swp3",
+                    "age": "6 days, 16:38:06",
+                    "port-id": "swp3",
+                    "port-id-type": "INTERFACE_NAME",
+                    "port-description": "swp3",
+                    "management-address": "10.50.203.13",
+                    "management-address-type": "IP Address",
+                    "arcos-openconfig-lldp-augments:management-address": "214:100:100::1",
+                    "arcos-openconfig-lldp-augments:management-address-type": "IPv6 Address"
+                  },
+                  "capabilities": {
+                    "capability": [
+                      {
+                        "name": "openconfig-lldp-types:MAC_BRIDGE",
+                        "state": {
+                          "name": "openconfig-lldp-types:MAC_BRIDGE",
+                          "enabled": false
+                        }
+                      },
+                      {
+                        "name": "openconfig-lldp-types:ROUTER",
+                        "state": {
+                          "name": "openconfig-lldp-types:ROUTER",
+                          "enabled": true
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "name": "swp14",
+            "state": {
+              "name": "swp14",
+              "enabled": true,
+              "counters": {
+                "frame-in": "0",
+                "frame-out": "0",
+                "frame-error-in": "0",
+                "frame-discard": "0",
+                "tlv-discard": "0",
+                "tlv-unknown": "0",
+                "frame-error-out": "0"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
