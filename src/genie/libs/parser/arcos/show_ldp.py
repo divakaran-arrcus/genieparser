@@ -87,6 +87,9 @@ class ShowLdpInterface(ShowLdpInterfaceSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLdpInterface: empty output")
+
         parsed = load_json_robust(output)
         ldp = _navigate_to_ldp(parsed)
         intf_attrs = ldp.get("interface-attributes", {})
@@ -181,6 +184,9 @@ class ShowLdpSession(ShowLdpSessionSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLdpSession: empty output")
+
         parsed = load_json_robust(output)
         ldp = _navigate_to_ldp(parsed)
 
@@ -265,6 +271,9 @@ class ShowLdpHelloAdjacency(ShowLdpHelloAdjacencySchema):
         if output is None:
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLdpHelloAdjacency: empty output")
 
         parsed = load_json_robust(output)
         ldp = _navigate_to_ldp(parsed)
@@ -352,6 +361,9 @@ class ShowLdpNeighbor(ShowLdpNeighborSchema):
         if output is None:
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLdpNeighbor: empty output")
 
         parsed = load_json_robust(output)
         ldp = _navigate_to_ldp(parsed)

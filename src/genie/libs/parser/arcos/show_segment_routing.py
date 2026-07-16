@@ -10,6 +10,7 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import (
     ARCOS_SR_AUGMENTS,
@@ -81,6 +82,9 @@ class ShowSrmsMappingsConfig(ShowSrmsMappingsConfigSchema):
             cmd = f"show running-config network-instance {instance} segment-routing"
             log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrmsMappingsConfig: empty output")
 
         log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"network-instances": {}}

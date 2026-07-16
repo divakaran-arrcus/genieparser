@@ -1,0 +1,87 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "mpls": {
+            "signaling-protocols": {
+              "ldp": {
+                "arcos-openconfig-network-instance-augments:hello-adjacencies": {
+                  "ipv4": {
+                    "hello-adjacency": [
+                      {
+                        "peer-address": "10.12.1.1",
+                        "state": {
+                          "peer-address": "10.12.1.1",
+                          "version": 1,
+                          "lsr-id": "1.1.1.1",
+                          "label-space-id": 0,
+                          "transport-address": "1.1.1.1",
+                          "source-address": "10.12.1.1",
+                          "holdtime": 15,
+                          "interface": "swp1",
+                          "uptime": "0d 00:00:46",
+                          "reset-count": 0,
+                          "adjacency-type": "LINK"
+                        }
+                      },
+                      {
+                        "peer-address": "10.23.2.3",
+                        "state": {
+                          "peer-address": "10.23.2.3",
+                          "version": 1,
+                          "lsr-id": "3.3.3.3",
+                          "label-space-id": 0,
+                          "transport-address": "3.3.3.3",
+                          "source-address": "10.23.2.3",
+                          "holdtime": 15,
+                          "interface": "swp2",
+                          "uptime": "0d 00:00:28",
+                          "reset-count": 0,
+                          "adjacency-type": "LINK"
+                        }
+                      },
+                      {
+                        "peer-address": "1.1.1.1",
+                        "state": {
+                          "peer-address": "1.1.1.1",
+                          "version": 1,
+                          "lsr-id": "1.1.1.1",
+                          "label-space-id": 0,
+                          "transport-address": "1.1.1.1",
+                          "source-address": "1.1.1.1",
+                          "holdtime": 45,
+                          "interface": "swp1",
+                          "uptime": "0d 00:00:46",
+                          "reset-count": 0,
+                          "adjacency-type": "TARGETED"
+                        }
+                      },
+                      {
+                        "peer-address": "3.3.3.3",
+                        "state": {
+                          "peer-address": "3.3.3.3",
+                          "version": 1,
+                          "lsr-id": "3.3.3.3",
+                          "label-space-id": 0,
+                          "transport-address": "3.3.3.3",
+                          "source-address": "3.3.3.3",
+                          "holdtime": 45,
+                          "interface": "swp2",
+                          "uptime": "0d 00:00:28",
+                          "reset-count": 0,
+                          "adjacency-type": "TARGETED"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

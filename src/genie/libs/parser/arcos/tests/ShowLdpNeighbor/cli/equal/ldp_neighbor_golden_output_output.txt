@@ -1,0 +1,89 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "mpls": {
+            "signaling-protocols": {
+              "ldp": {
+                "neighbors": {
+                  "neighbor": [
+                    {
+                      "lsr-id": "1.1.1.1",
+                      "label-space-id": 0,
+                      "state": {
+                        "lsr-id": "1.1.1.1",
+                        "label-space-id": 0
+                      },
+                      "authentication": {
+                        "state": {
+                          "enable": false
+                        }
+                      },
+                      "arcos-openconfig-network-instance-augments:max-remote-binding": {
+                        "state": {
+                          "maximum-remote-binding": 0
+                        }
+                      },
+                      "arcos-openconfig-network-instance-augments:targeted": {
+                        "address-family": [
+                          {
+                            "afi-name": "IPV4",
+                            "state": {
+                              "afi-name": "IPV4",
+                              "enabled": true,
+                              "destination-address": "1.1.1.1"
+                            }
+                          }
+                        ],
+                        "state": {
+                          "hello-holdtime": 45,
+                          "hello-interval": 15
+                        }
+                      }
+                    },
+                    {
+                      "lsr-id": "3.3.3.3",
+                      "label-space-id": 0,
+                      "state": {
+                        "lsr-id": "3.3.3.3",
+                        "label-space-id": 0
+                      },
+                      "authentication": {
+                        "state": {
+                          "enable": false
+                        }
+                      },
+                      "arcos-openconfig-network-instance-augments:max-remote-binding": {
+                        "state": {
+                          "maximum-remote-binding": 0
+                        }
+                      },
+                      "arcos-openconfig-network-instance-augments:targeted": {
+                        "address-family": [
+                          {
+                            "afi-name": "IPV4",
+                            "state": {
+                              "afi-name": "IPV4",
+                              "enabled": true,
+                              "destination-address": "3.3.3.3"
+                            }
+                          }
+                        ],
+                        "state": {
+                          "hello-holdtime": 45,
+                          "hello-interval": 15
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

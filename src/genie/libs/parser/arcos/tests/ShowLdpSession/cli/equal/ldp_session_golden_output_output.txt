@@ -1,0 +1,71 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "mpls": {
+            "signaling-protocols": {
+              "ldp": {
+                "arcos-openconfig-network-instance-augments:sessions": {
+                  "ipv4": {
+                    "session": [
+                      {
+                        "peer-address": "1.1.1.1",
+                        "state": {
+                          "peer-address": "1.1.1.1",
+                          "local-address": "2.2.2.2",
+                          "session-state": "Operational",
+                          "session-role": "Active",
+                          "keepalive-timeout": 30,
+                          "keepalive-interval": 10,
+                          "local-lsr-id": "2.2.2.2",
+                          "local-label-space-id": 0,
+                          "remote-lsr-id": "1.1.1.1",
+                          "remote-label-space-id": 0,
+                          "graceful-restart": "Disabled",
+                          "graceful-restart-state": "Inactive",
+                          "reconnect-time": 0,
+                          "recovery-time": 0,
+                          "forwarding-holdtime": 0,
+                          "last-update-timestamp": "2026-03-31T17:38:22.136631+00:00",
+                          "last-established-time": "2026-03-31T17:38:22.136631+00:00",
+                          "uptime": "0d 00:00:11",
+                          "reset-count": 1
+                        }
+                      },
+                      {
+                        "peer-address": "3.3.3.3",
+                        "state": {
+                          "peer-address": "3.3.3.3",
+                          "local-address": "2.2.2.2",
+                          "session-state": "Operational",
+                          "session-role": "Passive",
+                          "keepalive-timeout": 30,
+                          "keepalive-interval": 10,
+                          "local-lsr-id": "2.2.2.2",
+                          "local-label-space-id": 0,
+                          "remote-lsr-id": "3.3.3.3",
+                          "remote-label-space-id": 0,
+                          "graceful-restart": "Disabled",
+                          "graceful-restart-state": "Inactive",
+                          "reconnect-time": 0,
+                          "recovery-time": 0,
+                          "forwarding-holdtime": 0,
+                          "last-update-timestamp": "2026-03-31T17:38:10.20581+00:00",
+                          "last-established-time": "2026-03-31T17:38:10.205811+00:00",
+                          "uptime": "0d 00:00:23",
+                          "reset-count": 0
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

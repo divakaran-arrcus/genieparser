@@ -1,0 +1,10 @@
+expected_output = {'interfaces': {'swp1': {'address-families': {'IPV4': {'afi-name': 'IPV4', 'enabled': True}},
+                         'hello-holdtime': 15,
+                         'hello-interval': 5,
+                         'interface-id': 'swp1',
+                         'link-hello': True},
+                'swp2': {'address-families': {'IPV4': {'afi-name': 'IPV4', 'enabled': True}},
+                         'hello-holdtime': 15,
+                         'hello-interval': 5,
+                         'interface-id': 'swp2',
+                         'link-hello': True}}}
