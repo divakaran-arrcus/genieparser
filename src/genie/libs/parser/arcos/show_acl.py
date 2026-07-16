@@ -91,6 +91,9 @@ class ShowAclSet(ShowAclSetSchema):
                 cmd = "show acl acl-set | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowAclSet: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         acl_root = data.get("openconfig-acl:acl", {})

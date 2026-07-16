@@ -75,6 +75,9 @@ class ShowVrrp(ShowVrrpSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowVrrp: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         intf_container = data.get("openconfig-interfaces:interfaces", {})

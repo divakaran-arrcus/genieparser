@@ -1,0 +1,52 @@
+{
+  "data": {
+    "openconfig-keychain:keychains": {
+      "keychain": [
+        {
+          "name": "isis-key",
+          "state": {
+            "name": "isis-key",
+            "tolerance": 30
+          },
+          "keys": {
+            "key": [
+              {
+                "key-id": "10",
+                "state": {
+                  "key-id": "10",
+                  "secret-key": "$8$k0hukL5Ih3oArk9s4tGPhV8HHYVhV17wkpyA9BBer/o=",
+                  "crypto-algorithm": "openconfig-keychain-types:HMAC_SHA_1",
+                  "arcos-openconfig-keychain-augments:send-active": true,
+                  "arcos-openconfig-keychain-augments:receive-active": true
+                },
+                "send-lifetime": {
+                  "state": {
+                    "send-and-receive": true,
+                    "arcos-openconfig-keychain-augments:always": true
+                  }
+                }
+              },
+              {
+                "key-id": "20",
+                "state": {
+                  "key-id": "20",
+                  "secret-key": "$8$87/ZbJSkGZaFrTNsgTXHHqPN6GHa4ttRaumqShughxjKZQnrSzhpTVfJzl+7fyJo",
+                  "crypto-algorithm": "openconfig-keychain-types:HMAC_SHA_256",
+                  "arcos-openconfig-keychain-augments:send-active": false,
+                  "arcos-openconfig-keychain-augments:receive-active": true
+                },
+                "send-lifetime": {
+                  "state": {
+                    "start-time": "2026-01-01T00:00:00-00:00",
+                    "end-time": "2026-12-31T23:59:59-00:00",
+                    "send-and-receive": true
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
