@@ -1,0 +1,37 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-srv6:srv6": {
+            "local-sids": {
+              "local-sid": [
+                {
+                  "sid": "fc00:0:1:1::/48",
+                  "behavior": "arcos-srv6-types:UN_SL_END_PSP_USD",
+                  "locator-name": "LOC_USID_ALG128",
+                  "client-name": "sidmgr"
+                },
+                {
+                  "sid": "fc00:0:1:f001::/48",
+                  "behavior": "arcos-srv6-types:UA_SX_END_X_PSP_USD",
+                  "locator-name": "LOC_USID_ALG128",
+                  "client-name": "isis-default@defaul",
+                  "sid-paths": {
+                    "sid-path": [
+                      {
+                        "next-hop-address": "fe80::b436:c5ff:fe66:85ed",
+                        "interface": "swp1"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

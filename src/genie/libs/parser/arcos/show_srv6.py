@@ -10,6 +10,7 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import (
     ARCOS_SRV6,
@@ -98,6 +99,9 @@ class ShowSrv6Config(ShowSrv6ConfigSchema):
                 cmd += f" locator {locator}"
             log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrv6Config: empty output")
 
         log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
@@ -223,6 +227,9 @@ class ShowSrv6Locator(ShowSrv6LocatorSchema):
             log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrv6Locator: empty output")
+
         log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"network-instances": {}}
 
@@ -332,6 +339,9 @@ class ShowSrv6LocalSids(ShowSrv6LocalSidsSchema):
             cmd = f"show network-instance {instance} srv6 local-sids"
             log.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrv6LocalSids: empty output")
 
         log.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"network_instance": {}}
