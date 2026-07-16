@@ -39,6 +39,9 @@ class ShowStaticVxlanTunnels(ShowStaticVxlanTunnelsSchema):
             cmd = "show overlay static-vxlan-tunnels | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowStaticVxlanTunnels: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 

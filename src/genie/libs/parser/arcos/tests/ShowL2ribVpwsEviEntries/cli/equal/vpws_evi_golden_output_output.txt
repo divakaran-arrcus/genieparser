@@ -1,0 +1,32 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "vpws-100",
+          "arcos-l2rib:l2rib": {
+            "vpws-evi-entries": {
+              "vpws-evi-entry": [
+                {
+                  "state": {
+                    "evi": 100,
+                    "ingress-label": 50001,
+                    "esi": "00:11:22:33:44:55:66:77:88:99",
+                    "control-word": true
+                  }
+                },
+                {
+                  "state": {
+                    "evi": 200,
+                    "ingress-label": 50002,
+                    "control-word": false
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

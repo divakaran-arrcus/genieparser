@@ -38,6 +38,9 @@ class ShowEvpnState(ShowEvpnStateSchema):
             cmd = "show evpn state router-ip-selected | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowEvpnState: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 
@@ -83,6 +86,9 @@ class ShowEvpnEsiInfo(ShowEvpnEsiInfoSchema):
         if output is None:
             cmd = "show evpn esi-info esi | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowEvpnEsiInfo: empty output")
 
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
@@ -149,6 +155,9 @@ class ShowL2ribMacEntries(ShowL2ribMacEntriesSchema):
         if output is None:
             cmd = f"show network-instance {ni} l2rib mac-entries | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowL2ribMacEntries: empty output")
 
         parsed = load_json_robust(output)
         data = parsed.get("data", {})

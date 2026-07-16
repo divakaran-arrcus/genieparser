@@ -60,6 +60,9 @@ class ShowEvpn(ShowEvpnSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowEvpn: empty output")
+
         parsed_json = load_json_robust(output)
         result = self._parse_evpn(parsed_json)
 

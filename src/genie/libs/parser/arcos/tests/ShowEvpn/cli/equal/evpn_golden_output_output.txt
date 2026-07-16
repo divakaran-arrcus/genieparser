@@ -1,0 +1,28 @@
+{
+  "data": {
+    "arcos-evpn:evpn": {
+      "state": {
+        "anycast-gateway-mac": "aa:bb:cc:dd:ee:ff",
+        "df-election-time": 3,
+        "router-ip-selected": "1.0.0.0"
+      },
+      "esi-info": {
+        "counters": {
+          "esi-pruned-pkts": "0",
+          "esi-pruned-octets": "0"
+        }
+      },
+      "duplicate-mac-detection": {
+        "state": {
+          "window": 180,
+          "threshold": 5,
+          "auto-recovery-time": 1
+        }
+      },
+      "arp-nd-supression-counters": {
+        "arp-supression-counters": "0",
+        "nd-supression-counters": "0"
+      }
+    }
+  }
+}

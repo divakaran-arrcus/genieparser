@@ -1,0 +1,1 @@
+{"data": {"arcos-evpn:evpn": {"esi-info": {"esi": [{"esi": "00:11:22:33:44:55:66:77:88:99", "state": {"esi": "00:11:22:33:44:55:66:77:88:99", "designated-forwarder": true, "local": true, "interface": "ethernet-1/1"}}, {"esi": "00:AA:BB:CC:DD:EE:FF:00:11:22", "state": {"esi": "00:AA:BB:CC:DD:EE:FF:00:11:22", "designated-forwarder": false, "local": false}}]}}}}
