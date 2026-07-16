@@ -1,0 +1,15 @@
+{
+    "data": {
+        "openconfig-spanning-tree:stp": {
+            "global": {
+                "config": {
+                    "bridge-assurance": true,
+                    "bpdu-guard": false,
+                    "enabled-protocol": [
+                        "openconfig-spanning-tree-types:RAPID_PVST"
+                    ]
+                }
+            }
+        }
+    }
+}

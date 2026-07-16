@@ -86,6 +86,9 @@ class ShowBfd(ShowBfdSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowBfd: empty output")
+
         parsed_json = load_json_robust(output)
 
         result = self._parse_bfd(parsed_json)

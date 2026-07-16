@@ -1,0 +1,211 @@
+{
+  "data": {
+    "openconfig-vlan:vlans": {
+      "vlan": [
+        {
+          "vlan-id": 9,
+          "state": {
+            "vlan-id": 9,
+            "name": "",
+            "status": "ACTIVE"
+          }
+        },
+        {
+          "vlan-id": 2001,
+          "state": {
+            "vlan-id": 2001,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp5.6001"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 2002,
+          "state": {
+            "vlan-id": 2002,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp5.6002"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 2501,
+          "state": {
+            "vlan-id": 2501,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp7"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3500,
+          "state": {
+            "vlan-id": 3500,
+            "name": "",
+            "status": "ACTIVE"
+          }
+        },
+        {
+          "vlan-id": 3502,
+          "state": {
+            "vlan-id": 3502,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp5.8001"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3503,
+          "state": {
+            "vlan-id": 3503,
+            "name": "",
+            "status": "ACTIVE"
+          }
+        },
+        {
+          "vlan-id": 3700,
+          "state": {
+            "vlan-id": 3700,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp29.6001"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3701,
+          "state": {
+            "vlan-id": 3701,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp29.6002"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3702,
+          "state": {
+            "vlan-id": 3702,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp29.6003"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3703,
+          "state": {
+            "vlan-id": 3703,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp29.6004"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3704,
+          "state": {
+            "vlan-id": 3704,
+            "name": "",
+            "status": "ACTIVE"
+          },
+          "members": {
+            "member": [
+              {
+                "interface-ref": {
+                  "state": {
+                    "interface": "swp29.6005"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "vlan-id": 3963,
+          "state": {
+            "vlan-id": 3963,
+            "name": "",
+            "status": "ACTIVE"
+          }
+        }
+      ]
+    }
+  }
+}

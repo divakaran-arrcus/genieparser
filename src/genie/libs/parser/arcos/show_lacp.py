@@ -68,6 +68,9 @@ class ShowLacpInterface(ShowLacpInterfaceSchema):
             cmd = f"show lacp interface {bond} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLacpInterface: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         lacp = data.get("openconfig-lacp:lacp", {})

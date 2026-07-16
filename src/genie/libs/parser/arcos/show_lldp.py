@@ -61,6 +61,9 @@ class ShowLldpState(ShowLldpStateSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLldpState: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         lldp = data.get("openconfig-lldp:lldp", {})
@@ -161,6 +164,9 @@ class ShowLldpInterface(ShowLldpInterfaceSchema):
         if output is None:
             cmd = f"show lldp interface {interface} | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowLldpInterface: empty output")
 
         parsed = load_json_robust(output)
         data = parsed.get("data", {})

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "openconfig-lldp:lldp": {
+      "state": {
+        "hello-timer": "30",
+        "system-name": "Metro2-L1-46DX-203-11",
+        "system-description": "Arrcus Operating System (ArcOS)",
+        "counters": {
+          "frame-in": "519586",
+          "frame-out": "519591",
+          "frame-error-in": "0",
+          "frame-discard": "0",
+          "tlv-discard": "0",
+          "tlv-unknown": "0"
+        }
+      }
+    }
+  }
+}
