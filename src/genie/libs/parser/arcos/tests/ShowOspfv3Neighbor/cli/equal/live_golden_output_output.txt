@@ -1,0 +1,53 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF3",
+                "name": "default",
+                "arcos-ospf:ospfv3": {
+                  "areas": {
+                    "area": [
+                      {
+                        "identifier": 0,
+                        "interfaces": {
+                          "interface": [
+                            {
+                              "id": "swp1",
+                              "neighbors": {
+                                "neighbor": [
+                                  {
+                                    "neighbor-router-id": "2.2.2.2",
+                                    "state": {
+                                      "neighbor-router-id": "2.2.2.2",
+                                      "neighbor-ip-address": "fe80::b436:c5ff:fe66:85ed",
+                                      "adjacency-state": "arcos-ospf-types:NEIGHBOR_TWO_WAY",
+                                      "optional-capabilities": "00:00:13",
+                                      "priority": 1,
+                                      "database-exchange-mtu": 0,
+                                      "next-dead-timer-expiry-timestamp": "2026/07/16 14:11:52.355031",
+                                      "next-dead-timer-expiry-remaining-time": 37,
+                                      "arcos-ospfv3:interface-id": 3499
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
