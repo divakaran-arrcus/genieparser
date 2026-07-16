@@ -132,6 +132,8 @@ class ShowInterface(ShowInterfaceSchema):
         # instead of a raw string. Accept both forms.
 
         try:
+            if not output or not output.strip():
+                raise SchemaEmptyParserError("ShowInterface: empty output")
             data = load_json_robust(output)
         except json.JSONDecodeError as exc:
             logger.warning("Failed to parse JSON output: %s", exc)
