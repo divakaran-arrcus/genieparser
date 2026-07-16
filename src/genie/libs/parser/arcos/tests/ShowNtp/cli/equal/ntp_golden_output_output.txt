@@ -1,0 +1,35 @@
+{
+  "data": {
+    "openconfig-system:system": {
+      "ntp": {
+        "state": {
+          "arcos-openconfig-system-augments:network-instance": "default"
+        },
+        "arcos-openconfig-system-augments:status": [
+          {
+            "address": "66.118.228.14",
+            "stratum": 2,
+            "root-delay": 12,
+            "root-dispersion": "22",
+            "offset": "150",
+            "poll-interval": 64,
+            "reach": 377,
+            "time-since-last-response": "44",
+            "association-status": "COMBINED"
+          },
+          {
+            "address": "216.229.0.49",
+            "stratum": 2,
+            "root-delay": 22,
+            "root-dispersion": "11",
+            "offset": "141",
+            "poll-interval": 64,
+            "reach": 377,
+            "time-since-last-response": "40",
+            "association-status": "SYNC_SOURCE"
+          }
+        ]
+      }
+    }
+  }
+}

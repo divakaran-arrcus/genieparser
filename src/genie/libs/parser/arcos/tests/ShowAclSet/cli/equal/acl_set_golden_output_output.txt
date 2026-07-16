@@ -1,0 +1,66 @@
+{
+  "data": {
+    "openconfig-acl:acl": {
+      "acl-sets": {
+        "acl-set": [
+          {
+            "name": "pyats-test-v4",
+            "type": "openconfig-acl:ACL_IPV4",
+            "state": {
+              "name": "pyats-test-v4",
+              "type": "openconfig-acl:ACL_IPV4"
+            },
+            "acl-entries": {
+              "acl-entry": [
+                {
+                  "sequence-id": "10",
+                  "state": {
+                    "sequence-id": "10",
+                    "arcos-openconfig-acl-augments:matched-ingress-packets": "0",
+                    "arcos-openconfig-acl-augments:matched-egress-packets": "0",
+                    "arcos-openconfig-acl-augments:matched-ingress-octets": "0",
+                    "arcos-openconfig-acl-augments:matched-egress-octets": "0",
+                    "arcos-openconfig-acl-augments:priority": 10
+                  },
+                  "ipv4": {
+                    "state": {
+                      "source-address": "10.0.0.0/8"
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "forwarding-action": "openconfig-acl:DROP",
+                      "log-action": "openconfig-acl:LOG_NONE"
+                    }
+                  }
+                },
+                {
+                  "sequence-id": "1000",
+                  "state": {
+                    "sequence-id": "1000",
+                    "arcos-openconfig-acl-augments:matched-ingress-packets": "0",
+                    "arcos-openconfig-acl-augments:matched-egress-packets": "0",
+                    "arcos-openconfig-acl-augments:matched-ingress-octets": "0",
+                    "arcos-openconfig-acl-augments:matched-egress-octets": "0",
+                    "arcos-openconfig-acl-augments:priority": 1000
+                  },
+                  "ipv4": {
+                    "state": {
+                      "source-address": "0.0.0.0/0"
+                    }
+                  },
+                  "actions": {
+                    "state": {
+                      "forwarding-action": "openconfig-acl:ACCEPT",
+                      "log-action": "openconfig-acl:LOG_NONE"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

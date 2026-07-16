@@ -1,0 +1,11 @@
+expected_output = {'keychains': {'isis-key': {'keys': {'10': {'crypto-algorithm': 'HMAC_SHA_1',
+                                            'key-id': '10',
+                                            'secret-key': '$8$k0hukL5Ih3oArk9s4tGPhV8HHYVhV17wkpyA9BBer/o=',
+                                            'send-lifetime': {'always': True}},
+                                     '20': {'crypto-algorithm': 'HMAC_SHA_256',
+                                            'key-id': '20',
+                                            'secret-key': '$8$87/ZbJSkGZaFrTNsgTXHHqPN6GHa4ttRaumqShughxjKZQnrSzhpTVfJzl+7fyJo',
+                                            'send-lifetime': {'end-time': '2026-12-31T23:59:59-00:00',
+                                                              'start-time': '2026-01-01T00:00:00-00:00'}}},
+                            'name': 'isis-key',
+                            'tolerance': 30}}}

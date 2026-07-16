@@ -117,6 +117,9 @@ class ShowKeychainConfig(ShowKeychainConfigSchema):
                 cmd = "show running-config keychain | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowKeychainConfig: empty output")
+
         json_output = load_json_robust(output)
         if not json_output:
             raise SchemaEmptyParserError("No JSON output or empty response")
@@ -263,6 +266,9 @@ class ShowKeychain(ShowKeychainSchema):
             else:
                 cmd = "show keychain | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowKeychain: empty output")
 
         json_output = load_json_robust(output)
         if not json_output:
