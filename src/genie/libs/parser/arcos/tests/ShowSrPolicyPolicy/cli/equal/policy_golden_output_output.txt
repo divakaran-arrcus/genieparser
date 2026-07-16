@@ -1,0 +1,55 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-sr-policy:sr-policy": {
+            "policies": {
+              "policy": [
+                {
+                  "endpoint": "2.2.2.2",
+                  "color": 100,
+                  "state": {
+                    "color": 100,
+                    "endpoint": "2.2.2.2",
+                    "name": "test-policy-to-rtr2",
+                    "description": "Test SR-Policy towards rtr2",
+                    "enabled": true,
+                    "priority": 128
+                  },
+                  "candidate-paths": {
+                    "candidate-path": [
+                      {
+                        "discriminator": 10,
+                        "state": {
+                          "discriminator": 10,
+                          "preference": 200,
+                          "originator-as": 0,
+                          "originator-address": "0.0.0.0",
+                          "type": "EXPLICIT_SEGMENT_LIST"
+                        },
+                        "explicit": {
+                          "segment-lists": {
+                            "segment-list": [
+                              {
+                                "name": "sl1",
+                                "state": {
+                                  "name": "sl1"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

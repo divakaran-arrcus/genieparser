@@ -1,0 +1,63 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "mpls": {
+            "signaling-protocols": {
+              "ldp": {
+                "interface-attributes": {
+                  "interfaces": {
+                    "interface": [
+                      {
+                        "interface-id": "swp1",
+                        "state": {
+                          "interface-id": "swp1",
+                          "hello-holdtime": 15,
+                          "hello-interval": 5,
+                          "link-hello": true
+                        },
+                        "address-families": {
+                          "address-family": [
+                            {
+                              "afi-name": "IPV4",
+                              "state": {
+                                "afi-name": "IPV4",
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "interface-id": "swp2",
+                        "state": {
+                          "interface-id": "swp2",
+                          "hello-holdtime": 15,
+                          "hello-interval": 5,
+                          "link-hello": true
+                        },
+                        "address-families": {
+                          "address-family": [
+                            {
+                              "afi-name": "IPV4",
+                              "state": {
+                                "afi-name": "IPV4",
+                                "enabled": true
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

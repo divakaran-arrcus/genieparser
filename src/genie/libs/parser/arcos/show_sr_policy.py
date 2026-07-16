@@ -73,6 +73,9 @@ class ShowSrPolicySegmentList(ShowSrPolicySegmentListSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrPolicySegmentList: empty output")
+
         parsed = load_json_robust(output)
         sr = _navigate_to_sr_policy(parsed)
         sl_container = sr.get("segment-lists", {})
@@ -177,6 +180,9 @@ class ShowSrPolicyPolicy(ShowSrPolicyPolicySchema):
         if output is None:
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrPolicyPolicy: empty output")
 
         parsed = load_json_robust(output)
         sr = _navigate_to_sr_policy(parsed)
@@ -296,6 +302,9 @@ class ShowSrPolicyDatabasePolicy(ShowSrPolicyDatabasePolicySchema):
         if output is None:
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSrPolicyDatabasePolicy: empty output")
 
         parsed = load_json_robust(output)
         sr = _navigate_to_sr_policy(parsed)
