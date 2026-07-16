@@ -1,0 +1,73 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF",
+                "name": "default",
+                "arcos-ospf:ospfv2": {
+                  "areas": {
+                    "area": [
+                      {
+                        "identifier": 0,
+                        "interfaces": {
+                          "interface": [
+                            {
+                              "id": "loopback0",
+                              "state": {
+                                "id": "loopback0",
+                                "network-type": "arcos-ospf-types:POINT_TO_POINT_NETWORK",
+                                "priority": 1,
+                                "metric": 10,
+                                "passive": true,
+                                "ignore-mtu": false,
+                                "interface-up": true,
+                                "interface-state": "arcos-ospf-types:INTERFACE_LOOPBACK",
+                                "local-ip-address": "2.2.2.2",
+                                "mtu": 8974,
+                                "speed": "0",
+                                "neighbor-count": 0,
+                                "exchange-neighbor-count": 0,
+                                "loading-neighbor-count": 0,
+                                "full-neighbor-count": 0
+                              }
+                            },
+                            {
+                              "id": "swp1",
+                              "state": {
+                                "id": "swp1",
+                                "network-type": "arcos-ospf-types:POINT_TO_POINT_NETWORK",
+                                "priority": 1,
+                                "metric": 320,
+                                "passive": false,
+                                "ignore-mtu": false,
+                                "interface-up": true,
+                                "interface-state": "arcos-ospf-types:INTERFACE_POINT_TO_POINT",
+                                "local-ip-address": "10.12.1.2",
+                                "mtu": 8974,
+                                "speed": "10000",
+                                "neighbor-count": 1,
+                                "exchange-neighbor-count": 0,
+                                "loading-neighbor-count": 0,
+                                "full-neighbor-count": 1
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+root@
