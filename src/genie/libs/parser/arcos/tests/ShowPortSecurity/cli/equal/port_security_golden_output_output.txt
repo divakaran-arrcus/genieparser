@@ -1,0 +1,27 @@
+{
+  "data": {
+    "arcos-port-security:port-security": {
+      "profile": [
+        {
+          "name": "secure-profile-1",
+          "config": {
+            "limit": 5,
+            "sticky": true,
+            "violation-policy": "shutdown"
+          }
+        }
+      ],
+      "interface": [
+        {
+          "name": "ethernet-1/1",
+          "state": {
+            "security-enable": true,
+            "profile": "secure-profile-1",
+            "violation-count": 2,
+            "learned-mac-hit-count": 3
+          }
+        }
+      ]
+    }
+  }
+}

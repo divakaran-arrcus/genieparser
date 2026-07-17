@@ -50,6 +50,9 @@ class ShowIpsecConnEntry(ShowIpsecConnEntrySchema):
             cmd = f"show ipsec-ike conn-entry {name} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowIpsecConnEntry: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})

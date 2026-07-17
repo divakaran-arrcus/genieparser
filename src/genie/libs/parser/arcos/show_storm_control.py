@@ -35,6 +35,9 @@ class ShowStormControl(ShowStormControlSchema):
             cmd = f"show interface {interface} storm-control | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowStormControl: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 

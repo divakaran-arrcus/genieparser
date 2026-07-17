@@ -1,0 +1,1 @@
+{"data": {"arcos-copp:copp": {"policy": [{"name": "default-copp", "classifier": [{"name": "arp-cls", "action": {"type": "POLICE"}}]}]}}}

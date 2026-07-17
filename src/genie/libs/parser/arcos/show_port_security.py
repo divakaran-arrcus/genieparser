@@ -48,6 +48,9 @@ class ShowPortSecurity(ShowPortSecuritySchema):
             cmd = "show port-security | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowPortSecurity: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})

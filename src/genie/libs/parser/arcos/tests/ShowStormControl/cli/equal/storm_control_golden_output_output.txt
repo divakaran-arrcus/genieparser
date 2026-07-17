@@ -1,0 +1,1 @@
+{"data": {"openconfig-interfaces:interfaces": {"interface": [{"name": "ethernet-1/1", "arcos-storm-control:storm-control": {"state": {"broadcast-kbps": 1000, "multicast-kbps": 500}}}]}}}

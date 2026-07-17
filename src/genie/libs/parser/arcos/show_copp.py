@@ -45,6 +45,9 @@ class ShowCoppPolicy(ShowCoppPolicySchema):
             cmd = f"show copp policy {name} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowCoppPolicy: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})

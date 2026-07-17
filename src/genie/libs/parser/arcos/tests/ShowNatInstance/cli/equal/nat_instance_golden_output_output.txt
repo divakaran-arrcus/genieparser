@@ -1,0 +1,34 @@
+{
+    "data": {
+        "arcos-nat:nat": {
+            "instance": [
+                {
+                    "id": 1,
+                    "state": {
+                        "name": "nat-pool-1",
+                        "enable": true,
+                        "type": "STATIC"
+                    },
+                    "mapping-entry": [
+                        {
+                            "id": 10,
+                            "state": {
+                                "internal-src-address": "10.0.0.1",
+                                "total-packets": 500,
+                                "total-bytes": 64000
+                            }
+                        }
+                    ],
+                    "policy": [
+                        {
+                            "id": 100,
+                            "state": {
+                                "external-interface": "ethernet-1/1"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
