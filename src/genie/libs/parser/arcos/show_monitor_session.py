@@ -44,6 +44,9 @@ class ShowMonitorSession(ShowMonitorSessionSchema):
             cmd = "show monitor-session | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowMonitorSession: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})

@@ -1,0 +1,1 @@
+{"data": {"arcos-ptp:ptp": {"instance-list": [{"instance-number": 1, "state": {"clock-profile": "G.8275.1", "clock-role": "SLAVE"}, "default-ds": {"state": {"domain-number": 24, "priority2": 128}}}]}}}
