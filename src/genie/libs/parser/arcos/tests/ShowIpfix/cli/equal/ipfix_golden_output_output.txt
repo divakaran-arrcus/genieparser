@@ -1,0 +1,32 @@
+{
+    "data": {
+        "arcos-ipfix:ipfix": {
+            "observationPoint": [
+                {
+                    "name": "obs-point-1",
+                    "state": {
+                        "observationDomainId": 100
+                    }
+                }
+            ],
+            "exportingProcess": [
+                {
+                    "name": "exporter-1",
+                    "destination": [
+                        {
+                            "name": "collector-a",
+                            "udpExporter": {
+                                "transportSession": {
+                                    "destinationAddress": "10.10.10.1",
+                                    "destinationPort": 4739,
+                                    "packetsSent": 2000,
+                                    "packetsDropped": 3
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

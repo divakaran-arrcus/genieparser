@@ -1,0 +1,26 @@
+{
+  "data": {
+    "openconfig-system:system": {
+      "arcos-grpc-server:grpc-server": {
+        "state": {
+          "enable": true,
+          "transport-security": true,
+          "port": 6030,
+          "listen-addresses": [
+            "0.0.0.0"
+          ]
+        },
+        "clients": {
+          "client": [
+            {
+              "address": "10.0.0.50"
+            },
+            {
+              "address": "10.0.0.51"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

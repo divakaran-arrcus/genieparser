@@ -1,0 +1,34 @@
+{
+  "data": {
+    "arcos-monitor-session:monitor-session": {
+      "session": [
+        {
+          "session-name": "span-1",
+          "state": {
+            "session-name": "span-1",
+            "enable": true
+          },
+          "source": [
+            {
+              "state": {
+                "interface": "ethernet-1/1",
+                "direction": "BOTH"
+              }
+            },
+            {
+              "state": {
+                "interface": "ethernet-1/2",
+                "direction": "arcos-monitor:INGRESS"
+              }
+            }
+          ],
+          "destination": {
+            "state": {
+              "interface": "ethernet-1/10"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

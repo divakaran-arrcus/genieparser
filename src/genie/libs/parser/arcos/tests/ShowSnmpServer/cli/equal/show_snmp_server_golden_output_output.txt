@@ -1,0 +1,11 @@
+{
+    "data": {
+        "openconfig-system:system": {
+            "arcos-snmp:snmp-server": {
+                "config": {
+                    "enable": true
+                }
+            }
+        }
+    }
+}

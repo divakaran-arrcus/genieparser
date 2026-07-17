@@ -1,0 +1,31 @@
+{
+  "data": {
+    "openconfig-sampling:sampling": {
+      "sflow": {
+        "state": {
+          "counter-sampling-interval": 20,
+          "packet-sampling-rate": 4096
+        },
+        "collectors": {
+          "collector": [
+            {
+              "address": "10.0.0.1",
+              "port": 6343
+            }
+          ]
+        },
+        "interfaces": {
+          "interface": [
+            {
+              "name": "swp1",
+              "state": {
+                "direction": "INGRESS",
+                "packet-sampling-rate": 8192
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

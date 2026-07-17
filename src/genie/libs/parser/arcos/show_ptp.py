@@ -41,6 +41,9 @@ class ShowPtpInstance(ShowPtpInstanceSchema):
             cmd = f"show ptp instance-list {instance_id} clock-info | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowPtpInstance: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         ptp = data.get("arcos-ptp:ptp", data.get("ptp", {}))

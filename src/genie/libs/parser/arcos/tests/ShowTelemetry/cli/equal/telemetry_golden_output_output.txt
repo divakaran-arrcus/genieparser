@@ -1,0 +1,1 @@
+{"data": {"arcos-telemetry:telemetry-system": {"global": {"state": {"status": "ENABLED", "cuid": "arcos-device-001"}}, "destination-group": [{"group-id": "dg-1", "destination": [{"address": "10.0.0.100", "port": 50051}]}], "persistent-subscription": [{"subscription-name": "sub-interfaces", "state": {"sensors": ["/interfaces/interface/state"], "destination-group": "dg-1"}}]}}}
