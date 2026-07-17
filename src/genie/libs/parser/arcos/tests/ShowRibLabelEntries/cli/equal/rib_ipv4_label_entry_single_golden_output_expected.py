@@ -1,0 +1,10 @@
+expected_output = {'network-instance': {'default': {'address-family': 'IPV4',
+                                  'label-entries': {'10005': {'fec': '5.5.5.5/32',
+                                                              'flags': 'ECMP_FEC_OPTIMIZE',
+                                                              'label': 10005,
+                                                              'label-type': 'NONE',
+                                                              'last-updated': '2026-03-08T10:25:58.742922-00:00',
+                                                              'nhid': '643',
+                                                              'protocol': 'ISIS',
+                                                              'time-since-creation': '0d 04:32:38',
+                                                              'vpn-table-id': 1}}}}}

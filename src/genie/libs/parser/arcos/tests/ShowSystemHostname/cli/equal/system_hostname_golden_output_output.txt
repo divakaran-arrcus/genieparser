@@ -1,0 +1,9 @@
+{
+  "data": {
+    "openconfig-system:system": {
+      "config": {
+        "hostname": "rtr1"
+      }
+    }
+  }
+}

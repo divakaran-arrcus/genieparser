@@ -1,0 +1,1214 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-rib:rib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-entries": {
+                "entry": [
+                  {
+                    "prefix": "1.1.1.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "230",
+                          "last-updated": "2026-01-27T17:30:52.546417-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "229",
+                                "type": "IPV4",
+                                "next-hop": "1.1.1.1",
+                                "network-instance": "default",
+                                "interface": "loopback0",
+                                "weight": 100,
+                                "flags": "GLEAN LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "2.2.2.2/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "635",
+                          "last-updated": "2026-03-08T10:25:58.742726-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "634",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH",
+                                "pushed-mpls-label-stack": [
+                                  3
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "3.3.3.3/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 30,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "631",
+                          "last-updated": "2026-02-18T06:48:20.617053-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "4.4.4.4/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "641",
+                          "last-updated": "2026-03-08T10:25:58.742571-00:00",
+                          "flags": "ECMP_FEC_OPTIMIZE",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "640",
+                                "type": "IGP",
+                                "next-hop": 630,
+                                "network-instance": "default",
+                                "weight": 100,
+                                "flags": "RECURSIVE IGP_NH",
+                                "pushed-mpls-label-stack": [
+                                  3
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "5.5.5.5/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "643",
+                          "last-updated": "2026-03-08T10:25:58.742977-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "642",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH",
+                                "pushed-mpls-label-stack": [
+                                  3
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "6.6.6.6/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 30,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "631",
+                          "last-updated": "2026-02-18T06:48:20.617151-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.12.1.0/24",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "437",
+                          "last-updated": "2026-02-02T20:58:08.592847-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "436",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.1",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.12.1.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "439",
+                          "last-updated": "2026-02-02T20:58:08.592948-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "438",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.1",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.12.1.2/32",
+                    "best-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                          "protocol-name": "adjacency",
+                          "metric": 1,
+                          "pref": 1,
+                          "tag": 1,
+                          "nhid": "441",
+                          "last-updated": "2026-02-02T20:58:08.65838-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.2.0/24",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "6",
+                          "last-updated": "2026-01-21T12:26:40.10032-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "5",
+                                "type": "IPV4",
+                                "next-hop": "10.14.2.1",
+                                "network-instance": "default",
+                                "interface": "swp2",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.2.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "8",
+                          "last-updated": "2026-01-21T12:26:40.100452-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "7",
+                                "type": "IPV4",
+                                "next-hop": "10.14.2.1",
+                                "network-instance": "default",
+                                "interface": "swp2",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.2.4/32",
+                    "best-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                          "protocol-name": "adjacency",
+                          "metric": 1,
+                          "pref": 1,
+                          "tag": 1,
+                          "nhid": "24",
+                          "last-updated": "2026-01-21T12:35:25.560776-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "23",
+                                "type": "IPV4",
+                                "next-hop": "10.14.2.4",
+                                "network-instance": "default",
+                                "interface": "swp2",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.3.0/24",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "615",
+                          "last-updated": "2026-02-06T13:21:27.409772-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "614",
+                                "type": "IPV4",
+                                "next-hop": "10.14.3.1",
+                                "network-instance": "default",
+                                "interface": "swp3",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.3.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "617",
+                          "last-updated": "2026-02-06T13:21:27.409811-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "616",
+                                "type": "IPV4",
+                                "next-hop": "10.14.3.1",
+                                "network-instance": "default",
+                                "interface": "swp3",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.14.3.4/32",
+                    "best-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                          "protocol-name": "adjacency",
+                          "metric": 1,
+                          "pref": 1,
+                          "tag": 1,
+                          "nhid": "623",
+                          "last-updated": "2026-02-06T13:21:31.101216-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "622",
+                                "type": "IPV4",
+                                "next-hop": "10.14.3.4",
+                                "network-instance": "default",
+                                "interface": "swp3",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.15.4.0/24",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "619",
+                          "last-updated": "2026-02-06T13:21:27.503241-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "618",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.1",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "GLEAN"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.15.4.1/32",
+                    "best-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                          "protocol-name": "directly_connected",
+                          "metric": 1,
+                          "pref": 0,
+                          "tag": 0,
+                          "nhid": "621",
+                          "last-updated": "2026-02-06T13:21:27.503278-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "620",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.1",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "LOCAL"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.15.4.5/32",
+                    "best-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "arcos-openconfig-policy-types:ADJACENCY",
+                          "protocol-name": "adjacency",
+                          "metric": 1,
+                          "pref": 1,
+                          "tag": 1,
+                          "nhid": "625",
+                          "last-updated": "2026-02-06T13:21:31.196224-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.23.2.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "441",
+                          "last-updated": "2026-02-18T06:48:20.616286-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.24.4.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "633",
+                          "last-updated": "2026-02-18T06:48:20.616483-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "622",
+                                "type": "IPV4",
+                                "next-hop": "10.14.3.4",
+                                "network-instance": "default",
+                                "interface": "swp3",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "23",
+                                "type": "IPV4",
+                                "next-hop": "10.14.2.4",
+                                "network-instance": "default",
+                                "interface": "swp2",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.25.5.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "631",
+                          "last-updated": "2026-02-18T06:48:20.615173-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.26.3.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "441",
+                          "last-updated": "2026-02-18T06:48:20.616721-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.35.3.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "625",
+                          "last-updated": "2026-02-18T06:48:20.616153-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.36.1.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 30,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "631",
+                          "last-updated": "2026-02-18T06:48:20.616812-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.36.4.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 30,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "631",
+                          "last-updated": "2026-02-18T06:48:20.616892-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.45.1.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "632",
+                          "last-updated": "2026-02-18T06:48:20.615651-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "622",
+                                "type": "IPV4",
+                                "next-hop": "10.14.3.4",
+                                "network-instance": "default",
+                                "interface": "swp3",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              },
+                              {
+                                "pathid": "23",
+                                "type": "IPV4",
+                                "next-hop": "10.14.2.4",
+                                "network-instance": "default",
+                                "interface": "swp2",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "10.56.2.0/24",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "625",
+                          "last-updated": "2026-02-18T06:48:20.616218-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "22.22.22.22/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "441",
+                          "last-updated": "2026-02-18T06:48:20.617228-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "440",
+                                "type": "IPV4",
+                                "next-hop": "10.12.1.2",
+                                "network-instance": "default",
+                                "interface": "swp1",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "prefix": "55.55.55.55/32",
+                    "best-protocol": "openconfig-policy-types:ISIS",
+                    "hw-update": {
+                      "install-ack": false,
+                      "status-code": 0,
+                      "version": "0"
+                    },
+                    "origins": {
+                      "origin": [
+                        {
+                          "origin-protocol": "openconfig-policy-types:ISIS",
+                          "protocol-name": "isis-default@default",
+                          "metric": 20,
+                          "pref": 115,
+                          "label-pref": 114,
+                          "tag": 0,
+                          "route-type": "ISIS_L2",
+                          "nhid": "625",
+                          "last-updated": "2026-02-18T06:48:20.616078-00:00",
+                          "flags": "",
+                          "opaque-data": "0",
+                          "next-hops": {
+                            "next-hop": [
+                              {
+                                "pathid": "624",
+                                "type": "IPV4",
+                                "next-hop": "10.15.4.5",
+                                "network-instance": "default",
+                                "interface": "swp4",
+                                "weight": 100,
+                                "flags": "ATTACH"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
