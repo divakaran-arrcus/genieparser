@@ -1,0 +1,21 @@
+{
+  "data": {
+    "arcos-overlay:overlay": {
+      "static-vxlan-tunnels": {
+        "tunnel": [
+          {
+            "state": {
+              "remote-vtep": "10.1.1.2",
+              "local-vtep": "10.1.1.1",
+              "state": "UP",
+              "vnis": [
+                100,
+                200
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

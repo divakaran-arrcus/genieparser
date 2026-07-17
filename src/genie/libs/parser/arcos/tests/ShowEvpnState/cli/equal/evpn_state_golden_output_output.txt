@@ -1,0 +1,1 @@
+{"data": {"arcos-evpn:evpn": {"state": {"router-ip-selected": "10.0.0.1"}}}}

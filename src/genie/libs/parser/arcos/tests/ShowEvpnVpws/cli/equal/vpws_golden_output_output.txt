@@ -1,0 +1,44 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "bgp": {
+                  "global": {
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "L2VPN_EVPN",
+                          "vpws": {
+                            "service": [
+                              {
+                                "state": {
+                                  "network-instance": "vpws-svc-1",
+                                  "evi": 100,
+                                  "local-service-id": 1,
+                                  "remote-service-id": 2,
+                                  "control-word": true,
+                                  "link-loss-forwarding": false,
+                                  "oper-status": "UP"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

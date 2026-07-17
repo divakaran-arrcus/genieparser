@@ -47,6 +47,9 @@ class ShowEvpnVpws(ShowEvpnVpwsSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowEvpnVpws: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         ni_container = data.get(OPENCONFIG_NETWORK_INSTANCES, {})
@@ -123,6 +126,9 @@ class ShowL2ribVpwsEviEntries(ShowL2ribVpwsEviEntriesSchema):
         if output is None:
             cmd = f"show network-instance {ni} l2rib vpws-evi-entries | display json | nomore"
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowL2ribVpwsEviEntries: empty output")
 
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
