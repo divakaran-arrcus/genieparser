@@ -1,0 +1,151 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "ECMP-Leaf1-Leaf2-Leaf3-L3VPN-01",
+          "table-connections": {
+            "table-connection": [
+              {
+                "src-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                "dst-protocol": "openconfig-policy-types:BGP",
+                "address-family": "openconfig-types:IPV6",
+                "arcos-openconfig-network-instance-augments:src-dst-instances": {
+                  "src-dst-instance": [
+                    {
+                      "src-instance": "directly_connected",
+                      "dst-instance": "ECMP-Leaf1-Leaf2-Leaf3-L3VPN-01"
+                    }
+                  ]
+                }
+              },
+              {
+                "src-protocol": "openconfig-policy-types:DIRECTLY_CONNECTED",
+                "dst-protocol": "openconfig-policy-types:BGP",
+                "address-family": "openconfig-types:IPV4",
+                "arcos-openconfig-network-instance-augments:src-dst-instances": {
+                  "src-dst-instance": [
+                    {
+                      "src-instance": "directly_connected",
+                      "dst-instance": "ECMP-Leaf1-Leaf2-Leaf3-L3VPN-01"
+                    }
+                  ]
+                }
+              },
+              {
+                "src-protocol": "openconfig-policy-types:STATIC",
+                "dst-protocol": "openconfig-policy-types:BGP",
+                "address-family": "openconfig-types:IPV6"
+              },
+              {
+                "src-protocol": "openconfig-policy-types:STATIC",
+                "dst-protocol": "openconfig-policy-types:BGP",
+                "address-family": "openconfig-types:IPV4"
+              }
+            ]
+          },
+          "interfaces": {
+            "interface": [
+              {
+                "id": "swp5.5551",
+                "state": {
+                  "id": "swp5.5551",
+                  "interface": "swp5",
+                  "subinterface": 5551
+                }
+              }
+            ]
+          },
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:BGP",
+                "name": "ECMP-Leaf1-Leaf2-Leaf3-L3VPN-01",
+                "bgp": {
+                  "global": {
+                    "state": {
+                      "as": 65002,
+                      "router-id": "1.0.0.0",
+                      "total-paths": 3,
+                      "total-prefixes": 3,
+                      "arcos-openconfig-bgp-augments:route-distinguisher": "1.0.0.0:50002",
+                      "arcos-openconfig-bgp-augments:label-allocation-mode": "openconfig-network-instance-types:INSTANCE_LABEL",
+                      "arcos-openconfig-bgp-augments:vni-evi": 0,
+                      "arcos-openconfig-bgp-augments:tunnel-type": "MPLS",
+                      "arcos-openconfig-bgp-augments:control-word": false,
+                      "arcos-openconfig-bgp-augments:flow-label": false
+                    },
+                    "afi-safis": {
+                      "afi-safi": [
+                        {
+                          "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                          "state": {
+                            "afi-safi-name": "openconfig-bgp-types:IPV4_UNICAST",
+                            "enabled": true,
+                            "total-paths": 3,
+                            "total-prefixes": 3
+                          },
+                          "arcos-openconfig-bgp-augments:rt-afi-safis": {
+                            "rt-afi-safi": [
+                              {
+                                "rt-afi-safi-name": "openconfig-bgp-types:L3VPN_IPV4_UNICAST",
+                                "route-targets": {
+                                  "route-target": [
+                                    {
+                                      "route-target": "123:123",
+                                      "route-target-type": "both",
+                                      "state": {
+                                        "route-target": "123:123",
+                                        "route-target-type": "both"
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "neighbors": {
+                    "neighbor": [
+                      {
+                        "neighbor-address": "181.1.6.2",
+                        "state": {
+                          "neighbor-address": "181.1.6.2",
+                          "peer-as": 20123,
+                          "session-state": "CONNECT"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "arcos-openconfig-network-instance-augments:l3vrf": {
+            "state": {
+              "vrf-interface": "vrf10001",
+              "table-id": 1073741826
+            }
+          },
+          "arcos-rib:rib-options": {
+            "ipv4": {
+              "state": {
+                "max-prefix-limit": 1000,
+                "threshold": 90
+              }
+            },
+            "ipv6": {
+              "state": {
+                "max-prefix-limit": 100,
+                "threshold": 90
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

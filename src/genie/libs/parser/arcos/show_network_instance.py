@@ -125,6 +125,9 @@ class ShowNetworkInstance(ShowNetworkInstanceSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowNetworkInstance: empty output")
+
         parsed_json = load_json_robust(output)
 
         result = self._parse_network_instance(parsed_json)

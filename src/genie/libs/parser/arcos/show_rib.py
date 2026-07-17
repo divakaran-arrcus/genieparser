@@ -187,6 +187,9 @@ class _RibEntriesMixin:
             logger.debug("Executing command: %s", exec_cmd)
             output = self.device.execute(f"{exec_cmd} | display json | nomore")
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRibEntries: empty output")
+
         parsed_json = load_json_robust(output)
 
         ribs = _get_rib_data(parsed_json, network_instance, af_lower)
@@ -334,6 +337,9 @@ class _RibLabelEntriesMixin:
                 exec_cmd += f" entry {label}"
             logger.debug("Executing command: %s", exec_cmd)
             output = self.device.execute(f"{exec_cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRibLabelEntries: empty output")
 
         parsed_json = load_json_robust(output)
 

@@ -191,6 +191,9 @@ class _FibPrefixEntriesMixin:
             logger.debug("Executing command: %s", exec_cmd)
             output = self.device.execute(f"{exec_cmd} | display json | nomore")
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowFibPrefixEntries: empty output")
+
         parsed_json = load_json_robust(output)
 
         fibs = _get_fib_data(parsed_json, network_instance, af_lower)
@@ -264,6 +267,9 @@ class _FibNexthopEntriesMixin:
                 exec_cmd += f" {index}"
             logger.debug("Executing command: %s", exec_cmd)
             output = self.device.execute(f"{exec_cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowFibNexthopEntries: empty output")
 
         parsed_json = load_json_robust(output)
 
@@ -353,6 +359,9 @@ class _FibLabelEntriesMixin:
                 exec_cmd += f" {label}"
             logger.debug("Executing command: %s", exec_cmd)
             output = self.device.execute(f"{exec_cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowFibLabelEntries: empty output")
 
         parsed_json = load_json_robust(output)
 

@@ -1,0 +1,45 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV6",
+              "ipv6-label-entries": {
+                "ipv6-label-entry": [
+                  {
+                    "local-label": 10101,
+                    "vpn-table-id": 2147483649,
+                    "control-word": false,
+                    "flow-label": false,
+                    "domain-name": ""
+                  },
+                  {
+                    "local-label": 10102,
+                    "vpn-table-id": 2147483649,
+                    "next-hop-id": 268435888,
+                    "publish-id": 805306799
+                  },
+                  {
+                    "local-label": 10104,
+                    "vpn-table-id": 2147483649,
+                    "next-hop-id": 268435892,
+                    "publish-id": 805306803
+                  },
+                  {
+                    "local-label": 10105,
+                    "vpn-table-id": 2147483649,
+                    "next-hop-id": 268435890,
+                    "publish-id": 805306801
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

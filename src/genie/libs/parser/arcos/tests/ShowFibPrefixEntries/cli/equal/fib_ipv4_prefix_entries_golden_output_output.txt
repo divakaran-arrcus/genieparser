@@ -1,0 +1,227 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "arcos-fib:fib": [
+            {
+              "address-family": "openconfig-types:IPV4",
+              "ipv4-entries": {
+                "ipv4-prefix-entry": [
+                  {
+                    "prefix": "0.0.0.0/0",
+                    "last-updated": "1970-01-01T00:00:00-00:00"
+                  },
+                  {
+                    "prefix": "1.1.1.1/32",
+                    "last-updated": "2026-01-27T17:30:52.547748-00:00",
+                    "next-hop-id": 230,
+                    "publish-type": "PATH",
+                    "publish-id": 229
+                  },
+                  {
+                    "prefix": "2.2.2.2/32",
+                    "last-updated": "2026-03-08T10:25:58.743887-00:00",
+                    "next-hop-id": 635,
+                    "publish-type": "PATH",
+                    "publish-id": 634
+                  },
+                  {
+                    "prefix": "3.3.3.3/32",
+                    "last-updated": "2026-02-18T06:48:20.618458-00:00",
+                    "next-hop-id": 631,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742455
+                  },
+                  {
+                    "prefix": "4.4.4.4/32",
+                    "last-updated": "2026-03-08T10:25:58.743828-00:00",
+                    "next-hop-id": 641,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742465
+                  },
+                  {
+                    "prefix": "5.5.5.5/32",
+                    "last-updated": "2026-03-08T10:25:58.744205-00:00",
+                    "next-hop-id": 643,
+                    "publish-type": "PATH",
+                    "publish-id": 642
+                  },
+                  {
+                    "prefix": "6.6.6.6/32",
+                    "last-updated": "2026-02-18T06:48:20.618482-00:00",
+                    "next-hop-id": 631,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742455
+                  },
+                  {
+                    "prefix": "10.12.1.0/24",
+                    "last-updated": "2026-02-02T20:58:08.59401-00:00",
+                    "next-hop-id": 437,
+                    "publish-type": "PATH",
+                    "publish-id": 436
+                  },
+                  {
+                    "prefix": "10.12.1.1/32",
+                    "last-updated": "2026-02-02T20:58:08.594035-00:00",
+                    "next-hop-id": 439,
+                    "publish-type": "PATH",
+                    "publish-id": 438
+                  },
+                  {
+                    "prefix": "10.12.1.2/32",
+                    "last-updated": "2026-02-02T20:58:08.659154-00:00",
+                    "next-hop-id": 441,
+                    "publish-type": "PATH",
+                    "publish-id": 440
+                  },
+                  {
+                    "prefix": "10.14.2.0/24",
+                    "last-updated": "2026-01-21T12:26:40.100823-00:00",
+                    "next-hop-id": 6,
+                    "publish-type": "PATH",
+                    "publish-id": 5
+                  },
+                  {
+                    "prefix": "10.14.2.1/32",
+                    "last-updated": "2026-01-21T12:26:40.100841-00:00",
+                    "next-hop-id": 8,
+                    "publish-type": "PATH",
+                    "publish-id": 7
+                  },
+                  {
+                    "prefix": "10.14.2.4/32",
+                    "last-updated": "2026-01-21T12:35:25.561473-00:00",
+                    "next-hop-id": 24,
+                    "publish-type": "PATH",
+                    "publish-id": 23
+                  },
+                  {
+                    "prefix": "10.14.3.0/24",
+                    "last-updated": "2026-02-06T13:21:27.410543-00:00",
+                    "next-hop-id": 615,
+                    "publish-type": "PATH",
+                    "publish-id": 614
+                  },
+                  {
+                    "prefix": "10.14.3.1/32",
+                    "last-updated": "2026-02-06T13:21:27.410549-00:00",
+                    "next-hop-id": 617,
+                    "publish-type": "PATH",
+                    "publish-id": 616
+                  },
+                  {
+                    "prefix": "10.14.3.4/32",
+                    "last-updated": "2026-02-06T13:21:31.10161-00:00",
+                    "next-hop-id": 623,
+                    "publish-type": "PATH",
+                    "publish-id": 622
+                  },
+                  {
+                    "prefix": "10.15.4.0/24",
+                    "last-updated": "2026-02-06T13:21:27.503704-00:00",
+                    "next-hop-id": 619,
+                    "publish-type": "PATH",
+                    "publish-id": 618
+                  },
+                  {
+                    "prefix": "10.15.4.1/32",
+                    "last-updated": "2026-02-06T13:21:27.503712-00:00",
+                    "next-hop-id": 621,
+                    "publish-type": "PATH",
+                    "publish-id": 620
+                  },
+                  {
+                    "prefix": "10.15.4.5/32",
+                    "last-updated": "2026-02-06T13:21:31.196717-00:00",
+                    "next-hop-id": 625,
+                    "publish-type": "PATH",
+                    "publish-id": 624
+                  },
+                  {
+                    "prefix": "10.23.2.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618265-00:00",
+                    "next-hop-id": 441,
+                    "publish-type": "PATH",
+                    "publish-id": 440
+                  },
+                  {
+                    "prefix": "10.24.4.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618311-00:00",
+                    "next-hop-id": 633,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742457
+                  },
+                  {
+                    "prefix": "10.25.5.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618119-00:00",
+                    "next-hop-id": 631,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742455
+                  },
+                  {
+                    "prefix": "10.26.3.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618329-00:00",
+                    "next-hop-id": 441,
+                    "publish-type": "PATH",
+                    "publish-id": 440
+                  },
+                  {
+                    "prefix": "10.35.3.0/24",
+                    "last-updated": "2026-02-18T06:48:20.61823-00:00",
+                    "next-hop-id": 625,
+                    "publish-type": "PATH",
+                    "publish-id": 624
+                  },
+                  {
+                    "prefix": "10.36.1.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618347-00:00",
+                    "next-hop-id": 631,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742455
+                  },
+                  {
+                    "prefix": "10.36.4.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618365-00:00",
+                    "next-hop-id": 631,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742455
+                  },
+                  {
+                    "prefix": "10.45.1.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618174-00:00",
+                    "next-hop-id": 632,
+                    "publish-type": "ECMP",
+                    "publish-id": 1073742456
+                  },
+                  {
+                    "prefix": "10.56.2.0/24",
+                    "last-updated": "2026-02-18T06:48:20.618248-00:00",
+                    "next-hop-id": 625,
+                    "publish-type": "PATH",
+                    "publish-id": 624
+                  },
+                  {
+                    "prefix": "22.22.22.22/32",
+                    "last-updated": "2026-02-18T06:48:20.618499-00:00",
+                    "next-hop-id": 441,
+                    "publish-type": "PATH",
+                    "publish-id": 440
+                  },
+                  {
+                    "prefix": "55.55.55.55/32",
+                    "last-updated": "2026-02-18T06:48:20.618211-00:00",
+                    "next-hop-id": 625,
+                    "publish-type": "PATH",
+                    "publish-id": 624
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
