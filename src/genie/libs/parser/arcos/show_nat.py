@@ -54,6 +54,9 @@ class ShowNatInstance(ShowNatInstanceSchema):
             cmd = f"show nat instance {instance_id} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowNatInstance: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})

@@ -1,0 +1,10 @@
+expected_output = {'connections': {'tunnel-vpn1': {'authalg': 'sha256',
+                                 'autostartup': 'add',
+                                 'dh-group': 14,
+                                 'encalg': 'aes256',
+                                 'name': 'tunnel-vpn1',
+                                 'rekey-time': 3600,
+                                 'spd-entries': {'spd-rule-1': {'local-subnets': ['192.168.1.0/24'],
+                                                                'name': 'spd-rule-1',
+                                                                'remote-subnets': ['10.0.0.0/8']}},
+                                 'version': 'IKEv2'}}}

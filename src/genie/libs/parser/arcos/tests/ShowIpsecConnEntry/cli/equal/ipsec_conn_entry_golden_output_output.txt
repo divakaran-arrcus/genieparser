@@ -1,0 +1,34 @@
+{
+    "data": {
+        "arcos-ipsec-ike:ipsec-ike": {
+            "conn-entry": [
+                {
+                    "name": "tunnel-vpn1",
+                    "config": {
+                        "version": "IKEv2",
+                        "autostartup": "add",
+                        "authalg": "sha256",
+                        "encalg": "aes256",
+                        "dh-group": 14,
+                        "ike-sa-lifetime-soft": {
+                            "rekey-time": 3600
+                        }
+                    },
+                    "spd": {
+                        "spd-entry": [
+                            {
+                                "name": "spd-rule-1",
+                                "ipsec-policy-config": {
+                                    "traffic-selector": {
+                                        "local-subnets": ["192.168.1.0/24"],
+                                        "remote-subnets": ["10.0.0.0/8"]
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
