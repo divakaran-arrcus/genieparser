@@ -5,6 +5,7 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.utils import load_json_robust, validate_input
 
@@ -85,6 +86,11 @@ class ShowMplsReservedLabelBlockConfig(ShowMplsReservedLabelBlockConfigSchema):
                 cmd += f" {local_id}"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError(
+                "ShowMplsReservedLabelBlockConfig: empty output"
+            )
 
         logger.debug("Parsing output: %s", output)
 
@@ -217,6 +223,11 @@ class ShowMplsReservedLabelBlock(ShowMplsReservedLabelBlockSchema):
                 cmd += f" {local_id}"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(f"{cmd} | display json | nomore")
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError(
+                "ShowMplsReservedLabelBlock: empty output"
+            )
 
         logger.debug("Parsing output: %s", output)
 

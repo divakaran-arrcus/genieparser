@@ -35,6 +35,9 @@ class ShowBridgeIsolation(ShowBridgeIsolationSchema):
             cmd = f"show interface {interface} bridge-isolation | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowBridgeIsolation: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 

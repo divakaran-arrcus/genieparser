@@ -1,0 +1,12 @@
+expected_output = {'network-instance': {'default': {'mpls': {'reserved-label-blocks': {'rb1': {'local-id': 'rb1',
+                                                                             'lower-bound': 10000,
+                                                                             'protocol-identifier': 'ISIS',
+                                                                             'protocol-name': 'default',
+                                                                             'upper-bound': 19999,
+                                                                             'usage': 'ISIS_SRGB'},
+                                                                     'rb2': {'local-id': 'rb2',
+                                                                             'lower-bound': 20000,
+                                                                             'protocol-identifier': 'ISIS',
+                                                                             'protocol-name': 'default',
+                                                                             'upper-bound': 29999,
+                                                                             'usage': 'ISIS_SRLB'}}}}}}

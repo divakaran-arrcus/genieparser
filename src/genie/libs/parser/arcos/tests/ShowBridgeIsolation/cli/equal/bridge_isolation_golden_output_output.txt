@@ -1,0 +1,18 @@
+{
+  "data": {
+    "openconfig-interfaces:interfaces": {
+      "interface": [
+        {
+          "name": "ethernet-1/1",
+          "arcos-bridge-isolation:bridge-isolation": {
+            "state": {
+              "isolation": "enable",
+              "isolation-drop-packets": 42,
+              "isolation-drop-octets": 5600
+            }
+          }
+        }
+      ]
+    }
+  }
+}

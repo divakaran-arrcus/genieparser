@@ -1,0 +1,12 @@
+{
+  "data": {
+    "arcos-synce:sync-e": {
+      "state": {
+        "enabled": true,
+        "holdover": 300,
+        "quality-level-enabled": true,
+        "sync-e-clock-state": "LOCKED"
+      }
+    }
+  }
+}

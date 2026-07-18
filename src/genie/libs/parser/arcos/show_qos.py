@@ -58,6 +58,9 @@ class ShowQosPolicy(ShowQosPolicySchema):
             cmd = "show qos policy * | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowQosPolicy: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         qos_root = data.get("arcos-qos:qos", {})

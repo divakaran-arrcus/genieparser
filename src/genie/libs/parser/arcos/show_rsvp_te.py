@@ -56,6 +56,9 @@ class ShowRsvpGlobal(ShowRsvpGlobalSchema):
             )
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRsvpGlobal: empty output")
+
         parsed = load_json_robust(output)
         rsvp = _navigate_to_rsvp(parsed)
         state = rsvp.get("global", {}).get("state", {})
