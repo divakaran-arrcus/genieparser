@@ -36,6 +36,9 @@ class ShowSynce(ShowSynceSchema):
             cmd = "show operational-state sync-e | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSynce: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
         synce = data.get("arcos-synce:sync-e", data.get("sync-e", {}))

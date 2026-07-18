@@ -40,6 +40,9 @@ class ShowDamping(ShowDampingSchema):
             cmd = f"show interface {interface} damping | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowDamping: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 

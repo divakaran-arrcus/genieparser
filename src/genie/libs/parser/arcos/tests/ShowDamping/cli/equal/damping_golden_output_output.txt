@@ -1,0 +1,20 @@
+{
+  "data": {
+    "openconfig-interfaces:interfaces": {
+      "interface": [
+        {
+          "name": "ethernet-1/1",
+          "arcos-damping:damping": {
+            "state": {
+              "enabled": true,
+              "max-suppress-time": 60,
+              "decay-half-life": 15,
+              "suppress-threshold": 2000,
+              "reuse-threshold": 750
+            }
+          }
+        }
+      ]
+    }
+  }
+}

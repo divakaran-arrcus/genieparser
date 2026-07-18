@@ -45,6 +45,9 @@ class ShowSlaIcmp(ShowSlaIcmpSchema):
             cmd = f"show network-instance {ni} sla icmp | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowSlaIcmp: empty output")
+
         parsed = load_json_robust(output)
         data = parsed.get("data", {})
 

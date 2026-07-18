@@ -72,6 +72,9 @@ class ShowTeAdminGroup(ShowTeAdminGroupSchema):
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowTeAdminGroup: empty output")
+
         parsed_json = load_json_robust(output)
         result = self._parse_admin_groups(parsed_json)
 
