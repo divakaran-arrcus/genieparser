@@ -1,0 +1,1 @@
+expected_output = {'version': {'platform': 'Virtual', 'form-factor': 'FF_CONTAINER', 'num-cpu-cores': '8', 'cpu-info': 'Intel Core Processor (Haswell)', 'total-memory': '32552728 kB', 'software': 'Arrcus ArcOS', 'sw-version': '8.2.1A', 'uptime': '50 weeks, 5 days, 12 hours, 38 minutes'}}
