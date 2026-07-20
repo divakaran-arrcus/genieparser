@@ -15,6 +15,7 @@ from typing import Any as TypeAny, Dict as TypeDict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.utils import load_json_robust
 
@@ -152,6 +153,9 @@ class ShowRoutingPolicyDefinedSets(ShowRoutingPolicyDefinedSetsSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRoutingPolicyDefinedSets: empty output")
 
         logger.debug("Parsing output: %s", output)
 
@@ -416,6 +420,9 @@ class ShowRoutingPolicyPolicyDefinition(ShowRoutingPolicyPolicyDefinitionSchema)
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRoutingPolicyPolicyDefinition: empty output")
+
         logger.debug("Parsing output: %s", output)
 
         ret: TypeDict[str, TypeAny] = {"routing-policy": {"policy-definitions": {}}}
@@ -628,6 +635,9 @@ class ShowRoutingPolicyConfig(ShowRoutingPolicyConfigSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowRoutingPolicyConfig: empty output")
 
         logger.debug("Parsing output: %s", output)
 

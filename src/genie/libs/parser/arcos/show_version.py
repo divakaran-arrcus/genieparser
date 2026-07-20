@@ -6,6 +6,7 @@ from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
 from genie.metaparser.util.schemaengine import Optional
+from genie.metaparser.util.exceptions import SchemaEmptyParserError
 from genie.libs.parser.arcos.utils import load_json_robust
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,9 @@ class ShowVersion(ShowVersionSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             logger.debug("Executing command: %s", cmd)
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowVersion: empty output")
 
         logger.debug("Parsing output: %s", output)
         ret_dict: Dict[str, TypeAny] = {"version": {}}
