@@ -67,6 +67,9 @@ class ShowBgpDeaggregationLabel(ShowBgpDeaggregationLabelSchema):
             cmd = f"{self.cli_command} | display json | nomore"
             output = self.device.execute(cmd)
 
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowBgpDeaggregationLabel: empty output")
+
         parsed = load_json_robust(output)
 
         data = parsed.get("data", {})
@@ -154,6 +157,9 @@ class ShowBgpVpnExportedRoutes(ShowBgpVpnExportedRoutesSchema):
                 f"exported-rib route | display json | nomore"
             )
             output = self.device.execute(cmd)
+
+        if not output or not output.strip():
+            raise SchemaEmptyParserError("ShowBgpVpnExportedRoutes: empty output")
 
         parsed = load_json_robust(output)
 
