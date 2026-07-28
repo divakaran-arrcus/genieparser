@@ -1,0 +1,36 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF3",
+                "name": "default",
+                "arcos-ospf:ospfv3": {
+                  "global": {
+                    "spf": {
+                      "throttle": {
+                        "timers": {
+                          "state": {
+                            "spf-initial-delay": 50,
+                            "spf-short-delay": 200,
+                            "spf-long-delay": 5000,
+                            "time-to-learn-interval": 500,
+                            "holddown-interval": 10000
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

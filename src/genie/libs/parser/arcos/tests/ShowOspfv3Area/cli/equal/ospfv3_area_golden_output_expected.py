@@ -1,0 +1,10 @@
+expected_output = {'areas': {'0.0.0.0': {'advertise-summary-lsas': True,
+                       'area-type': 'AREA_TYPE_NORMAL',
+                       'configured-interface-count': 1,
+                       'exchange-neighbor-count': 0,
+                       'full-neighbor-count': 1,
+                       'identifier': 0,
+                       'loading-neighbor-count': 0,
+                       'neighbor-count': 1,
+                       'stub-default-cost': 1,
+                       'up-interface-count': 1}}}

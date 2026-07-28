@@ -684,7 +684,7 @@ class ShowOspfv3LsdbSchema(MetaParser):
                                 Optional("advertising-router"): str,
                                 Optional("ls-sequence-number"): str,
                                 Optional("ls-age"): int,
-                                Optional("ls-checksum"): str,
+                                Optional("ls-checksum"): int,
                             }
                         },
                     }
@@ -769,9 +769,16 @@ class ShowOspfv3Lsdb(ShowOspfv3LsdbSchema):
                         "link-state-id": lsi,
                         "advertising-router": adv,
                     }
-                    for k in ("ls-sequence-number", "ls-age", "ls-checksum"):
-                        if k in lsa_state:
-                            lsa_entry[k] = lsa_state[k]
+                    # arcOS emits unprefixed keys under lsa.state; map them to
+                    # the schema's ls-* output names (real device output uses
+                    # sequence-number/age/checksum, not ls-*).
+                    for src, dst in (
+                        ("sequence-number", "ls-sequence-number"),
+                        ("age", "ls-age"),
+                        ("checksum", "ls-checksum"),
+                    ):
+                        if src in lsa_state:
+                            lsa_entry[dst] = lsa_state[src]
                     lsas_dict[key] = lsa_entry
 
                 if lsas_dict:
