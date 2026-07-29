@@ -1,6 +1,5 @@
 """ArcOS show bgp parser using OpenConfig JSON output."""
 
-import json
 import logging
 from typing import Any as TypeAny, Dict, List, Optional as TypeOptional
 

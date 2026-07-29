@@ -11,7 +11,6 @@ Two parsers:
    information (system-name, chassis-id, port-id, management-address, etc.).
 """
 
-import json
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 

@@ -15,7 +15,6 @@ from genie.libs.parser.arcos.show_fib import (
     ShowFibNexthopEntries,
     ShowFibLabelEntries,
 )
-from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 SAMPLES_DIR = Path(__file__).parent / "test_samples"
 

@@ -1,6 +1,5 @@
 """Unit tests for ArcOS Keychain parsers."""
 
-import json
 from unittest import TestCase
 from unittest.mock import Mock
 

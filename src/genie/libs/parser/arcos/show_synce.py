@@ -8,7 +8,7 @@ import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
-from genie.metaparser.util.schemaengine import Any, Optional
+from genie.metaparser.util.schemaengine import Optional
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.utils import load_json_robust

@@ -4,7 +4,7 @@ import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
 from genie.metaparser import MetaParser
-from genie.metaparser.util.schemaengine import Any, Optional, Or
+from genie.metaparser.util.schemaengine import Optional, Or
 from genie.metaparser.util.exceptions import SchemaEmptyParserError
 
 from genie.libs.parser.arcos.constants import ARCOS_EVPN
