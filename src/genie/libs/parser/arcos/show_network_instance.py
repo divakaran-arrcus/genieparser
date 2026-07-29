@@ -1,6 +1,5 @@
 """ArcOS show network-instance parser using OpenConfig JSON output."""
 
-import json
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 

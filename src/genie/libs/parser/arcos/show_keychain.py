@@ -9,7 +9,6 @@ Supports:
   - show keychain {name} | display json | nomore
 """
 
-import json
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional
 
