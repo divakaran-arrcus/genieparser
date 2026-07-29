@@ -1,0 +1,44 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF",
+                "name": "default",
+                "arcos-ospf:ospfv2": {
+                  "global": {
+                    "rib": {
+                      "prefixes": {
+                        "prefix": [
+                          {
+                            "prefix-key": "10.0.12.0/24",
+                            "prefix-identifier": {
+                              "prefix-key": "10.0.12.0/24"
+                            },
+                            "state": {
+                              "path-count": 2
+                            },
+                            "bestpath": {
+                              "path-type": "arcos-ospf-types:OSPF_INTRA_AREA_CONNECTED_ROUTE",
+                              "area-id": 0,
+                              "metric": 320,
+                              "path-flags": ["arcos-ospf-types:CONNECTED"]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "data": {
+    "openconfig-network-instance:network-instances": {
+      "network-instance": [
+        {
+          "name": "default",
+          "protocols": {
+            "protocol": [
+              {
+                "identifier": "openconfig-policy-types:OSPF3",
+                "name": "default",
+                "arcos-ospf:ospfv3": {
+                  "areas": {
+                    "area": [
+                      {
+                        "identifier": "0.0.0.0",
+                        "interfaces": {
+                          "interface": [
+                            {
+                              "id": "swp1",
+                              "state": {
+                                "id": "swp1",
+                                "network-type": "arcos-ospf-types:BROADCAST_NETWORK",
+                                "priority": 1,
+                                "metric": 320,
+                                "passive": false,
+                                "ignore-mtu": false,
+                                "interface-up": true,
+                                "interface-state": "arcos-ospf-types:INTERFACE_BACKUP",
+                                "local-ip-address": "fe80::1016:9bff:fe15:5899",
+                                "dr-router-id": "2.2.2.2",
+                                "dr-ip-address": "fe80::3022:d7ff:fe51:3840",
+                                "bdr-router-id": "1.1.1.1",
+                                "bdr-ip-address": "fe80::1016:9bff:fe15:5899",
+                                "mtu": 8974,
+                                "speed": "10000",
+                                "neighbor-count": 1,
+                                "exchange-neighbor-count": 0,
+                                "loading-neighbor-count": 0,
+                                "full-neighbor-count": 1,
+                                "arcos-ospfv3:interface-id": 11,
+                                "arcos-ospfv3:instance-id": 0
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -506,6 +506,11 @@ class ShowOspfv3InterfaceSchema(MetaParser):
                         Optional("exchange-neighbor-count"): int,
                         Optional("loading-neighbor-count"): int,
                         Optional("full-neighbor-count"): int,
+                        # DR/BDR (broadcast networks)
+                        Optional("dr-router-id"): str,
+                        Optional("dr-ip-address"): str,
+                        Optional("bdr-router-id"): str,
+                        Optional("bdr-ip-address"): str,
                         # OSPFv3-specific fields
                         Optional("interface-id"): int,
                         Optional("instance-id"): int,
@@ -572,7 +577,9 @@ class ShowOspfv3Interface(ShowOspfv3InterfaceSchema):
                 for k in ("id", "priority", "metric", "passive", "ignore-mtu",
                           "interface-up", "local-ip-address", "mtu", "speed",
                           "neighbor-count", "exchange-neighbor-count",
-                          "loading-neighbor-count", "full-neighbor-count"):
+                          "loading-neighbor-count", "full-neighbor-count",
+                          "dr-router-id", "dr-ip-address",
+                          "bdr-router-id", "bdr-ip-address"):
                     if k in state:
                         entry[k] = state[k]
 
@@ -684,7 +691,7 @@ class ShowOspfv3LsdbSchema(MetaParser):
                                 Optional("advertising-router"): str,
                                 Optional("ls-sequence-number"): str,
                                 Optional("ls-age"): int,
-                                Optional("ls-checksum"): str,
+                                Optional("ls-checksum"): int,
                             }
                         },
                     }
@@ -769,9 +776,16 @@ class ShowOspfv3Lsdb(ShowOspfv3LsdbSchema):
                         "link-state-id": lsi,
                         "advertising-router": adv,
                     }
-                    for k in ("ls-sequence-number", "ls-age", "ls-checksum"):
-                        if k in lsa_state:
-                            lsa_entry[k] = lsa_state[k]
+                    # arcOS emits unprefixed keys under lsa.state; map them to
+                    # the schema's ls-* output names (real device output uses
+                    # sequence-number/age/checksum, not ls-*).
+                    for src, dst in (
+                        ("sequence-number", "ls-sequence-number"),
+                        ("age", "ls-age"),
+                        ("checksum", "ls-checksum"),
+                    ):
+                        if src in lsa_state:
+                            lsa_entry[dst] = lsa_state[src]
                     lsas_dict[key] = lsa_entry
 
                 if lsas_dict:
