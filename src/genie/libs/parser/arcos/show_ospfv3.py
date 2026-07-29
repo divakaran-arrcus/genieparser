@@ -506,6 +506,11 @@ class ShowOspfv3InterfaceSchema(MetaParser):
                         Optional("exchange-neighbor-count"): int,
                         Optional("loading-neighbor-count"): int,
                         Optional("full-neighbor-count"): int,
+                        # DR/BDR (broadcast networks)
+                        Optional("dr-router-id"): str,
+                        Optional("dr-ip-address"): str,
+                        Optional("bdr-router-id"): str,
+                        Optional("bdr-ip-address"): str,
                         # OSPFv3-specific fields
                         Optional("interface-id"): int,
                         Optional("instance-id"): int,
@@ -572,7 +577,9 @@ class ShowOspfv3Interface(ShowOspfv3InterfaceSchema):
                 for k in ("id", "priority", "metric", "passive", "ignore-mtu",
                           "interface-up", "local-ip-address", "mtu", "speed",
                           "neighbor-count", "exchange-neighbor-count",
-                          "loading-neighbor-count", "full-neighbor-count"):
+                          "loading-neighbor-count", "full-neighbor-count",
+                          "dr-router-id", "dr-ip-address",
+                          "bdr-router-id", "bdr-ip-address"):
                     if k in state:
                         entry[k] = state[k]
 
