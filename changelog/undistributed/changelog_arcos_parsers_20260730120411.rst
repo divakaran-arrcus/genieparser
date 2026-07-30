@@ -241,3 +241,23 @@
         * show system hostname
     * Added ShowVersion:
         * show version
+
+--------------------------------------------------------------------------------
+                            Fix
+--------------------------------------------------------------------------------
+* ARCOS
+    * Modified ShowOspfv3Lsdb:
+        * Fixed LSA field lookup to read the device's actual (unprefixed)
+          keys sequence-number/age/checksum from lsa.state and map them to
+          the schema's ls-sequence-number/ls-age/ls-checksum names; the
+          previous code looked up ls-sequence-number/ls-age/ls-checksum
+          directly under lsa.state, which never matched, silently dropping
+          all 3 fields on every real response.
+        * Changed ls-checksum from str to int in the schema to match the
+          device's actual output type.
+
+    * Modified ShowOspfv3Interface:
+        * Added dr-router-id, dr-ip-address, bdr-router-id, bdr-ip-address
+          to the schema and read-loop; these DR/BDR fields are present in
+          real device output on broadcast networks but were previously
+          absent from the schema, so they were silently dropped.
