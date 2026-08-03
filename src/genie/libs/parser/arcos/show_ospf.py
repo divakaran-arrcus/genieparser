@@ -1,15 +1,14 @@
-"""ArcOS OSPFv2 parsers using JSON output.
+"""show_ospf.py
 
-Parsers:
-
-1. ShowOspfGlobal — ``show network-instance {ni} protocol OSPF {instance} global state``
-2. ShowOspfNeighbor — ``show network-instance {ni} protocol OSPF {instance} area {area} interface * neighbor``
-3. ShowOspfArea — ``show network-instance {ni} protocol OSPF {instance} area state``
-4. ShowOspfInterface — ``show network-instance {ni} protocol OSPF {instance} area {area} interface state``
-5. ShowOspfSpfThrottle — ``show network-instance {ni} protocol OSPF {instance} global spf throttle``
-6. ShowOspfLsdb — ``show network-instance {ni} protocol OSPF {instance} area {area} lsdb``
-7. ShowOspfRunningConfig — ``show running-config network-instance {ni} protocol OSPF {instance}``
-8. ShowOspfGlobalRib — ``show network-instance {ni} protocol OSPF {instance} global rib prefix``
+ArcOS parsers for the following show commands:
+    * show network-instance {ni} protocol OSPF {instance} global state
+    * show network-instance {ni} protocol OSPF {instance} area {area} interface * neighbor
+    * show network-instance {ni} protocol OSPF {instance} area state
+    * show network-instance {ni} protocol OSPF {instance} area {area} interface state
+    * show network-instance {ni} protocol OSPF {instance} global spf throttle
+    * show network-instance {ni} protocol OSPF {instance} area {area} lsdb
+    * show running-config network-instance {ni} protocol OSPF {instance}
+    * show network-instance {ni} protocol OSPF {instance} global rib prefix
 """
 
 import logging

@@ -1,4 +1,8 @@
-"""ArcOS show te parser using OpenConfig JSON output."""
+"""show_te.py
+
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance} te admin-group
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional

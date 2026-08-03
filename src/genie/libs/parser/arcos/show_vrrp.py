@@ -1,12 +1,7 @@
-"""ArcOS VRRP parser using OpenConfig JSON output.
+"""show_vrrp.py
 
-Parser:
-
-ShowVrrp
-    ``show interface <intf> subinterface <sub> ipv4 address <ip> vrrp``
-
-Returns VRRP group state including virtual-router-id, virtual-addresses,
-priority, mode, counters.
+ArcOS parsers for the following show commands:
+    * show interface {interface} subinterface {sub_id} {af} address {address} vrrp
 """
 
 import logging

@@ -1,12 +1,10 @@
-"""ArcOS Keychain parsers.
+"""show_keychain.py
 
-Parsers for Arrcus ArcOS Keychain commands using OpenConfig JSON format.
-
-Supports:
-  - show running-config keychain | display json | nomore
-  - show running-config keychain {name} | display json | nomore
-  - show keychain | display json | nomore
-  - show keychain {name} | display json | nomore
+ArcOS parsers for the following show commands:
+    * show running-config keychain | display json | nomore
+    * show running-config keychain {name} | display json | nomore
+    * show keychain | display json | nomore
+    * show keychain {name} | display json | nomore
 """
 
 import logging

@@ -1,7 +1,7 @@
-"""ArcOS SyncE parser using JSON output.
+"""show_synce.py
 
-Parser:
-    ShowSynce — ``show operational-state sync-e``
+ArcOS parsers for the following show commands:
+    * show operational-state sync-e
 """
 
 import logging

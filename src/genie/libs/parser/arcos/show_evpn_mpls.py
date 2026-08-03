@@ -1,9 +1,9 @@
-"""ArcOS EVPN MPLS parsers using JSON output.
+"""show_evpn_mpls.py
 
-Parsers:
-1. ShowEvpnState — ``show evpn state router-ip-selected``
-2. ShowEvpnEsiInfo — ``show evpn esi-info esi``
-3. ShowL2ribMacEntries — ``show network-instance <ni> l2rib mac-entries``
+ArcOS parsers for the following show commands:
+    * show evpn state router-ip-selected
+    * show evpn esi-info esi
+    * show network-instance {ni} l2rib mac-entries
 """
 
 import logging

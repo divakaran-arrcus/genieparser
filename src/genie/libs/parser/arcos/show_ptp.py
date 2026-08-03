@@ -1,7 +1,7 @@
-"""ArcOS PTP parser using JSON output.
+"""show_ptp.py
 
-Parser:
-    ShowPtpInstance — ``show ptp instance-list <id> clock-info``
+ArcOS parsers for the following show commands:
+    * show ptp instance-list {instance_id} clock-info
 """
 
 import logging

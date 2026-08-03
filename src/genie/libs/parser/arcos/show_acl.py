@@ -1,11 +1,8 @@
-"""ArcOS ACL parser using OpenConfig JSON output.
+"""show_acl.py
 
-Parser:
-
-ShowAclSet
-    ``show acl acl-set {name} {acl_type} | display json | nomore``
-
-Returns per-ACL-set state with entries, match criteria, actions, and counters.
+ArcOS parsers for the following show commands:
+    * show acl acl-set {name} {acl_type}
+    * show acl acl-set
 """
 
 import logging

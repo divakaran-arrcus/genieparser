@@ -1,7 +1,7 @@
-"""ArcOS sFlow parser using JSON output.
+"""show_sflow.py
 
-Parser:
-    ShowSflow — ``show sflow``
+ArcOS parsers for the following show commands:
+    * show sflow
 """
 
 import logging

@@ -1,7 +1,7 @@
-"""ArcOS Port Security parser using JSON output.
+"""show_port_security.py
 
-Parser:
-    ShowPortSecurity — ``show port-security``
+ArcOS parsers for the following show commands:
+    * show port-security
 """
 
 import logging

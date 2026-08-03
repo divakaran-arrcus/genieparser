@@ -1,14 +1,18 @@
-"""ArcOS FIB (Forwarding Information Base) parsers.
+"""show_fib.py
 
-Parsers for Arrcus ArcOS FIB OpenConfig-based JSON commands.
-
-Provides three parser classes with ``af`` as a runtime parameter:
-
-- ``ShowFibPrefixEntries``  — IPv4/IPv6 prefix entries
-- ``ShowFibNexthopEntries`` — IPv4/IPv6 nexthop entries
-- ``ShowFibLabelEntries``   — IPv4/IPv6 label entries
-
-All output is JSON-only via ``| display json | nomore``.
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance} fib {af} ipv4-prefix-entry
+    * show network-instance {network_instance} fib {af} ipv4-prefix-entry {prefix}
+    * show network-instance {network_instance} fib {af} ipv6-prefix-entry
+    * show network-instance {network_instance} fib {af} ipv6-prefix-entry {prefix}
+    * show network-instance {network_instance} fib {af} ipv4-nexthop-entry
+    * show network-instance {network_instance} fib {af} ipv4-nexthop-entry {index}
+    * show network-instance {network_instance} fib {af} ipv6-nexthop-entry
+    * show network-instance {network_instance} fib {af} ipv6-nexthop-entry {index}
+    * show network-instance {network_instance} fib {af} ipv4-label-entry
+    * show network-instance {network_instance} fib {af} ipv4-label-entry {label}
+    * show network-instance {network_instance} fib {af} ipv6-label-entry
+    * show network-instance {network_instance} fib {af} ipv6-label-entry {label}
 """
 
 import logging

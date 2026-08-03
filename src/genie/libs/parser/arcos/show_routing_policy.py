@@ -1,11 +1,9 @@
-"""ArcOS routing-policy defined-sets parsers.
+"""show_routing_policy.py
 
-Parsers for ArcOS routing-policy defined-sets commands using
-OpenConfig-based JSON output.
-
-This module currently provides a single parser
-``ShowRoutingPolicyDefinedSets`` which normalizes the JSON into the
-ArcOS routing-policy data model described in ROUTING_POLICY_GENIE_PLAN.
+ArcOS parsers for the following show commands:
+    * show routing-policy defined-sets
+    * show routing-policy policy-definition
+    * show running-config routing-policy
 """
 
 from __future__ import annotations

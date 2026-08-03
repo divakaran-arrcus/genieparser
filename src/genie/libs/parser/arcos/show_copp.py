@@ -1,7 +1,7 @@
-"""ArcOS CoPP parser using JSON output.
+"""show_copp.py
 
-Parser:
-    ShowCoppPolicy — ``show copp policy *``
+ArcOS parsers for the following show commands:
+    * show copp policy {name}
 """
 
 import logging

@@ -1,7 +1,7 @@
-"""ArcOS Static Routing parsers.
+"""show_static_routing.py
 
-Parsers for Arrcus ArcOS Static Routing commands using
-OpenConfig JSON format.
+ArcOS parsers for the following show commands:
+    * show running-config network-instance {network_instance} protocol STATIC {protocol_instance}
 """
 
 import json

@@ -1,7 +1,7 @@
-"""ArcOS Interface Damping parser using JSON output.
+"""show_damping.py
 
-Parser:
-    ShowDamping — ``show interface <name> damping``
+ArcOS parsers for the following show commands:
+    * show interface {interface} damping
 """
 
 import logging

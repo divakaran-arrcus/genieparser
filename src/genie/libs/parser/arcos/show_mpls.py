@@ -1,4 +1,9 @@
-"""ArcOS MPLS parsers using OpenConfig JSON output."""
+"""show_mpls.py
+
+ArcOS parsers for the following show commands:
+    * show running-config network-instance {network_instance} mpls global reserved-label-block
+    * show network-instance {network_instance} mpls global reserved-label-block
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional

@@ -1,7 +1,7 @@
-"""ArcOS IPFIX parser using JSON output.
+"""show_ipfix.py
 
-Parser:
-    ShowIpfix — ``show ipfix``
+ArcOS parsers for the following show commands:
+    * show ipfix
 """
 
 import logging

@@ -1,4 +1,8 @@
-"""ArcOS show version parser using OpenConfig JSON output."""
+"""show_version.py
+
+ArcOS parsers for the following show commands:
+    * show version
+"""
 
 import json
 import logging

@@ -1,7 +1,7 @@
-"""ArcOS DHCP Relay parser using JSON output.
+"""show_dhcp_relay.py
 
-Parser:
-    ShowDhcpRelay — ``show relay-agent dhcp``
+ArcOS parsers for the following show commands:
+    * show relay-agent dhcp
 """
 
 import logging

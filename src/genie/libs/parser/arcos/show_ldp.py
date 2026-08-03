@@ -1,22 +1,10 @@
-"""ArcOS LDP parsers using OpenConfig JSON output.
+"""show_ldp.py
 
-Four parsers:
-
-1. ShowLdpInterface
-   ``show network-instance default mpls signaling-protocols ldp
-     interface-attributes interface | display json | nomore``
-
-2. ShowLdpSession
-   ``show network-instance default mpls signaling-protocols ldp
-     sessions ipv4 session | display json | nomore``
-
-3. ShowLdpHelloAdjacency
-   ``show network-instance default mpls signaling-protocols ldp
-     hello-adjacencies ipv4 hello-adjacency | display json | nomore``
-
-4. ShowLdpNeighbor
-   ``show network-instance default mpls signaling-protocols ldp
-     neighbor | display json | nomore``
+ArcOS parsers for the following show commands:
+    * show network-instance default mpls signaling-protocols ldp interface-attributes interface
+    * show network-instance default mpls signaling-protocols ldp sessions ipv4 session
+    * show network-instance default mpls signaling-protocols ldp hello-adjacencies ipv4 hello-adjacency
+    * show network-instance default mpls signaling-protocols ldp neighbor
 """
 
 import logging

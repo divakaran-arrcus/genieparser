@@ -1,4 +1,8 @@
-"""ArcOS show bfd parser using OpenConfig JSON output."""
+"""show_bfd.py
+
+ArcOS parsers for the following show commands:
+    * show bfd
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional

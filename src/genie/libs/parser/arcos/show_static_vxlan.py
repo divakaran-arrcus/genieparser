@@ -1,7 +1,7 @@
-"""ArcOS Static VXLAN parser using JSON output.
+"""show_static_vxlan.py
 
-Parser:
-    ShowStaticVxlanTunnels — ``show overlay static-vxlan-tunnels``
+ArcOS parsers for the following show commands:
+    * show overlay static-vxlan-tunnels
 """
 
 import logging

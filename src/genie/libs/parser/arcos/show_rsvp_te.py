@@ -1,7 +1,7 @@
-"""ArcOS RSVP-TE parser using JSON output.
+"""show_rsvp_te.py
 
-Parser:
-    ShowRsvpGlobal — ``show network-instance default protocol RSVP default global state``
+ArcOS parsers for the following show commands:
+    * show network-instance {ni} protocol RSVP {instance} global state
 """
 
 import logging
