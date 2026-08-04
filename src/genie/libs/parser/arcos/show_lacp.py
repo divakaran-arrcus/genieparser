@@ -48,6 +48,9 @@ class ShowLacpInterface(ShowLacpInterfaceSchema):
         data["openconfig-lacp:lacp"]["interfaces"]["interface"]
 
     Supports specific bond (``bond1``) or wildcard (``*``).
+
+    Returns per-bond LACP state (interval) and per-member state
+    (synchronization, collecting, distributing, etc.).
     """
 
     cli_command = [

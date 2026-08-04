@@ -48,6 +48,9 @@ class ShowVrrp(ShowVrrpSchema):
     """Parser for ArcOS VRRP show command (JSON format).
 
     Command: show interface <intf> subinterface <sub> <af> address <ip> vrrp
+
+    Returns VRRP group state including virtual-router-id,
+    virtual-addresses, priority, mode, and counters.
     """
 
     cli_command = (

@@ -68,6 +68,9 @@ class ShowInterface(ShowInterfaceSchema):
     Because ``show interface *`` can be very large, the implementation
     queries by interface-type groups (e.g. ``swp*``, ``loopback*``) when
     no specific interface is provided.
+
+    Returns interface operational state, IPv4/IPv6 addresses, and
+    basic counters.
     """
 
     # Multiple CLI command patterns (for device.parse integration)

@@ -37,7 +37,10 @@ class ShowQosPolicySchema(MetaParser):
 
 
 class ShowQosPolicy(ShowQosPolicySchema):
-    """Parser for ArcOS ``show qos policy`` (JSON format)."""
+    """Parser for ArcOS ``show qos policy`` (JSON format).
+
+    Returns per-policy state with classifiers and actions.
+    """
 
     cli_command = [
         "show qos policy {name}",

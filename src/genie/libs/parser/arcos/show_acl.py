@@ -68,6 +68,9 @@ class ShowAclSet(ShowAclSetSchema):
 
     Supports specific ACL: ``show acl acl-set <name> <type>``
     or all ACLs: ``show acl acl-set``
+
+    Returns per-ACL-set state with entries, match criteria, actions,
+    and counters.
     """
 
     cli_command = [

@@ -46,6 +46,9 @@ class ShowLldpState(ShowLldpStateSchema):
     Parses OpenConfig JSON::
 
         data["openconfig-lldp:lldp"]["state"]
+
+    Returns global LLDP state: hello-timer, system-name,
+    system-description, and counters.
     """
 
     cli_command = "show lldp state"
@@ -143,6 +146,10 @@ class ShowLldpInterface(ShowLldpInterfaceSchema):
         data["openconfig-lldp:lldp"]["interfaces"]["interface"]
 
     Supports wildcard (``*``) or specific interface name.
+
+    Returns per-interface LLDP state including counters, mode, and
+    neighbor information (system-name, chassis-id, port-id,
+    management-address, etc.).
     """
 
     cli_command = [
