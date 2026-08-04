@@ -1,7 +1,7 @@
-"""ArcOS SLA ICMP parser using JSON output.
+"""show_sla.py
 
-Parser:
-    ShowSlaIcmp — ``show network-instance <ni> sla icmp``
+ArcOS parsers for the following show commands:
+    * show network-instance {ni} sla icmp
 """
 
 import logging

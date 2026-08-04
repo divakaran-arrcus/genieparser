@@ -1,7 +1,7 @@
-"""ArcOS STP parser using JSON output.
+"""show_stp.py
 
-Parser:
-    ShowStpGlobal — ``show stp global``
+ArcOS parsers for the following show commands:
+    * show stp global
 """
 
 import logging

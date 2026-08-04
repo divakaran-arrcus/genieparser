@@ -1,4 +1,15 @@
-"""ArcOS show bgp parser using OpenConfig JSON output."""
+"""show_bgp.py
+
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance} protocol BGP {protocol_instance} neighbor
+    * show network-instance {network_instance} protocol BGP {protocol_instance} neighbor {neighbor}
+    * show network-instance {network_instance} protocol BGP {protocol_instance} global state
+    * show network-instance {network_instance} protocol BGP {protocol_instance} global afi-safi
+    * show network-instance {network_instance} protocol BGP {protocol_instance} rib afi-safi {afi_safi} loc-rib route
+    * show network-instance {network_instance} protocol BGP {protocol_instance} rib afi-safi {afi_safi} loc-rib route {prefix}
+    * show running-config network-instance {network_instance} protocol BGP
+    * show network-instance {ni} protocol BGP {instance} global mpls label-db
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, List, Optional as TypeOptional

@@ -1,13 +1,14 @@
-"""ArcOS RIB (Routing Information Base) parsers.
+"""show_rib.py
 
-Parsers for Arrcus ArcOS RIB OpenConfig-based JSON commands.
-
-Provides two parser classes with ``af`` as a runtime parameter:
-
-- ``ShowRibEntries``      — IPv4/IPv6 route entries
-- ``ShowRibLabelEntries`` — IPv4/IPv6 MPLS label entries
-
-All output is JSON-only via ``| display json | nomore``.
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance} rib {af} ipv4-entries
+    * show network-instance {network_instance} rib {af} ipv4-entries entry {prefix}
+    * show network-instance {network_instance} rib {af} ipv6-entries
+    * show network-instance {network_instance} rib {af} ipv6-entries entry {prefix}
+    * show network-instance {network_instance} rib {af} ipv4-label-entries
+    * show network-instance {network_instance} rib {af} ipv4-label-entries entry {label}
+    * show network-instance {network_instance} rib {af} ipv6-label-entries
+    * show network-instance {network_instance} rib {af} ipv6-label-entries entry {label}
 """
 
 import logging

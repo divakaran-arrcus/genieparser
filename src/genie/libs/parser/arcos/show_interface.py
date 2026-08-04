@@ -1,10 +1,8 @@
-"""ArcOS interface parsers.
+"""show_interface.py
 
-Parsers for ArcOS interface commands using OpenConfig JSON format.
-
-This module provides a single parser ``ShowInterface`` that retrieves
-interface operational state, IPv4/IPv6 addresses, and basic counters
-from JSON output.
+ArcOS parsers for the following show commands:
+    * show interface
+    * show interface {interface}
 """
 
 import json
@@ -70,6 +68,9 @@ class ShowInterface(ShowInterfaceSchema):
     Because ``show interface *`` can be very large, the implementation
     queries by interface-type groups (e.g. ``swp*``, ``loopback*``) when
     no specific interface is provided.
+
+    Returns interface operational state, IPv4/IPv6 addresses, and
+    basic counters.
     """
 
     # Multiple CLI command patterns (for device.parse integration)

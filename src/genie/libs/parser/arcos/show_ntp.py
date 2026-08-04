@@ -1,7 +1,7 @@
-"""ArcOS NTP parser using JSON output.
+"""show_ntp.py
 
-Parser:
-    ShowNtp — ``show system ntp``
+ArcOS parsers for the following show commands:
+    * show system ntp
 """
 
 import logging

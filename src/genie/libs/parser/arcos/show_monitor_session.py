@@ -1,7 +1,7 @@
-"""ArcOS Monitor Session (SPAN) parser using JSON output.
+"""show_monitor_session.py
 
-Parser:
-    ShowMonitorSession — ``show monitor-session``
+ArcOS parsers for the following show commands:
+    * show monitor-session
 """
 
 import logging

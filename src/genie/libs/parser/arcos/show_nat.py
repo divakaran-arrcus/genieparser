@@ -1,7 +1,7 @@
-"""ArcOS NAT parser using JSON output.
+"""show_nat.py
 
-Parser:
-    ShowNatInstance — ``show nat instance <id>``
+ArcOS parsers for the following show commands:
+    * show nat instance {instance_id}
 """
 
 import logging

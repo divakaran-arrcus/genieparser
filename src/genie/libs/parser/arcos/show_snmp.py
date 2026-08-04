@@ -1,7 +1,7 @@
-"""ArcOS SNMP parser using JSON output.
+"""show_snmp.py
 
-Parser:
-    ShowSnmpServer — ``show system snmp-server enable``
+ArcOS parsers for the following show commands:
+    * show system snmp-server enable
 """
 
 import logging

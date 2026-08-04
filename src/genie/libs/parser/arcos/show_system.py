@@ -1,7 +1,7 @@
-"""ArcOS System parser using JSON output.
+"""show_system.py
 
-Parser:
-    ShowSystemHostname — ``show system hostname``
+ArcOS parsers for the following show commands:
+    * show system hostname
 """
 
 import logging

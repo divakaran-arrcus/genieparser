@@ -1,7 +1,7 @@
-"""ArcOS Telemetry parser using JSON output.
+"""show_telemetry.py
 
-Parser:
-    ShowTelemetry — ``show telemetry-system``
+ArcOS parsers for the following show commands:
+    * show telemetry-system
 """
 
 import logging

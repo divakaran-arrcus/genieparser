@@ -1,7 +1,7 @@
-"""ArcOS Bridge Isolation parser using JSON output.
+"""show_bridge_isolation.py
 
-Parser:
-    ShowBridgeIsolation — ``show interface <name> bridge-isolation``
+ArcOS parsers for the following show commands:
+    * show interface {interface} bridge-isolation
 """
 
 import logging

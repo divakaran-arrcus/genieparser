@@ -1,4 +1,8 @@
-"""ArcOS show network-instance parser using OpenConfig JSON output."""
+"""show_network_instance.py
+
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance}
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional

@@ -1,8 +1,8 @@
-"""ArcOS EVPN VPWS parser using JSON output.
+"""show_evpn_vpws.py
 
-Parsers:
-1. ShowEvpnVpws — ``show ... global afi-safi L2VPN_EVPN vpws``
-2. ShowL2ribVpwsEviEntries — ``show network-instance <ni> l2rib vpws-evi-entries``
+ArcOS parsers for the following show commands:
+    * show network-instance default protocol BGP default global afi-safi L2VPN_EVPN vpws
+    * show network-instance {ni} l2rib vpws-evi-entries
 """
 
 import logging

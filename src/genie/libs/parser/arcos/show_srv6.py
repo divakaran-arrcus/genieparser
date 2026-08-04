@@ -1,7 +1,10 @@
-"""ArcOS SRv6 parsers.
+"""show_srv6.py
 
-Parsers for Arrcus ArcOS SRv6 (Segment Routing v6) commands using
-OpenConfig JSON format.
+ArcOS parsers for the following show commands:
+    * show running-config network-instance {instance} srv6
+    * show network-instance {instance} srv6 locator
+    * show network-instance {instance} srv6 locator {locator_name}
+    * show network-instance {instance} srv6 local-sids
 """
 
 import json

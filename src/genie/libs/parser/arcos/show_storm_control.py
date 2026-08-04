@@ -1,7 +1,7 @@
-"""ArcOS Storm Control parser using JSON output.
+"""show_storm_control.py
 
-Parser:
-    ShowStormControl — ``show interface <name> storm-control``
+ArcOS parsers for the following show commands:
+    * show interface {interface} storm-control
 """
 
 import logging

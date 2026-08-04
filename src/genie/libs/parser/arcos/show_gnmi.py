@@ -1,7 +1,7 @@
-"""ArcOS gNMI parser using JSON output.
+"""show_gnmi.py
 
-Parser:
-    ShowGnmiServer — ``show system grpc-server``
+ArcOS parsers for the following show commands:
+    * show system grpc-server
 """
 
 import logging

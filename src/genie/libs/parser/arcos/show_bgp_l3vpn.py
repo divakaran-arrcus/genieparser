@@ -1,8 +1,8 @@
-"""ArcOS BGP L3VPN parsers using JSON output.
+"""show_bgp_l3vpn.py
 
-Parsers:
-1. ShowBgpDeaggregationLabel — deaggregation label state across VRFs
-2. ShowBgpVpnExportedRoutes — VPN exported routes (L3VPN_IPV4/IPV6_UNICAST)
+ArcOS parsers for the following show commands:
+    * show network-instance * protocol BGP * global afi-safi * state deaggregation-label
+    * show network-instance default protocol BGP default rib afi-safi {afi_safi} network-instance {vrf_name} exported-rib route
 """
 
 import logging

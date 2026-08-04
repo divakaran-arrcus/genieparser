@@ -1,4 +1,8 @@
-"""ArcOS show vlan parser using OpenConfig JSON output."""
+"""show_vlan.py
+
+ArcOS parsers for the following show commands:
+    * show vlan
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, List, Optional as TypeOptional

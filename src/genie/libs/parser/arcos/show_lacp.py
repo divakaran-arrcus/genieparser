@@ -1,12 +1,8 @@
-"""ArcOS LACP parser using OpenConfig JSON output.
+"""show_lacp.py
 
-Parser:
-
-ShowLacpInterface
-    ``show lacp interface {bond} | display json | nomore``
-
-Returns per-bond LACP state (interval) and per-member state
-(synchronization, collecting, distributing, etc.).
+ArcOS parsers for the following show commands:
+    * show lacp interface {bond}
+    * show lacp interface
 """
 
 import logging
@@ -52,6 +48,9 @@ class ShowLacpInterface(ShowLacpInterfaceSchema):
         data["openconfig-lacp:lacp"]["interfaces"]["interface"]
 
     Supports specific bond (``bond1``) or wildcard (``*``).
+
+    Returns per-bond LACP state (interval) and per-member state
+    (synchronization, collecting, distributing, etc.).
     """
 
     cli_command = [

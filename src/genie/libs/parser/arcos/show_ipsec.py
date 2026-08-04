@@ -1,7 +1,7 @@
-"""ArcOS IPsec parser using JSON output.
+"""show_ipsec.py
 
-Parser:
-    ShowIpsecConnEntry — ``show ipsec-ike conn-entry <name>``
+ArcOS parsers for the following show commands:
+    * show ipsec-ike conn-entry {name}
 """
 
 import logging

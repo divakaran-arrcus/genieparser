@@ -1,15 +1,9 @@
-"""ArcOS SR-Policy parsers using OpenConfig JSON output.
+"""show_sr_policy.py
 
-Three parsers:
-
-1. ShowSrPolicySegmentList
-   ``show network-instance default sr-policy segment-list``
-
-2. ShowSrPolicyPolicy
-   ``show network-instance default sr-policy policy``
-
-3. ShowSrPolicyDatabasePolicy
-   ``show network-instance default sr-policy database policy``
+ArcOS parsers for the following show commands:
+    * show network-instance default sr-policy segment-list
+    * show network-instance default sr-policy policy
+    * show network-instance default sr-policy database policy
 """
 
 import logging

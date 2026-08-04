@@ -1,9 +1,26 @@
-"""ArcOS ISIS parsers.
+"""show_isis.py
 
-Parsers for Arrcus ArcOS ISIS OpenConfig-based JSON commands.
-
-Initially this module provides adjacency and LSP database parsers,
-mirroring the behavior of the local Arrcus pyATS implementation.
+ArcOS parsers for the following show commands:
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} interface {interface} level {level} adjacency
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} link-state-database lsp
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} interface
+    * show running-config network-instance {network_instance} protocol ISIS {protocol_instance}
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST route {prefix}
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST redistribute-route
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global state
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST fast-reroute
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global micro-loop-avoidance
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} fast-reroute
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global af {afi} UNICAST flexible-algorithm {algo} route
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global mpls
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} state
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} level {level} system-level-counters
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global spf-log
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global timers
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global protection-tracker
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel
+    * show network-instance {network_instance} protocol ISIS {protocol_instance} global tunnel {tunnel_id}
 """
 
 import json
@@ -62,8 +79,8 @@ def get_isis_data(json_output: Dict, instance: str = DEFAULT_INSTANCE) -> Dict:
 
 class ShowIsisAdjacencySchema(MetaParser):
     """Schema for ArcOS ISIS adjacency JSON output.
-    
-    New hierarchical structure: interface → level → adjacency
+
+    Hierarchical structure: interface -> level -> adjacency
     """
 
     schema = {
@@ -258,7 +275,7 @@ class ShowIsisAdjacency(ShowIsisAdjacencySchema):
             all_outputs = [output]
 
         logger.debug("Parsing output")
-        # Initialize return dictionary with new hierarchical structure
+        # Initialize return dictionary with the hierarchical structure
         ret_dict: Dict[str, TypeAny] = {
             "network-instance": {"default": {"isis": {"default": {}}}}
         }
@@ -3841,7 +3858,7 @@ class ShowIsisGlobal(ShowIsisGlobalSchema):
                 if system_id_key in state:
                     global_entry["system-id"] = state[system_id_key]
 
-                # For now, always use DEFAULT_INSTANCE key
+                # Key the global state under the default network-instance
                 ret_dict["network-instance"]["default"]["isis"]["default"]["global"] = (
                     global_entry
                 )

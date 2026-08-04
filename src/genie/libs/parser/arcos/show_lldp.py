@@ -1,14 +1,9 @@
-"""ArcOS LLDP parsers using OpenConfig JSON output.
+"""show_lldp.py
 
-Two parsers:
-
-1. ShowLldpState — ``show lldp state | display json | nomore``
-   Returns global LLDP state: hello-timer, system-name, system-description,
-   and counters.
-
-2. ShowLldpInterface — ``show lldp interface {interface} | display json | nomore``
-   Returns per-interface LLDP state including counters, mode, and neighbor
-   information (system-name, chassis-id, port-id, management-address, etc.).
+ArcOS parsers for the following show commands:
+    * show lldp state
+    * show lldp interface {interface}
+    * show lldp interface
 """
 
 import logging
@@ -51,6 +46,9 @@ class ShowLldpState(ShowLldpStateSchema):
     Parses OpenConfig JSON::
 
         data["openconfig-lldp:lldp"]["state"]
+
+    Returns global LLDP state: hello-timer, system-name,
+    system-description, and counters.
     """
 
     cli_command = "show lldp state"
@@ -148,6 +146,10 @@ class ShowLldpInterface(ShowLldpInterfaceSchema):
         data["openconfig-lldp:lldp"]["interfaces"]["interface"]
 
     Supports wildcard (``*``) or specific interface name.
+
+    Returns per-interface LLDP state including counters, mode, and
+    neighbor information (system-name, chassis-id, port-id,
+    management-address, etc.).
     """
 
     cli_command = [

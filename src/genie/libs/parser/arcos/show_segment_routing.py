@@ -1,7 +1,7 @@
-"""ArcOS Segment Routing parsers.
+"""show_segment_routing.py
 
-Parsers for Arrcus ArcOS Segment Routing commands including SRMS
-(Segment Routing Mapping Server) using OpenConfig JSON format.
+ArcOS parsers for the following show commands:
+    * show running-config network-instance {instance} segment-routing
 """
 
 import json

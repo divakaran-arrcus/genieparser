@@ -1,15 +1,14 @@
-"""ArcOS OSPFv3 parsers using JSON output.
+"""show_ospfv3.py
 
-Parsers:
-
-1. ShowOspfv3Global — ``show network-instance default protocol OSPF3 default global state``
-2. ShowOspfv3Neighbor — ``show network-instance default protocol OSPF3 default area <area> interface * neighbor``
-3. ShowOspfv3RunningConfig — ``show running-config network-instance {ni} protocol OSPF3 {instance}``
-4. ShowOspfv3Area — ``show network-instance default protocol OSPF3 default area <area> state``
-5. ShowOspfv3Interface — ``show network-instance default protocol OSPF3 default area <area> interface state``
-6. ShowOspfv3SpfThrottle — ``show network-instance default protocol OSPF3 default global spf throttle``
-7. ShowOspfv3Lsdb — ``show network-instance default protocol OSPF3 default area <area> lsdb``
-8. ShowOspfv3GlobalRib — ``show network-instance default protocol OSPF3 default global rib prefix``
+ArcOS parsers for the following show commands:
+    * show network-instance {ni} protocol OSPF3 {instance} global state
+    * show network-instance {ni} protocol OSPF3 {instance} area {area} interface * neighbor
+    * show running-config network-instance {ni} protocol OSPF3 {instance}
+    * show network-instance {ni} protocol OSPF3 {instance} area {area} state
+    * show network-instance {ni} protocol OSPF3 {instance} area {area} interface state
+    * show network-instance {ni} protocol OSPF3 {instance} global spf throttle
+    * show network-instance {ni} protocol OSPF3 {instance} area {area} lsdb
+    * show network-instance {ni} protocol OSPF3 {instance} global rib prefix
 """
 
 import logging

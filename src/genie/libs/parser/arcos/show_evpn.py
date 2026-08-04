@@ -1,4 +1,8 @@
-"""ArcOS show evpn parser using JSON output."""
+"""show_evpn.py
+
+ArcOS parsers for the following show commands:
+    * show evpn
+"""
 
 import logging
 from typing import Any as TypeAny, Dict, Optional as TypeOptional

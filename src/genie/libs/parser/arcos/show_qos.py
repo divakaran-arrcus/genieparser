@@ -1,12 +1,8 @@
-"""ArcOS QoS policy parser using JSON output.
+"""show_qos.py
 
-Parser:
-
-ShowQosPolicy
-    ``show qos policy {name} | display json | nomore``
-    or ``show qos policy * | display json | nomore``
-
-Returns per-policy state with classifiers and actions.
+ArcOS parsers for the following show commands:
+    * show qos policy {name}
+    * show qos policy
 """
 
 import logging
@@ -41,7 +37,10 @@ class ShowQosPolicySchema(MetaParser):
 
 
 class ShowQosPolicy(ShowQosPolicySchema):
-    """Parser for ArcOS ``show qos policy`` (JSON format)."""
+    """Parser for ArcOS ``show qos policy`` (JSON format).
+
+    Returns per-policy state with classifiers and actions.
+    """
 
     cli_command = [
         "show qos policy {name}",
